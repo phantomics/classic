@@ -35,11 +35,14 @@ indexed in a secondary hash table for query-relation support."))
 ;;; Protocol implementation
 ;;; ============================================================
 
-(defun normalize-uri-key (uri-or-string)
-  "Coerce a classic-uri struct or string to a canonical URI string key."
-  (etypecase uri-or-string
-    (classic-uri (uri-string uri-or-string))
-    (string uri-or-string)))
+(defun normalize-uri-key (thing)
+  "Coerce THING to a canonical URI string key.
+Accepts classic-uri structs, strings, or classic-resource instances
+(from which the URI is extracted)."
+  (etypecase thing
+    (classic-uri (uri-string thing))
+    (string thing)
+    (classic-resource (uri-string thing))))
 
 (defmethod persist-entity ((strategy memory-persistence-strategy) entity)
   "Store ENTITY in the hash table. Also indexes all :relation slots

@@ -28,6 +28,7 @@
      (:file "content")
      (:file "community")
      (:file "identity")
+     (:file "workflow")
      (:file "publication")))
    (:module "persistence"
     :serial t

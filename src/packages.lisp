@@ -90,6 +90,7 @@
    #:classic-container
    #:parent-space
    #:contains
+   #:storage-granularity
 
    #:classic-forum
 
@@ -114,6 +115,44 @@
    #:uri-base-authority
    #:ui-theme
 
+    ;; ---- Model: Workflow ----
+   #:classic-workflow
+   #:workflow-states
+   #:transitions
+   #:initial-state
+
+   #:classic-workflow-state
+   #:permitted-roles
+   #:permitted-ops
+
+   #:classic-workflow-transition
+   #:from-state
+   #:to-state
+   #:required-role
+   #:guard
+
+   #:classic-stateful
+   #:current-state
+   #:workflow
+   #:state-history
+
+   #:classic-state-history-entry
+   #:history-from-state
+   #:history-to-state
+   #:actor
+   #:transitioned-at
+
+   #:actor-role-label
+   #:find-transition
+   #:find-workflow-state
+   #:attempt-transition
+
+   ;; Workflow conditions
+   #:workflow-error
+   #:invalid-transition
+   #:permission-denied
+   #:guard-failed
+
    ;; ---- Persistence: In-Memory Backend ----
    #:memory-persistence-strategy
    #:strategy-entities))
@@ -131,8 +170,15 @@
    #:blog-strategy
    #:blog-authority
    #:blog-authority-date
+   #:blog-workflow
+   #:blog-roles
    #:make-blog
    #:write-post
    #:list-posts
    #:show-post
-   #:get-posts))
+   #:get-posts
+   #:create-account
+   #:publish-post
+   #:blog-account
+   #:blog-account-role
+   #:blog-article))

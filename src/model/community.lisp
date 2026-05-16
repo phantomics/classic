@@ -50,11 +50,29 @@ Maps to sioc:has_space.")
     :persistence :relation
     :predicate "sioc:container_of"
     :documentation "List of URIs of items in this container.
-Maps to sioc:container_of."))
+Maps to sioc:container_of.")
+   (storage-granularity
+    :accessor storage-granularity
+    :initarg :storage-granularity
+    :initform :individual
+    :persistence :triple
+    :predicate "classic:storageGranularity"
+    :documentation "Controls how the flat-file persistence backend
+stores items in this container.
+  :individual — one file per contained item (default, appropriate for
+                articles and other large, independently accessed content)
+  :bundled    — all contained items in a single file keyed by the
+                container's URI (appropriate for comments, forum replies,
+                and other high-volume small items that are typically
+                read together as a unit)
+The in-memory backend ignores this slot. It is read by file-based
+persistence strategies to determine storage layout."))
   (:metaclass classic-class)
   (:documentation
    "A structure that holds posts or items. Mirrors sioc:Container.
-Could be a blog, forum board, subreddit, product category, etc."))
+Could be a blog, forum board, subreddit, product category, etc.
+The storage-granularity slot informs file-based persistence backends
+whether to store contained items individually or bundled together."))
 
 (defmethod uri-namespace-prefix ((class (eql 'classic-container)))
   "containers")
