@@ -5,7 +5,7 @@
 ;;;; CLOS classes mirror RDF/RDFS, FOAF, SIOC, and Schema.org vocabularies,
 ;;;; with custom MOP extensions for persistence metadata on slots.
 
-(defsystem "classic"
+(asdf:defsystem "classic"
   :description "Common Lisp Abstract Syndication System and Imprint Composer"
   :version "0.1.0"
   :license "TBD"
@@ -34,7 +34,23 @@
     :serial t
     :components
     ((:file "memory")))
-   (:module "models"
-    :serial t
-    :components
-    ((:file "blog")))))
+    (:module "models"
+     :serial t
+     :components
+     ((:file "blog")))))
+
+(asdf:defsystem "classic/tests"
+  :description "Test suite for CLASSIC"
+  :depends-on ("classic" "fiveam" "hamcrest/fiveam")
+  :pathname "test/"
+  :serial t
+  :components
+  ((:file "package")
+   (:file "helpers")
+   (:file "test-mop")
+   (:file "test-uri")
+   (:file "test-protocol")
+   (:file "test-memory")
+   (:file "test-model")
+   (:file "test-workflow")
+   (:file "test-blog")))
