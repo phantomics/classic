@@ -2,87 +2,81 @@
 
 **Common Lisp Abstract Syndication System and Imprint Composer**
 
-A composable publishing framework where CLOS classes grounded in
-semantic web vocabularies define content types, and the persistence,
-workflow, and presentation layers derive their behavior from those
-class definitions.
+A composable publishing framework where CLOS classes grounded in semantic web vocabularies define content types, and the persistence, workflow, and presentation layers derive their behavior from those class definitions.
 
 ## Quick Start
 
-Classic requires SBCL and Quicklisp. Load the system and its blog
-model:
+Classic requires SBCL and Quicklisp. To load the main system:
 
 ```lisp
-(push #p"/path/to/classic/" asdf:*central-registry*)
-(ql:quickload "classic")
+* (push #p"/path/to/classic/" asdf:*central-registry*)
+
+* (ql:quickload "classic")
 ```
 
 ### A Blog in Five Minutes
 
-Create a blog with a built-in publishing workflow:
+Before we dive into the details of how Classic works, let's try a simple publishing task. We're going to create a blog at our Lisp REPL. Here's how it starts:
 
 ```lisp
-(in-package #:classic-blog)
+* (in-package #:classic-blog)
 
-(defvar *blog* (make-blog :name "Engineering Blog"
-                          :authority "team.dev"
-                          :authority-date "2026"))
+* (defvar *blog* (make-blog :name "Engineering Blog"
+                            :authority "team.dev"
+                            :authority-date "2026"))
 ;; => #<BLOG Engineering Blog (0 posts)>
 ```
 
-Create user accounts with different roles. Writers can draft posts;
-editors can draft and publish:
+Next we'll create user accounts with different roles. Writers can draft posts; editors can draft and publish.
 
 ```lisp
-(defvar *alice* (create-account *blog* :name "Alice" :role :writer))
-(defvar *bob*   (create-account *blog* :name "Bob"   :role :editor))
+* (defvar *alice* (create-account *blog* :name "Alice" :role :writer))
+*ALICE*
+
+* (defvar *bob*   (create-account *blog* :name "Bob"   :role :editor))
+*BOB*
 ```
 
 Alice writes a post. It enters the system as a draft:
 
 ```lisp
-(write-post *blog* :account *alice*
-            :title "Getting Started with Classic"
-            :text "Classic is a composable publishing framework built on
+* (write-post *blog* :account *alice*
+              :title "Getting Started with Classic"
+              :text "Classic is a composable publishing framework built on
 semantic web concepts. Its CLOS classes mirror RDF, FOAF, SIOC, and
 Schema.org vocabularies, with custom MOP extensions for persistence
 metadata on slots."
-            :categories '("tutorial" "architecture"))
+              :categories '("tutorial" "architecture"))
 ;; => "classic:team.dev,2026:blog-articles/2026/05/kf7x3m-getting-started-with-classic"
 ```
 
 Bob writes one too:
 
 ```lisp
-(write-post *blog* :account *bob*
-            :title "Why Ontological Composition Matters"
-            :text "In WordPress, a blog post that also functions as a forum
+* (write-post *blog* :account *bob*
+              :title "Why Ontological Composition Matters"
+              :text "In WordPress, a blog post that also functions as a forum
 thread requires plugin bridges. In Classic, it's a class that inherits
 from both classic-article and classic-thread-bearing."
             :categories '("design" "philosophy"))
 ```
 
-List all posts -- both are drafts, newest first:
+Let's list all the posts. Both are drafts, newest first:
 
 ```lisp
-(list-posts *blog*)
-```
+* (list-posts *blog*)
 
-```
   #    Title                             Author          Status        Date
   ---  --------------------------------  --------------  ------------  ----------------
     1  Why Ontological Composition...    Bob             draft         2026-05-22 15:55
     2  Getting Started with Classic      Alice           draft         2026-05-22 15:55
 ```
 
-Alice tries to publish post #1. The workflow engine denies this --
-her writer role doesn't have publish permission:
+Alice tries to publish post #1. The workflow engine denies this. Her writer role doesn't have publish permission:
 
 ```lisp
-(publish-post *blog* 1 :account *alice*)
-```
+* (publish-post *blog* 1 :account *alice*)
 
-```
   Permission denied: role "writer" cannot transition "draft" -> "published"
   (requires "editor")
 ```
@@ -90,20 +84,16 @@ her writer role doesn't have publish permission:
 Bob, as an editor, publishes it:
 
 ```lisp
-(publish-post *blog* 1 :account *bob*)
-```
+* (publish-post *blog* 1 :account *bob*)
 
-```
   Post "Why Ontological Composition Matters" transitioned: draft -> published
 ```
 
-View the published post with its full workflow history:
+Let's view the published post with its full workflow history:
 
 ```lisp
-(show-post *blog* 1)
-```
+* (show-post *blog* 1)
 
-```
 ------------------------------------------------------------
   Why Ontological Composition Matters
 ------------------------------------------------------------
@@ -124,10 +114,8 @@ from both classic-article and classic-thread-bearing.
 The listing now shows mixed statuses:
 
 ```lisp
-(list-posts *blog*)
-```
+* (list-posts *blog*)
 
-```
   #    Title                             Author          Status        Date
   ---  --------------------------------  --------------  ------------  ----------------
     1  Why Ontological Composition...    Bob             published     2026-05-22 15:55
@@ -137,27 +125,19 @@ The listing now shows mixed statuses:
 Filter by status:
 
 ```lisp
-(get-posts *blog* :status "published")  ; only published
-(get-posts *blog* :status "draft")      ; only drafts
+* (get-posts *blog* :status "published")  ; only published
+* (get-posts *blog* :status "draft")      ; only drafts
 ```
 
 ### What Just Happened
 
 Behind this demo, several architectural layers are working:
 
-- Each post is a `blog-article` instance -- a CLOS class that inherits
-  from both `classic-article` (content with headline, body, keywords,
-  author) and `classic-stateful` (workflow participation with state,
-  history, guard predicates).
-- Each account is a `blog-account` linking a `classic-person` to a
-  `classic-role` with specific permissions.
-- The publishing workflow is a `classic-workflow` with states
-  ("draft", "published"), a transition with a required role ("editor"),
-  and immutable audit history entries.
-- All entities are stored in an in-memory persistence backend via the
-  `classic-persistence-strategy` protocol.
-- Every class uses a custom MOP metaclass (`classic-class`) that
-  annotates slots with RDF predicates and persistence strategies.
+- Each post is a `blog-article` instance. This is a CLOS class that inherits from both `classic-article` (content with headline, body, keywords, author) and `classic-stateful` (workflow participation with state, history, guard predicates).
+- Each account is a `blog-account` linking a `classic-person` to a `classic-role` with specific permissions.
+- The publishing workflow is a `classic-workflow` with states ("draft", "published"), a transition with a required role ("editor"), and immutable audit history entries.
+- All entities are stored in an in-memory persistence backend via the `classic-persistence-strategy` protocol.
+- Every class uses a custom MOP metaclass (`classic-class`) that annotates slots with RDF predicates and persistence strategies.
 
 No database, no web server, no HTML rendering. The ontological model,
 persistence protocol, workflow engine, and identity system all work at
@@ -168,30 +148,18 @@ the REPL.
 
 ### The Core Idea
 
-Classic's content types are CLOS classes whose slots are annotated with
-semantic web metadata. A `classic-article` isn't just a data container --
-it declares that its `headline` slot maps to `schema:headline`, its
-`author` slot is a relationship (`:persistence :relation`) to a
-`classic-person` identified by `foaf:name`, and its `body` is a blob
-stored separately from the metadata. The persistence layer reads these
-annotations to determine how to store each slot; the rendering layer
-reads them to determine how to present each slot; the federation layer
-reads them to determine how to syndicate each slot.
+Classic's content types are CLOS classes whose slots are annotated with semantic web metadata. A `classic-article` isn't just a data container; it declares that its `headline` slot maps to `schema:headline`, its `author` slot is a relationship (`:persistence :relation`) to a `classic-person` identified by `foaf:name`, and its `body` is a blob stored separately from the metadata. The persistence layer reads these annotations to determine how to store each slot; the rendering layer reads them to determine how to present each slot; the federation layer reads them to determine how to syndicate each slot.
 
 ```lisp
-(defclass classic-article (classic-creative-work)
-  ((headline :accessor headline
-             :initarg :headline
-             :persistence :triple
-             :predicate "schema:headline"))
-  (:metaclass classic-class))
+* (defclass classic-article (classic-creative-work)
+    ((headline :accessor headline
+               :initarg :headline
+               :persistence :triple
+               :predicate "schema:headline"))
+    (:metaclass classic-class))
 ```
 
-The `:persistence` and `:predicate` options are custom MOP slot
-annotations -- not standard CLOS. They are implemented via
-`classic-class`, a metaclass that extends slot definitions with
-persistence strategy, RDF predicate URI, serialization format, and
-derivation source metadata.
+The `:persistence` and `:predicate` options are custom MOP slot annotations, not standard CLOS. They are implemented via `classic-class`, a metaclass that extends slot definitions with persistence strategy, RDF predicate URI, serialization format, and derivation source metadata.
 
 ### Ontological Foundation
 
@@ -221,9 +189,7 @@ are composed via CLOS multiple inheritance:
   (:metaclass classic-class))
 ```
 
-This class is simultaneously an article, a forum thread host, and a
-media reference -- with no plugin bridges, no hook priorities, and no
-configuration files. The class definition *is* the schema.
+This class is simultaneously an article, a forum thread host, and a media reference. No plugin bridges, hook priorities or configuration files are required. The class definition *is* the schema.
 
 ### URI System
 
@@ -240,9 +206,7 @@ classic:janedoe.net,2026:articles/2026/05/kf7x3m-lisp-is-great
 classic:university.edu,2024:agents/h7nw2p-jane-doe
 ```
 
-The authority-date ensures global uniqueness even if a domain changes
-hands. The 6-character local ID (Crockford base32) provides collision
-resistance. HTTP URLs are derived for web access:
+The authority-date ensures global uniqueness even if a domain changes hands. The 6-character local ID (Crockford base32) provides collision resistance. HTTP URLs are derived for web access:
 
 ```
 https://janedoe.net/articles/2026/05/kf7x3m-lisp-is-great
@@ -250,8 +214,7 @@ https://janedoe.net/articles/2026/05/kf7x3m-lisp-is-great
 
 ### Persistence Protocol
 
-The ontology talks to storage through a generic protocol, never to
-a backing store directly:
+The ontology talks to storage through a generic protocol, never to a backing store directly:
 
 ```lisp
 (defgeneric persist-entity (strategy entity))
@@ -286,7 +249,7 @@ existence, role permissions, and guard predicates, then records an
 immutable `classic-state-history-entry` with actor, timestamp, and
 state change.
 
-Role resolution uses the `actor-role-label` generic function --
+Role resolution uses the `actor-role-label` generic function;
 application models define one method on their account class to connect
 to the workflow engine via normal CLOS dispatch.
 
@@ -372,4 +335,4 @@ interface.
 
 ## License
 
-TBD
+BSD-3

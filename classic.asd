@@ -8,7 +8,7 @@
 (asdf:defsystem "classic"
   :description "Common Lisp Abstract Syndication System and Imprint Composer"
   :version "0.1.0"
-  :license "TBD"
+  :license "BSD-3"
   :depends-on ("closer-mop" "local-time")
   :pathname "src/"
   :serial t
