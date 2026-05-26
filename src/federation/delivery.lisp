@@ -33,20 +33,36 @@ This function abstracts the transport-specific ack format."
 ;;; ============================================================
 
 (defun entity-newer-p (incoming existing)
-  "Return T if INCOMING entity is newer than EXISTING entity,
-based on modified-at timestamps. If either lacks a timestamp,
-returns T (accept the incoming entity as a conservative default).
+  "Return T if INCOMING entity is newer than EXISTING entity.
+
+Comparison strategy (in priority order):
+  1. Logical clocks: if both entities have non-zero logical clocks,
+     the incoming entity is newer if its clock is strictly greater.
+     This is the preferred mechanism — immune to wall-clock skew.
+  2. Timestamps: if logical clocks are unavailable (both zero or
+     unbound), falls back to modified-at/created-at comparison.
+  3. Conservative default: if neither mechanism can determine
+     ordering, returns T (accept the incoming entity).
 
 Used by idempotent-receive to reject stale content from peers."
-  (let ((incoming-time (or (modified-at incoming) (created-at incoming)))
-        (existing-time (or (modified-at existing) (created-at existing))))
+  (let ((incoming-clock (logical-clock incoming))
+        (existing-clock (logical-clock existing)))
+    ;; Prefer logical clock comparison when available
     (cond
-      ;; No timestamps to compare: accept
-      ((or (null incoming-time) (null existing-time)) t)
-      ;; Incoming is strictly newer
-      ((local-time:timestamp> incoming-time existing-time) t)
-      ;; Same or older: reject
-      (t nil))))
+      ;; Both have non-zero clocks: use them
+      ((and (plusp incoming-clock) (plusp existing-clock))
+       (> incoming-clock existing-clock))
+      ;; Fall back to timestamp comparison
+      (t
+       (let ((incoming-time (or (modified-at incoming) (created-at incoming)))
+             (existing-time (or (modified-at existing) (created-at existing))))
+         (cond
+           ;; No timestamps to compare: accept
+           ((or (null incoming-time) (null existing-time)) t)
+           ;; Incoming is strictly newer
+           ((local-time:timestamp> incoming-time existing-time) t)
+           ;; Same or older: reject
+           (t nil)))))))
 
 (defgeneric idempotent-receive (publication entity source-authority)
   (:documentation

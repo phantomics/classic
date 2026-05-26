@@ -386,7 +386,11 @@ deleted (soft delete) but retains it for audit purposes."))
       (persist-entity strategy entity)
       entity)))
 
-;;; Extend transport receive to handle :retract messages
+;;; Extend transport receive to handle message types beyond the base set.
+;;; The base federation-receive (in transport.lisp) handles:
+;;;   :descriptor-request, :descriptor-response, :subscribe, :publish
+;;; This :around method handles additional message types:
+;;;   :resolve, :retract, :update, :batch
 (defmethod federation-receive :around ((transport direct-transport)
                                        publication message)
   (case (getf message :type)
@@ -401,6 +405,36 @@ deleted (soft delete) but retains it for audit purposes."))
                          :retracted-at (getf message :retracted-at)
                          :reason (getf message :reason))
      (list :type :retract-response :status :ok))
+    (:update
+     (let ((entity (getf message :entity))
+           (source-authority (getf message :source-authority)))
+       (receive-update publication entity source-authority)
+       (list :type :ack)))
+    (:batch
+     ;; Process each operation in the batch sequentially
+     (let ((operations (getf message :operations))
+           (processed 0))
+       (dolist (op operations)
+         (let ((op-type (getf op :op-type))
+               (source-auth (getf op :source-authority)))
+           (case op-type
+             (:publish
+              (let ((entity (getf op :entity)))
+                (when entity
+                  (receive-from-peer publication entity source-auth)
+                  (incf processed))))
+             (:update
+              (let ((entity (getf op :entity)))
+                (when entity
+                  (receive-update publication entity source-auth)
+                  (incf processed))))
+             (:retract
+              (let ((entity-uri (getf op :entity-uri))
+                    (extra (getf op :extra)))
+                (receive-retraction publication entity-uri source-auth
+                                   :reason (getf extra :reason))
+                (incf processed))))))
+       (list :type :ack :processed processed)))
     (otherwise
      (call-next-method))))
 

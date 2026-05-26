@@ -51,7 +51,9 @@
      ((:file "transport")
       (:file "provenance")
       (:file "protocol")
-      (:file "delivery")))
+      (:file "delivery")
+      (:file "updates")
+      (:file "outbox")))
    (:module "models"
     :serial t
     :components

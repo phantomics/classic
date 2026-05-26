@@ -464,3 +464,229 @@
     (is-false (classic:entity-newer-p old-entity new-entity))
     ;; Same entity is not newer than itself
     (is-false (classic:entity-newer-p new-entity new-entity))))
+
+;;; ============================================================
+;;; Phase C: Logical Clock
+;;; ============================================================
+
+(def-test logical-clock-defaults-to-zero ()
+  "New entities have logical clock initialized to 0."
+  (let ((article (make-instance 'classic-article
+                   :uri (make-test-uri :slug "clock-zero"))))
+    (is (= 0 (classic:logical-clock article)))))
+
+(def-test increment-logical-clock-advances ()
+  "increment-logical-clock increases the clock and sets modified-at."
+  (let ((article (make-instance 'classic-article
+                   :uri (make-test-uri :slug "clock-inc"))))
+    (is (= 0 (classic:logical-clock article)))
+    (let ((new-val (classic:increment-logical-clock article)))
+      (is (= 1 new-val))
+      (is (= 1 (classic:logical-clock article)))
+      (is-true (modified-at article)))
+    (classic:increment-logical-clock article)
+    (is (= 2 (classic:logical-clock article)))))
+
+(def-test entity-newer-p-prefers-logical-clock ()
+  "entity-newer-p uses logical clocks when both entities have non-zero clocks."
+  (let ((high-clock (make-instance 'classic-article
+                      :uri (make-test-uri :slug "high-clock")
+                      :logical-clock 5
+                      ;; Give it an OLDER timestamp to prove clock wins
+                      :modified-at (local-time:adjust-timestamp
+                                    (local-time:now) (offset :hour -2))))
+        (low-clock (make-instance 'classic-article
+                     :uri (make-test-uri :slug "low-clock")
+                     :logical-clock 3
+                     :modified-at (local-time:now))))
+    ;; Despite having an older timestamp, higher clock wins
+    (is-true (classic:entity-newer-p high-clock low-clock))
+    (is-false (classic:entity-newer-p low-clock high-clock))))
+
+;;; ============================================================
+;;; Phase C: Update Propagation
+;;; ============================================================
+
+(def-test update-propagates-to-peers ()
+  "Editing a published post propagates the update to federation peers."
+  (multiple-value-bind (blog-a blog-b transport)
+      (make-federated-pair)
+    (declare (ignore transport))
+    ;; Publish a post
+    (let ((editor-a (classic-blog:create-account blog-a
+                                                 :name "Alice" :role :editor)))
+      (classic-blog:write-post blog-a :account editor-a
+                               :title "Original Title" :text "Original text.")
+      (classic-blog:publish-post blog-a 1 :account editor-a)
+      ;; Verify B received it
+      (let ((federated (classic:list-federated-content
+                        (classic-blog:blog-publication blog-b))))
+        (is (= 1 (length federated)))
+        (is (equal "Original Title" (headline (first federated)))))
+      ;; Edit the post
+      (classic-blog:edit-post blog-a 1 :account editor-a
+                              :title "Updated Title"
+                              :text "Updated text.")
+      ;; Verify A's post is updated
+      (let ((post (first (classic-blog:get-posts blog-a))))
+        (is (equal "Updated Title" (headline post)))
+        (is (= 1 (classic:logical-clock post)))))))
+
+(def-test receive-update-accepts-newer-clock ()
+  "receive-update accepts an entity with a higher logical clock."
+  (with-clean-strategy ()
+    (let* ((pub-uri (make-test-uri :class 'classic-publication
+                                   :slug "update-accept-pub"))
+           (pub (make-instance 'classic-publication
+                  :uri pub-uri
+                  :label "Update Accept"
+                  :persistence-strategy *test-strategy*
+                  :uri-base-authority "update.dev"))
+           (entity-uri (make-test-uri :slug "update-entity")))
+      (persist-entity *test-strategy* pub)
+      ;; Store existing entity with clock=1
+      (let ((existing (make-instance 'classic-article
+                        :uri entity-uri
+                        :headline "Version 1"
+                        :logical-clock 1)))
+        (persist-entity *test-strategy* existing)
+        (record-federation-provenance pub (uri-string existing)
+                                     "peer.dev" *test-strategy*))
+      ;; Receive update with clock=2
+      (let ((updated (make-instance 'classic-article
+                       :uri entity-uri
+                       :headline "Version 2"
+                       :logical-clock 2)))
+        (let ((result (classic:receive-update pub updated "peer.dev")))
+          (is-true result)
+          (let ((stored (retrieve-entity *test-strategy* entity-uri nil)))
+            (is (equal "Version 2" (headline stored)))))))))
+
+(def-test receive-update-rejects-stale-clock ()
+  "receive-update rejects an entity with a lower logical clock."
+  (with-clean-strategy ()
+    (let* ((pub-uri (make-test-uri :class 'classic-publication
+                                   :slug "update-reject-pub"))
+           (pub (make-instance 'classic-publication
+                  :uri pub-uri
+                  :label "Update Reject"
+                  :persistence-strategy *test-strategy*
+                  :uri-base-authority "reject.dev"))
+           (entity-uri (make-test-uri :slug "reject-entity")))
+      (persist-entity *test-strategy* pub)
+      ;; Store existing entity with clock=5
+      (let ((existing (make-instance 'classic-article
+                        :uri entity-uri
+                        :headline "Current"
+                        :logical-clock 5)))
+        (persist-entity *test-strategy* existing)
+        (record-federation-provenance pub (uri-string existing)
+                                     "peer.dev" *test-strategy*))
+      ;; Try to receive update with clock=3 (stale)
+      (let ((stale (make-instance 'classic-article
+                     :uri entity-uri
+                     :headline "Stale"
+                     :logical-clock 3)))
+        (let ((result (classic:receive-update pub stale "peer.dev")))
+          (is (null result))
+          ;; Local copy unchanged
+          (let ((stored (retrieve-entity *test-strategy* entity-uri nil)))
+            (is (equal "Current" (headline stored)))))))))
+
+;;; ============================================================
+;;; Phase C: Outbox
+;;; ============================================================
+
+(def-test outbox-enqueue-and-count ()
+  "Operations can be enqueued and counted."
+  (let ((outbox (classic:make-outbox "peer.dev" :threshold 5)))
+    (is (= 0 (classic:outbox-pending-count outbox)))
+    (classic:enqueue-operation outbox :publish "uri:entity-1")
+    (is (= 1 (classic:outbox-pending-count outbox)))
+    (classic:enqueue-operation outbox :publish "uri:entity-2")
+    (is (= 2 (classic:outbox-pending-count outbox)))))
+
+(def-test outbox-signals-flush-at-threshold ()
+  "enqueue-operation returns :flush-needed when threshold is reached."
+  (let ((outbox (classic:make-outbox "peer.dev" :threshold 2)))
+    (is (eq :queued (classic:enqueue-operation outbox :publish "uri:e1")))
+    (is (eq :flush-needed
+            (classic:enqueue-operation outbox :publish "uri:e2")))))
+
+(def-test outbox-flush-sends-batch ()
+  "flush-outbox sends a :batch message and clears the queue."
+  (multiple-value-bind (blog-a blog-b transport)
+      (make-federated-pair)
+    (declare (ignore blog-b))
+    (let* ((strategy (classic-blog:blog-strategy blog-a))
+           (pub (classic-blog:blog-publication blog-a))
+           (outbox (classic:make-outbox "beta.dev" :threshold 10)))
+      ;; Write a post so we have an entity to reference
+      (let ((editor (classic-blog:create-account blog-a
+                                                 :name "Ed" :role :editor)))
+        (classic-blog:write-post blog-a :account editor
+                                 :title "Batch Test" :text "Content."))
+      ;; Enqueue operations
+      (classic:enqueue-operation outbox :publish
+                                (uri-string (first (classic-blog:get-posts blog-a))))
+      (is (= 1 (classic:outbox-pending-count outbox)))
+      ;; Flush
+      (let ((result (classic:flush-outbox outbox pub strategy transport)))
+        (is (= 1 (getf result :sent)))
+        (is-true (getf result :acknowledged))
+        ;; Queue cleared
+        (is (= 0 (classic:outbox-pending-count outbox)))))))
+
+(def-test outbox-check-flush-interval ()
+  "check-flush-needed detects when flush interval has elapsed."
+  (let ((outbox (classic:make-outbox "peer.dev" :threshold 100
+                                                :interval 1)))
+    ;; No pending ops: no flush needed
+    (is (null (classic:check-flush-needed outbox)))
+    ;; Add an operation
+    (classic:enqueue-operation outbox :publish "uri:e1")
+    ;; Set last-flush to 2 seconds ago
+    (setf (classic:outbox-last-flush-at outbox)
+          (local-time:adjust-timestamp (local-time:now) (offset :sec -2)))
+    ;; Now interval has elapsed with pending ops
+    (is (eq :flush-needed (classic:check-flush-needed outbox)))))
+
+(def-test clear-outbox-discards-operations ()
+  "clear-outbox empties the queue without sending."
+  (let ((outbox (classic:make-outbox "peer.dev" :threshold 10)))
+    (classic:enqueue-operation outbox :publish "uri:e1")
+    (classic:enqueue-operation outbox :retract "uri:e2")
+    (is (= 2 (classic:outbox-pending-count outbox)))
+    (classic:clear-outbox outbox)
+    (is (= 0 (classic:outbox-pending-count outbox)))))
+
+;;; ============================================================
+;;; Phase C: Blog edit-post integration
+;;; ============================================================
+
+(def-test edit-post-updates-content ()
+  "edit-post modifies post fields and increments the logical clock."
+  (let ((blog (make-test-blog)))
+    (let ((editor (classic-blog:create-account blog :name "Ed" :role :editor)))
+      (classic-blog:write-post blog :account editor
+                               :title "Before Edit" :text "Old content.")
+      (classic-blog:edit-post blog 1 :account editor
+                              :title "After Edit" :text "New content.")
+      (let ((post (first (classic-blog:get-posts blog :include-deleted t))))
+        (is (equal "After Edit" (headline post)))
+        (is (equal "New content." (classic:body post)))
+        (is (= 1 (classic:logical-clock post)))))))
+
+(def-test edit-post-preserves-unspecified-fields ()
+  "edit-post only changes fields that are explicitly provided."
+  (let ((blog (make-test-blog)))
+    (let ((editor (classic-blog:create-account blog :name "Ed" :role :editor)))
+      (classic-blog:write-post blog :account editor
+                               :title "Keep Title" :text "Keep text."
+                               :categories '("tag1" "tag2"))
+      (classic-blog:edit-post blog 1 :account editor
+                              :text "Only text changed.")
+      (let ((post (first (classic-blog:get-posts blog :include-deleted t))))
+        (is (equal "Keep Title" (headline post)))
+        (is (equal "Only text changed." (classic:body post)))
+        (is (equal '("tag1" "tag2") (keywords post)))))))

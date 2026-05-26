@@ -93,8 +93,8 @@
 ;;; ============================================================
 
 (test article-slot-count
-  "classic-article has 12 persistent slots."
-  (is (= 12 (length (class-persistent-slots 'classic-article)))))
+  "classic-article has 13 persistent slots (5 resource + 2 named + 5 creative-work + 1 headline)."
+  (is (= 13 (length (class-persistent-slots 'classic-article)))))
 
 (test person-has-email-slot
   "classic-person has an email slot with foaf:mbox predicate."

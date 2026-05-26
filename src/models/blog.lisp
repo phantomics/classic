@@ -354,6 +354,53 @@ ACCOUNT must have the editor role. INDEX is 1-based from list-posts."
           nil)))))
 
 ;;; ============================================================
+;;; Post editing (with update propagation)
+;;; ============================================================
+
+(defun edit-post (blog index &key account title text categories)
+  "Edit post number INDEX. Updates the specified fields, increments the
+logical clock, re-persists, and propagates the update to federation peers.
+ACCOUNT must have :write permission. Only non-NIL keyword arguments are
+applied; others are left unchanged. INDEX is 1-based from list-posts."
+  (check-type account blog-account)
+  (unless (account-has-permission-p account :write)
+    (error 'permission-denied
+           :actor-role (actor-role-label account)
+           :required "writer or editor"
+           :from-state "any"
+           :to-state "any"
+           :message (format nil "Role ~S does not have :write permission"
+                            (actor-role-label account))))
+  (let ((posts (get-posts blog :include-deleted t)))
+    (when (or (< index 1) (> index (length posts)))
+      (format t "~%  No post #~D.~%" index)
+      (return-from edit-post nil))
+    (let ((post (nth (1- index) posts)))
+      ;; Apply changes
+      (when title
+        (setf (headline post) title)
+        (setf (label post) title))
+      (when text
+        (setf (body post) text))
+      (when categories
+        (setf (keywords post) categories))
+      ;; Increment logical clock and update modified-at
+      (increment-logical-clock post)
+      ;; Re-persist
+      (persist-entity (blog-strategy blog) post)
+      (format t "~%  Post ~S updated (clock: ~D).~%"
+              (or (headline post) (label post))
+              (logical-clock post))
+      ;; Propagate update to federation peers if published and configured
+      (when (and (equal "published" (current-state post))
+                 (blog-has-federation-p blog))
+        (let ((count (propagate-update (blog-publication blog) post
+                                       (blog-transport blog))))
+          (when (> count 0)
+            (format t "  Update propagated to ~D peer~:P~%" count))))
+      post)))
+
+;;; ============================================================
 ;;; Post deletion and archival
 ;;; ============================================================
 

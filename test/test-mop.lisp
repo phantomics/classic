@@ -78,9 +78,9 @@
 ;;; ============================================================
 
 (test class-persistent-slots-count
-  "classic-article has 12 persistent slots (4 resource + 2 named + 5 creative-work + 1 headline)."
+  "classic-article has 13 persistent slots (5 resource + 2 named + 5 creative-work + 1 headline)."
   (let ((slots (class-persistent-slots 'classic-article)))
-    (is (= 12 (length slots)))))
+    (is (= 13 (length slots)))))
 
 (test class-persistent-slots-all-annotated
   "Every slot returned by class-persistent-slots has a non-nil persistence."

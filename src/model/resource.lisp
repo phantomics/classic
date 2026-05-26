@@ -40,7 +40,19 @@ from the CLOS class name if not explicitly provided.")
     :initform nil
     :persistence :triple
     :predicate "dcterms:modified"
-    :documentation "Last modification timestamp (local-time:timestamp)."))
+    :documentation "Last modification timestamp (local-time:timestamp).")
+   (logical-clock
+    :accessor logical-clock
+    :initarg :logical-clock
+    :initform 0
+    :persistence :triple
+    :predicate "classic:logicalClock"
+    :documentation "Monotonic counter incremented on every mutation.
+Used by the federation system for causal ordering: peers accept
+updates only if the incoming logical clock value is greater than
+their stored value. This is immune to wall-clock skew and provides
+a total ordering of mutations within a single entity's history.
+Initialized to 0 on creation."))
   (:metaclass classic-class)
   (:documentation
    "Root of all CLASSIC objects. Every entity has a URI and an RDF type,
@@ -61,6 +73,19 @@ used for flat file indexing, RDF graph identity, and federation."))
     (when (slot-boundp resource 'uri)
       (let ((u (uri resource)))
         (princ (if (classic-uri-p u) (uri-string u) u) stream)))))
+
+;;; ============================================================
+;;; Logical clock operations
+;;; ============================================================
+
+(defun increment-logical-clock (resource)
+  "Increment RESOURCE's logical clock and set modified-at to now.
+Returns the new clock value. Call this on every mutation to a
+persisted entity to maintain causal ordering for federation."
+  (let ((new-clock (1+ (logical-clock resource))))
+    (setf (logical-clock resource) new-clock)
+    (setf (modified-at resource) (local-time:now))
+    new-clock))
 
 ;;; Convenience: get the URI string from a resource directly.
 (defmethod uri-string ((resource classic-resource))

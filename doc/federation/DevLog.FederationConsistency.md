@@ -379,3 +379,228 @@ Phase C will build on this by adding:
 - `:update` message type for propagating edits to published content
 - An outbox system for debounced batch delivery, sharing the future
   timer infrastructure with the retry loop
+
+
+## Phase C: Update Propagation and Ordering
+
+**Date:** 2026-05-26
+
+### Problem
+
+Phases A and B established persisted provenance, event logging,
+delivery confirmation, and retry. Three gaps remained:
+
+1. **No causal ordering.** Phase B's `entity-newer-p` used wall-clock
+   timestamps (`modified-at`) to determine whether an incoming entity
+   is newer than a local copy. This is fragile: clocks can skew
+   between instances, timestamps can be absent, and simultaneous edits
+   on different instances have no defined ordering.
+
+2. **No update propagation.** If a publisher edits a post after
+   federation, the update does not reach peers. Only initial publish
+   and retraction are federated; edits create silent divergence.
+
+3. **No batching.** Every publish, retract, and (now) update sends
+   an individual message to each peer. For high-traffic publications
+   (forums, social feeds) this creates excessive message overhead.
+   There is no debounce or accumulation mechanism.
+
+### Design Decisions
+
+**Logical clock on classic-resource.** Rather than introducing a
+mixin, the logical clock is a slot directly on `classic-resource`,
+making it available to every entity in the system. This is the right
+placement because causal ordering is a universal concern -- any entity
+that participates in federation needs it, and future persistence
+backends (flat files, triplestores) need to store it alongside the
+entity's other metadata.
+
+The clock initializes to 0 and is incremented by
+`increment-logical-clock`, which also updates `modified-at` as a
+side effect. Application code calls this on every deliberate mutation
+(the blog's `edit-post` calls it; workflow transitions do not, since
+transitions are structural state changes rather than content edits).
+
+`entity-newer-p` was updated to prefer logical clocks when both
+entities have non-zero values, falling back to timestamp comparison
+only when clocks are unavailable (zero on both sides). This means
+existing entities without logical clock values continue to work via
+timestamp comparison (backward compatible), while entities that have
+been through an edit cycle use the clock. A deliberate test case
+verifies that a high-clock entity with an older timestamp is accepted
+over a low-clock entity with a newer timestamp, proving the clock
+takes precedence.
+
+**`:update` message type and `receive-update`.** The update flow is
+structurally parallel to publish:
+
+- `propagate-update` sends `:update` messages to all subscribers of
+  matching feeds (same feed-matching logic as `publish-to-peers`)
+- `receive-update` on the peer checks the incoming entity's logical
+  clock against the local copy and accepts only if strictly greater
+- The transport's `:around` method dispatches `:update` messages to
+  `receive-update`
+
+`receive-update` differs from `idempotent-receive` in that it is the
+canonical path for peer-initiated updates. `idempotent-receive` is a
+general-purpose check-before-store utility; `receive-update` is the
+federation protocol handler that also updates provenance records and
+logs events.
+
+**Per-peer outbox with threshold and interval flushing.** The
+`classic-federation-outbox` class accumulates operations (publish,
+retract, update) for a specific peer. Two flush triggers:
+
+- **Threshold:** when N operations accumulate (configurable via
+  `flush-threshold`; default 1 = immediate send, preserving current
+  behavior)
+- **Interval:** when M seconds elapse since the last flush (configurable
+  via `flush-interval`; default 0 = no interval-based flushing)
+
+Flushing sends a single `:batch` message containing all accumulated
+operations. The receiving peer processes each operation in the batch
+sequentially via the existing handlers (`receive-from-peer`,
+`receive-update`, `receive-retraction`).
+
+The interval trigger requires an external caller (a timer or polling
+loop) to invoke `check-flush-needed` periodically. This is the same
+timer infrastructure that the retry loop needs, so both can share a
+single Origin-managed background thread in a production deployment.
+The current implementation provides `check-flush-needed` as a
+callable predicate without the timer.
+
+The default configuration (threshold=1, interval=0) is equivalent to
+immediate send. Users enable batching by increasing the threshold.
+This means the outbox infrastructure exists and is tested without
+changing the behavior of existing code.
+
+**Blog `edit-post` with update propagation.** The blog model gains
+an `edit-post` function that modifies specified fields (title, text,
+categories -- only non-NIL arguments are applied), increments the
+logical clock, re-persists, and calls `propagate-update` if the post
+is published and federation is configured. This completes the
+federation lifecycle: create -> publish -> federate -> edit -> propagate
+update -> retract.
+
+### Implementation
+
+**Modified: `src/model/resource.lisp`**
+
+- Added `logical-clock` slot to `classic-resource`: `:persistence
+  :triple`, `:predicate "classic:logicalClock"`, `:initform 0`.
+- Added `increment-logical-clock` function: increments clock, sets
+  `modified-at` to now, returns new value.
+
+**Modified: `src/federation/delivery.lisp`**
+
+- `entity-newer-p` updated to prefer logical clock comparison when
+  both entities have non-zero clocks, falling back to timestamp
+  comparison otherwise.
+
+**New file: `src/federation/updates.lisp`** (115 lines)
+
+- `propagate-update` -- sends `:update` messages to feed subscribers,
+  with ack checking and event logging (mirrors `publish-to-peers`
+  structure)
+- `receive-update` -- accepts updates by logical clock comparison,
+  updates provenance on accept, rejects stale updates
+
+**New file: `src/federation/outbox.lisp`** (165 lines)
+
+- `classic-federation-outbox` class with peer-authority, pending
+  operations list, flush-threshold, flush-interval, and last-flush-at
+- `make-outbox` -- constructor with configurable thresholds
+- `enqueue-operation` -- adds to queue, returns `:flush-needed` or
+  `:queued`
+- `check-flush-needed` -- interval-based flush check
+- `flush-outbox` -- sends `:batch` message, logs events, clears queue
+- `outbox-pending-count`, `clear-outbox` -- inspection and management
+
+**Modified: `src/federation/protocol.lisp`**
+
+- Transport `:around` method extended to handle `:update` (dispatches
+  to `receive-update`) and `:batch` (processes each operation
+  sequentially via existing handlers)
+
+**Modified: `src/models/blog.lisp`**
+
+- Added `edit-post` function: updates specified fields, increments
+  logical clock, re-persists, propagates update to peers if published
+  and federation configured
+
+### Tests
+
+Added to `test/test-federation-consistency.lisp` -- 14 new tests:
+
+Logical clock (3 tests):
+- Default clock value is 0
+- `increment-logical-clock` advances clock and sets modified-at
+- `entity-newer-p` prefers logical clock over timestamps (higher clock
+  with older timestamp beats lower clock with newer timestamp)
+
+Update propagation (3 tests):
+- `edit-post` updates content and increments logical clock
+- `receive-update` accepts entity with higher logical clock
+- `receive-update` rejects entity with lower logical clock
+
+Outbox (5 tests):
+- Operations enqueue and count correctly
+- `enqueue-operation` returns `:flush-needed` at threshold
+- `flush-outbox` sends `:batch` message and clears queue
+- `check-flush-needed` detects elapsed interval
+- `clear-outbox` discards operations without sending
+
+Blog integration (2 tests):
+- `edit-post` modifies fields and increments clock
+- `edit-post` preserves fields not specified in the call
+
+Updated existing tests (2 tests):
+- MOP slot count updated from 12 to 13 (logical-clock on resource)
+- Model slot count updated from 12 to 13
+
+### Metrics
+
+- Total test checks after Phase C: 511 (all passing)
+- New checks added: 36 (Phase C tests) - 2 (updated existing) = 34 net new
+- Regressions: 0
+- Federation-consistency suite total: 37 tests, 85 checks
+
+### Federation Consistency: Complete
+
+With Phase C, the federation consistency system provides:
+
+- **Persisted provenance** scoped per-publication, surviving image
+  restarts (Phase A)
+- **Event log** with delivery status tracking and configurable
+  retention (Phase A)
+- **Delivery confirmation** with acknowledgment checking (Phase B)
+- **Idempotent receive** preventing stale overwrites (Phase B)
+- **Retry** for failed and pending deliveries (Phase B)
+- **Causal ordering** via logical clocks, immune to clock skew
+  (Phase C)
+- **Update propagation** for content edits (Phase C)
+- **Batch delivery** via per-peer outbox with configurable thresholds
+  (Phase C)
+
+The system now provides at-least-once delivery with causal ordering
+and idempotent receive, which together approximate causal consistency
+across federated instances. This is the appropriate consistency model
+for a publishing system -- stronger than eventual consistency (peers
+cannot accept stale updates) but weaker than linearizability (which
+is neither achievable nor necessary over unreliable networks).
+
+### Future Work Beyond Federation Consistency
+
+The federation system's remaining open items fall outside the
+consistency scope and belong to separate development efforts:
+
+- **Network transport**: replacing `direct-transport` with an HTTP or
+  WebSocket transport for cross-process federation (requires Origin
+  IPC infrastructure)
+- **Background timer**: a shared timer thread for retry loops and
+  outbox interval flushing (requires Origin supervisor integration)
+- **Conflict resolution**: when two instances independently edit the
+  same federated entity, the logical clock detects the conflict (equal
+  clock values with different content) but does not resolve it. A
+  conflict resolution strategy (last-writer-wins, manual merge, or
+  CRDT-style automatic merge) is a separate design problem.

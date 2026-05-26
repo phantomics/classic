@@ -33,6 +33,10 @@
    #:commit-transaction
    #:rollback-transaction
 
+   ;; ---- Logical Clock ----
+   #:logical-clock
+   #:increment-logical-clock
+
    ;; ---- URI ----
    #:classic-uri
    #:make-classic-uri
@@ -261,6 +265,24 @@
    #:*retry-max-attempts*
    #:*retry-backoff-base*
 
+   ;; ---- Federation: Update Propagation ----
+   #:propagate-update
+   #:receive-update
+
+   ;; ---- Federation: Outbox ----
+   #:classic-federation-outbox
+   #:outbox-peer-authority
+   #:outbox-pending-operations
+   #:outbox-flush-threshold
+   #:outbox-flush-interval
+   #:outbox-last-flush-at
+   #:make-outbox
+   #:enqueue-operation
+   #:check-flush-needed
+   #:flush-outbox
+   #:outbox-pending-count
+   #:clear-outbox
+
    ;; ---- Schema Migration: Model ----
    #:classic-migration-operation
    #:operation-type
@@ -366,6 +388,7 @@
     #:blog-transport
     #:blog-federation-roles
     #:list-federated-content
+    #:edit-post
     #:archive-post
     #:delete-post
     #:restore-post
