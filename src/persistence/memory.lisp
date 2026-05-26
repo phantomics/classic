@@ -93,6 +93,70 @@ Returns a list of URI strings."
     (nreverse results)))
 
 ;;; ============================================================
+;;; Reverse relation query
+;;; ============================================================
+
+(defmethod query-relation-subjects ((strategy memory-persistence-strategy)
+                                    subject predicate)
+  "Find all object URIs where (SUBJECT PREDICATE object) holds.
+Returns a list of URI strings."
+  (let ((subj (normalize-uri-key subject))
+        (results nil))
+    (dolist (pair (gethash predicate (strategy-relations strategy) nil))
+      (when (equal (car pair) subj)
+        (push (cdr pair) results)))
+    (nreverse results)))
+
+;;; ============================================================
+;;; Entity and relation removal
+;;; ============================================================
+
+(defmethod delete-entity ((strategy memory-persistence-strategy) uri)
+  "Remove entity from the hash table and clean all relation index
+entries that reference this URI as either subject or object."
+  (let* ((uri-key (normalize-uri-key uri))
+         (existed (nth-value 1 (gethash uri-key
+                                        (strategy-entities strategy)))))
+    (when existed
+      ;; Remove from entity store
+      (remhash uri-key (strategy-entities strategy))
+      ;; Remove from version table (migration system)
+      (let ((vtable (gethash strategy *memory-version-tables*)))
+        (when vtable
+          (remhash uri-key vtable)))
+      ;; Clean relation index: remove all pairs mentioning this URI
+      (maphash (lambda (predicate pairs)
+                 (let ((cleaned (remove-if
+                                 (lambda (pair)
+                                   (or (equal (car pair) uri-key)
+                                       (equal (cdr pair) uri-key)))
+                                 pairs)))
+                   (if cleaned
+                       (setf (gethash predicate
+                                      (strategy-relations strategy))
+                             cleaned)
+                       (remhash predicate
+                                (strategy-relations strategy)))))
+               (strategy-relations strategy)))
+    existed))
+
+(defmethod remove-relation ((strategy memory-persistence-strategy)
+                            subject predicate object)
+  "Remove a specific (subject, predicate, object) triple from the
+relation index. Returns T if the triple existed."
+  (let* ((subj (normalize-uri-key subject))
+         (obj (normalize-uri-key object))
+         (pair-to-remove (cons subj obj))
+         (pairs (gethash predicate (strategy-relations strategy) nil))
+         (found (member pair-to-remove pairs :test #'equal)))
+    (when found
+      (let ((cleaned (remove pair-to-remove pairs :test #'equal :count 1)))
+        (if cleaned
+            (setf (gethash predicate (strategy-relations strategy)) cleaned)
+            (remhash predicate (strategy-relations strategy))))
+      t)))
+
+;;; ============================================================
 ;;; Diagnostics
 ;;; ============================================================
 

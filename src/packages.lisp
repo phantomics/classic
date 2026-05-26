@@ -23,8 +23,12 @@
    #:retrieve-entity
    #:persist-relation
    #:query-relation
+   #:query-relation-subjects
+   #:delete-entity
+   #:remove-relation
    #:invalidate-derived
    #:rebuild-derived
+   #:on-entity-delete
    #:begin-transaction
    #:commit-transaction
    #:rollback-transaction
@@ -110,7 +114,20 @@
    #:has-scope
    #:has-permission
 
-    ;; ---- Model: Publication (top-level) ----
+   ;; ---- Model: Deletion ----
+   #:classic-deletable
+   #:deleted-at
+   #:deleted-by
+   #:deletion-reason
+   #:extend-workflow-with-deletion
+   #:attempt-deletion
+   #:purge-entity
+   #:entity-deleted-p
+   #:entity-archived-p
+   #:entity-visible-p
+   #:remove-from-container
+
+     ;; ---- Model: Publication (top-level) ----
    #:classic-publication
    #:pub-host
    #:persistence-strategy
@@ -203,6 +220,8 @@
    #:list-federated-content
    #:entity-source-instance
    #:entity-federated-p
+   #:retract-from-peers
+   #:receive-retraction
 
    ;; ---- Schema Migration: Model ----
    #:classic-migration-operation
@@ -306,6 +325,10 @@
    #:blog-account
    #:blog-account-role
    #:blog-article
-   #:blog-transport
-   #:blog-federation-roles
-   #:list-federated-content))
+    #:blog-transport
+    #:blog-federation-roles
+    #:list-federated-content
+    #:archive-post
+    #:delete-post
+    #:restore-post
+    #:purge-post))

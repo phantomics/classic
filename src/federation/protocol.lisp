@@ -284,14 +284,94 @@ entity is not found locally, queries known peers."))
                 (when response
                   (getf response :entity)))))))))
 
-;;; Extend the transport receive to handle :resolve messages
+;;; ============================================================
+;;; Deletion retraction (tombstones)
+;;; ============================================================
+
+(defgeneric retract-from-peers (publication entity transport)
+  (:documentation
+   "Send a retraction (tombstone) for ENTITY to all peers that
+may have received it via syndication. Called when an entity is
+soft-deleted locally."))
+
+(defmethod retract-from-peers ((pub classic-publication) entity transport)
+  (let ((source-auth (uri-base-authority pub))
+        (entity-uri (uri-string entity))
+        (retracted-count 0))
+    ;; Iterate over all feeds and their subscribers
+    (maphash (lambda (uri feed-entity)
+               (declare (ignore uri))
+               (when (typep feed-entity 'classic-syndication-feed)
+                 (dolist (subscriber-auth (feed-subscribers feed-entity))
+                   (federation-send transport subscriber-auth
+                                    (list :type :retract
+                                          :entity-uri entity-uri
+                                          :source-authority source-auth
+                                          :retracted-at (local-time:now)
+                                          :reason "author-deleted"))
+                   (incf retracted-count))))
+             (strategy-entities (persistence-strategy pub)))
+    retracted-count))
+
+(defgeneric receive-retraction (publication entity-uri source-authority
+                                &key retracted-at reason)
+  (:documentation
+   "Process a retraction from a peer. Marks the federated copy as
+deleted (soft delete) but retains it for audit purposes."))
+
+(defmethod receive-retraction ((pub classic-publication) entity-uri
+                               source-authority
+                               &key retracted-at reason)
+  (declare (ignore source-authority))
+  (let* ((strategy (persistence-strategy pub))
+         (entity (retrieve-entity strategy entity-uri nil)))
+    (when entity
+      ;; Mark as deleted via workflow if stateful
+      (when (typep entity 'classic-stateful)
+        ;; Directly set state — we don't use attempt-transition here
+        ;; because the retraction comes from a peer, not a local actor,
+        ;; and the local workflow may not have the same transitions.
+        (let ((old-state (current-state entity)))
+          (setf (current-state entity) "deleted")
+          ;; Record in history
+          (push (make-instance 'classic-state-history-entry
+                  :uri (make-classic-uri
+                        :authority (uri-base-authority pub)
+                        :authority-date "2026"
+                        :path "workflow-history/retraction"
+                        :local-id (generate-local-id))
+                  :from-state (or old-state "unknown")
+                  :to-state "deleted"
+                  :actor "federation:retraction"
+                  :transitioned-at (or retracted-at (local-time:now)))
+                (state-history entity))))
+      ;; Record deletion metadata if deletable
+      (when (typep entity 'classic-deletable)
+        (setf (deleted-at entity) (or retracted-at (local-time:now)))
+        (setf (deleted-by entity) "federation:retraction")
+        (when reason
+          (setf (deletion-reason entity) reason)))
+      ;; Re-persist with updated state
+      (persist-entity strategy entity)
+      entity)))
+
+;;; Extend transport receive to handle :retract messages
 (defmethod federation-receive :around ((transport direct-transport)
                                        publication message)
-  (if (eq :resolve (getf message :type))
-      (let ((entity (retrieve-entity (persistence-strategy publication)
-                                     (getf message :uri) nil)))
-        (list :type :resolve-response :entity entity))
-      (call-next-method)))
+  (case (getf message :type)
+    (:resolve
+     (let ((entity (retrieve-entity (persistence-strategy publication)
+                                    (getf message :uri) nil)))
+       (list :type :resolve-response :entity entity)))
+    (:retract
+     (receive-retraction publication
+                         (getf message :entity-uri)
+                         (getf message :source-authority)
+                         :retracted-at (getf message :retracted-at)
+                         :reason (getf message :reason))
+     (list :type :retract-response :status :ok))
+    (otherwise
+     (call-next-method))))
 
 ;;; ============================================================
 ;;; Federated content listing
@@ -311,7 +391,7 @@ federation peers (i.e., not locally authored)."))
         (maphash (lambda (entity-uri source-auth)
                    (declare (ignore source-auth))
                    (let ((entity (retrieve-entity strategy entity-uri nil)))
-                     (when entity
+                     (when (and entity (entity-visible-p entity))
                        (push entity results))))
                  prov-table)))
     (nreverse results)))

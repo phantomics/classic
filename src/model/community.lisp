@@ -77,6 +77,26 @@ whether to store contained items individually or bundled together."))
 (defmethod uri-namespace-prefix ((class (eql 'classic-container)))
   "containers")
 
+(defgeneric remove-from-container (container entity-uri strategy)
+  (:documentation
+   "Remove ENTITY-URI from CONTAINER's contains list and re-persist
+the container. Returns T if the URI was found and removed, NIL if
+it was not present."))
+
+(defmethod remove-from-container ((container classic-container)
+                                  entity-uri
+                                  (strategy classic-persistence-strategy))
+  (let* ((uri-str (etypecase entity-uri
+                    (classic-uri (uri-string entity-uri))
+                    (string entity-uri)
+                    (classic-resource (uri-string entity-uri))))
+         (old-contains (contains container))
+         (new-contains (remove uri-str old-contains :test #'equal)))
+    (when (/= (length old-contains) (length new-contains))
+      (setf (contains container) new-contains)
+      (persist-entity strategy container)
+      t)))
+
 ;;; ============================================================
 ;;; classic-forum — a discussion container
 ;;; ============================================================

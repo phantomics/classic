@@ -44,6 +44,10 @@
   :description "Schema migration system"
   :in classic)
 
+(def-suite deletion
+  :description "Entity deletion and purge support"
+  :in classic)
+
 ;;; ============================================================
 ;;; Test runner
 ;;; ============================================================

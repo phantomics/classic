@@ -47,14 +47,15 @@ of the core identity model."))
   (let ((role (blog-account-role account)))
     (when role (label role))))
 
-(defclass blog-article (classic-article classic-stateful)
+(defclass blog-article (classic-article classic-stateful classic-deletable)
   ()
   (:metaclass classic-class)
   (:documentation
-   "A blog article that participates in a workflow state machine.
-Inherits content semantics from classic-article and workflow
-participation from classic-stateful. This is the mixin composition
-pattern that CLASSIC's design is built around."))
+   "A blog article that participates in a workflow state machine
+and supports soft deletion. Inherits content semantics from
+classic-article, workflow participation from classic-stateful,
+and deletion metadata from classic-deletable. This is the mixin
+composition pattern that CLASSIC's design is built around."))
 
 ;;; blog-article uses the same namespace prefix as classic-article.
 (defmethod uri-namespace-prefix ((class (eql 'blog-article)))
@@ -145,6 +146,12 @@ a draft→published workflow. Returns a blog struct."
     (persist-entity strategy pub)
     (persist-entity strategy container)
     (persist-entity strategy wf)
+    ;; Extend workflow with deletion support
+    (extend-workflow-with-deletion wf strategy authority authority-date
+                                   :archive-from '("published")
+                                   :delete-from '("archived" "draft")
+                                   :archive-role "editor"
+                                   :delete-role "editor")
     ;; Register roles
     (setf (gethash "writer" roles) writer-role)
     (setf (gethash "editor" roles) editor-role)
@@ -347,18 +354,132 @@ ACCOUNT must have the editor role. INDEX is 1-based from list-posts."
           nil)))))
 
 ;;; ============================================================
+;;; Post deletion and archival
+;;; ============================================================
+
+(defun archive-post (blog index &key account)
+  "Transition post number INDEX to archived state.
+ACCOUNT must have the editor role. INDEX is 1-based from list-posts."
+  (check-type account blog-account)
+  (let ((posts (get-posts blog :include-deleted t)))
+    (when (or (< index 1) (> index (length posts)))
+      (format t "~%  No post #~D.~%" index)
+      (return-from archive-post nil))
+    (let ((post (nth (1- index) posts)))
+      (handler-case
+          (let ((from-state (current-state post)))
+            (attempt-deletion post account
+                              :target-state "archived"
+                              :reason "archived by editor")
+            (persist-entity (blog-strategy blog) post)
+            (format t "~%  Post ~S transitioned: ~A -> archived~%"
+                    (or (headline post) (label post)) from-state)
+            post)
+        (workflow-error (e)
+          (format t "~%  ~A~%" e)
+          nil)))))
+
+(defun delete-post (blog index &key account (reason "deleted by editor"))
+  "Soft-delete post number INDEX. Transitions to the deleted state,
+records deletion metadata, and sends tombstones to federation peers.
+ACCOUNT must have the editor role. INDEX is 1-based from list-posts."
+  (check-type account blog-account)
+  (let ((posts (get-posts blog :include-deleted t)))
+    (when (or (< index 1) (> index (length posts)))
+      (format t "~%  No post #~D.~%" index)
+      (return-from delete-post nil))
+    (let ((post (nth (1- index) posts)))
+      (handler-case
+          (let ((from-state (current-state post)))
+            (attempt-deletion post account
+                              :target-state "deleted"
+                              :reason reason)
+            (persist-entity (blog-strategy blog) post)
+            ;; Fire deletion lifecycle hook
+            (on-entity-delete (blog-publication blog) post :soft)
+            (format t "~%  Post ~S transitioned: ~A -> deleted~%"
+                    (or (headline post) (label post)) from-state)
+            ;; Send tombstone to federation peers if configured
+            (retract-if-configured blog post)
+            post)
+        (workflow-error (e)
+          (format t "~%  ~A~%" e)
+          nil)))))
+
+(defun restore-post (blog index &key account)
+  "Restore post number INDEX from archived back to published.
+ACCOUNT must have the editor role. INDEX is 1-based from list-posts
+with :include-deleted t."
+  (check-type account blog-account)
+  (let ((posts (get-posts blog :include-deleted t)))
+    (when (or (< index 1) (> index (length posts)))
+      (format t "~%  No post #~D.~%" index)
+      (return-from restore-post nil))
+    (let ((post (nth (1- index) posts)))
+      (handler-case
+          (let ((from-state (current-state post)))
+            (attempt-transition post "published" account)
+            ;; Clear deletion metadata on restore
+            (when (typep post 'classic-deletable)
+              (setf (deleted-at post) nil)
+              (setf (deleted-by post) nil)
+              (setf (deletion-reason post) nil))
+            (persist-entity (blog-strategy blog) post)
+            (format t "~%  Post ~S restored: ~A -> published~%"
+                    (or (headline post) (label post)) from-state)
+            post)
+        (workflow-error (e)
+          (format t "~%  ~A~%" e)
+          nil)))))
+
+(defun purge-post (blog index &key account)
+  "Permanently remove post number INDEX from the blog.
+This is a hard delete — the post is removed from the persistence
+store entirely. INDEX is 1-based from list-posts with :include-deleted."
+  (when account
+    (check-type account blog-account))
+  (let ((posts (get-posts blog :include-deleted t)))
+    (when (or (< index 1) (> index (length posts)))
+      (format t "~%  No post #~D.~%" index)
+      (return-from purge-post nil))
+    (let ((post (nth (1- index) posts)))
+      ;; Fire deletion lifecycle hook
+      (on-entity-delete (blog-publication blog) post :hard)
+      ;; Hard delete from persistence
+      (purge-entity (blog-strategy blog) post
+                    :container (blog-container blog))
+      (format t "~%  Post ~S permanently deleted.~%"
+              (or (headline post) (label post)))
+      t)))
+
+(defun retract-if-configured (blog post)
+  "If the blog has federation configured, send tombstone to peers."
+  (when (blog-has-federation-p blog)
+    (let ((count (retract-from-peers (blog-publication blog) post
+                                     (blog-transport blog))))
+      (when (> count 0)
+        (format t "  Retraction sent to ~D peer~:P~%" count)))))
+
+;;; ============================================================
 ;;; Post retrieval
 ;;; ============================================================
 
-(defun get-posts (blog &key status)
+(defun get-posts (blog &key status include-deleted)
   "Retrieve posts as a list of blog-article instances.
-Ordered newest-first. STATUS can be NIL (all), \"draft\", or \"published\"."
+Ordered newest-first. STATUS can be NIL (all visible), \"draft\",
+\"published\", \"archived\", or \"deleted\".
+When INCLUDE-DELETED is T and STATUS is NIL, includes archived
+and deleted posts in the result."
   (let ((strategy (blog-strategy blog)))
     (loop for uri-str in (contains (blog-container blog))
           for entity = (retrieve-entity strategy uri-str nil)
           when (and entity
-                    (or (null status)
-                        (equal status (current-state entity))))
+                    (if status
+                        ;; Explicit status filter: exact match
+                        (equal status (current-state entity))
+                        ;; No status filter: visible only unless include-deleted
+                        (or include-deleted
+                            (entity-visible-p entity))))
             collect entity)))
 
 ;;; ============================================================

@@ -29,8 +29,9 @@
      (:file "community")
      (:file "identity")
       (:file "workflow")
-      (:file "federation")
-      (:file "publication")))
+       (:file "federation")
+       (:file "deletion")
+       (:file "publication")))
    (:module "persistence"
      :serial t
      :components
@@ -70,4 +71,5 @@
    (:file "test-workflow")
    (:file "test-blog")
     (:file "test-federation")
-    (:file "test-migration")))
+    (:file "test-migration")
+    (:file "test-deletion")))
