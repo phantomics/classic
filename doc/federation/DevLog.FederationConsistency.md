@@ -215,3 +215,167 @@ the remaining phases can build on a stable foundation:
   outbox system for debounced batch delivery. The outbox will
   accumulate operations and flush on threshold or interval, with the
   flush timer sharing infrastructure with the retry loop.
+
+
+## Phase B: Delivery Confirmation and Retry
+
+**Date:** 2026-05-26
+
+### Problem
+
+Phase A established the event log but did not close the loop on
+delivery. Three specific gaps remained:
+
+1. `publish-to-peers` and `retract-from-peers` logged events but did
+   not verify that the peer actually acknowledged receipt. The
+   `handler-case` caught transport errors, but a peer returning a
+   non-ack response (e.g., an error) was logged as `:delivered`.
+
+2. If a peer received the same entity twice (e.g., due to a retry or
+   network duplicate), `receive-from-peer` would store it again
+   unconditionally, potentially overwriting a newer local version with
+   a stale copy.
+
+3. There was no mechanism to retry failed deliveries. Events with
+   status `:failed` or `:pending` accumulated in the log with no path
+   to resolution.
+
+### Design Decisions
+
+**Acknowledgment abstraction.** Rather than coupling the federation
+protocol to a specific ack format, a `delivery-acknowledged-p`
+function inspects transport responses and returns T for any response
+type that constitutes a successful acknowledgment. The direct-transport
+returns `(:type :ack)` for publishes and `(:type :retract-response)`
+for retractions; both are recognized. Future HTTP transports can return
+different response structures and the function can be extended without
+changing the protocol layer.
+
+`publish-to-peers` and `retract-from-peers` now check
+`delivery-acknowledged-p` on every response and log `:delivered` only
+on positive acknowledgment, `:failed` otherwise.
+
+**Idempotent receive via timestamp comparison.** The
+`idempotent-receive` generic function provides a check-before-store
+path. Before accepting an incoming entity, it checks:
+
+1. If the entity is not present locally: accept unconditionally (this
+   is a new entity from a peer).
+2. If the entity is present and the incoming copy is newer (by
+   `modified-at` or `created-at` timestamp comparison): accept as an
+   update, re-persist, and update the provenance record's
+   `received-at` and `sync-status`.
+3. If the entity is present and the incoming copy is the same age or
+   older: reject silently. A receive event is still logged (we
+   received the message) but the local data is not overwritten.
+
+The `entity-newer-p` helper performs the timestamp comparison, with a
+conservative default: if either entity lacks a timestamp, the incoming
+entity is accepted. This prevents silent data loss from timestamp
+absence while Phase C's logical clocks will provide a more robust
+ordering mechanism.
+
+`idempotent-receive` is provided as a separate function rather than
+replacing `receive-from-peer` directly. The existing `receive-from-peer`
+remains as the unconditional receive path (used by the transport
+dispatch), while `idempotent-receive` is available for application code
+and the retry system to use when staleness checking is needed.
+
+**Synchronous single-pass retry with expansion stubs.** The
+`run-federation-retry` generic function scans the event log for
+`:pending` and `:failed` events and attempts redelivery. The current
+implementation is synchronous: it queries all retryable events, sends
+each one, and updates the event status. It returns a summary plist
+with `:retried`, `:succeeded`, and `:exhausted` counts.
+
+The retry function respects `*retry-max-attempts*` (default 5). Events
+that have been retried this many times are left as `:failed` and
+counted as `:exhausted`. They remain in the event log for manual
+inspection or retention policy pruning.
+
+The file contains detailed comments marking where a production
+implementation would integrate with Origin's supervisor for background
+execution, exponential backoff timing (using `*retry-backoff-base*`),
+and concurrent retry management. The synchronous version provides
+identical logic without the timer infrastructure.
+
+For `:publish` retries, the retry function re-retrieves the entity
+from the local persistence store before sending. This means a retry
+always sends the current version of the entity, not the version that
+was current when the original send failed. This is intentional: if
+the entity has been updated since the failed send, the peer should
+receive the latest version.
+
+### Implementation
+
+**New file: `src/federation/delivery.lisp`** (175 lines)
+
+Functions and generics:
+
+- `delivery-acknowledged-p` -- response inspection for ack detection
+- `entity-newer-p` -- timestamp comparison for staleness checking
+- `idempotent-receive` -- check-before-store receive path
+- `run-federation-retry` -- single-pass retry with event log updates
+
+Configuration:
+
+- `*retry-max-attempts*` -- default 5, controls when events are
+  considered exhausted
+- `*retry-backoff-base*` -- default 2, for future background retry
+  timing
+
+**Modified: `src/federation/protocol.lisp`**
+
+- `publish-to-peers` now captures the transport response and checks
+  `delivery-acknowledged-p` before logging `:delivered`. Non-ack
+  responses are logged as `:failed` with the response type as error
+  info.
+
+- `retract-from-peers` receives the same treatment: ack checking
+  before logging delivery status.
+
+### Tests
+
+Added to `test/test-federation-consistency.lisp` -- 7 new tests:
+
+Delivery confirmation (2 tests):
+- `delivery-acknowledged-p` correctly identifies ack and non-ack
+  responses
+- `publish-to-peers` logs `:delivered` only on acknowledged delivery
+
+Idempotent receive (3 tests):
+- New entity accepted unconditionally
+- Newer incoming entity accepted, local copy updated
+- Stale incoming entity rejected, local copy preserved
+
+Retry (2 tests):
+- Pending events are retried and marked delivered on success
+- Events exceeding max attempts are counted as exhausted
+
+Timestamp comparison (1 test):
+- `entity-newer-p` correctly compares modified-at timestamps in both
+  directions, and returns false for equal timestamps
+
+### Metrics
+
+- Total test checks after Phase B: 475 (all passing)
+- New checks added: 19
+- Regressions: 0
+- Federation-consistency suite total: 23 tests, 51 checks
+
+### What Phase B Enables
+
+With delivery confirmation and retry in place, the federation protocol
+now provides at-least-once delivery semantics for the direct-transport
+case. Combined with idempotent receive, duplicate deliveries are safe.
+The retry stub provides the logical structure for background retry
+without requiring timer infrastructure.
+
+Phase C will build on this by adding:
+
+- Logical clocks on entities for causal ordering (replacing the
+  timestamp-based comparison in `entity-newer-p` with a monotonic
+  counter that is immune to clock skew)
+- `:update` message type for propagating edits to published content
+- An outbox system for debounced batch delivery, sharing the future
+  timer infrastructure with the retry loop

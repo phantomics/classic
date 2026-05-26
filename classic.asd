@@ -50,7 +50,8 @@
      :components
      ((:file "transport")
       (:file "provenance")
-      (:file "protocol")))
+      (:file "protocol")
+      (:file "delivery")))
    (:module "models"
     :serial t
     :components

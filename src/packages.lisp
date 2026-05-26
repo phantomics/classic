@@ -253,6 +253,14 @@
    #:apply-retention-policy
    #:make-default-retention-policy
 
+   ;; ---- Federation: Delivery Confirmation and Retry ----
+   #:delivery-acknowledged-p
+   #:entity-newer-p
+   #:idempotent-receive
+   #:run-federation-retry
+   #:*retry-max-attempts*
+   #:*retry-backoff-base*
+
    ;; ---- Schema Migration: Model ----
    #:classic-migration-operation
    #:operation-type

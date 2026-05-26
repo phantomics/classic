@@ -277,3 +277,190 @@
                                            :data "test"))))
       (is-true response)
       (is (eq :error (getf response :type))))))
+
+;;; ============================================================
+;;; Phase B: Delivery Confirmation
+;;; ============================================================
+
+(def-test delivery-acknowledged-p-recognizes-ack ()
+  "delivery-acknowledged-p returns T for :ack responses."
+  (is-true (classic:delivery-acknowledged-p '(:type :ack)))
+  (is-true (classic:delivery-acknowledged-p '(:type :retract-response)))
+  (is-false (classic:delivery-acknowledged-p '(:type :error :message "fail")))
+  (is-false (classic:delivery-acknowledged-p nil)))
+
+(def-test publish-checks-ack-on-delivery ()
+  "publish-to-peers logs :delivered only when peer acknowledges."
+  (multiple-value-bind (blog-a blog-b transport)
+      (make-federated-pair)
+    (declare (ignore blog-b))
+    (write-and-publish blog-a "Ack Check" "Content.")
+    ;; The direct-transport always acks, so events should be :delivered
+    (let ((events (classic:query-federation-events
+                   (classic-blog:blog-strategy blog-a)
+                   (classic-blog:blog-publication blog-a)
+                   :event-type :publish
+                   :status :delivered)))
+      (is (<= 1 (length events))))))
+
+;;; ============================================================
+;;; Phase B: Idempotent Receive
+;;; ============================================================
+
+(def-test idempotent-receive-accepts-new-entity ()
+  "idempotent-receive accepts an entity not yet present locally."
+  (with-clean-strategy ()
+    (let* ((pub-uri (make-test-uri :class 'classic-publication
+                                   :slug "idem-pub"))
+           (pub (make-instance 'classic-publication
+                  :uri pub-uri
+                  :label "Idempotent Test"
+                  :persistence-strategy *test-strategy*
+                  :uri-base-authority "idem.dev")))
+      (persist-entity *test-strategy* pub)
+      (let ((article (make-instance 'classic-article
+                       :uri (make-test-uri :slug "idem-new")
+                       :headline "New Article")))
+        (let ((result (classic:idempotent-receive pub article "peer.dev")))
+          (is-true result)
+          (is (equal "New Article" (headline result))))))))
+
+(def-test idempotent-receive-accepts-newer-entity ()
+  "idempotent-receive accepts an incoming entity newer than local copy."
+  (with-clean-strategy ()
+    (let* ((pub-uri (make-test-uri :class 'classic-publication
+                                   :slug "idem-newer-pub"))
+           (pub (make-instance 'classic-publication
+                  :uri pub-uri
+                  :label "Newer Test"
+                  :persistence-strategy *test-strategy*
+                  :uri-base-authority "newer.dev"))
+           (entity-uri (make-test-uri :slug "idem-entity")))
+      (persist-entity *test-strategy* pub)
+      ;; Store an older version
+      (let ((old (make-instance 'classic-article
+                   :uri entity-uri
+                   :headline "Old Title"
+                   :modified-at (local-time:adjust-timestamp
+                                 (local-time:now)
+                                 (offset :hour -1)))))
+        (persist-entity *test-strategy* old)
+        ;; Record provenance for the old entity
+        (record-federation-provenance pub (uri-string old) "peer.dev"
+                                     *test-strategy*))
+      ;; Receive a newer version
+      (let ((new-entity (make-instance 'classic-article
+                          :uri entity-uri
+                          :headline "New Title"
+                          :modified-at (local-time:now))))
+        (let ((result (classic:idempotent-receive pub new-entity "peer.dev")))
+          (is-true result)
+          ;; The stored entity should now have the new title
+          (let ((stored (retrieve-entity *test-strategy* entity-uri nil)))
+            (is (equal "New Title" (headline stored)))))))))
+
+(def-test idempotent-receive-rejects-stale-entity ()
+  "idempotent-receive rejects an incoming entity older than local copy."
+  (with-clean-strategy ()
+    (let* ((pub-uri (make-test-uri :class 'classic-publication
+                                   :slug "idem-stale-pub"))
+           (pub (make-instance 'classic-publication
+                  :uri pub-uri
+                  :label "Stale Test"
+                  :persistence-strategy *test-strategy*
+                  :uri-base-authority "stale.dev"))
+           (entity-uri (make-test-uri :slug "idem-stale-entity")))
+      (persist-entity *test-strategy* pub)
+      ;; Store a newer version locally
+      (let ((current (make-instance 'classic-article
+                       :uri entity-uri
+                       :headline "Current Title"
+                       :modified-at (local-time:now))))
+        (persist-entity *test-strategy* current))
+      ;; Try to receive an older version
+      (let ((old-entity (make-instance 'classic-article
+                          :uri entity-uri
+                          :headline "Old Title"
+                          :modified-at (local-time:adjust-timestamp
+                                        (local-time:now)
+                                        (offset :hour -1)))))
+        (let ((result (classic:idempotent-receive pub old-entity "peer.dev")))
+          ;; Should return NIL (rejected)
+          (is (null result))
+          ;; Local copy should still have current title
+          (let ((stored (retrieve-entity *test-strategy* entity-uri nil)))
+            (is (equal "Current Title" (headline stored)))))))))
+
+;;; ============================================================
+;;; Phase B: Retry
+;;; ============================================================
+
+(def-test retry-delivers-pending-events ()
+  "run-federation-retry re-sends pending events and marks delivered."
+  (multiple-value-bind (blog-a blog-b transport)
+      (make-federated-pair)
+    (declare (ignore blog-b))
+    (let* ((strategy (classic-blog:blog-strategy blog-a))
+           (pub (classic-blog:blog-publication blog-a))
+           (editor (classic-blog:create-account blog-a
+                                                :name "Ed" :role :editor)))
+      ;; Write and publish (creates :delivered events normally)
+      (classic-blog:write-post blog-a :account editor
+                               :title "Retry Test" :text "Content.")
+      (classic-blog:publish-post blog-a 1 :account editor)
+      ;; Manually create a pending event to simulate a failed first delivery
+      (let ((post-uri (uri-string (first (classic-blog:get-posts blog-a)))))
+        (classic:log-federation-event strategy pub :publish
+                                     post-uri "beta.dev"
+                                     :status :pending))
+      ;; Run retry
+      (let ((result (classic:run-federation-retry pub strategy transport)))
+        (is (<= 1 (getf result :retried)))
+        (is (<= 1 (getf result :succeeded)))
+        ;; The pending event should now be :delivered or :retrying->:delivered
+        (let ((pending (classic:query-federation-events strategy pub
+                                                        :status :pending)))
+          (is (= 0 (length pending))))))))
+
+(def-test retry-exhausts-after-max-attempts ()
+  "Events exceeding *retry-max-attempts* are left as :failed."
+  (with-clean-strategy ()
+    (let* ((pub-uri (make-test-uri :class 'classic-publication
+                                   :slug "exhaust-pub"))
+           (pub (make-instance 'classic-publication
+                  :uri pub-uri
+                  :label "Exhaust Test"
+                  :persistence-strategy *test-strategy*
+                  :uri-base-authority "exhaust.dev"))
+           (transport (make-instance 'direct-transport)))
+      (persist-entity *test-strategy* pub)
+      (register-with-transport transport pub)
+      ;; Create a failed event with max attempts already reached
+      (let ((event (classic:log-federation-event
+                    *test-strategy* pub :publish
+                    "uri:exhaust-entity" "nobody.dev"
+                    :status :failed)))
+        (setf (classic:federation-event-attempt-count event)
+              classic:*retry-max-attempts*)
+        (persist-entity *test-strategy* event))
+      ;; Run retry
+      (let ((result (classic:run-federation-retry pub *test-strategy* transport)))
+        (is (= 1 (getf result :exhausted)))
+        (is (= 0 (getf result :succeeded)))))))
+
+(def-test entity-newer-p-compares-timestamps ()
+  "entity-newer-p correctly compares entity timestamps."
+  (let* ((now (local-time:now))
+         (old-time (local-time:adjust-timestamp now (offset :hour -1)))
+         (new-entity (make-instance 'classic-article
+                       :uri (make-test-uri :slug "newer")
+                       :modified-at now))
+         (old-entity (make-instance 'classic-article
+                       :uri (make-test-uri :slug "older")
+                       :modified-at old-time)))
+    ;; New is newer than old
+    (is-true (classic:entity-newer-p new-entity old-entity))
+    ;; Old is not newer than new
+    (is-false (classic:entity-newer-p old-entity new-entity))
+    ;; Same entity is not newer than itself
+    (is-false (classic:entity-newer-p new-entity new-entity))))

@@ -211,18 +211,25 @@ Called by the on-state-change hook when an entity is published."))
                      ;; Send to each subscriber
                      (dolist (subscriber-auth (feed-subscribers feed-entity))
                        (handler-case
-                           (progn
-                             (federation-send transport subscriber-auth
-                                             (list :type :publish
-                                                   :entity entity
-                                                   :source-authority source-auth))
-                             ;; Log successful delivery
-                             (log-federation-event strategy pub :publish
-                                                  entity-uri subscriber-auth
-                                                  :status :delivered)
-                             (incf syndicated-count))
+                           (let ((response
+                                   (federation-send transport subscriber-auth
+                                                   (list :type :publish
+                                                         :entity entity
+                                                         :source-authority source-auth))))
+                             (if (delivery-acknowledged-p response)
+                                 (progn
+                                   (log-federation-event strategy pub :publish
+                                                        entity-uri subscriber-auth
+                                                        :status :delivered)
+                                   (incf syndicated-count))
+                                 ;; Peer returned non-ack response
+                                 (log-federation-event strategy pub :publish
+                                                      entity-uri subscriber-auth
+                                                      :status :failed
+                                                      :error-info (format nil "Non-ack response: ~S"
+                                                                          (getf response :type)))))
                          (error (e)
-                           ;; Log failed delivery
+                           ;; Transport-level failure
                            (log-federation-event strategy pub :publish
                                                 entity-uri subscriber-auth
                                                 :status :failed
@@ -304,17 +311,24 @@ soft-deleted locally."))
                (when (typep feed-entity 'classic-syndication-feed)
                  (dolist (subscriber-auth (feed-subscribers feed-entity))
                    (handler-case
-                       (progn
-                         (federation-send transport subscriber-auth
-                                         (list :type :retract
-                                               :entity-uri entity-uri
-                                               :source-authority source-auth
-                                               :retracted-at (local-time:now)
-                                               :reason "author-deleted"))
-                         (log-federation-event strategy pub :retract
-                                              entity-uri subscriber-auth
-                                              :status :delivered)
-                         (incf retracted-count))
+                       (let ((response
+                               (federation-send transport subscriber-auth
+                                               (list :type :retract
+                                                     :entity-uri entity-uri
+                                                     :source-authority source-auth
+                                                     :retracted-at (local-time:now)
+                                                     :reason "author-deleted"))))
+                         (if (delivery-acknowledged-p response)
+                             (progn
+                               (log-federation-event strategy pub :retract
+                                                    entity-uri subscriber-auth
+                                                    :status :delivered)
+                               (incf retracted-count))
+                             (log-federation-event strategy pub :retract
+                                                  entity-uri subscriber-auth
+                                                  :status :failed
+                                                  :error-info (format nil "Non-ack: ~S"
+                                                                      (getf response :type)))))
                      (error (e)
                        (log-federation-event strategy pub :retract
                                             entity-uri subscriber-auth
