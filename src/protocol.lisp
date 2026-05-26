@@ -68,6 +68,26 @@
    a named query for RDF store)."))
 
 ;;; ============================================================
+;;; Lifecycle hooks
+;;; ============================================================
+
+(defgeneric on-state-change (publication entity from-state to-state)
+  (:documentation
+   "Called when ENTITY transitions from FROM-STATE to TO-STATE
+   within PUBLICATION. Default method is a no-op. Application
+   layers override this for side effects such as federation
+   syndication, cache invalidation, analytics recording, or
+   notification dispatch.
+
+   FROM-STATE and TO-STATE are state label strings.
+   PUBLICATION is a classic-publication instance.
+   ENTITY is the classic-stateful instance that transitioned.")
+  (:method (publication entity from-state to-state)
+    ;; Default: no-op. Applications specialize as needed.
+    (declare (ignore publication entity from-state to-state))
+    nil))
+
+;;; ============================================================
 ;;; Transaction support (optional, for backends that need it)
 ;;; ============================================================
 

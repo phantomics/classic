@@ -40,6 +40,10 @@
   :description "Blog application model integration"
   :in classic)
 
+(def-suite migration
+  :description "Schema migration system"
+  :in classic)
+
 ;;; ============================================================
 ;;; Test runner
 ;;; ============================================================

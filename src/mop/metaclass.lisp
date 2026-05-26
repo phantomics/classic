@@ -66,16 +66,39 @@
 ;;; ============================================================
 
 (defclass classic-class (standard-class)
-  ()
+  ((schema-version
+    :initarg :schema-version
+    :initform "1"
+    :accessor class-schema-version
+    :documentation "Schema version string for this class. Defaults to \"1\".
+Incremented when the class's slot structure changes (slots added,
+removed, renamed, or predicates changed). Used by the migration
+system to detect version mismatches between stored entities and
+current class definitions."))
   (:documentation
    "Metaclass for CLASSIC semantic resource classes.
    Enables :persistence, :predicate, :format, and :derives-from
-   slot options on defclass forms."))
+   slot options on defclass forms, and :schema-version as a class option."))
 
 ;;; Allow CLASSIC classes to inherit from standard classes and vice versa.
 (defmethod c2mop:validate-superclass
     ((class classic-class) (superclass standard-class))
   t)
+
+;;; Accept :schema-version as a class option in defclass forms.
+;;; SBCL (and other implementations via closer-mop) pass unrecognized
+;;; class options through to shared-initialize. We intercept them here.
+(defmethod shared-initialize :after ((class classic-class) slot-names
+                                     &key (schema-version nil sv-p)
+                                     &allow-other-keys)
+  (declare (ignore slot-names))
+  (when sv-p
+    (setf (class-schema-version class)
+          ;; Accept a string or a list containing a string (SBCL
+          ;; wraps class option values in a list).
+          (if (listp schema-version)
+              (first schema-version)
+              schema-version))))
 
 ;;; ============================================================
 ;;; Slot definition class selection
@@ -146,3 +169,16 @@ or a symbol."
           :key (lambda (slot)
                  (when (typep slot 'classic-effective-slot-definition)
                    (slot-predicate slot))))))
+
+;;; ============================================================
+;;; Schema version introspection
+;;; ============================================================
+
+(defun schema-version (class)
+  "Return the schema version string for CLASS. CLASS may be a class
+object or a symbol naming a classic-class. Returns \"1\" for classes
+without an explicit :schema-version declaration."
+  (let ((class-obj (if (symbolp class) (find-class class) class)))
+    (if (typep class-obj 'classic-class)
+        (class-schema-version class-obj)
+        "1")))

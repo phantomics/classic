@@ -1,10 +1,10 @@
-# CLASSIC
+# Classic
 
 **Common Lisp Abstract Syndication System and Imprint Composer**
 
 The advent of the Internet has brought with it the proliferation of countless articles, comments, reviews, callbacks, video and audio segments and other forms of human expression. Implementing the relationships between these entities and the communication channels that carry them has challenged generations of programmers. Classic is a publishing framework offering new ways to publish and manage media by focusing on the things that all publishing activities have in common.
 
-Built on the foundation of Common Lisp, Classic's composable publishing model uses CLOS classes grounded in semantic web vocabularies to define content types, and the persistence, workflow, and presentation layers derive their behavior from those class definitions.
+Built on the foundation of Common Lisp, Classic's composable publishing model uses CLOS classes grounded in semantic web vocabularies to define content types. These definitions determine a platform's persistence, workflow, and presentation behaviors in a way that separates concerns. Functions like HTML generation, content storage and authoring user interfaces are implemented through modules connecting to Classic's core.
 
 ## Quick Start
 

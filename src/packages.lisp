@@ -14,6 +14,8 @@
    #:slot-derives-from
    #:class-persistent-slots
    #:find-slot-by-predicate
+   #:class-schema-version
+   #:schema-version
 
    ;; ---- Persistence Protocol ----
    #:classic-persistence-strategy
@@ -153,9 +155,131 @@
    #:permission-denied
    #:guard-failed
 
+    ;; ---- Lifecycle Hooks ----
+   #:on-state-change
+
    ;; ---- Persistence: In-Memory Backend ----
    #:memory-persistence-strategy
-   #:strategy-entities))
+   #:strategy-entities
+
+   ;; ---- Model: Federation ----
+   #:classic-instance-descriptor
+   #:instance-uri
+   #:federation-roles
+   #:supported-classes
+   #:peer-instances
+
+   #:classic-federation-peer
+   #:peer-uri
+   #:peer-descriptor-uri
+   #:peer-roles
+   #:peer-relationship
+   #:last-synced
+
+   #:classic-syndication-feed
+   #:feed-type
+   #:source-instance
+   #:filter-predicate
+   #:feed-subscribers
+   #:last-updated
+
+   ;; ---- Federation: Transport ----
+   #:federation-transport
+   #:direct-transport
+   #:transport-registry
+   #:register-with-transport
+   #:federation-send
+   #:federation-receive
+
+    ;; ---- Federation: Protocol ----
+   #:describe-instance
+   #:register-peer
+   #:establish-federation
+   #:create-feed
+   #:subscribe-to-feed
+   #:publish-to-peers
+   #:receive-from-peer
+   #:resolve-entity
+   #:list-federated-content
+   #:entity-source-instance
+   #:entity-federated-p
+
+   ;; ---- Schema Migration: Model ----
+   #:classic-migration-operation
+   #:operation-type
+   #:target-slot
+   #:new-slot-name
+   #:old-predicate
+   #:new-predicate
+   #:default-value
+   #:new-persistence
+   #:transform-fn-name
+
+   #:classic-schema-migration
+   #:target-class
+   #:from-version
+   #:to-version
+   #:compatibility
+   #:reversible-p
+   #:operations
+   #:depends-on
+   #:migration-trigger
+
+   #:classic-schema-manifest
+   #:manifest-version
+   #:class-versions
+   #:parent-manifest
+
+   ;; ---- Schema Migration: Manifest Helpers ----
+   #:build-current-manifest
+   #:all-classic-classes
+   #:manifest-class-version
+   #:manifests-differ-p
+
+   ;; ---- Schema Migration: Registry ----
+   #:register-migration
+   #:find-migration
+   #:find-migration-path
+   #:list-migrations
+   #:clear-migration-registry
+   #:define-schema-migration
+
+   ;; ---- Schema Migration: Predicate Registry ----
+   #:register-predicate
+   #:predicate->slot
+   #:predicate-history
+   #:rebuild-predicate-registry
+   #:clear-predicate-registry
+
+   ;; ---- Schema Migration: Runner ----
+   #:migration-error
+   #:no-migration-path
+   #:migration-cycle
+   #:apply-operation
+   #:migrate-entity
+   #:toposort-migrations
+   #:evaluate-trigger
+   #:default-migration-trigger
+   #:migrate-store
+
+   ;; ---- Schema Migration: Persistence Integration ----
+   #:entity-schema-version
+
+   ;; ---- Schema Migration: Data Migration ----
+   #:apply-data-migration
+   #:estimate-data-migration
+   #:validate-data-migration
+   #:run-data-migrations
+
+   ;; ---- Schema Migration: Federation Integration ----
+   #:instance-schema-manifest
+   #:federation-compatibility-report
+   #:federation-compatibility-report-compatible-classes
+   #:federation-compatibility-report-translatable-classes
+   #:federation-compatibility-report-incompatible-classes
+   #:assess-federation-compatibility
+   #:translate-entity-for-peer
+   #:translate-entity-from-peer))
 
 ;;; ============================================================
 ;;; Application model packages
@@ -181,4 +305,7 @@
    #:publish-post
    #:blog-account
    #:blog-account-role
-   #:blog-article))
+   #:blog-article
+   #:blog-transport
+   #:blog-federation-roles
+   #:list-federated-content))

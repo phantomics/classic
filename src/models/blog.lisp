@@ -73,7 +73,10 @@ pattern that CLASSIC's design is built around."))
   (authority-date "" :type string)
   (workflow    nil)
   (roles       (make-hash-table :test 'equal) :type hash-table)
-  (persons     (make-hash-table :test 'equal) :type hash-table))
+  (persons     (make-hash-table :test 'equal) :type hash-table)
+  ;; Federation (opt-in)
+  (transport   nil :type (or null federation-transport))
+  (federation-roles nil :type list))
 
 (defmethod print-object ((blog blog) stream)
   (print-unreadable-object (blog stream :type t)
@@ -328,11 +331,16 @@ ACCOUNT must have the editor role. INDEX is 1-based from list-posts."
       (return-from publish-post nil))
     (let ((post (nth (1- index) posts)))
       (handler-case
-          (progn
+          (let ((from-state (current-state post)))
             (attempt-transition post "published" account)
             (persist-entity (blog-strategy blog) post)
-            (format t "~%  Post ~S transitioned: draft → published~%"
-                    (or (headline post) (label post)))
+            ;; Fire lifecycle hook (federation, cache invalidation, etc.)
+            (on-state-change (blog-publication blog) post
+                             from-state "published")
+            (format t "~%  Post ~S transitioned: ~A → published~%"
+                    (or (headline post) (label post)) from-state)
+            ;; Syndicate to federation peers if configured
+            (syndicate-if-configured blog post)
             post)
         (workflow-error (e)
           (format t "~%  ~A~%" e)
@@ -462,3 +470,39 @@ Returns the post instance, or NIL if the index is invalid."
        :format '(:year #\- (:month 2) #\- (:day 2) #\Space
                  (:hour 2) #\: (:min 2)))
       ""))
+
+;;; ============================================================
+;;; Federation integration (opt-in via blog-transport)
+;;; ============================================================
+
+(defun blog-has-federation-p (blog)
+  "Return T if this blog has federation enabled."
+  (and (blog-transport blog)
+       (blog-federation-roles blog)))
+
+;;; When a blog has a transport configured, on-state-change syndicates
+;;; published content to subscribed peers.
+(defmethod on-state-change ((pub classic-publication) entity
+                            (from-state string) (to-state string))
+  ;; Find the blog struct that wraps this publication.
+  ;; For the PoC, we check the transport slot via a dynamic lookup.
+  ;; The default method (on protocol.lisp) is a no-op; this method
+  ;; fires only when matched and does federation if configured.
+  ;;
+  ;; We can't easily get the blog struct from the publication alone,
+  ;; so federation syndication is triggered directly by publish-post
+  ;; rather than this hook. This method remains as an extension point
+  ;; for non-blog publications.
+  nil)
+
+(defun syndicate-if-configured (blog post)
+  "If the blog has federation configured, push the post to peers."
+  (when (blog-has-federation-p blog)
+    (let ((count (publish-to-peers (blog-publication blog) post
+                                   (blog-transport blog))))
+      (when (> count 0)
+        (format t "  Syndicated to ~D peer~:P~%" count)))))
+
+(defmethod list-federated-content ((blog blog))
+  "List all content received from federation peers on this blog."
+  (classic:list-federated-content (blog-publication blog)))

@@ -28,16 +28,31 @@
      (:file "content")
      (:file "community")
      (:file "identity")
-     (:file "workflow")
-     (:file "publication")))
+      (:file "workflow")
+      (:file "federation")
+      (:file "publication")))
    (:module "persistence"
-    :serial t
-    :components
-    ((:file "memory")))
-    (:module "models"
      :serial t
      :components
-     ((:file "blog")))))
+     ((:file "memory")))
+   (:module "migration"
+     :serial t
+     :components
+     ((:file "model")
+      (:file "registry")
+      (:file "runner")
+      (:file "persistence")
+      (:file "data-migration")
+      (:file "federation")))
+   (:module "federation"
+    :serial t
+    :components
+    ((:file "transport")
+     (:file "protocol")))
+   (:module "models"
+    :serial t
+    :components
+    ((:file "blog")))))
 
 (asdf:defsystem "classic/tests"
   :description "Test suite for CLASSIC"
@@ -53,4 +68,6 @@
    (:file "test-memory")
    (:file "test-model")
    (:file "test-workflow")
-   (:file "test-blog")))
+   (:file "test-blog")
+    (:file "test-federation")
+    (:file "test-migration")))
