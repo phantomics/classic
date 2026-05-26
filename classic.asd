@@ -46,10 +46,11 @@
       (:file "data-migration")
       (:file "federation")))
    (:module "federation"
-    :serial t
-    :components
-    ((:file "transport")
-     (:file "protocol")))
+     :serial t
+     :components
+     ((:file "transport")
+      (:file "provenance")
+      (:file "protocol")))
    (:module "models"
     :serial t
     :components
@@ -72,4 +73,5 @@
    (:file "test-blog")
     (:file "test-federation")
     (:file "test-migration")
-    (:file "test-deletion")))
+    (:file "test-deletion")
+    (:file "test-federation-consistency")))

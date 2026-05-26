@@ -14,36 +14,18 @@
 ;;; ============================================================
 ;;; Provenance metadata on federated entities
 ;;; ============================================================
-;;; Rather than adding slots to every content class, we store
-;;; provenance in the entity's metadata via a simple convention:
-;;; a hash table on the publication mapping entity URIs to their
-;;; source instance authority. This keeps the core ontology clean.
-
-(defvar *federation-provenance* (make-hash-table :test 'equal)
-  "Maps publication authority -> (hash-table: entity-uri -> source-authority).
-Tracks which entities were received from federation peers.")
-
-(defun ensure-provenance-table (publication-authority)
-  "Get or create the provenance table for a publication."
-  (or (gethash publication-authority *federation-provenance*)
-      (setf (gethash publication-authority *federation-provenance*)
-            (make-hash-table :test 'equal))))
-
-(defun record-provenance (publication entity-uri source-authority)
-  "Record that ENTITY-URI in PUBLICATION was received from SOURCE-AUTHORITY."
-  (let ((table (ensure-provenance-table (uri-base-authority publication))))
-    (setf (gethash entity-uri table) source-authority)))
-
-(defun entity-source-instance (publication entity-uri)
-  "Return the source authority for a federated entity, or NIL if local."
-  (let ((table (gethash (uri-base-authority publication)
-                        *federation-provenance*)))
-    (when table
-      (gethash entity-uri table))))
-
-(defun entity-federated-p (publication entity-uri)
-  "Return T if ENTITY-URI in PUBLICATION was received from a peer."
-  (not (null (entity-source-instance publication entity-uri))))
+;;; Provenance is stored as persisted classic-federation-provenance
+;;; resources via the persistence protocol. See provenance.lisp for
+;;; the resource classes and helper functions. The old global
+;;; *federation-provenance* hash table has been removed.
+;;;
+;;; Key functions (defined in provenance.lisp):
+;;;   record-federation-provenance  — create a provenance record
+;;;   find-provenance               — look up a provenance record
+;;;   entity-source-instance        — get source authority for an entity
+;;;   entity-federated-p            — check if an entity is federated
+;;;   log-federation-event          — log a federation operation
+;;;   query-federation-events       — query the event log
 
 ;;; ============================================================
 ;;; Instance description
@@ -213,6 +195,8 @@ Called by the on-state-change hook when an entity is published."))
 
 (defmethod publish-to-peers ((pub classic-publication) entity transport)
   (let ((source-auth (uri-base-authority pub))
+        (entity-uri (uri-string entity))
+        (strategy (persistence-strategy pub))
         (syndicated-count 0))
     ;; Find all feeds on this publication
     (maphash (lambda (uri feed-entity)
@@ -226,12 +210,24 @@ Called by the on-state-change hook when an entity is published."))
                    (when matches
                      ;; Send to each subscriber
                      (dolist (subscriber-auth (feed-subscribers feed-entity))
-                       (federation-send transport subscriber-auth
-                                        (list :type :publish
-                                              :entity entity
-                                              :source-authority source-auth))
-                       (incf syndicated-count))))))
-             (strategy-entities (persistence-strategy pub)))
+                       (handler-case
+                           (progn
+                             (federation-send transport subscriber-auth
+                                             (list :type :publish
+                                                   :entity entity
+                                                   :source-authority source-auth))
+                             ;; Log successful delivery
+                             (log-federation-event strategy pub :publish
+                                                  entity-uri subscriber-auth
+                                                  :status :delivered)
+                             (incf syndicated-count))
+                         (error (e)
+                           ;; Log failed delivery
+                           (log-federation-event strategy pub :publish
+                                                entity-uri subscriber-auth
+                                                :status :failed
+                                                :error-info (princ-to-string e)))))))))
+             (strategy-entities strategy))
     syndicated-count))
 
 ;;; ============================================================
@@ -249,8 +245,11 @@ Provenance is recorded so the entity can be identified as federated."))
         (entity-uri (uri-string entity)))
     ;; Store the entity locally with its original URI
     (persist-entity strategy entity)
-    ;; Record provenance
-    (record-provenance pub entity-uri source-authority)
+    ;; Record provenance via persistence protocol
+    (record-federation-provenance pub entity-uri source-authority strategy)
+    ;; Log the receive event
+    (log-federation-event strategy pub :receive entity-uri source-authority
+                          :status :delivered)
     entity))
 
 ;;; ============================================================
@@ -297,20 +296,31 @@ soft-deleted locally."))
 (defmethod retract-from-peers ((pub classic-publication) entity transport)
   (let ((source-auth (uri-base-authority pub))
         (entity-uri (uri-string entity))
+        (strategy (persistence-strategy pub))
         (retracted-count 0))
     ;; Iterate over all feeds and their subscribers
     (maphash (lambda (uri feed-entity)
                (declare (ignore uri))
                (when (typep feed-entity 'classic-syndication-feed)
                  (dolist (subscriber-auth (feed-subscribers feed-entity))
-                   (federation-send transport subscriber-auth
-                                    (list :type :retract
-                                          :entity-uri entity-uri
-                                          :source-authority source-auth
-                                          :retracted-at (local-time:now)
-                                          :reason "author-deleted"))
-                   (incf retracted-count))))
-             (strategy-entities (persistence-strategy pub)))
+                   (handler-case
+                       (progn
+                         (federation-send transport subscriber-auth
+                                         (list :type :retract
+                                               :entity-uri entity-uri
+                                               :source-authority source-auth
+                                               :retracted-at (local-time:now)
+                                               :reason "author-deleted"))
+                         (log-federation-event strategy pub :retract
+                                              entity-uri subscriber-auth
+                                              :status :delivered)
+                         (incf retracted-count))
+                     (error (e)
+                       (log-federation-event strategy pub :retract
+                                            entity-uri subscriber-auth
+                                            :status :failed
+                                            :error-info (princ-to-string e)))))))
+             (strategy-entities strategy))
     retracted-count))
 
 (defgeneric receive-retraction (publication entity-uri source-authority
@@ -322,7 +332,6 @@ deleted (soft delete) but retains it for audit purposes."))
 (defmethod receive-retraction ((pub classic-publication) entity-uri
                                source-authority
                                &key retracted-at reason)
-  (declare (ignore source-authority))
   (let* ((strategy (persistence-strategy pub))
          (entity (retrieve-entity strategy entity-uri nil)))
     (when entity
@@ -351,6 +360,14 @@ deleted (soft delete) but retains it for audit purposes."))
         (setf (deleted-by entity) "federation:retraction")
         (when reason
           (setf (deletion-reason entity) reason)))
+      ;; Update provenance sync status to retracted
+      (let ((prov (find-provenance pub entity-uri strategy)))
+        (when prov
+          (setf (provenance-sync-status prov) :retracted)
+          (persist-entity strategy prov)))
+      ;; Log the receive-retraction event
+      (log-federation-event strategy pub :retract entity-uri
+                            source-authority :status :delivered)
       ;; Re-persist with updated state
       (persist-entity strategy entity)
       entity)))
@@ -384,14 +401,13 @@ federation peers (i.e., not locally authored)."))
 
 (defmethod list-federated-content ((pub classic-publication))
   (let ((strategy (persistence-strategy pub))
-        (authority (uri-base-authority pub))
         (results nil))
-    (let ((prov-table (gethash authority *federation-provenance*)))
-      (when prov-table
-        (maphash (lambda (entity-uri source-auth)
-                   (declare (ignore source-auth))
-                   (let ((entity (retrieve-entity strategy entity-uri nil)))
-                     (when (and entity (entity-visible-p entity))
-                       (push entity results))))
-                 prov-table)))
+    ;; Query all provenance records for this publication
+    (dolist (prov (find-all-provenance pub strategy))
+      ;; Skip retracted entries
+      (unless (eq :retracted (provenance-sync-status prov))
+        (let ((entity (retrieve-entity strategy
+                                       (provenance-entity-uri prov) nil)))
+          (when (and entity (entity-visible-p entity))
+            (push entity results)))))
     (nreverse results)))

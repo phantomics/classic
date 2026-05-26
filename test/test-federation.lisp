@@ -1,11 +1,6 @@
 ;;;; test-federation.lisp — Tests for CLASSIC federation
 
 (in-package #:classic-tests)
-(in-suite classic)
-
-(def-suite federation
-  :description "Federation: instance discovery, syndication, resolution"
-  :in classic)
 
 (in-suite federation)
 

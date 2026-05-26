@@ -83,7 +83,7 @@ Suitable for:
                                publication message)
   "Dispatch an incoming message based on its :type."
   (let ((msg-type (getf message :type)))
-    (ecase msg-type
+    (case msg-type
       (:descriptor-request
        (list :type :descriptor-response
              :descriptor (describe-instance publication)))
@@ -102,7 +102,13 @@ Suitable for:
        (let ((entity (getf message :entity))
              (source-authority (getf message :source-authority)))
          (receive-from-peer publication entity source-authority)
-         (list :type :ack))))))
+         (list :type :ack)))
+      (otherwise
+       ;; Unknown message types return an error response rather than
+       ;; signaling, allowing protocol extensions without breaking
+       ;; older instances.
+       (list :type :error
+             :message (format nil "Unknown message type: ~S" msg-type))))))
 
 (defmethod print-object ((transport direct-transport) stream)
   (print-unreadable-object (transport stream :type t)

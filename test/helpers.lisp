@@ -40,8 +40,16 @@
   :description "Blog application model integration"
   :in classic)
 
+(def-suite federation
+  :description "Federation: instance discovery, syndication, resolution"
+  :in classic)
+
 (def-suite migration
   :description "Schema migration system"
+  :in classic)
+
+(def-suite federation-consistency
+  :description "Federation consistency: persisted provenance, event log, retention"
   :in classic)
 
 (def-suite deletion

@@ -223,6 +223,36 @@
    #:retract-from-peers
    #:receive-retraction
 
+   ;; ---- Federation: Provenance (persisted) ----
+   #:classic-federation-provenance
+   #:provenance-entity-uri
+   #:provenance-source-authority
+   #:provenance-received-at
+   #:provenance-sync-status
+   #:provenance-publication-uri
+   #:record-federation-provenance
+   #:find-provenance
+   #:find-all-provenance
+
+   ;; ---- Federation: Event Log ----
+   #:classic-federation-event
+   #:federation-event-type
+   #:federation-event-entity-uri
+   #:federation-event-peer-authority
+   #:federation-event-delivery-status
+   #:federation-event-attempt-count
+   #:federation-event-last-attempt-at
+   #:federation-event-error-info
+   #:log-federation-event
+   #:update-event-status
+   #:query-federation-events
+
+   ;; ---- Federation: Retention Policy ----
+   #:classic-retention-policy
+   #:retention-rules
+   #:apply-retention-policy
+   #:make-default-retention-policy
+
    ;; ---- Schema Migration: Model ----
    #:classic-migration-operation
    #:operation-type
