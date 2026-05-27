@@ -339,8 +339,8 @@ ACCOUNT must have the editor role. INDEX is 1-based from list-posts."
     (let ((post (nth (1- index) posts)))
       (handler-case
           (let ((from-state (current-state post)))
-            (attempt-transition post "published" account)
-            (persist-entity (blog-strategy blog) post)
+            (with-persistence ((blog-strategy blog) post)
+              (attempt-transition post "published" account))
             ;; Fire lifecycle hook (federation, cache invalidation, etc.)
             (on-state-change (blog-publication blog) post
                              from-state "published")
@@ -376,18 +376,17 @@ applied; others are left unchanged. INDEX is 1-based from list-posts."
       (format t "~%  No post #~D.~%" index)
       (return-from edit-post nil))
     (let ((post (nth (1- index) posts)))
-      ;; Apply changes
-      (when title
-        (setf (headline post) title)
-        (setf (label post) title))
-      (when text
-        (setf (body post) text))
-      (when categories
-        (setf (keywords post) categories))
-      ;; Increment logical clock and update modified-at
-      (increment-logical-clock post)
-      ;; Re-persist
-      (persist-entity (blog-strategy blog) post)
+      ;; Apply changes and persist
+      (with-persistence ((blog-strategy blog) post)
+        (when title
+          (setf (headline post) title)
+          (setf (label post) title))
+        (when text
+          (setf (body post) text))
+        (when categories
+          (setf (keywords post) categories))
+        ;; Increment logical clock and update modified-at
+        (increment-logical-clock post))
       (format t "~%  Post ~S updated (clock: ~D).~%"
               (or (headline post) (label post))
               (logical-clock post))
@@ -415,10 +414,10 @@ ACCOUNT must have the editor role. INDEX is 1-based from list-posts."
     (let ((post (nth (1- index) posts)))
       (handler-case
           (let ((from-state (current-state post)))
-            (attempt-deletion post account
-                              :target-state "archived"
-                              :reason "archived by editor")
-            (persist-entity (blog-strategy blog) post)
+            (with-persistence ((blog-strategy blog) post)
+              (attempt-deletion post account
+                                :target-state "archived"
+                                :reason "archived by editor"))
             (format t "~%  Post ~S transitioned: ~A -> archived~%"
                     (or (headline post) (label post)) from-state)
             post)
@@ -438,10 +437,10 @@ ACCOUNT must have the editor role. INDEX is 1-based from list-posts."
     (let ((post (nth (1- index) posts)))
       (handler-case
           (let ((from-state (current-state post)))
-            (attempt-deletion post account
-                              :target-state "deleted"
-                              :reason reason)
-            (persist-entity (blog-strategy blog) post)
+            (with-persistence ((blog-strategy blog) post)
+              (attempt-deletion post account
+                                :target-state "deleted"
+                                :reason reason))
             ;; Fire deletion lifecycle hook
             (on-entity-delete (blog-publication blog) post :soft)
             (format t "~%  Post ~S transitioned: ~A -> deleted~%"
@@ -465,13 +464,13 @@ with :include-deleted t."
     (let ((post (nth (1- index) posts)))
       (handler-case
           (let ((from-state (current-state post)))
-            (attempt-transition post "published" account)
-            ;; Clear deletion metadata on restore
-            (when (typep post 'classic-deletable)
-              (setf (deleted-at post) nil)
-              (setf (deleted-by post) nil)
-              (setf (deletion-reason post) nil))
-            (persist-entity (blog-strategy blog) post)
+            (with-persistence ((blog-strategy blog) post)
+              (attempt-transition post "published" account)
+              ;; Clear deletion metadata on restore
+              (when (typep post 'classic-deletable)
+                (setf (deleted-at post) nil)
+                (setf (deleted-by post) nil)
+                (setf (deletion-reason post) nil)))
             (format t "~%  Post ~S restored: ~A -> published~%"
                     (or (headline post) (label post)) from-state)
             post)

@@ -78,4 +78,5 @@
     (:file "test-migration")
     (:file "test-deletion")
     (:file "test-federation-consistency")
-    (:file "test-validation")))
+    (:file "test-validation")
+    (:file "test-with-persistence")))

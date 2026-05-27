@@ -191,6 +191,50 @@ annotations to check)."
     (validate-entity entity :on-error :signal)))
 
 ;;; ============================================================
+;;; Persistence convenience macro
+;;; ============================================================
+
+(defmacro with-persistence ((strategy entity-or-entities) &body body)
+  "Execute BODY, then persist ENTITY-OR-ENTITIES via STRATEGY on
+normal exit. If BODY signals an error, no persistence occurs and
+the entity remains in its pre-body state.
+
+ENTITY-OR-ENTITIES is either a single form evaluating to a
+classic-resource, or a list of such forms. In the list case, all
+entities are persisted in order after the body completes.
+
+Returns the value(s) of the last form in BODY.
+
+Example (single entity):
+  (with-persistence (strategy post)
+    (attempt-transition post \"published\" account))
+
+Example (multiple entities):
+  (with-persistence (strategy (post container))
+    (attempt-transition post \"published\" account)
+    (push uri (contains container)))"
+  (let ((s (gensym "STRATEGY")))
+    (if (and (listp entity-or-entities)
+             (not (eq (first entity-or-entities) 'quote)))
+        ;; Multiple entities: persist each in order
+        (let ((entity-vars (loop for e in entity-or-entities
+                                 collect (gensym "ENTITY"))))
+          `(let ((,s ,strategy)
+                 ,@(mapcar #'list entity-vars entity-or-entities))
+             (multiple-value-prog1
+                 (progn ,@body)
+               ,@(mapcar (lambda (evar)
+                           `(persist-entity ,s ,evar))
+                         entity-vars))))
+        ;; Single entity
+        (let ((e (gensym "ENTITY")))
+          `(let ((,s ,strategy)
+                 (,e ,entity-or-entities))
+             (multiple-value-prog1
+                 (progn ,@body)
+               (persist-entity ,s ,e)))))))
+
+;;; ============================================================
 ;;; Deletion lifecycle hook
 ;;; ============================================================
 

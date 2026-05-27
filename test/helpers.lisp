@@ -60,6 +60,10 @@
   :description "Slot type validation"
   :in classic)
 
+(def-suite with-persistence-suite
+  :description "with-persistence macro"
+  :in classic)
+
 ;;; ============================================================
 ;;; Test runner
 ;;; ============================================================

@@ -31,6 +31,7 @@
    #:rebuild-derived
    #:validate-entity
    #:validation-failed
+   #:with-persistence
    #:validation-failed-entity
    #:validation-failed-errors
    #:*validate-on-persist*
