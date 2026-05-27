@@ -12,11 +12,12 @@
 ;;; ============================================================
 
 (defclass classic-resource ()
-  ((uri
+  (   (uri
     :accessor uri
     :initarg :uri
     :persistence :identity
     :predicate "rdf:about"
+    :slot-type (or classic-uri string)
     :documentation "The resource's canonical classic: URI. Immutable after
 first publication. Accepts a classic-uri struct or a string (auto-parsed).")
    (rdf-type
@@ -25,6 +26,7 @@ first publication. Accepts a classic-uri struct or a string (auto-parsed).")
     :initform nil
     :persistence :triple
     :predicate "rdf:type"
+    :slot-type (or null string)
     :documentation "The RDF type URI string. Defaults to a value derived
 from the CLOS class name if not explicitly provided.")
    (created-at
@@ -33,6 +35,7 @@ from the CLOS class name if not explicitly provided.")
     :initform nil
     :persistence :triple
     :predicate "dcterms:created"
+    :slot-type (or null local-time:timestamp)
     :documentation "Creation timestamp (local-time:timestamp).")
    (modified-at
     :accessor modified-at
@@ -40,6 +43,7 @@ from the CLOS class name if not explicitly provided.")
     :initform nil
     :persistence :triple
     :predicate "dcterms:modified"
+    :slot-type (or null local-time:timestamp)
     :documentation "Last modification timestamp (local-time:timestamp).")
    (logical-clock
     :accessor logical-clock
@@ -47,6 +51,7 @@ from the CLOS class name if not explicitly provided.")
     :initform 0
     :persistence :triple
     :predicate "classic:logicalClock"
+    :slot-type (integer 0)
     :documentation "Monotonic counter incremented on every mutation.
 Used by the federation system for causal ordering: peers accept
 updates only if the incoming logical clock value is greater than
@@ -99,12 +104,13 @@ persisted entity to maintain causal ordering for federation."
 ;;; ============================================================
 
 (defclass classic-named-resource (classic-resource)
-  ((label
+  (   (label
     :accessor label
     :initarg :label
     :initform nil
     :persistence :triple
     :predicate "rdfs:label"
+    :slot-type (or null string)
     :documentation "Human-readable label. Maps to rdfs:label.")
    (description
     :accessor description
@@ -112,6 +118,7 @@ persisted entity to maintain causal ordering for federation."
     :initform nil
     :persistence :triple
     :predicate "rdfs:comment"
+    :slot-type (or null string)
     :documentation "Human-readable description. Maps to rdfs:comment."))
   (:metaclass classic-class)
   (:documentation

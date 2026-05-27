@@ -38,7 +38,14 @@
     :initarg :derives-from
     :initform nil
     :reader slot-derives-from
-    :documentation "Source specification for :derived persistence slots."))
+    :documentation "Source specification for :derived persistence slots.")
+   (slot-type
+    :initarg :slot-type
+    :initform nil
+    :reader slot-type
+    :documentation "Type constraint for slot value validation. A CL type
+specifier checked by validate-entity before persistence. NIL means
+unconstrained. Examples: STRING, (OR NULL STRING), (INTEGER 0)."))
   (:documentation "Direct slot definition with CLASSIC persistence metadata."))
 
 (defclass classic-effective-slot-definition
@@ -58,7 +65,11 @@
    (derives-from
     :initform nil
     :accessor slot-derives-from
-    :documentation "Effective source specification for :derived slots."))
+    :documentation "Effective source specification for :derived slots.")
+   (slot-type
+    :initform nil
+    :accessor slot-type
+    :documentation "Effective type constraint for validation."))
   (:documentation "Effective slot definition with CLASSIC persistence metadata."))
 
 ;;; ============================================================
@@ -127,7 +138,8 @@ current class definitions."))
     (let ((persistence nil)
           (predicate nil)
           (fmt nil)
-          (derives-from nil))
+          (derives-from nil)
+          (stype nil))
       (dolist (dslot direct-slots)
         (when (typep dslot 'classic-direct-slot-definition)
           (unless persistence
@@ -137,11 +149,14 @@ current class definitions."))
           (unless fmt
             (setf fmt (slot-format dslot)))
           (unless derives-from
-            (setf derives-from (slot-derives-from dslot)))))
+            (setf derives-from (slot-derives-from dslot)))
+          (unless stype
+            (setf stype (slot-type dslot)))))
       (setf (slot-value effective-slot 'persistence) persistence)
       (setf (slot-value effective-slot 'predicate) predicate)
       (setf (slot-value effective-slot 'slot-format) fmt)
-      (setf (slot-value effective-slot 'derives-from) derives-from))
+      (setf (slot-value effective-slot 'derives-from) derives-from)
+      (setf (slot-value effective-slot 'slot-type) stype))
     effective-slot))
 
 ;;; ============================================================

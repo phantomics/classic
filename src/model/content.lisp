@@ -13,12 +13,13 @@
 ;;; ============================================================
 
 (defclass classic-creative-work (classic-named-resource)
-  ((author
+  (   (author
     :accessor author
     :initarg :author
     :initform nil
     :persistence :relation
     :predicate "schema:author"
+    :slot-type (or null string)
     :documentation "URI of the author (a classic-agent). Maps to schema:author.")
    (date-created
     :accessor date-created
@@ -26,6 +27,7 @@
     :initform nil
     :persistence :triple
     :predicate "schema:dateCreated"
+    :slot-type (or null local-time:timestamp)
     :documentation "Content creation date (local-time:timestamp).
 Distinct from the resource's created-at: date-created is the
 authorial date, created-at is the system record timestamp.")
@@ -35,6 +37,7 @@ authorial date, created-at is the system record timestamp.")
     :initform nil
     :persistence :triple
     :predicate "schema:dateModified"
+    :slot-type (or null local-time:timestamp)
     :documentation "Content last-modified date.")
    (keywords
     :accessor keywords
@@ -42,6 +45,7 @@ authorial date, created-at is the system record timestamp.")
     :initform nil
     :persistence :triple
     :predicate "schema:keywords"
+    :slot-type (or null list)
     :documentation "List of keyword/tag strings. Maps to schema:keywords.")
    (body
     :accessor body
@@ -62,12 +66,13 @@ media objects, and all other content types. Mirrors schema:CreativeWork."))
 ;;; ============================================================
 
 (defclass classic-article (classic-creative-work)
-  ((headline
+  (   (headline
     :accessor headline
     :initarg :headline
     :initform nil
     :persistence :triple
     :predicate "schema:headline"
+    :slot-type (or null string)
     :documentation "The article's headline/title. Maps to schema:headline."))
   (:metaclass classic-class)
   (:documentation

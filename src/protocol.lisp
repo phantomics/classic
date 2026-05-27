@@ -112,6 +112,85 @@
     nil))
 
 ;;; ============================================================
+;;; Entity validation
+;;; ============================================================
+
+(define-condition validation-failed (error)
+  ((entity :initarg :entity :reader validation-failed-entity)
+   (errors :initarg :errors :reader validation-failed-errors))
+  (:report (lambda (c s)
+             (format s "Validation failed on ~A: ~D error~:P~%~{  ~A~%~}"
+                     (let ((e (validation-failed-entity c)))
+                       (if (and (typep e 'classic-resource)
+                                (slot-boundp e 'uri))
+                           (uri-string e)
+                           (type-of e)))
+                     (length (validation-failed-errors c))
+                     (mapcar (lambda (err) (getf err :message))
+                             (validation-failed-errors c)))))
+  (:documentation "Signaled when validate-entity finds type constraint
+violations. Contains the entity and a list of error plists."))
+
+(defgeneric validate-entity (entity &key on-error)
+  (:documentation
+   "Validate ENTITY's slot values against declared :slot-type constraints.
+
+Checks every persistent slot that has a non-NIL :slot-type annotation.
+Unbound slots are skipped (unbound is not invalid -- the entity may
+be under construction).
+
+ON-ERROR controls behavior when violations are found:
+  :report (default) -- return a list of error plists
+  :signal           -- signal a validation-failed condition
+  :warn             -- issue warnings, return the error list
+
+Returns T if all constraints pass, or the error list if any fail.
+Each error is a plist with keys :slot, :predicate, :expected,
+:actual, and :message."))
+
+(defmethod validate-entity (entity &key (on-error :report))
+  (let ((errors nil))
+    (dolist (slot (class-persistent-slots (class-of entity)))
+      (let ((stype (slot-type slot)))
+        (when stype
+          (let ((slot-name (c2mop:slot-definition-name slot)))
+            (when (slot-boundp entity slot-name)
+              (let ((value (slot-value entity slot-name)))
+                (unless (typep value stype)
+                  (push (list :slot slot-name
+                              :predicate (slot-predicate slot)
+                              :expected stype
+                              :actual value
+                              :message (format nil "Slot ~A: expected ~S, ~
+                                                    got ~S ~S"
+                                               slot-name stype
+                                               (type-of value) value))
+                        errors))))))))
+    (setf errors (nreverse errors))
+    (cond
+      ((null errors) t)
+      ((eq on-error :signal)
+       (error 'validation-failed :entity entity :errors errors))
+      ((eq on-error :warn)
+       (dolist (err errors)
+         (warn "~A" (getf err :message)))
+       errors)
+      (t errors))))
+
+(defvar *validate-on-persist* nil
+  "When T, persist-entity validates entities before storing.
+Signals validation-failed if any :slot-type constraints are violated.
+Default NIL preserves existing behavior (no validation overhead).")
+
+(defmethod persist-entity :before ((strategy classic-persistence-strategy) entity)
+  "When *validate-on-persist* is T, validate the entity before storing.
+Only fires for entities whose class is a classic-class (has slot-type
+annotations to check)."
+  (when (and *validate-on-persist*
+             (typep (class-of entity) 'classic-class))
+    (validate-entity entity :on-error :signal)))
+
+;;; ============================================================
 ;;; Deletion lifecycle hook
 ;;; ============================================================
 

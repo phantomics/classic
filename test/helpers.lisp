@@ -56,6 +56,10 @@
   :description "Entity deletion and purge support"
   :in classic)
 
+(def-suite validation
+  :description "Slot type validation"
+  :in classic)
+
 ;;; ============================================================
 ;;; Test runner
 ;;; ============================================================

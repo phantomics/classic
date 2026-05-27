@@ -16,6 +16,7 @@
    #:find-slot-by-predicate
    #:class-schema-version
    #:schema-version
+   #:slot-type
 
    ;; ---- Persistence Protocol ----
    #:classic-persistence-strategy
@@ -28,6 +29,11 @@
    #:remove-relation
    #:invalidate-derived
    #:rebuild-derived
+   #:validate-entity
+   #:validation-failed
+   #:validation-failed-entity
+   #:validation-failed-errors
+   #:*validate-on-persist*
    #:on-entity-delete
    #:begin-transaction
    #:commit-transaction
