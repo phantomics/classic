@@ -136,14 +136,28 @@ Signals an error if the string is not a valid classic: URI."
   "Crockford's base32 alphabet: 0-9, a-z excluding i, l, o, u.
 Lowercase for URI aesthetics. Case-insensitive by convention.")
 
+(defvar *uri-random-state*
+  #+sbcl (sb-ext:seed-random-state t)
+  #-sbcl (make-random-state t)
+  "Dedicated random state for URI local ID generation.
+On SBCL, seeded via sb-ext:seed-random-state which uses system
+entropy. On other implementations, seeded from make-random-state t
+(which is implementation-defined but typically uses time-based
+entropy).
+
+Using a dedicated random state avoids interference from application
+code that may bind or modify *random-state*.")
+
 (defun generate-local-id (&optional (length 6))
   "Generate a random local ID string of LENGTH characters using
-Crockford base32. Default length of 6 gives ~1 billion possibilities,
-sufficient for collision resistance within a namespace path."
+Crockford base32 and the dedicated *uri-random-state*.
+Default length of 6 gives ~1 billion possibilities, sufficient
+for collision resistance within a namespace path."
   (let ((result (make-string length)))
     (dotimes (i length result)
       (setf (char result i)
-            (char *crockford-base32-alphabet* (random 32))))))
+            (char *crockford-base32-alphabet*
+                  (random 32 *uri-random-state*))))))
 
 ;;; ============================================================
 ;;; Slug generation
@@ -200,21 +214,29 @@ Override this for specific classes to control URI path structure."))
     (concatenate 'string stripped "s")))
 
 (defgeneric mint-uri (class-designator authority authority-date
-                      &key slug date &allow-other-keys)
+                      &key slug date strategy max-attempts
+                      &allow-other-keys)
   (:documentation
    "Mint a new classic: URI for a resource of the given class.
 CLASS-DESIGNATOR: symbol or class object.
 AUTHORITY: domain name of the originating instance.
 AUTHORITY-DATE: year (string) when the authority was valid.
 SLUG: optional human-readable string (will be slugified).
-DATE: optional local-time:timestamp for temporal namespace paths."))
+DATE: optional local-time:timestamp for temporal namespace paths.
+STRATEGY: optional persistence strategy for collision detection.
+  When provided, the minted URI is checked against the store. If a
+  collision is found, a new local ID is generated and checked again,
+  up to MAX-ATTEMPTS times.
+MAX-ATTEMPTS: maximum collision retries (default 10). Only used
+  when STRATEGY is provided."))
 
 (defmethod mint-uri ((class-name symbol) authority authority-date
                      &rest args &key &allow-other-keys)
   (apply #'mint-uri (find-class class-name) authority authority-date args))
 
 (defmethod mint-uri ((class standard-class) authority authority-date
-                     &key slug date &allow-other-keys)
+                     &key slug date strategy (max-attempts 10)
+                     &allow-other-keys)
   (let* ((prefix (uri-namespace-prefix class))
          (date-path (when date
                       (format nil "~D/~2,'0D"
@@ -223,9 +245,27 @@ DATE: optional local-time:timestamp for temporal namespace paths."))
          (path (if date-path
                    (format nil "~A/~A" prefix date-path)
                    prefix))
-         (local-id (generate-local-id)))
-    (make-classic-uri :authority authority
-                      :authority-date authority-date
-                      :path path
-                      :local-id local-id
-                      :slug (when slug (slugify slug)))))
+         (slugified (when slug (slugify slug)))
+         (local-id (generate-local-id))
+         (uri (make-classic-uri :authority authority
+                                :authority-date authority-date
+                                :path path
+                                :local-id local-id
+                                :slug slugified)))
+    ;; Collision detection: if a strategy is provided, check whether
+    ;; the minted URI already exists and retry with a new local ID.
+    (when strategy
+      (loop for attempt from 1 to max-attempts
+            while (retrieve-entity strategy (uri-string uri) nil)
+            do (setf local-id (generate-local-id))
+               (setf uri (make-classic-uri :authority authority
+                                           :authority-date authority-date
+                                           :path path
+                                           :local-id local-id
+                                           :slug slugified))
+            finally (when (retrieve-entity strategy (uri-string uri) nil)
+                      (error "URI collision persisted after ~D attempts ~
+                              for ~A in ~A"
+                             max-attempts (or slugified "unspecified")
+                             path))))
+    uri))

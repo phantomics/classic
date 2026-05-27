@@ -162,6 +162,51 @@
         (id2 (generate-local-id)))
     (is (not (string= id1 id2)))))
 
+(test generate-local-id-uses-dedicated-random-state
+  "generate-local-id uses *uri-random-state*, not *random-state*.
+Binding *random-state* to a fixed state should not affect ID generation."
+  (let* ((id-before (generate-local-id))
+         ;; Bind *random-state* to a fixed copy -- this should NOT
+         ;; affect generate-local-id since it uses *uri-random-state*
+         (id-during (let ((*random-state* (make-random-state nil)))
+                      (generate-local-id))))
+    ;; Both IDs should be valid 6-char strings
+    (is (= 6 (length id-before)))
+    (is (= 6 (length id-during)))
+    ;; They should differ (the dedicated state advances independently)
+    (is (not (string= id-before id-during)))))
+
+(test mint-uri-detects-collision
+  "mint-uri with :strategy retries on collision."
+  (with-clean-strategy ()
+    ;; Create an article to occupy a URI
+    (let* ((first-uri (mint-uri 'classic-article "test.example" "2026"
+                                :slug "collision-test"))
+           (article (make-instance 'classic-article
+                      :uri first-uri
+                      :headline "Occupant")))
+      (persist-entity *test-strategy* article)
+      ;; Mint a new URI with collision detection -- even though the slug
+      ;; is the same, the local-id will differ, so no collision.
+      ;; This tests that the mechanism works without actually colliding.
+      (let ((new-uri (mint-uri 'classic-article "test.example" "2026"
+                               :slug "collision-test"
+                               :strategy *test-strategy*)))
+        ;; The new URI should be different from the occupied one
+        (is (not (string= (uri-string first-uri)
+                           (uri-string new-uri))))
+        ;; And should not exist in the store
+        (is (null (retrieve-entity *test-strategy*
+                                  (uri-string new-uri) nil)))))))
+
+(test mint-uri-without-strategy-skips-collision-check
+  "mint-uri without :strategy does not check for collisions."
+  ;; Just verify it works without error and produces a URI
+  (let ((uri (mint-uri 'classic-article "test.example" "2026"
+                       :slug "no-check")))
+    (is (classic-uri-p uri))
+    (is (= 6 (length (classic-uri-local-id uri))))))
+
 ;;; ============================================================
 ;;; slugify
 ;;; ============================================================

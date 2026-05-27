@@ -44,13 +44,34 @@ Accepts classic-uri structs, strings, or classic-resource instances
     (string thing)
     (classic-resource (uri-string thing))))
 
+(defun clear-subject-relations (strategy uri-key)
+  "Remove all relation index entries where URI-KEY is the subject.
+Does not remove entries where URI-KEY is the object (those belong
+to other entities' relation slots). Used by persist-entity to clear
+stale relations before re-indexing."
+  (maphash (lambda (predicate pairs)
+             (let ((cleaned (remove-if (lambda (pair)
+                                         (equal (car pair) uri-key))
+                                       pairs)))
+               (if cleaned
+                   (setf (gethash predicate
+                                  (strategy-relations strategy))
+                         cleaned)
+                   (remhash predicate
+                            (strategy-relations strategy)))))
+           (strategy-relations strategy)))
+
 (defmethod persist-entity ((strategy memory-persistence-strategy) entity)
   "Store ENTITY in the hash table. Also indexes all :relation slots
-as queryable triples in the secondary index."
+as queryable triples in the secondary index. Clears stale relation
+entries for this entity before re-indexing, so that changed relations
+(e.g. a new author) replace old ones rather than accumulating."
   (let ((uri-key (uri-string entity)))
     ;; Store the instance
     (setf (gethash uri-key (strategy-entities strategy)) entity)
-    ;; Index relation slots
+    ;; Clear stale relation entries where this entity is the subject,
+    ;; then re-index current relation slot values.
+    (clear-subject-relations strategy uri-key)
     (dolist (slot (class-persistent-slots (class-of entity)))
       (when (eq :relation (slot-persistence slot))
         (let ((slot-name (c2mop:slot-definition-name slot))

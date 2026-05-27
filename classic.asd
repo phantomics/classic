@@ -54,7 +54,7 @@
       (:file "delivery")
       (:file "updates")
       (:file "outbox")))
-   (:module "models"
+   (:module "imprint"
     :serial t
     :components
     ((:file "blog")))))

@@ -10,7 +10,7 @@
 ;;;; guard predicates.
 ;;;;
 ;;;; Role resolution uses the actor-role-label generic function,
-;;;; allowing application models to define their own account-to-role
+;;;; allowing imprint models to define their own account-to-role
 ;;;; mapping via normal CLOS method dispatch.
 
 (in-package #:classic)

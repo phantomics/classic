@@ -94,6 +94,44 @@
         (is (= 1 (length subj-a)))
         (is (= 1 (length subj-b)))))))
 
+(test persist-entity-clears-stale-relations
+  "Re-persisting an entity with a changed :relation slot replaces
+the old relation index entries rather than accumulating."
+  (with-clean-strategy ()
+    (let* ((jane (make-test-person :name "Jane"))
+           (bob (make-test-person :name "Bob"))
+           (article (make-test-article :author-uri (uri-string jane))))
+      ;; Initially, article -> Jane via schema:author
+      (is (= 1 (length (query-relation *test-strategy* "schema:author"
+                                        (uri-string jane)))))
+      (is (= 0 (length (query-relation *test-strategy* "schema:author"
+                                        (uri-string bob)))))
+      ;; Change author to Bob and re-persist
+      (setf (classic:author article) (uri-string bob))
+      (persist-entity *test-strategy* article)
+      ;; Now only Bob should appear, not Jane
+      (is (= 0 (length (query-relation *test-strategy* "schema:author"
+                                        (uri-string jane)))))
+      (is (= 1 (length (query-relation *test-strategy* "schema:author"
+                                        (uri-string bob))))))))
+
+(test persist-entity-preserves-other-entity-relations
+  "Re-persisting entity A does not affect entity B's relation entries."
+  (with-clean-strategy ()
+    (let* ((jane (make-test-person :name "Jane"))
+           (article-a (make-test-article :author-uri (uri-string jane)
+                                         :headline "Article A"))
+           (article-b (make-test-article :author-uri (uri-string jane)
+                                         :headline "Article B")))
+      ;; Both articles reference Jane
+      (is (= 2 (length (query-relation *test-strategy* "schema:author"
+                                        (uri-string jane)))))
+      ;; Re-persist article-a (no changes)
+      (persist-entity *test-strategy* article-a)
+      ;; Article B's relation should still be intact
+      (is (= 2 (length (query-relation *test-strategy* "schema:author"
+                                        (uri-string jane))))))))
+
 (test normalize-uri-key-handles-resource-instances
   "normalize-uri-key handles classic-resource instances by extracting URI."
   (with-clean-strategy ()
