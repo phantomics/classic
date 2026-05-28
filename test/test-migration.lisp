@@ -673,3 +673,88 @@ those with removes or transforms are not."
       (let ((est (classic:estimate-data-migration m *test-strategy*)))
         (is (= 0 (getf est :entity-count)))
         (is (= 0 (getf est :estimated-seconds)))))))
+
+;;; ============================================================
+;;; Namespace discovery helper
+;;; ============================================================
+
+(def-test classes-using-namespace-finds-matches ()
+  "classes-using-namespace returns classes with matching predicates."
+  (let ((result (classic:classes-using-namespace "syndication:")))
+    (is-true result)
+    (is (member 'classic:classic-syndication-feed result))))
+
+(def-test classes-using-namespace-empty-for-unknown ()
+  "classes-using-namespace returns NIL for an unknown prefix."
+  (is (null (classic:classes-using-namespace "nonexistent.prefix:"))))
+
+(def-test classes-using-namespace-finds-workflow ()
+  "classes-using-namespace finds workflow classes."
+  (let ((result (classic:classes-using-namespace "workflow:")))
+    (is-true result)
+    (is (member 'classic:classic-workflow result))
+    (is (member 'classic:classic-workflow-state result))))
+
+;;; ============================================================
+;;; Bulk namespace migration macro
+;;; ============================================================
+
+(def-test define-namespace-migration-registers-migrations ()
+  "define-namespace-migration registers one migration per listed class."
+  (with-clean-migration-state ()
+    ;; Migrate the syndication: namespace on classic-syndication-feed
+    ;; This is a dry run: we register migrations but don't actually
+    ;; change the class definitions (the predicates stay as-is in the
+    ;; live classes). The test verifies the migrations are created
+    ;; with the correct structure.
+    (classic:define-namespace-migration
+        ("syndication:" "test.syndication:"
+         :version-bump "99"
+         :compatibility :full)
+      "Test namespace rename."
+      classic-syndication-feed)
+    ;; A migration should be registered for classic-syndication-feed
+    (let ((m (classic:find-migration 'classic-syndication-feed "1")))
+      (is-true m)
+      (is (equal "99" (classic:to-version m)))
+      (is (eq :full (classic:compatibility m))))))
+
+(def-test define-namespace-migration-generates-rename-ops ()
+  "Generated migrations contain :rename-predicate ops for matching slots."
+  (with-clean-migration-state ()
+    (classic:define-namespace-migration
+        ("syndication:" "test.syndication:"
+         :version-bump "99"
+         :compatibility :full)
+      "Test predicate renames."
+      classic-syndication-feed)
+    (let* ((m (classic:find-migration 'classic-syndication-feed "1"))
+           (ops (classic:operations m)))
+      ;; Should have at least one operation
+      (is (plusp (length ops)))
+      ;; All operations should be :rename-predicate
+      (dolist (op ops)
+        (is (eq :rename-predicate (classic:operation-type op))))
+      ;; Each should rename from syndication: to test.syndication:
+      (dolist (op ops)
+        (is (eql 0 (search "syndication:" (classic:old-predicate op))))
+        (is (eql 0 (search "test.syndication:" (classic:new-predicate op))))
+        ;; The suffix after the prefix should be the same
+        (is (equal (subseq (classic:old-predicate op) (length "syndication:"))
+                   (subseq (classic:new-predicate op)
+                           (length "test.syndication:"))))))))
+
+(def-test define-namespace-migration-multiple-classes ()
+  "define-namespace-migration handles multiple classes in one call."
+  (with-clean-migration-state ()
+    ;; federation: namespace is used by multiple classes
+    (classic:define-namespace-migration
+        ("federation:" "test.federation:"
+         :version-bump "99"
+         :compatibility :full)
+      "Test multi-class rename."
+      classic-federation-provenance
+      classic-federation-event)
+    ;; Both classes should have migrations registered
+    (is-true (classic:find-migration 'classic-federation-provenance "1"))
+    (is-true (classic:find-migration 'classic-federation-event "1"))))

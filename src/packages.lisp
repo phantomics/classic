@@ -329,6 +329,8 @@
    #:list-migrations
    #:clear-migration-registry
    #:define-schema-migration
+   #:define-namespace-migration
+   #:classes-using-namespace
 
    ;; ---- Schema Migration: Predicate Registry ----
    #:register-predicate

@@ -262,3 +262,98 @@ Operations are applied in the order listed."
                                  (target-slot op)
                                  ,to-version)))
          migration))))
+
+;;; ============================================================
+;;; Namespace discovery helper
+;;; ============================================================
+
+(defun classes-using-namespace (prefix)
+  "Return a list of class names (symbols) for all classic-class classes
+that have at least one persistent slot whose :predicate starts with PREFIX.
+
+Intended for REPL use when building the class list for
+define-namespace-migration.
+
+Example:
+  (classes-using-namespace \"syndication:\")
+  ;; => (CLASSIC-SYNDICATION-FEED)"
+  (let ((results nil))
+    (dolist (class (all-classic-classes))
+      (let ((class-name (class-name class)))
+        (dolist (slot (class-persistent-slots class))
+          (let ((pred (slot-predicate slot)))
+            (when (and pred
+                       (>= (length pred) (length prefix))
+                       (string= prefix pred :end2 (length prefix)))
+              (pushnew class-name results)
+              (return))))))
+    (nreverse results)))
+
+(defun %slots-with-namespace (class-name prefix)
+  "Return a list of (slot-name predicate-string) pairs for all
+persistent slots on CLASS-NAME whose predicate starts with PREFIX."
+  (let ((class (if (symbolp class-name)
+                   (find-class class-name)
+                   class-name)))
+    (loop for slot in (class-persistent-slots class)
+          for pred = (slot-predicate slot)
+          when (and pred
+                    (>= (length pred) (length prefix))
+                    (string= prefix pred :end2 (length prefix)))
+            collect (list (c2mop:slot-definition-name slot) pred))))
+
+;;; ============================================================
+;;; Bulk namespace rename macro
+;;; ============================================================
+
+(defmacro define-namespace-migration ((old-prefix new-prefix
+                                       &key version-bump
+                                            (compatibility :full))
+                                      docstring &rest class-names)
+  "Generate per-class schema migrations that rename all predicates
+from OLD-PREFIX to NEW-PREFIX for each class in CLASS-NAMES.
+
+VERSION-BUMP is the target schema version string for all affected
+classes. The from-version for each class is auto-detected from its
+current :schema-version at macroexpansion time.
+
+COMPATIBILITY defaults to :full (predicate renames are both backward
+and forward compatible).
+
+Example:
+  (define-namespace-migration (\"syndication:\" \"classic.syndication:\"
+                               :version-bump \"2\"
+                               :compatibility :full)
+    \"Rename syndication: namespace for consistency.\"
+    classic-syndication-feed
+    classic-federation-event)
+
+This expands to one define-schema-migration call per class, each
+containing :rename-predicate operations for every slot whose predicate
+starts with the old prefix. Classes must be fully defined and
+finalized before this macro is expanded."
+  (let ((migrations nil))
+    (dolist (class-name class-names)
+      (let* ((class (find-class class-name))
+             (from-version (class-schema-version class))
+             (matching-slots (%slots-with-namespace class-name old-prefix))
+             (old-prefix-len (length old-prefix)))
+        (when matching-slots
+          (let ((rename-ops
+                  (mapcar (lambda (slot-info)
+                            (destructuring-bind (slot-name old-pred) slot-info
+                              (let ((new-pred (concatenate 'string
+                                               new-prefix
+                                               (subseq old-pred old-prefix-len))))
+                                `(:rename-predicate ,slot-name
+                                   :old ,old-pred
+                                   :new ,new-pred))))
+                          matching-slots)))
+            (push `(define-schema-migration
+                       (,class-name ,from-version -> ,version-bump)
+                     ,(format nil "~A [~A: ~D predicate~:P renamed]"
+                              docstring class-name (length rename-ops))
+                     (:compatibility ,compatibility)
+                     ,@rename-ops)
+                  migrations)))))
+    `(progn ,@(nreverse migrations))))

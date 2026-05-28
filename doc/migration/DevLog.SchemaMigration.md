@@ -319,3 +319,164 @@ translate an incoming entity to the local schema version.
 - Regressions: 0
 - New source files: 6 (~975 lines total)
 - New test file: 1 (380 lines)
+
+
+---
+
+
+## Addendum: Bulk Namespace Rename
+
+**Date:** 2026-05-27
+
+### Context
+
+After the initial migration system was deployed, the question arose
+of how well it would handle ontology evolution for Classic's custom
+vocabularies. The semantic web vocabularies (RDF, FOAF, SIOC,
+Schema.org) are stable, but Classic defines novel ontology for
+workflow (`workflow:` namespace), syndication (`syndication:`
+namespace), and will later need a theme vocabulary. These custom
+vocabularies may need to evolve -- predicates renamed for clarity,
+namespace prefixes changed for consistency, slots restructured.
+
+Analysis of the migration system against these scenarios found that
+the common cases (adding slots, renaming individual predicates,
+transforming values) are well-handled. One gap was identified for
+a less common but important case: **bulk namespace renames**.
+
+### Problem
+
+Renaming an RDF namespace prefix (e.g., changing `syndication:` to
+`classic.syndication:` for consistency with other Classic-specific
+vocabularies) requires a `:rename-predicate` operation on every slot
+that uses that namespace, across every class that has such slots.
+The `define-schema-migration` DSL handles this correctly -- you
+write one migration per class with `:rename-predicate` operations
+for each affected slot. But for a namespace used by multiple classes
+with multiple slots each, this is tedious and error-prone.
+
+Consider the `syndication:` namespace: `classic-syndication-feed`
+has 4 slots using it. If the namespace were used across 5 classes
+with an average of 3 predicated slots each, a namespace rename
+would require 5 migration definitions containing 15 individual
+`:rename-predicate` operations. Each operation has old and new
+predicate strings that must match exactly. Manual authoring is a
+significant source of transcription errors.
+
+### Design Decisions
+
+**Explicit class list with auto-discover helper.** The macro takes
+an explicit list of classes to migrate rather than auto-discovering
+them, for predictability and auditability. A separate
+`classes-using-namespace` function is provided for REPL discovery:
+
+```lisp
+(classes-using-namespace "syndication:")
+;; => (CLASSIC-SYNDICATION-FEED)
+```
+
+The developer calls this interactively to build the class list, then
+pastes the result into the `define-namespace-migration` call. This
+keeps the migration definition self-contained and inspectable
+without relying on runtime class scanning.
+
+Auto-discovery was rejected as the primary mechanism because it runs
+at macroexpansion time, making it sensitive to class load order and
+potentially capturing classes defined after the migration module was
+intended to be finalized.
+
+**Uniform target version with auto-detected from-version.** All
+listed classes are bumped to the same target version (`:version-bump`
+parameter). The from-version for each class is auto-detected from
+its current `:schema-version` at macroexpansion time. This handles
+the common case where all classes in a namespace are bumped together.
+
+For cases where classes are at different version levels and need
+different version increments, the developer writes multiple
+`define-namespace-migration` invocations, one per version step.
+This makes the version history self-documenting: reading the
+migration file top to bottom shows exactly which classes changed at
+which version step, with no hidden per-class version differences.
+
+This design was chosen over a per-class version override alist
+because it prioritizes readability of the migration specification
+over conciseness. Schema migrations are written once and read many
+times; clarity of the version incrementation matters more than
+keystroke savings.
+
+**No `->` arrow in syntax.** The old and new prefixes are positional
+string arguments rather than using a `->` arrow symbol, keeping the
+syntax clean:
+
+```lisp
+(define-namespace-migration ("syndication:" "classic.syndication:"
+                             :version-bump "2"
+                             :compatibility :full)
+  "Rename syndication: namespace for consistency."
+  classic-syndication-feed
+  classic-federation-event)
+```
+
+### Implementation
+
+**`classes-using-namespace (prefix)`** -- scans all classic-class
+classes (via `all-classic-classes`) and returns those with at least
+one persistent slot whose `:predicate` string starts with the given
+prefix. Used at the REPL for discovery.
+
+**`%slots-with-namespace (class-name prefix)`** -- internal helper
+returning `(slot-name predicate-string)` pairs for all persistent
+slots on a class whose predicate starts with the prefix. Used by the
+macro at expansion time to generate `:rename-predicate` operations.
+
+**`define-namespace-migration` macro** -- for each listed class:
+
+1. Reads the class's current `:schema-version` as the from-version
+2. Calls `%slots-with-namespace` to find all matching slots
+3. Generates a `define-schema-migration` call with `:rename-predicate`
+   operations that replace the old prefix with the new prefix,
+   preserving the predicate suffix
+4. Sets compatibility as specified (default `:full`, since predicate
+   renames are inherently both backward and forward compatible)
+
+The generated migration docstring includes the class name and
+predicate count for traceability.
+
+The macro requires classes to be fully defined and finalized before
+expansion, since it calls `class-persistent-slots` at macroexpansion
+time. In practice this is always the case because namespace
+migrations are defined in migration ASDF systems that depend on
+Classic's core.
+
+### Tests
+
+6 new tests added to `test/test-migration.lisp`:
+
+Namespace discovery (3 tests):
+- `classes-using-namespace` finds classes with matching predicates
+- Returns NIL for unknown namespace prefixes
+- Finds multiple workflow classes under the `workflow:` prefix
+
+Bulk namespace migration (3 tests):
+- `define-namespace-migration` registers a migration for the listed
+  class with correct from/to versions
+- Generated migrations contain `:rename-predicate` operations for
+  each matching slot, with correct old/new predicate strings
+  preserving the suffix
+- Multiple classes in one call each get their own registered
+  migration
+
+### Files
+
+| File | Action | Description |
+|------|--------|-------------|
+| `src/migration/registry.lisp` | Modified | Added `classes-using-namespace`, `%slots-with-namespace`, `define-namespace-migration` (~85 lines) |
+| `src/packages.lisp` | Modified | Exported `define-namespace-migration`, `classes-using-namespace` |
+| `test/test-migration.lisp` | Modified | Added 6 new tests, 28 new checks |
+
+### Metrics
+
+- Test checks added: 28
+- Regressions: 0
+- Total migration test checks: 102 (74 original + 28 new)
+- Total Classic test checks: 589

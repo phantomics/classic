@@ -1,0 +1,3 @@
+`invalidate-derived` / `rebuild-derived` unimplemented 
+These are stubs for the derived artifact / cache invalidation system. They matter for the flat-file backend (where rendered HTML, index files, etc. need rebuilding) but not for the in-memory backend. Could be deferred until a file backend is implemented.
+
