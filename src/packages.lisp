@@ -138,6 +138,33 @@
    #:entity-visible-p
    #:remove-from-container
 
+   ;; ---- Model: Theme ----
+   #:classic-theme
+   #:parent-theme
+   #:theme-version
+   #:theme-capabilities
+   #:required-capabilities
+   #:tier-templates
+   #:asset-base-uri
+   #:asset-manifest
+
+   #:classic-theme-override
+   #:base-theme
+   #:override-tier
+   #:override-template
+   #:additional-capabilities
+
+   #:classic-theme-bindings
+   #:bindings-theme
+   #:bindings-entries
+   #:bindings-description
+
+   #:resolve-theme-chain
+   #:resolve-theme-capabilities
+   #:resolve-theme-overrides
+   #:resolve-theme-bindings
+   #:theme-binding-value
+
      ;; ---- Model: Publication (top-level) ----
    #:classic-publication
    #:pub-host

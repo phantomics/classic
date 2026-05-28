@@ -64,6 +64,10 @@
   :description "with-persistence macro"
   :in classic)
 
+(def-suite theme
+  :description "Theme ontology and resolution"
+  :in classic)
+
 ;;; ============================================================
 ;;; Test runner
 ;;; ============================================================

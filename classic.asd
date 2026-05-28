@@ -31,7 +31,8 @@
       (:file "workflow")
        (:file "federation")
        (:file "deletion")
-       (:file "publication")))
+        (:file "theme")
+        (:file "publication")))
    (:module "persistence"
      :serial t
      :components
@@ -78,5 +79,6 @@
     (:file "test-migration")
     (:file "test-deletion")
     (:file "test-federation-consistency")
-    (:file "test-validation")
-    (:file "test-with-persistence")))
+     (:file "test-validation")
+     (:file "test-with-persistence")
+     (:file "test-theme")))

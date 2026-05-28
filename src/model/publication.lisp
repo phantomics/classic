@@ -38,10 +38,13 @@ for resources within this publication (e.g. \"janedoe.net\").")
     :accessor ui-theme
     :initarg :ui-theme
     :initform nil
-    :persistence :triple
+    :persistence :relation
     :predicate "classic:uiTheme"
-    :documentation "UI theme identifier or configuration for rendering."))
+    :slot-type (or null string)
+    :documentation "URI of the classic-theme resource for this publication.
+The Composer resolves this to a theme chain for composition."))
   (:metaclass classic-class)
+  (:schema-version "2")
   (:documentation
    "The root object for any CLASSIC-generated publication.
 Composes spaces, containers, content types, and agents into a coherent
