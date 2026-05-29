@@ -159,11 +159,18 @@
    #:bindings-entries
    #:bindings-description
 
+   #:theme-lenses
+   #:lens-class
+   #:lens-purpose
+   #:lens-properties
+
    #:resolve-theme-chain
    #:resolve-theme-capabilities
    #:resolve-theme-overrides
    #:resolve-theme-bindings
+   #:resolve-theme-lenses
    #:theme-binding-value
+   #:find-lens
 
      ;; ---- Model: Publication (top-level) ----
    #:classic-publication

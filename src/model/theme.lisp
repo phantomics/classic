@@ -98,7 +98,41 @@ to asset-base-uri. Example:
   ((:stylesheets (\"main.css\" \"syntax.css\"))
    (:scripts (\"navigation.js\"))
    (:fonts (\"inter-variable.woff2\"))
-   (:images (\"logo.svg\" \"favicon.png\")))"))
+   (:images (\"logo.svg\" \"favicon.png\")))")
+   (lenses
+    :accessor theme-lenses
+    :initarg :lenses
+    :initform nil
+    :persistence :blob
+    :format :sexp
+    :predicate "theme:lenses"
+    :documentation "List of lens specifications declaring which slots of
+a class to display, in what order, with what display modes, and how
+relation slots should be rendered via sublens references.
+
+Each lens is a plist of the form:
+  (:class CLASS-SYMBOL
+   :purpose PURPOSE-KEYWORD       ; optional, defaults to :default
+   :properties PROPERTY-SPECS)
+
+Each entry in PROPERTY-SPECS is either a bare slot symbol or a list:
+  (SLOT-NAME &key display sublens purpose)
+
+Example:
+  ((:class classic-article
+    :purpose :default
+    :properties (headline
+                 (author :sublens classic-person :purpose :label)
+                 (date-created :display :date)
+                 body
+                 (keywords :display :list)))
+   (:class classic-article
+    :purpose :label
+    :properties (headline)))
+
+Lens identity within a theme is the (class . purpose) pair. Child
+themes override parent lenses on matching pairs (wholesale, not
+per-property). Inspired by the W3C Fresnel display vocabulary."))
   (:metaclass classic-class)
   (:documentation
    "A theme resource defining the visual and structural presentation
@@ -312,3 +346,97 @@ resolve-theme-bindings). Returns the value, or DEFAULT if not found."
     (if entry
         (cdr entry)
         default)))
+
+;;; ============================================================
+;;; Lens resolution
+;;; ============================================================
+;;;
+;;; Lenses provide property-level selection: which slots of an entity
+;;; class to display, in what order, and with what rendering hints.
+;;; Inspired by the W3C Fresnel display vocabulary.
+;;;
+;;; A theme's `lenses' slot is a list of lens spec plists. Each lens
+;;; is identified within the theme by the (class . purpose) pair.
+;;; Child themes override parent lenses wholesale on matching pairs.
+
+(defun lens-class (lens-spec)
+  "Return the target class symbol of LENS-SPEC."
+  (getf lens-spec :class))
+
+(defun lens-purpose (lens-spec)
+  "Return the purpose keyword of LENS-SPEC. Defaults to :DEFAULT
+when the spec does not declare a purpose."
+  (or (getf lens-spec :purpose) :default))
+
+(defun lens-properties (lens-spec)
+  "Return the normalized property specs from LENS-SPEC.
+
+Each returned entry is a plist of the form
+  (:slot SLOT-NAME &key display sublens purpose)
+regardless of whether the source spec used the bare-symbol or list form.
+This lets callers (typically the Composer's feature tier) handle every
+property uniformly without checking the source representation."
+  (mapcar (lambda (prop)
+            (cond
+              ;; Bare symbol -- minimal spec
+              ((symbolp prop)
+               (list :slot prop))
+              ;; List form: (slot-name &key display sublens purpose)
+              ((consp prop)
+               (let ((slot (car prop))
+                     (rest (cdr prop)))
+                 (list* :slot slot rest)))
+              (t
+               (error "Invalid property spec in lens: ~S" prop))))
+          (getf lens-spec :properties)))
+
+(defun resolve-theme-lenses (theme-chain)
+  "Merge lenses from all themes in THEME-CHAIN.
+
+Child lenses override parent lenses on matching (CLASS . PURPOSE)
+pairs. Lenses on classes/purposes not covered by descendants are
+preserved from ancestor themes.
+
+Returns an alist of ((CLASS . PURPOSE) . LENS-SPEC) entries.
+
+THEME-CHAIN is ordered most-specific-first (as returned by
+RESOLVE-THEME-CHAIN). Inheritance is wholesale per (class, purpose)
+pair -- there is no merging of :PROPERTIES lists between parent and
+child lenses, mirroring the existing per-tier override behavior."
+  (let ((merged nil))
+    ;; Walk root-to-child so child entries overwrite ancestors
+    (dolist (theme (reverse theme-chain))
+      (dolist (lens (theme-lenses theme))
+        (let* ((key (cons (lens-class lens) (lens-purpose lens)))
+               (existing (assoc key merged :test #'equal)))
+          (if existing
+              (setf (cdr existing) lens)
+              (push (cons key lens) merged)))))
+    (nreverse merged)))
+
+(defun find-lens (resolved-lenses class &key (purpose :default))
+  "Find the lens for CLASS with PURPOSE in RESOLVED-LENSES.
+
+RESOLVED-LENSES is an alist as returned by RESOLVE-THEME-LENSES.
+CLASS is a class symbol. PURPOSE is a keyword (defaults to :DEFAULT).
+
+Returns the lens spec plist, or NIL if no matching lens exists.
+
+If no lens exists for CLASS directly, walks the class precedence
+list looking for a lens defined on a superclass. This mirrors CLOS
+dispatch semantics and Fresnel's classLensDomain behavior: a lens on
+CLASSIC-CREATIVE-WORK applies to CLASSIC-ARTICLE unless that class
+has its own lens with the same purpose."
+  (labels ((lookup (class-symbol)
+             (cdr (assoc (cons class-symbol purpose) resolved-lenses
+                         :test #'equal))))
+    (let ((class-obj (find-class class :errorp nil)))
+      (if class-obj
+          ;; Walk the full class precedence list
+          (loop for super in (c2mop:class-precedence-list
+                              (c2mop:ensure-finalized class-obj))
+                for super-name = (class-name super)
+                for hit = (lookup super-name)
+                when hit return hit)
+          ;; Class symbol not loaded; just look up directly
+          (lookup class)))))

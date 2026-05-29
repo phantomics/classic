@@ -260,3 +260,309 @@ Publication integration (2 tests):
 - New source file: 1 (~260 lines)
 - New test file: 1 (~210 lines)
 - Total Classic test checks: 624
+
+
+## Addendum: Lens Integration (2026-05-29)
+
+This addendum chronicles the addition of Fresnel-style lenses to
+the theme ontology. Lenses provide property-level selection: which
+slots of an entity class to display, in what order, with what
+display modes, and how relation slots reference sublenses for
+related entities.
+
+
+### Problem
+
+The initial theme ontology (2026-05-27) handled "how" at the page
+level -- tier templates, capabilities, bindings, asset references.
+What it did not handle was "what" at the property level. The
+Composer's feature tier had hardcoded slot rendering per entity
+class, with no theme-driven control over which slots to show or
+how to render them.
+
+This was the same gap WordPress has between themes (which control
+overall presentation) and the per-post-type rendering logic in
+plugins. A "card" view of an article and a "full" view of the same
+article cannot be expressed as theme variants if the theme has no
+vocabulary for property selection.
+
+
+### The Fresnel Comparison
+
+A discussion of the W3C Fresnel display vocabulary surfaced its
+two foundational concepts:
+
+- **Lenses** declare which RDF properties of a resource to display
+  and in what order. Sublenses allow nested rendering of related
+  resources (e.g., a person lens that displays each known person
+  with a person-label sublens).
+- **Formats** declare how property values are rendered, with hooks
+  to CSS classes via typed literals and a small vocabulary of
+  display modes (image, externalLink, uri, text).
+
+Fresnel maps cleanly onto Classic's existing architecture:
+
+| Fresnel | Classic |
+|---------|---------|
+| Lenses (property selection) | *Missing* before this addendum |
+| Formats (rendering hints) | Composer capabilities + tier templates + bindings |
+| Groups (related lenses + formats) | Themes (with inheritance) |
+| `fresnel:value` (display mode) | *Missing*, partially overlapped by capabilities |
+| Sublenses | *Missing*, achievable but not declarative |
+
+What Classic already had that Fresnel lacked: theme inheritance,
+configuration bindings, federation awareness, capability
+negotiation. What Classic lacked was Fresnel's most actionable
+contribution: declarative property-level selection with display
+hints and sublens references.
+
+
+### Design Decisions Chronology
+
+#### Lens scope: class-level only initially
+
+Fresnel supports both class-level (`fresnel:classLensDomain`) and
+instance-level (`fresnel:instanceLensDomain`) targeting. Classic's
+lenses target classes only for now. Instance-level targeting (a
+lens applying to a single specific URI) is deferred -- the use
+cases are uncommon in publishing scenarios, and the class-level
+mechanism with superclass fallback covers most needs.
+
+#### Display modes belong in the lens, not the capability system
+
+The most consequential design decision was where display modes
+should live. Two coherent positions emerged:
+
+**Position A: Capabilities can do everything.** The Composer's
+feature tier produces some default Lexis node per slot, and a
+capability rewrites it. This was rejected for two reasons:
+
+1. **Capabilities match on node shape, not theme intent.** A
+   capability that turns text-valued URIs into images has no way
+   to know "this theme wants `content-url` shown as an image while
+   another theme wants it shown as a link to the file." That is
+   theme configuration, not Lexis tree shape.
+2. **Capabilities run too late.** By capability dispatch time, the
+   tier method has already chosen how to render the slot value.
+   Without display modes, the tier method has to hardcode a
+   universal default and let capabilities override it -- which is
+   exactly the problem Fresnel's `fresnel:value` solves.
+
+**Position B: Display modes in lens, capabilities for richer
+transformations.** Display modes are a small, fixed vocabulary
+(`:text`, `:image`, `:link`, `:uri`, `:html`, `:markdown`,
+`:date`, `:list`) producing well-formed Lexis nodes. Capabilities
+operate on those nodes for compound presentation (figures, hero
+banners, sidebars). The two compose cleanly: display modes
+determine the *kind* of node; capabilities determine the *shape*
+of the resulting subtree.
+
+Position B was adopted. Display modes are a per-property primitive
+renderer hint, lens-scoped and theme-owned. Capabilities remain
+tier-scoped and registered globally.
+
+#### Display mode default cascade
+
+Lenses can omit `:display`, in which case the Composer falls back
+through:
+
+1. Slot's MOP `:format` annotation (`:markdown`, `:html`)
+2. Slot's MOP `:persistence` -- `:relation` defaults to `:link`
+   unless `:sublens` is specified
+3. `:text` as the universal fallback
+
+This cascade lives in the Composer, not the core ontology. The
+core just stores lens specs as data and exposes them via
+`resolve-theme-lenses` and `find-lens`. This means lenses only
+need to declare display modes when the theme wants something
+different from the slot's natural rendering -- the common case
+needs no lens annotations at all.
+
+#### Sublens references included from the start
+
+Fresnel's `fresnel:sublens` is a powerful idea: a property spec
+for a relation slot can declare which lens to use when rendering
+the related entity inline. The article author byline, for example,
+is naturally rendered as the person `:label` lens applied to the
+author entity.
+
+Classic's sublens references are class-and-purpose-typed:
+`(author :sublens classic-person :purpose :label)`. The Composer
+resolves the sublens at composition time by looking up
+`(classic-person, :label)` in the resolved lenses. Fallback chain:
+exact match → `:label` purpose for the relation's actual class →
+built-in label representation (entity's `label` slot).
+
+Fresnel's `fresnel:depth` parameter for bounding recursive
+sublensing is deferred. Cycles in lens declarations are uncommon;
+if they appear, depth limiting can be added without changing the
+lens structure.
+
+#### Lens purposes: `:default` and `:label`
+
+Two purposes are pre-defined as conventions but not enforced:
+
+- `:default` is the standard view of an entity (used by the
+  Composer's feature tier for primary entities)
+- `:label` is a minimal view (used as a sublens target for terse
+  references)
+
+Themes may define custom purposes (`:summary`, `:card`,
+`:thumbnail`). The core treats purposes as opaque keywords used to
+disambiguate multiple lenses per class.
+
+#### Property spec dual form
+
+Each entry in a lens's `:properties` list is either a bare symbol
+(slot name with no overrides) or a list `(slot-name &key display
+sublens purpose)`. The bare-symbol form is for the common case of
+"display this slot using its natural rendering"; the list form is
+for explicit overrides.
+
+The `lens-properties` helper normalizes both forms to a uniform
+plist `(:slot SLOT-NAME &key display sublens purpose)`, so callers
+in the Composer never have to handle both representations.
+
+#### Inheritance is wholesale per (class, purpose) pair
+
+When resolving lenses across a theme chain, child lenses override
+parent lenses entirely on matching `(class, purpose)` pairs.
+There is no per-property merging. This matches the existing
+override behavior of `classic-theme-override` (per-tier wholesale
+replacement) and avoids the considerable complexity of
+property-by-property reconciliation between parent and child
+property lists. Parent lenses for pairs not covered by the child
+are preserved.
+
+#### Storage: a flat list, not an alist keyed by class
+
+The `lenses` slot stores a flat list of lens spec plists, not an
+alist keyed by class. This allows multiple lenses per class with
+different purposes -- a theme typically defines both a
+`:default` lens and a `:label` lens for primary entity classes.
+The `(class . purpose)` pair becomes the natural key only at
+resolution time, in `resolve-theme-lenses`.
+
+#### Class symbols, not strings
+
+Lens specs reference target classes as Lisp symbols (e.g.,
+`classic-article`). Symbols are package-qualified when serialized
+via the `:sexp` format. This ties themes to a specific package
+layout, which is already true of the rest of the theme system
+(tier templates use the same convention).
+
+#### Superclass fallback in `find-lens`
+
+`find-lens` walks the class precedence list when no lens matches
+the requested class directly. A lens defined on
+`classic-creative-work` automatically applies to
+`classic-article`, `classic-comment`, and `classic-media-object`
+unless those classes have their own lenses. This mirrors CLOS
+dispatch semantics and Fresnel's classLensDomain behavior.
+
+
+### Implementation
+
+#### New slot on `classic-theme`
+
+```lisp
+(lenses
+ :accessor theme-lenses
+ :initarg :lenses
+ :initform nil
+ :persistence :blob
+ :format :sexp
+ :predicate "theme:lenses"
+ :documentation "...")
+```
+
+The `:initform nil` means existing themes without lenses keep
+working with no migration needed. As Classic is in its prototype
+phase, no schema version bump was applied.
+
+#### New helpers
+
+Three new functions in `src/model/theme.lisp`:
+
+- **`lens-properties`** normalizes property specs (bare symbol or
+  list form) to a uniform plist
+- **`resolve-theme-lenses`** walks a theme chain, building an
+  alist of `((class . purpose) . lens-spec)` entries with child
+  lenses overriding parents
+- **`find-lens`** looks up a lens for a class with optional
+  purpose, walking the class precedence list for superclass
+  fallback
+
+Two small accessors -- `lens-class` and `lens-purpose` -- handle
+the optional `:purpose` default.
+
+
+### Tests
+
+`test/test-theme.lisp` gained 10 tests in the existing `theme`
+suite, contributing 35 new checks:
+
+Lens model (3 tests):
+- Theme with lenses persists and retrieves correctly
+- Bare-symbol property specs normalize to plist form
+- List-form property specs preserve overrides
+
+Lens lookup (4 tests):
+- `find-lens` with default `:default` purpose
+- `find-lens` with explicit non-default purpose
+- `find-lens` returns NIL when no match exists
+- `find-lens` walks class precedence list for superclass fallback
+
+Lens resolution (3 tests):
+- Root theme lenses resolve to single-theme alist
+- Child lens overrides parent on matching pair, preserves unique
+  pair
+- Three-level chain: leaf wins for its pairs, mid and root
+  contribute for unique pairs
+
+
+### Files
+
+| File | Action | Description |
+|------|--------|-------------|
+| `src/model/theme.lisp` | Modified | Added `lenses` slot to `classic-theme`; added `lens-class`, `lens-purpose`, `lens-properties`, `resolve-theme-lenses`, `find-lens` (~95 new lines) |
+| `src/packages.lisp` | Modified | Exported six new symbols (`theme-lenses`, `lens-class`, `lens-purpose`, `lens-properties`, `resolve-theme-lenses`, `find-lens`) |
+| `test/test-theme.lisp` | Modified | Added 10 lens tests, ~150 new lines |
+| `doc/theme/Theme.md` | Modified | New "Lenses: Property-Level Selection" section, updated Composer integration and slot tables |
+| `doc/theme/DevLog.ThemeOntology.md` | Modified | This addendum |
+
+
+### Metrics
+
+- Test checks added in this addendum: 35
+- Regressions: 0
+- Total theme suite checks: 70 (was 35)
+- Total Classic test checks: 659 (was 624)
+- Lines added to `theme.lisp`: ~95
+- Lines added to `test-theme.lisp`: ~150
+
+
+### What This Does Not Include
+
+Deferred to future work:
+
+- **Composer integration.** The Composer's feature tier needs a
+  method that consumes `find-lens` and walks the property specs,
+  producing Lexis subtrees per the display mode cascade. This is
+  Composer rendering work, not core ontology.
+- **Instance-level lenses** (`fresnel:instanceLensDomain`
+  equivalent). Targets specific URIs, not just classes.
+- **FSL-style conditional selectors** (e.g., "format authors who
+  know more than 5 people differently"). Significant complexity;
+  uncommon in publishing scenarios.
+- **`:depth` parameter on sublens references** to bound recursive
+  sublensing. Add when a use case appears that creates risk of
+  cycles.
+- **`:table` and `:control`/operative display modes.** Add to the
+  vocabulary when the Composer needs them. The lens structure
+  already accommodates this -- only the cascade in the Composer
+  needs updating.
+- **Lens validation against actual class slots.** A lens could
+  reference a slot that doesn't exist on the class. MOP
+  introspection at lens-persist time could catch this. Useful but
+  not essential for the core data model.

@@ -277,3 +277,219 @@
         (is-true retrieved-theme)
         (is (typep retrieved-theme 'classic-theme))
         (is (equal "Retrievable Theme" (classic:label retrieved-theme)))))))
+
+;;; ============================================================
+;;; Lenses (Fresnel-style property selection)
+;;; ============================================================
+
+(defun make-test-themed-with-lenses (strategy name lenses
+                                     &key parent-uri
+                                          (authority "test.example")
+                                          (authority-date "2026"))
+  "Create, persist, and return a classic-theme with lenses set."
+  (let ((theme (make-instance 'classic-theme
+                 :uri (mint-uri 'classic-theme authority authority-date
+                                :slug name)
+                 :label name
+                 :parent-theme parent-uri
+                 :lenses lenses
+                 :theme-version "1.0")))
+    (persist-entity strategy theme)
+    theme))
+
+(def-test lens-instantiation ()
+  "A theme with a lenses slot persists and retrieves the spec correctly."
+  (with-clean-strategy ()
+    (let ((theme (make-test-themed-with-lenses
+                  *test-strategy* "Lensed-Theme"
+                  '((:class classic:classic-article
+                     :purpose :default
+                     :properties (headline author body))))))
+      (let ((retrieved (retrieve-entity *test-strategy*
+                                        (uri-string theme) nil)))
+        (is-true retrieved)
+        (is (= 1 (length (classic:theme-lenses retrieved))))
+        (let ((lens (first (classic:theme-lenses retrieved))))
+          (is (eq 'classic:classic-article (classic:lens-class lens)))
+          (is (eq :default (classic:lens-purpose lens))))))))
+
+(def-test lens-properties-bare-symbol ()
+  "lens-properties normalizes bare-symbol property specs to plist form."
+  (let ((spec '(:class classic:classic-article
+                :purpose :default
+                :properties (headline body keywords))))
+    (let ((normalized (classic:lens-properties spec)))
+      (is (= 3 (length normalized)))
+      (is (equal '(:slot headline) (first normalized)))
+      (is (equal '(:slot body) (second normalized)))
+      (is (equal '(:slot keywords) (third normalized))))))
+
+(def-test lens-properties-with-overrides ()
+  "lens-properties preserves :display, :sublens, :purpose overrides."
+  (let ((spec '(:class classic:classic-article
+                :purpose :default
+                :properties (headline
+                             (author :sublens classic:classic-person
+                                     :purpose :label)
+                             (date-created :display :date)
+                             (keywords :display :list)))))
+    (let ((normalized (classic:lens-properties spec)))
+      (is (= 4 (length normalized)))
+      (is (equal '(:slot headline) (first normalized)))
+      (let ((author (second normalized)))
+        (is (eq 'author (getf author :slot)))
+        (is (eq 'classic:classic-person (getf author :sublens)))
+        (is (eq :label (getf author :purpose))))
+      (is (eq :date (getf (third normalized) :display)))
+      (is (eq :list (getf (fourth normalized) :display))))))
+
+(def-test find-lens-default-purpose ()
+  "find-lens finds a lens with :purpose :default (the default argument)."
+  (with-clean-strategy ()
+    (let ((theme (make-test-themed-with-lenses
+                  *test-strategy* "FL-Default"
+                  '((:class classic:classic-article
+                     :purpose :default
+                     :properties (headline body))))))
+      (let* ((chain (classic:resolve-theme-chain theme *test-strategy*))
+             (resolved (classic:resolve-theme-lenses chain))
+             (lens (classic:find-lens resolved 'classic:classic-article)))
+        (is-true lens)
+        (is (eq 'classic:classic-article (classic:lens-class lens)))
+        (is (eq :default (classic:lens-purpose lens)))))))
+
+(def-test find-lens-explicit-purpose ()
+  "find-lens finds a lens with an explicit non-default purpose."
+  (with-clean-strategy ()
+    (let ((theme (make-test-themed-with-lenses
+                  *test-strategy* "FL-Label"
+                  '((:class classic:classic-article
+                     :purpose :default
+                     :properties (headline author body))
+                    (:class classic:classic-article
+                     :purpose :label
+                     :properties (headline))))))
+      (let* ((chain (classic:resolve-theme-chain theme *test-strategy*))
+             (resolved (classic:resolve-theme-lenses chain))
+             (label-lens (classic:find-lens resolved 'classic:classic-article
+                                            :purpose :label)))
+        (is-true label-lens)
+        (is (eq :label (classic:lens-purpose label-lens)))
+        (is (= 1 (length (getf label-lens :properties))))))))
+
+(def-test find-lens-no-match ()
+  "find-lens returns NIL when no lens matches."
+  (with-clean-strategy ()
+    (let ((theme (make-test-themed-with-lenses
+                  *test-strategy* "FL-NoMatch"
+                  '((:class classic:classic-article
+                     :properties (headline))))))
+      (let* ((chain (classic:resolve-theme-chain theme *test-strategy*))
+             (resolved (classic:resolve-theme-lenses chain)))
+        ;; No lens for classic-comment
+        (is (null (classic:find-lens resolved 'classic:classic-comment)))
+        ;; No :summary purpose lens for classic-article
+        (is (null (classic:find-lens resolved 'classic:classic-article
+                                     :purpose :summary)))))))
+
+(def-test find-lens-superclass-fallback ()
+  "find-lens walks the class precedence list for inherited lenses."
+  (with-clean-strategy ()
+    ;; Define a lens on classic-creative-work; expect it to apply to
+    ;; classic-article (a subclass) when no article-specific lens exists.
+    (let ((theme (make-test-themed-with-lenses
+                  *test-strategy* "FL-Super"
+                  '((:class classic:classic-creative-work
+                     :purpose :default
+                     :properties (author body))))))
+      (let* ((chain (classic:resolve-theme-chain theme *test-strategy*))
+             (resolved (classic:resolve-theme-lenses chain))
+             (lens (classic:find-lens resolved 'classic:classic-article)))
+        (is-true lens)
+        ;; The lens we found is the creative-work one
+        (is (eq 'classic:classic-creative-work
+                (classic:lens-class lens)))))))
+
+(def-test resolve-lenses-root ()
+  "A root theme's lenses resolve to a single-theme alist."
+  (with-clean-strategy ()
+    (let ((theme (make-test-themed-with-lenses
+                  *test-strategy* "Root-Lensed"
+                  '((:class classic:classic-article
+                     :properties (headline body))
+                    (:class classic:classic-person
+                     :purpose :label
+                     :properties (agent-name))))))
+      (let* ((chain (classic:resolve-theme-chain theme *test-strategy*))
+             (resolved (classic:resolve-theme-lenses chain)))
+        (is (= 2 (length resolved)))
+        (is-true (assoc (cons 'classic:classic-article :default) resolved
+                        :test #'equal))
+        (is-true (assoc (cons 'classic:classic-person :label) resolved
+                        :test #'equal))))))
+
+(def-test resolve-lenses-child-overrides-parent ()
+  "Child lens overrides parent lens on matching (class, purpose),
+preserving parent lenses for unique pairs."
+  (with-clean-strategy ()
+    (let* ((parent (make-test-themed-with-lenses
+                    *test-strategy* "Parent-Lensed"
+                    '((:class classic:classic-article
+                       :purpose :default
+                       :properties (headline author body))
+                      (:class classic:classic-person
+                       :purpose :default
+                       :properties (agent-name email)))))
+           (child (make-test-themed-with-lenses
+                   *test-strategy* "Child-Lensed"
+                   '((:class classic:classic-article
+                      :purpose :default
+                      :properties (headline body)))   ; overrides
+                   :parent-uri (uri-string parent))))
+      (let* ((chain (classic:resolve-theme-chain child *test-strategy*))
+             (resolved (classic:resolve-theme-lenses chain))
+             (article-lens (classic:find-lens resolved 'classic:classic-article))
+             (person-lens (classic:find-lens resolved 'classic:classic-person)))
+        ;; Child's article lens wins (2 properties, not 3)
+        (is (= 2 (length (getf article-lens :properties))))
+        ;; Parent's person lens preserved
+        (is-true person-lens)
+        (is (= 2 (length (getf person-lens :properties))))))))
+
+(def-test resolve-lenses-grandchild-chain ()
+  "Three-level chain: grandchild wins for its pairs, lower themes
+contribute lenses for unique (class, purpose) pairs."
+  (with-clean-strategy ()
+    (let* ((root (make-test-themed-with-lenses
+                  *test-strategy* "GC-Root"
+                  '((:class classic:classic-article
+                     :purpose :default
+                     :properties (headline author body keywords)))))
+           (mid (make-test-themed-with-lenses
+                 *test-strategy* "GC-Mid"
+                 '((:class classic:classic-article
+                    :purpose :label
+                    :properties (headline))
+                   (:class classic:classic-person
+                    :purpose :default
+                    :properties (agent-name email)))
+                 :parent-uri (uri-string root)))
+           (leaf (make-test-themed-with-lenses
+                  *test-strategy* "GC-Leaf"
+                  '((:class classic:classic-article
+                     :purpose :default
+                     :properties (headline body)))   ; overrides root
+                  :parent-uri (uri-string mid))))
+      (let* ((chain (classic:resolve-theme-chain leaf *test-strategy*))
+             (resolved (classic:resolve-theme-lenses chain))
+             (article-default (classic:find-lens resolved 'classic:classic-article))
+             (article-label (classic:find-lens resolved 'classic:classic-article
+                                               :purpose :label))
+             (person-default (classic:find-lens resolved 'classic:classic-person)))
+        ;; Article :default lens comes from leaf (2 properties)
+        (is (= 2 (length (getf article-default :properties))))
+        ;; Article :label lens preserved from mid
+        (is-true article-label)
+        ;; Person :default lens preserved from mid
+        (is-true person-default)
+        (is (= 2 (length (getf person-default :properties))))))))
