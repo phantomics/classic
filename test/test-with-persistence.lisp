@@ -15,12 +15,12 @@
                      :uri (make-test-uri :slug "wp-normal")
                      :headline "Before")))
       (with-persistence (*test-strategy* article)
-        (setf (classic:headline article) "After"))
+        (setf (classic.schema.alpha:headline article) "After"))
       ;; Should be persisted
       (let ((retrieved (retrieve-entity *test-strategy*
                                        (uri-string article) nil)))
         (is-true retrieved)
-        (is (equal "After" (classic:headline retrieved)))))))
+        (is (equal "After" (classic.schema.alpha:headline retrieved)))))))
 
 (def-test with-persistence-returns-body-value ()
   "with-persistence returns the value of the last form in body."
@@ -29,7 +29,7 @@
                      :uri (make-test-uri :slug "wp-retval")
                      :headline "Test")))
       (let ((result (with-persistence (*test-strategy* article)
-                      (setf (classic:headline article) "Updated")
+                      (setf (classic.schema.alpha:headline article) "Updated")
                       :my-return-value)))
         (is (eq :my-return-value result))))))
 
@@ -48,7 +48,7 @@
       ;; Try to mutate + persist, but signal an error
       (handler-case
           (with-persistence (*test-strategy* article)
-            (setf (classic:headline article) "Should Not Persist")
+            (setf (classic.schema.alpha:headline article) "Should Not Persist")
             (error "Intentional error"))
         (error () nil))
       ;; The entity in the store should still have original headline
@@ -75,19 +75,19 @@
                                         :slug "wp-multi-p")
                     :agent-name "Author")))
       (with-persistence (*test-strategy* (article person))
-        (setf (classic:headline article) "Updated Article")
-        (setf (classic:agent-name person) "Updated Author"))
+        (setf (classic.schema.alpha:headline article) "Updated Article")
+        (setf (classic.schema.alpha:agent-name person) "Updated Author"))
       ;; Both should be persisted
       (is-true (retrieve-entity *test-strategy*
                                 (uri-string article) nil))
       (is-true (retrieve-entity *test-strategy*
                                 (uri-string person) nil))
       (is (equal "Updated Article"
-                 (classic:headline
+                 (classic.schema.alpha:headline
                   (retrieve-entity *test-strategy*
                                   (uri-string article) nil))))
       (is (equal "Updated Author"
-                 (classic:agent-name
+                 (classic.schema.alpha:agent-name
                   (retrieve-entity *test-strategy*
                                   (uri-string person) nil)))))))
 
@@ -138,8 +138,8 @@
       ;; Valid entity: should persist fine
       (finishes
         (with-persistence (*test-strategy* article)
-          (setf (classic:headline article) "Still Valid")))
+          (setf (classic.schema.alpha:headline article) "Still Valid")))
       ;; Invalid entity: should signal
       (signals classic:validation-failed
         (with-persistence (*test-strategy* article)
-          (setf (classic:headline article) 42))))))
+          (setf (classic.schema.alpha:headline article) 42))))))

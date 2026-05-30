@@ -22,9 +22,9 @@
                    (classic-blog:blog-strategy blog-b))))
         (is-true prov)
         (is (typep prov 'classic-federation-provenance))
-        (is (equal uri-a (classic:provenance-entity-uri prov)))
-        (is (equal "alpha.dev" (classic:provenance-source-authority prov)))
-        (is (eq :current (classic:provenance-sync-status prov)))))))
+        (is (equal uri-a (classic.schema.alpha:provenance-entity-uri prov)))
+        (is (equal "alpha.dev" (classic.schema.alpha:provenance-source-authority prov)))
+        (is (eq :current (classic.schema.alpha:provenance-sync-status prov)))))))
 
 (def-test provenance-scoped-to-publication ()
   "Provenance records are scoped to their publication via publication-uri."
@@ -37,7 +37,7 @@
                        pub-b (classic-blog:blog-strategy blog-b))))
       (is (= 1 (length prov-list)))
       (is (equal (uri-string pub-b)
-                 (classic:provenance-publication-uri (first prov-list)))))))
+                 (classic.schema.alpha:provenance-publication-uri (first prov-list)))))))
 
 (def-test provenance-survives-retrieval ()
   "Provenance records can be retrieved from persistence after creation."
@@ -53,7 +53,7 @@
         (let ((retrieved (retrieve-entity (classic-blog:blog-strategy blog-b)
                                          (uri-string prov) nil)))
           (is-true retrieved)
-          (is (equal uri-a (classic:provenance-entity-uri retrieved))))))))
+          (is (equal uri-a (classic.schema.alpha:provenance-entity-uri retrieved))))))))
 
 (def-test entity-federated-p-uses-persisted-provenance ()
   "entity-federated-p works with persisted provenance records."
@@ -92,7 +92,7 @@
                    (classic-blog:blog-publication blog-b)
                    uri-a
                    (classic-blog:blog-strategy blog-b))))
-        (is (eq :current (classic:provenance-sync-status prov))))
+        (is (eq :current (classic.schema.alpha:provenance-sync-status prov))))
       ;; Send retraction
       (let ((editor (classic-blog:create-account blog-a
                                                  :name "Ed" :role :editor)))
@@ -105,7 +105,7 @@
                      (classic-blog:blog-publication blog-b)
                      uri-a
                      (classic-blog:blog-strategy blog-b))))
-          (is (eq :retracted (classic:provenance-sync-status prov))))))))
+          (is (eq :retracted (classic.schema.alpha:provenance-sync-status prov))))))))
 
 (def-test no-global-provenance-table ()
   "The old *federation-provenance* global has been removed."
@@ -127,10 +127,10 @@
                    :event-type :publish)))
       (is (<= 1 (length events)))
       (let ((event (first events)))
-        (is (eq :publish (classic:federation-event-type event)))
-        (is (eq :delivered (classic:federation-event-delivery-status event)))
+        (is (eq :publish (classic.schema.alpha:federation-event-type event)))
+        (is (eq :delivered (classic.schema.alpha:federation-event-delivery-status event)))
         (is (equal "beta.dev"
-                   (classic:federation-event-peer-authority event)))))))
+                   (classic.schema.alpha:federation-event-peer-authority event)))))))
 
 (def-test receive-logs-event ()
   "Receiving a federated entity logs a :receive event."
@@ -144,7 +144,7 @@
                    :event-type :receive)))
       (is (= 1 (length events)))
       (is (eq :delivered
-              (classic:federation-event-delivery-status (first events)))))))
+              (classic.schema.alpha:federation-event-delivery-status (first events)))))))
 
 (def-test events-queryable-by-status ()
   "Federation events can be filtered by delivery status."
@@ -440,7 +440,7 @@
                     *test-strategy* pub :publish
                     "uri:exhaust-entity" "nobody.dev"
                     :status :failed)))
-        (setf (classic:federation-event-attempt-count event)
+        (setf (classic.schema.alpha:federation-event-attempt-count event)
               classic:*retry-max-attempts*)
         (persist-entity *test-strategy* event))
       ;; Run retry
@@ -646,7 +646,7 @@
     ;; Add an operation
     (classic:enqueue-operation outbox :publish "uri:e1")
     ;; Set last-flush to 2 seconds ago
-    (setf (classic:outbox-last-flush-at outbox)
+    (setf (classic.schema.alpha:outbox-last-flush-at outbox)
           (local-time:adjust-timestamp (local-time:now) (offset :sec -2)))
     ;; Now interval has elapsed with pending ops
     (is (eq :flush-needed (classic:check-flush-needed outbox)))))
@@ -674,7 +674,7 @@
                               :title "After Edit" :text "New content.")
       (let ((post (first (classic-blog:get-posts blog :include-deleted t))))
         (is (equal "After Edit" (headline post)))
-        (is (equal "New content." (classic:body post)))
+        (is (equal "New content." (classic.schema.alpha:body post)))
         (is (= 1 (classic:logical-clock post)))))))
 
 (def-test edit-post-preserves-unspecified-fields ()
@@ -688,5 +688,5 @@
                               :text "Only text changed.")
       (let ((post (first (classic-blog:get-posts blog :include-deleted t))))
         (is (equal "Keep Title" (headline post)))
-        (is (equal "Only text changed." (classic:body post)))
+        (is (equal "Only text changed." (classic.schema.alpha:body post)))
         (is (equal '("tag1" "tag2") (keywords post)))))))

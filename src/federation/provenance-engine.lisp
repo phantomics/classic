@@ -6,8 +6,8 @@
 ;;;; definitions: they call generic functions and accessors that the
 ;;;; schema (or any equivalent schema) provides.
 ;;;;
-;;;; The ontological classes themselves (classic-federation-provenance,
-;;;; classic-federation-event, classic-retention-policy) live in
+;;;; The ontological classes themselves (classic.schema.alpha:classic-federation-provenance,
+;;;; classic.schema.alpha:classic-federation-event, classic.schema.alpha:classic-retention-policy) live in
 ;;;; provenance.lisp.
 
 (in-package #:classic)
@@ -21,12 +21,12 @@
   "Create and persist a provenance record for a federated entity.
 Returns the provenance instance."
   (let* ((pub-uri (uri-string publication))
-         (authority (uri-base-authority publication))
+         (authority (classic.schema.alpha:uri-base-authority publication))
          (auth-date (classic-uri-authority-date
-                     (let ((u (uri publication)))
+                     (let ((u (classic.schema.alpha:uri publication)))
                        (if (classic-uri-p u) u (parse-classic-uri u)))))
-         (prov (make-instance 'classic-federation-provenance
-                 :uri (mint-uri 'classic-federation-provenance
+         (prov (make-instance 'classic.schema.alpha:classic-federation-provenance
+                 :uri (mint-uri 'classic.schema.alpha:classic-federation-provenance
                                 authority auth-date
                                 :slug (format nil "prov-~A"
                                               (generate-local-id)))
@@ -41,29 +41,29 @@ Returns the provenance instance."
 (defun find-provenance (publication entity-uri strategy)
   "Find the provenance record for ENTITY-URI in PUBLICATION.
 Scans persisted entities for a matching provenance record.
-Returns the classic-federation-provenance instance or NIL."
+Returns the classic.schema.alpha:classic-federation-provenance instance or NIL."
   (let ((pub-uri (uri-string publication)))
-    (maphash (lambda (uri entity)
+    (maphash (lambda (classic.schema.alpha:uri entity)
                (declare (ignore uri))
-               (when (and (typep entity 'classic-federation-provenance)
+               (when (and (typep entity 'classic.schema.alpha:classic-federation-provenance)
                           (equal entity-uri
-                                 (provenance-entity-uri entity))
+                                 (classic.schema.alpha:provenance-entity-uri entity))
                           (equal pub-uri
-                                 (provenance-publication-uri entity)))
+                                 (classic.schema.alpha:provenance-publication-uri entity)))
                  (return-from find-provenance entity)))
              (strategy-entities strategy))
     nil))
 
 (defun find-all-provenance (publication strategy)
   "Find all provenance records for PUBLICATION.
-Returns a list of classic-federation-provenance instances."
+Returns a list of classic.schema.alpha:classic-federation-provenance instances."
   (let ((pub-uri (uri-string publication))
         (results nil))
-    (maphash (lambda (uri entity)
+    (maphash (lambda (classic.schema.alpha:uri entity)
                (declare (ignore uri))
-               (when (and (typep entity 'classic-federation-provenance)
+               (when (and (typep entity 'classic.schema.alpha:classic-federation-provenance)
                           (equal pub-uri
-                                 (provenance-publication-uri entity)))
+                                 (classic.schema.alpha:provenance-publication-uri entity)))
                  (push entity results)))
              (strategy-entities strategy))
     (nreverse results)))
@@ -76,18 +76,18 @@ Returns a list of classic-federation-provenance instances."
 or NIL if the entity is local (not received via federation).
 Uses persisted provenance records."))
 
-(defmethod entity-source-instance ((pub classic-publication) entity-uri)
+(defmethod entity-source-instance ((pub classic.schema.alpha:classic-publication) entity-uri)
   (let ((prov (find-provenance pub entity-uri
-                               (persistence-strategy pub))))
+                               (classic.schema.alpha:persistence-strategy pub))))
     (when prov
-      (provenance-source-authority prov))))
+      (classic.schema.alpha:provenance-source-authority prov))))
 
 (defgeneric entity-federated-p (publication entity-uri)
   (:documentation
    "Return T if ENTITY-URI in PUBLICATION was received from a
 federation peer. Uses persisted provenance records."))
 
-(defmethod entity-federated-p ((pub classic-publication) entity-uri)
+(defmethod entity-federated-p ((pub classic.schema.alpha:classic-publication) entity-uri)
   (not (null (entity-source-instance pub entity-uri))))
 
 ;;; ============================================================
@@ -100,12 +100,12 @@ federation peer. Uses persisted provenance records."))
   "Create and persist a federation event log entry.
 Returns the event instance."
   (let* ((pub-uri (uri-string publication))
-         (authority (uri-base-authority publication))
+         (authority (classic.schema.alpha:uri-base-authority publication))
          (auth-date (classic-uri-authority-date
-                     (let ((u (uri publication)))
+                     (let ((u (classic.schema.alpha:uri publication)))
                        (if (classic-uri-p u) u (parse-classic-uri u)))))
-         (event (make-instance 'classic-federation-event
-                  :uri (mint-uri 'classic-federation-event
+         (event (make-instance 'classic.schema.alpha:classic-federation-event
+                  :uri (mint-uri 'classic.schema.alpha:classic-federation-event
                                  authority auth-date
                                  :slug (format nil "evt-~A"
                                                (generate-local-id)))
@@ -122,34 +122,34 @@ Returns the event instance."
 
 (defun update-event-status (strategy event new-status &key error-info)
   "Update a federation event's delivery status and re-persist."
-  (setf (federation-event-delivery-status event) new-status)
-  (incf (federation-event-attempt-count event))
-  (setf (federation-event-last-attempt-at event) (local-time:now))
+  (setf (classic.schema.alpha:federation-event-delivery-status event) new-status)
+  (incf (classic.schema.alpha:federation-event-attempt-count event))
+  (setf (classic.schema.alpha:federation-event-last-attempt-at event) (local-time:now))
   (when error-info
-    (setf (federation-event-error-info event) error-info))
+    (setf (classic.schema.alpha:federation-event-error-info event) error-info))
   (persist-entity strategy event)
   event)
 
 (defun query-federation-events (strategy publication
                                 &key status peer-authority event-type)
   "Query the federation event log with optional filters.
-Returns a list of classic-federation-event instances."
+Returns a list of classic.schema.alpha:classic-federation-event instances."
   (let ((pub-uri (uri-string publication))
         (results nil))
-    (maphash (lambda (uri entity)
+    (maphash (lambda (classic.schema.alpha:uri entity)
                (declare (ignore uri))
-               (when (and (typep entity 'classic-federation-event)
+               (when (and (typep entity 'classic.schema.alpha:classic-federation-event)
                           (equal pub-uri
                                  (federation-event-publication-uri entity))
                           (or (null status)
                               (eq status
-                                  (federation-event-delivery-status entity)))
+                                  (classic.schema.alpha:federation-event-delivery-status entity)))
                           (or (null peer-authority)
                               (equal peer-authority
-                                     (federation-event-peer-authority entity)))
+                                     (classic.schema.alpha:federation-event-peer-authority entity)))
                           (or (null event-type)
                               (eq event-type
-                                  (federation-event-type entity))))
+                                  (classic.schema.alpha:federation-event-type entity))))
                  (push entity results)))
              (strategy-entities strategy))
     (nreverse results)))
@@ -164,7 +164,7 @@ Deletes events that exceed age or count limits per status.
 Returns a plist (:pruned N) with the count of deleted events."
   (let ((pruned 0)
         (now (local-time:now)))
-    (dolist (rule (retention-rules policy))
+    (dolist (rule (classic.schema.alpha:retention-rules policy))
       (destructuring-bind (status . spec) rule
         (let* ((max-age (getf spec :max-age))
                (max-count (getf spec :max-count))
@@ -173,13 +173,13 @@ Returns a plist (:pruned N) with the count of deleted events."
                ;; Sort oldest first for count-based eviction
                (sorted (sort (copy-list events) #'local-time:timestamp<
                              :key (lambda (e)
-                                    (or (federation-event-last-attempt-at e)
-                                        (created-at e))))))
+                                    (or (classic.schema.alpha:federation-event-last-attempt-at e)
+                                        (classic.schema.alpha:created-at e))))))
           ;; Age-based pruning
           (when max-age
             (dolist (event sorted)
-              (let ((event-time (or (federation-event-last-attempt-at event)
-                                    (created-at event))))
+              (let ((event-time (or (classic.schema.alpha:federation-event-last-attempt-at event)
+                                    (classic.schema.alpha:created-at event))))
                 (when (and event-time
                            (> (local-time:timestamp-difference now event-time)
                               max-age))
@@ -194,8 +194,8 @@ Returns a plist (:pruned N) with the count of deleted events."
                 (let ((to-prune (subseq (sort (copy-list remaining)
                                               #'local-time:timestamp<
                                               :key (lambda (e)
-                                                     (or (federation-event-last-attempt-at e)
-                                                         (created-at e))))
+                                                     (or (classic.schema.alpha:federation-event-last-attempt-at e)
+                                                         (classic.schema.alpha:created-at e))))
                                         0 excess)))
                   (dolist (event to-prune)
                     (delete-entity strategy (uri-string event))
@@ -204,8 +204,8 @@ Returns a plist (:pruned N) with the count of deleted events."
 
 (defun make-default-retention-policy (authority authority-date)
   "Create a retention policy with sensible defaults."
-  (make-instance 'classic-retention-policy
-    :uri (mint-uri 'classic-retention-policy authority authority-date
+  (make-instance 'classic.schema.alpha:classic-retention-policy
+    :uri (mint-uri 'classic.schema.alpha:classic-retention-policy authority authority-date
                    :slug "default-retention")
     :label "Default Retention Policy"
     :rules '((:delivered . (:max-age 86400  :max-count 1000))

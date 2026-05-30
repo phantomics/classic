@@ -5,7 +5,7 @@
 ;;;; and configuration into a coherent whole. It is what you instantiate
 ;;;; when you say "I am building a blog" or "I am building a forum."
 
-(in-package #:classic)
+(in-package #:classic.schema.alpha)
 
 ;;; ============================================================
 ;;; classic-publication — the root of a CLASSIC-generated site

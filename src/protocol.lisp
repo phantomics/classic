@@ -104,8 +104,8 @@
    notification dispatch.
 
    FROM-STATE and TO-STATE are state label strings.
-   PUBLICATION is a classic-publication instance.
-   ENTITY is the classic-stateful instance that transitioned.")
+   PUBLICATION is a classic.schema.alpha:classic-publication instance.
+   ENTITY is the classic.schema.alpha:classic-stateful instance that transitioned.")
   (:method (publication entity from-state to-state)
     ;; Default: no-op. Applications specialize as needed.
     (declare (ignore publication entity from-state to-state))
@@ -121,7 +121,7 @@
   (:report (lambda (c s)
              (format s "Validation failed on ~A: ~D error~:P~%~{  ~A~%~}"
                      (let ((e (validation-failed-entity c)))
-                       (if (and (typep e 'classic-resource)
+                       (if (and (typep e 'classic.schema.alpha:classic-resource)
                                 (slot-boundp e 'uri))
                            (uri-string e)
                            (type-of e)))
@@ -200,7 +200,7 @@ normal exit. If BODY signals an error, no persistence occurs and
 the entity remains in its pre-body state.
 
 ENTITY-OR-ENTITIES is either a single form evaluating to a
-classic-resource, or a list of such forms. In the list case, all
+classic.schema.alpha:classic-resource, or a list of such forms. In the list case, all
 entities are persisted in order after the body completes.
 
 Returns the value(s) of the last form in BODY.
@@ -212,7 +212,7 @@ Example (single entity):
 Example (multiple entities):
   (with-persistence (strategy (post container))
     (attempt-transition post \"published\" account)
-    (push uri (contains container)))"
+    (push uri (classic.schema.alpha:contains container)))"
   (let ((s (gensym "STRATEGY")))
     (if (and (listp entity-or-entities)
              (not (eq (first entity-or-entities) 'quote)))
@@ -241,7 +241,7 @@ Example (multiple entities):
 (defgeneric on-entity-delete (publication entity deletion-type)
   (:documentation
    "Called when ENTITY is deleted from PUBLICATION.
-    DELETION-TYPE is :soft (workflow transition to deleted state)
+    DELETION-TYPE is :soft (classic.schema.alpha:workflow transition to deleted state)
     or :hard (purge from persistence store).
     Default method is a no-op. Application layers override for
     side effects such as federation retraction, cache invalidation,

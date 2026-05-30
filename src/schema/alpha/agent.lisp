@@ -5,7 +5,7 @@
 ;;;;   classic-person       ↔ foaf:Person
 ;;;;   classic-organization ↔ foaf:Organization
 
-(in-package #:classic)
+(in-package #:classic.schema.alpha)
 
 ;;; ============================================================
 ;;; classic-agent — any actor (person or organization)

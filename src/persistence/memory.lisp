@@ -37,12 +37,12 @@ indexed in a secondary hash table for query-relation support."))
 
 (defun normalize-uri-key (thing)
   "Coerce THING to a canonical URI string key.
-Accepts classic-uri structs, strings, or classic-resource instances
+Accepts classic-uri structs, strings, or classic.schema.alpha:classic-resource instances
 (from which the URI is extracted)."
   (etypecase thing
     (classic-uri (uri-string thing))
     (string thing)
-    (classic-resource (uri-string thing))))
+    (classic.schema.alpha:classic-resource (uri-string thing))))
 
 (defun clear-subject-relations (strategy uri-key)
   "Remove all relation index entries where URI-KEY is the subject.

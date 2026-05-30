@@ -62,9 +62,9 @@
                 :new-predicate "schema:abstract"
                 :new-persistence :triple
                 :default-value nil)))
-      (is (eq :add-slot (classic:operation-type op)))
-      (is (eq 'summary (classic:target-slot op)))
-      (is (equal "schema:abstract" (classic:new-predicate op))))))
+      (is (eq :add-slot (classic.schema.alpha:operation-type op)))
+      (is (eq 'summary (classic.schema.alpha:target-slot op)))
+      (is (equal "schema:abstract" (classic.schema.alpha:new-predicate op))))))
 
 (def-test schema-migration-instantiation ()
   "Schema migrations can be instantiated with metadata."
@@ -78,16 +78,16 @@
                        :compatibility :backward
                        :reversible-p t
                        :operations nil)))
-      (is (eq 'classic-article (classic:target-class migration)))
-      (is (equal "1" (classic:from-version migration)))
-      (is (equal "2" (classic:to-version migration)))
-      (is (eq :backward (classic:compatibility migration)))
-      (is-true (classic:reversible-p migration)))))
+      (is (eq 'classic-article (classic.schema.alpha:target-class migration)))
+      (is (equal "1" (classic.schema.alpha:from-version migration)))
+      (is (equal "2" (classic.schema.alpha:to-version migration)))
+      (is (eq :backward (classic.schema.alpha:compatibility migration)))
+      (is-true (classic.schema.alpha:reversible-p migration)))))
 
 (def-test schema-manifest-creation ()
   "Schema manifests can be built from current class definitions."
   (let ((manifest (classic:build-current-manifest :version "0.1.0")))
-    (is (equal "0.1.0" (classic:manifest-version manifest)))
+    (is (equal "0.1.0" (classic.schema.alpha:manifest-version manifest)))
     ;; Should contain at least the core classes
     (is-true (classic:manifest-class-version manifest "CLASSIC-ARTICLE"))
     (is-true (classic:manifest-class-version manifest "CLASSIC-RESOURCE"))
@@ -217,10 +217,10 @@
                  :persistence :triple :default nil))
     (let ((m (classic:find-migration 'classic-article "1")))
       (is-true m)
-      (is (eq 'classic-article (classic:target-class m)))
-      (is (equal "1" (classic:from-version m)))
-      (is (equal "2" (classic:to-version m)))
-      (is (eq :backward (classic:compatibility m))))))
+      (is (eq 'classic-article (classic.schema.alpha:target-class m)))
+      (is (equal "1" (classic.schema.alpha:from-version m)))
+      (is (equal "2" (classic.schema.alpha:to-version m)))
+      (is (eq :backward (classic.schema.alpha:compatibility m))))))
 
 (def-test define-schema-migration-parses-operations ()
   "define-schema-migration correctly parses operation clauses."
@@ -233,11 +233,11 @@
       (:rename-predicate body :old "schema:text" :new "schema:articleBody")
       (:remove-slot date-modified))
     (let* ((m (classic:find-migration 'classic-article "1"))
-           (ops (classic:operations m)))
+           (ops (classic.schema.alpha:operations m)))
       (is (= 3 (length ops)))
-      (is (eq :add-slot (classic:operation-type (first ops))))
-      (is (eq :rename-predicate (classic:operation-type (second ops))))
-      (is (eq :remove-slot (classic:operation-type (third ops)))))))
+      (is (eq :add-slot (classic.schema.alpha:operation-type (first ops))))
+      (is (eq :rename-predicate (classic.schema.alpha:operation-type (second ops))))
+      (is (eq :remove-slot (classic.schema.alpha:operation-type (third ops)))))))
 
 (def-test define-schema-migration-detects-reversibility ()
   "Migrations with only renames/adds are marked reversible;
@@ -250,7 +250,7 @@ those with removes or transforms are not."
       (:add-slot summary :predicate "schema:abstract"
                  :persistence :triple :default nil)
       (:rename-predicate body :old "schema:text" :new "schema:articleBody"))
-    (is-true (classic:reversible-p
+    (is-true (classic.schema.alpha:reversible-p
               (classic:find-migration 'classic-article "1")))
     ;; Not reversible: has remove
     (classic:clear-migration-registry)
@@ -258,7 +258,7 @@ those with removes or transforms are not."
       "Non-reversible test."
       (:compatibility :backward)
       (:remove-slot date-modified))
-    (is-false (classic:reversible-p
+    (is-false (classic.schema.alpha:reversible-p
                (classic:find-migration 'classic-article "1")))))
 
 ;;; ============================================================
@@ -273,13 +273,13 @@ those with removes or transforms are not."
                  :uri (make-test-uri :class 'classic-migration-operation
                                      :slug "op-add")
                  :operation-type :add-slot
-                 :target-slot 'classic:description
+                 :target-slot 'classic.schema.alpha:description
                  :default-value "auto-generated")))
       ;; Ensure the slot is unbound first
-      (slot-makunbound article 'classic:description)
+      (slot-makunbound article 'classic.schema.alpha:description)
       (classic:apply-operation op article)
       (is (equal "auto-generated"
-                 (slot-value article 'classic:description))))))
+                 (slot-value article 'classic.schema.alpha:description))))))
 
 (def-test apply-operation-add-slot-idempotent ()
   "apply-operation :add-slot does not overwrite existing values."
@@ -291,11 +291,11 @@ those with removes or transforms are not."
                  :uri (make-test-uri :class 'classic-migration-operation
                                      :slug "op-add-idem")
                  :operation-type :add-slot
-                 :target-slot 'classic:description
+                 :target-slot 'classic.schema.alpha:description
                  :default-value "default")))
       (classic:apply-operation op article)
       (is (equal "existing"
-                 (slot-value article 'classic:description))))))
+                 (slot-value article 'classic.schema.alpha:description))))))
 
 (def-test apply-operation-remove-slot ()
   "apply-operation :remove-slot unbinds the slot."
@@ -307,9 +307,9 @@ those with removes or transforms are not."
                  :uri (make-test-uri :class 'classic-migration-operation
                                      :slug "op-rem")
                  :operation-type :remove-slot
-                 :target-slot 'classic:description)))
+                 :target-slot 'classic.schema.alpha:description)))
       (classic:apply-operation op article)
-      (is-false (slot-boundp article 'classic:description)))))
+      (is-false (slot-boundp article 'classic.schema.alpha:description)))))
 
 (def-test apply-operation-transform-slot ()
   "apply-operation :transform-slot calls the transform function."
@@ -325,10 +325,10 @@ those with removes or transforms are not."
                    :uri (make-test-uri :class 'classic-migration-operation
                                        :slug "op-trans")
                    :operation-type :transform-slot
-                   :target-slot 'classic:headline
+                   :target-slot 'classic.schema.alpha:headline
                    :transform-fn-name #'upcase-transform)))
         (classic:apply-operation op article)
-        (is (equal "HELLO WORLD" (classic:headline article)))))))
+        (is (equal "HELLO WORLD" (classic.schema.alpha:headline article)))))))
 
 (def-test apply-operation-rename-predicate-is-noop-on-entity ()
   "apply-operation :rename-predicate does not modify the entity."
@@ -340,12 +340,12 @@ those with removes or transforms are not."
                  :uri (make-test-uri :class 'classic-migration-operation
                                      :slug "op-pred")
                  :operation-type :rename-predicate
-                 :target-slot 'classic:headline
+                 :target-slot 'classic.schema.alpha:headline
                  :old-predicate "schema:headline"
                  :new-predicate "schema:name")))
       (classic:apply-operation op article)
       ;; Entity unchanged
-      (is (equal "original" (classic:headline article))))))
+      (is (equal "original" (classic.schema.alpha:headline article))))))
 
 ;;; ============================================================
 ;;; Migration runner: migrate-entity
@@ -360,7 +360,7 @@ those with removes or transforms are not."
                    :uri (make-test-uri :class 'classic-migration-operation
                                        :slug "chain-op")
                    :operation-type :add-slot
-                   :target-slot 'classic:description
+                   :target-slot 'classic.schema.alpha:description
                    :default-value "migrated"))
              (migration (make-instance 'classic-schema-migration
                           :uri (make-test-uri :class 'classic-schema-migration
@@ -371,10 +371,10 @@ those with removes or transforms are not."
         (classic:register-migration migration)
         (let ((article (make-instance 'classic-article
                          :uri (make-test-uri :slug "migrate-me"))))
-          (slot-makunbound article 'classic:description)
+          (slot-makunbound article 'classic.schema.alpha:description)
           (classic:migrate-entity article "1" "2")
           (is (equal "migrated"
-                     (slot-value article 'classic:description))))))))
+                     (slot-value article 'classic.schema.alpha:description))))))))
 
 (def-test migrate-entity-signals-on-no-path ()
   "migrate-entity signals no-migration-path when no path exists."
@@ -513,7 +513,7 @@ those with removes or transforms are not."
       (let ((article (make-instance 'classic-article
                        :uri (make-test-uri :slug "lazy-test")
                        :headline "Lazy Test")))
-        (slot-makunbound article 'classic:description)
+        (slot-makunbound article 'classic.schema.alpha:description)
         (persist-entity *test-strategy* article)
         ;; Manually set stored version to "0" (simulate old data)
         (setf (classic:entity-schema-version *test-strategy*
@@ -524,7 +524,7 @@ those with removes or transforms are not."
                      :uri (make-test-uri :class 'classic-migration-operation
                                          :slug "lazy-op")
                      :operation-type :add-slot
-                     :target-slot 'classic:description
+                     :target-slot 'classic.schema.alpha:description
                      :default-value "lazy-migrated"))
                (migration (make-instance 'classic-schema-migration
                             :uri (make-test-uri :class 'classic-schema-migration
@@ -539,7 +539,7 @@ those with removes or transforms are not."
                                            'classic-article)))
             (is-true retrieved)
             (is (equal "lazy-migrated"
-                       (slot-value retrieved 'classic:description)))
+                       (slot-value retrieved 'classic.schema.alpha:description)))
             ;; Version should now be updated
             (is (equal "1"
                        (classic:entity-schema-version
@@ -634,7 +634,7 @@ those with removes or transforms are not."
   (multiple-value-bind (class-name slot-name version)
       (classic:predicate->slot "schema:headline")
     (is-true class-name)
-    (is (eq 'classic:headline slot-name))
+    (is (eq 'classic.schema.alpha:headline slot-name))
     (is (equal "1" version))
     ;; The history should include at least the original class
     (let ((history (classic:predicate-history "schema:headline")))
@@ -682,7 +682,7 @@ those with removes or transforms are not."
   "classes-using-namespace returns classes with matching predicates."
   (let ((result (classic:classes-using-namespace "syndication:")))
     (is-true result)
-    (is (member 'classic:classic-syndication-feed result))))
+    (is (member 'classic.schema.alpha:classic-syndication-feed result))))
 
 (def-test classes-using-namespace-empty-for-unknown ()
   "classes-using-namespace returns NIL for an unknown prefix."
@@ -692,8 +692,8 @@ those with removes or transforms are not."
   "classes-using-namespace finds workflow classes."
   (let ((result (classic:classes-using-namespace "workflow:")))
     (is-true result)
-    (is (member 'classic:classic-workflow result))
-    (is (member 'classic:classic-workflow-state result))))
+    (is (member 'classic.schema.alpha:classic-workflow result))
+    (is (member 'classic.schema.alpha:classic-workflow-state result))))
 
 ;;; ============================================================
 ;;; Bulk namespace migration macro
@@ -716,8 +716,8 @@ those with removes or transforms are not."
     ;; A migration should be registered for classic-syndication-feed
     (let ((m (classic:find-migration 'classic-syndication-feed "1")))
       (is-true m)
-      (is (equal "99" (classic:to-version m)))
-      (is (eq :full (classic:compatibility m))))))
+      (is (equal "99" (classic.schema.alpha:to-version m)))
+      (is (eq :full (classic.schema.alpha:compatibility m))))))
 
 (def-test define-namespace-migration-generates-rename-ops ()
   "Generated migrations contain :rename-predicate ops for matching slots."
@@ -729,19 +729,19 @@ those with removes or transforms are not."
       "Test predicate renames."
       classic-syndication-feed)
     (let* ((m (classic:find-migration 'classic-syndication-feed "1"))
-           (ops (classic:operations m)))
+           (ops (classic.schema.alpha:operations m)))
       ;; Should have at least one operation
       (is (plusp (length ops)))
       ;; All operations should be :rename-predicate
       (dolist (op ops)
-        (is (eq :rename-predicate (classic:operation-type op))))
+        (is (eq :rename-predicate (classic.schema.alpha:operation-type op))))
       ;; Each should rename from syndication: to test.syndication:
       (dolist (op ops)
-        (is (eql 0 (search "syndication:" (classic:old-predicate op))))
-        (is (eql 0 (search "test.syndication:" (classic:new-predicate op))))
+        (is (eql 0 (search "syndication:" (classic.schema.alpha:old-predicate op))))
+        (is (eql 0 (search "test.syndication:" (classic.schema.alpha:new-predicate op))))
         ;; The suffix after the prefix should be the same
-        (is (equal (subseq (classic:old-predicate op) (length "syndication:"))
-                   (subseq (classic:new-predicate op)
+        (is (equal (subseq (classic.schema.alpha:old-predicate op) (length "syndication:"))
+                   (subseq (classic.schema.alpha:new-predicate op)
                            (length "test.syndication:"))))))))
 
 (def-test define-namespace-migration-multiple-classes ()
@@ -779,14 +779,14 @@ their metadata (superclasses, metaclass, slot-specs) on the operation."
                   :predicate "schema:location"
                   :persistence :relation))))
     (let* ((migration (classic:find-migration 'test-event "0"))
-           (ops (classic:operations migration))
+           (ops (classic.schema.alpha:operations migration))
            (op (first ops)))
       (is-true migration)
       (is (= 1 (length ops)))
-      (is (eq :create-class (classic:operation-type op)))
-      (is (equal '(classic-named-resource) (classic:superclasses op)))
-      (is (eq 'classic-class (classic:class-metaclass op)))
-      (is (= 2 (length (classic:slot-specs op)))))))
+      (is (eq :create-class (classic.schema.alpha:operation-type op)))
+      (is (equal '(classic-named-resource) (classic.schema.alpha:superclasses op)))
+      (is (eq 'classic-class (classic.schema.alpha:class-metaclass op)))
+      (is (= 2 (length (classic.schema.alpha:slot-specs op)))))))
 
 (def-test create-class-default-metaclass ()
   "Omitting :metaclass in :create-class defaults to classic-class."
@@ -797,8 +797,8 @@ their metadata (superclasses, metaclass, slot-specs) on the operation."
         :superclasses (classic-resource)
         :slots nil))
     (let* ((migration (classic:find-migration 'test-default-meta "0"))
-           (op (first (classic:operations migration))))
-      (is (eq 'classic-class (classic:class-metaclass op))))))
+           (op (first (classic.schema.alpha:operations migration))))
+      (is (eq 'classic-class (classic.schema.alpha:class-metaclass op))))))
 
 (def-test create-class-is-not-reversible ()
   "Migrations containing :create-class operations are not reversible."
@@ -809,7 +809,7 @@ their metadata (superclasses, metaclass, slot-specs) on the operation."
         :superclasses (classic-named-resource)
         :slots nil))
     (let ((migration (classic:find-migration 'test-not-rev "0")))
-      (is-false (classic:reversible-p migration)))))
+      (is-false (classic.schema.alpha:reversible-p migration)))))
 
 (def-test create-class-default-trigger-is-eager ()
   "default-migration-trigger returns :eager for :create-class-only
@@ -834,8 +834,8 @@ migrations because no entity-level work is required."
     (let ((path (classic:find-migration-path 'test-path "0" "1")))
       (is-true path)
       (is (= 1 (length path)))
-      (is (equal "0" (classic:from-version (first path))))
-      (is (equal "1" (classic:to-version (first path)))))))
+      (is (equal "0" (classic.schema.alpha:from-version (first path))))
+      (is (equal "1" (classic.schema.alpha:to-version (first path)))))))
 
 (def-test create-class-apply-operation-is-noop ()
   "apply-operation on a :create-class operation returns the entity
@@ -851,7 +851,7 @@ unchanged (no entity-level work for class introductions)."
           (entity (make-test-article :headline "Unchanged")))
       (let ((result (classic:apply-operation op entity)))
         (is (eq entity result))
-        (is (equal "Unchanged" (classic:headline result)))))))
+        (is (equal "Unchanged" (classic.schema.alpha:headline result)))))))
 
 (def-test migrate-store-handles-new-class ()
   "migrate-store treats classes missing from the source manifest as
@@ -898,7 +898,7 @@ the dependency as (class-name-string . from-version-string)."
       (:add-slot bar :predicate "test:bar"
                      :persistence :triple :default nil))
     (let* ((child (classic:find-migration 'test-dep-child "1"))
-           (deps (classic:depends-on child)))
+           (deps (classic.schema.alpha:depends-on child)))
       (is (= 1 (length deps)))
       (is (equal "TEST-DEP-PARENT" (car (first deps))))
       (is (equal "1" (cdr (first deps)))))))
@@ -957,7 +957,7 @@ is preserved (via the macro's internal nreverse)."
       (:add-slot baz :predicate "test:baz"
                      :persistence :triple :default nil))
     (let* ((child (classic:find-migration 'test-multi-child "1"))
-           (deps (classic:depends-on child)))
+           (deps (classic.schema.alpha:depends-on child)))
       (is (= 2 (length deps)))
       ;; Both dependencies recorded as (class-name . from-version) pairs
       (is-true (find "TEST-MULTI-PARENT-A" deps

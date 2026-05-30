@@ -5,7 +5,7 @@
 ;;;;   classic-resource      ↔ rdf:Resource
 ;;;;   classic-named-resource ↔ rdfs:Resource with rdfs:label and rdfs:comment
 
-(in-package #:classic)
+(in-package #:classic.schema.alpha)
 
 ;;; ============================================================
 ;;; classic-resource — root of all CLASSIC objects

@@ -17,13 +17,13 @@
   (let ((blog (make-test-blog :name "My Blog")))
     (is (typep (classic-blog:blog-publication blog) 'classic-publication))
     (is (string= "My Blog"
-                  (classic::label (classic-blog:blog-publication blog))))))
+                  (classic.schema.alpha:label (classic-blog:blog-publication blog))))))
 
 (test make-blog-has-empty-container
   "Blog has a container with empty contains list."
   (let ((blog (make-test-blog)))
     (is (typep (classic-blog:blog-container blog) 'classic-container))
-    (is (null (classic:contains (classic-blog:blog-container blog))))))
+    (is (null (classic.schema.alpha:contains (classic-blog:blog-container blog))))))
 
 (test make-blog-has-workflow
   "Blog has a workflow with draft initial state."
@@ -103,7 +103,7 @@
                                     :categories '("tech" "lisp"))
       (let ((post (first (classic-blog:get-posts blog))))
         (is (string= "Metadata Test" (headline post)))
-        (is (string= "Test body" (classic::body post)))
+        (is (string= "Test body" (classic.schema.alpha:body post)))
         (is (equal '("tech" "lisp") (keywords post)))))))
 
 (test editor-can-write-posts

@@ -4,7 +4,7 @@
 ;;;; composable CLOS-aware assertions.
 
 (defpackage #:classic-tests
-  (:use #:cl #:classic)
+  (:use #:cl #:classic #:classic.schema.alpha)
   ;; Import FiveAM symbols explicitly to avoid package lock issues
   (:import-from #:fiveam
                 #:def-suite #:in-suite #:def-test #:test
@@ -24,7 +24,7 @@
                 #:contains-in-any-order
                 #:any
                 #:_)
-  ;; Shadow symbols that conflict between classic and cl
+  ;; Shadow symbols that conflict between classic.schema.alpha and cl
   (:shadow #:label #:description #:body)
   (:export
    #:run-all-tests

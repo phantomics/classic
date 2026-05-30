@@ -96,7 +96,7 @@
                                            :slug "test-container")
                        :contains '("uri:a" "uri:b" "uri:c"))))
       (persist-entity *test-strategy* container)
-      (is-true (classic:remove-from-container container "uri:b"
+      (is-true (classic.schema.alpha:remove-from-container container "uri:b"
                                               *test-strategy*))
       (is (equal '("uri:a" "uri:c") (contains container))))))
 
@@ -108,7 +108,7 @@
                                            :slug "test-container-2")
                        :contains '("uri:a"))))
       (persist-entity *test-strategy* container)
-      (is-false (classic:remove-from-container container "uri:z"
+      (is-false (classic.schema.alpha:remove-from-container container "uri:z"
                                                *test-strategy*)))))
 
 ;;; ============================================================
@@ -180,9 +180,9 @@
       (classic-blog:delete-post blog 1 :account editor
                                 :reason "policy violation")
       (let ((post (first (classic-blog:get-posts blog :status "deleted"))))
-        (is-true (classic:deleted-at post))
-        (is-true (classic:deleted-by post))
-        (is (equal "policy violation" (classic:deletion-reason post)))))))
+        (is-true (classic.schema.alpha:deleted-at post))
+        (is-true (classic.schema.alpha:deleted-by post))
+        (is (equal "policy violation" (classic.schema.alpha:deletion-reason post)))))))
 
 (def-test restore-post-from-archived ()
   "restore-post transitions archived post back to published."
@@ -314,9 +314,9 @@
       (classic-blog:write-post blog :account editor
                                :title "Pred Test" :text ".")
       (let ((post (first (classic-blog:get-posts blog :include-deleted t))))
-        (is-false (classic:entity-deleted-p post))
+        (is-false (classic.schema.alpha:entity-deleted-p post))
         (classic-blog:delete-post blog 1 :account editor)
-        (is-true (classic:entity-deleted-p post))))))
+        (is-true (classic.schema.alpha:entity-deleted-p post))))))
 
 (def-test entity-archived-p-works ()
   "entity-archived-p returns T for archived entities."
@@ -327,6 +327,6 @@
                                :title "Arch Pred" :text ".")
       (classic-blog:publish-post blog 1 :account editor)
       (let ((post (first (classic-blog:get-posts blog :include-deleted t))))
-        (is-false (classic:entity-archived-p post))
+        (is-false (classic.schema.alpha:entity-archived-p post))
         (classic-blog:archive-post blog 1 :account editor)
-        (is-true (classic:entity-archived-p post))))))
+        (is-true (classic.schema.alpha:entity-archived-p post))))))

@@ -48,7 +48,7 @@
   (let ((article (make-instance 'classic-article
                    :uri (make-test-uri :slug "unbound"))))
     ;; headline is unbound -- should pass, not error
-    (slot-makunbound article 'classic:headline)
+    (slot-makunbound article 'classic.schema.alpha:headline)
     (is (eq t (classic:validate-entity article)))))
 
 (def-test validate-entity-skips-unconstrained-slots ()
@@ -73,7 +73,7 @@
       (is (listp result))
       (is (= 1 (length result)))
       (let ((err (first result)))
-        (is (eq 'classic:headline (getf err :slot)))
+        (is (eq 'classic.schema.alpha:headline (getf err :slot)))
         (is (equal '(or null string) (getf err :expected)))
         (is (eql 42 (getf err :actual)))))))
 

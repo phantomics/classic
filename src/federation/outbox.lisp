@@ -1,4 +1,4 @@
-;;;; outbox.lisp — Federation outbox for debounced batch delivery
+;;;; outbox.lisp — Federation outbox engine (core)
 ;;;;
 ;;;; Operations (publish, retract, update) are accumulated in a
 ;;;; per-peer outbox rather than sent immediately. The outbox flushes
@@ -11,64 +11,11 @@
 ;;;; supervisor or a background thread). The current implementation
 ;;;; provides threshold-based auto-flush and explicit flush, with
 ;;;; interval checking available for callers who poll.
+;;;;
+;;;; The classic.schema.alpha:classic-federation-outbox class lives in
+;;;; src/schema/alpha/outbox-class.lisp.
 
 (in-package #:classic)
-
-;;; ============================================================
-;;; classic-federation-outbox — per-peer operation accumulator
-;;; ============================================================
-
-(defclass classic-federation-outbox (classic-named-resource)
-  ((outbox-peer-authority
-    :accessor outbox-peer-authority
-    :initarg :peer-authority
-    :initform nil
-    :persistence :triple
-    :predicate "federation:outboxPeerAuthority"
-    :documentation "Authority string of the peer this outbox is for.")
-   (pending-operations
-    :accessor outbox-pending-operations
-    :initarg :pending-operations
-    :initform nil
-    :documentation "List of (operation-type entity-uri . extra-plist) entries
-awaiting dispatch. Not persisted — runtime state only. Operations
-are logged in the federation event log on flush for durability.")
-   (flush-threshold
-    :accessor outbox-flush-threshold
-    :initarg :flush-threshold
-    :initform 1
-    :persistence :triple
-    :predicate "federation:flushThreshold"
-    :documentation "Flush when this many operations accumulate.
-Default 1 means immediate send (current behavior). Set higher
-for batch efficiency on high-traffic publications.")
-   (flush-interval
-    :accessor outbox-flush-interval
-    :initarg :flush-interval
-    :initform 0
-    :persistence :triple
-    :predicate "federation:flushInterval"
-    :documentation "Maximum seconds between flushes, regardless of
-operation count. 0 means no interval-based flushing (threshold only).
-Requires an external timer to call check-flush-needed periodically.")
-   (last-flush-at
-    :accessor outbox-last-flush-at
-    :initarg :last-flush-at
-    :initform nil
-    :documentation "Timestamp of the last flush. Runtime state, not persisted."))
-  (:metaclass classic-class)
-  (:documentation
-   "A per-peer accumulator for federation operations. Rather than
-sending each publish/retract/update immediately, operations are
-queued here and sent as a batch when the threshold is reached or
-the interval expires. This reduces network overhead and allows
-natural debouncing of rapid successive operations.
-
-Default configuration (threshold=1, interval=0) replicates
-immediate-send behavior. Increasing the threshold enables batching."))
-
-(defmethod uri-namespace-prefix ((class (eql 'classic-federation-outbox)))
-  "federation-outboxes")
 
 ;;; ============================================================
 ;;; Outbox management
@@ -78,8 +25,8 @@ immediate-send behavior. Increasing the threshold enables batching."))
                                         (authority "classic.system")
                                         (authority-date "2026"))
   "Create a new outbox for PEER-AUTHORITY with the given flush settings."
-  (make-instance 'classic-federation-outbox
-    :uri (mint-uri 'classic-federation-outbox authority authority-date
+  (make-instance 'classic.schema.alpha:classic-federation-outbox
+    :uri (mint-uri 'classic.schema.alpha:classic-federation-outbox authority authority-date
                    :slug (format nil "outbox-~A" peer-authority))
     :label (format nil "Outbox: ~A" peer-authority)
     :peer-authority peer-authority
@@ -97,9 +44,9 @@ ENTITY-URI is the URI string of the affected entity.
 EXTRA-PLIST is additional data for the operation (e.g., :reason for
 retractions)."
   (push (list* operation-type entity-uri extra-plist)
-        (outbox-pending-operations outbox))
-  (if (>= (length (outbox-pending-operations outbox))
-           (outbox-flush-threshold outbox))
+        (classic.schema.alpha:outbox-pending-operations outbox))
+  (if (>= (length (classic.schema.alpha:outbox-pending-operations outbox))
+           (classic.schema.alpha:outbox-flush-threshold outbox))
       :flush-needed
       :queued))
 
@@ -111,9 +58,9 @@ flush and there are pending operations, NIL otherwise.
 This function is intended to be called periodically by a timer
 or polling loop. The current implementation checks wall-clock time;
 a production version might use monotonic time."
-  (let ((interval (outbox-flush-interval outbox))
-        (pending (outbox-pending-operations outbox))
-        (last-flush (outbox-last-flush-at outbox)))
+  (let ((interval (classic.schema.alpha:outbox-flush-interval outbox))
+        (pending (classic.schema.alpha:outbox-pending-operations outbox))
+        (last-flush (classic.schema.alpha:outbox-last-flush-at outbox)))
     (when (and (plusp interval)
                pending
                last-flush
@@ -129,9 +76,9 @@ Each operation in the batch is individually logged in the
 federation event log.
 
 Returns a plist (:sent N :acknowledged P) with counts."
-  (let ((operations (nreverse (outbox-pending-operations outbox)))
-        (peer-auth (outbox-peer-authority outbox))
-        (source-auth (uri-base-authority publication))
+  (let ((classic.schema.alpha:operations (nreverse (classic.schema.alpha:outbox-pending-operations outbox)))
+        (peer-auth (classic.schema.alpha:outbox-peer-authority outbox))
+        (source-auth (classic.schema.alpha:uri-base-authority publication))
         (sent 0)
         (acknowledged nil))
     (when operations
@@ -163,15 +110,15 @@ Returns a plist (:sent N :acknowledged P) with counts."
                                  :status :failed
                                  :error-info (princ-to-string e))))))
     ;; Clear queue and update flush time
-    (setf (outbox-pending-operations outbox) nil)
-    (setf (outbox-last-flush-at outbox) (local-time:now))
+    (setf (classic.schema.alpha:outbox-pending-operations outbox) nil)
+    (setf (classic.schema.alpha:outbox-last-flush-at outbox) (local-time:now))
     (list :sent sent :acknowledged acknowledged)))
 
 (defun outbox-pending-count (outbox)
   "Return the number of pending operations in OUTBOX."
-  (length (outbox-pending-operations outbox)))
+  (length (classic.schema.alpha:outbox-pending-operations outbox)))
 
 (defun clear-outbox (outbox)
   "Discard all pending operations in OUTBOX without sending."
-  (setf (outbox-pending-operations outbox) nil)
-  (setf (outbox-last-flush-at outbox) (local-time:now)))
+  (setf (classic.schema.alpha:outbox-pending-operations outbox) nil)
+  (setf (classic.schema.alpha:outbox-last-flush-at outbox) (local-time:now)))

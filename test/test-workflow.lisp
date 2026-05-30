@@ -188,8 +188,8 @@ Returns (values workflow draft-state published-state transition)."
            (editor (make-instance 'test-actor :role-label "editor")))
       (attempt-transition article "published" editor)
       (let ((entry (first (state-history article))))
-        (is-true (classic::uri entry))
-        (is (classic-uri-p (classic::uri entry)))))))
+        (is-true (classic.schema.alpha:uri entry))
+        (is (classic-uri-p (classic.schema.alpha:uri entry)))))))
 
 (test transition-signals-invalid-transition
   "attempt-transition signals invalid-transition for non-existent transition."
@@ -226,7 +226,7 @@ Returns (values workflow draft-state published-state transition)."
         (make-simple-workflow *test-strategy* "test.example" "2026")
       (declare (ignore draft published))
       ;; Set a guard that always rejects
-      (setf (classic::guard transition) (lambda (obj actor)
+      (setf (classic.schema.alpha:guard transition) (lambda (obj actor)
                                           (declare (ignore obj actor))
                                           nil))
       (let ((article (make-instance 'test-stateful-article
@@ -246,7 +246,7 @@ Returns (values workflow draft-state published-state transition)."
         (make-simple-workflow *test-strategy* "test.example" "2026")
       (declare (ignore draft published))
       (let (captured-obj captured-actor)
-        (setf (classic::guard transition)
+        (setf (classic.schema.alpha:guard transition)
               (lambda (obj actor)
                 (setf captured-obj obj captured-actor actor)
                 t))

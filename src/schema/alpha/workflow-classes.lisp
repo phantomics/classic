@@ -14,7 +14,7 @@
 ;;;; classic-state-history-entry instances (also defined here), so it
 ;;;; lives in this file alongside the class definitions.
 
-(in-package #:classic)
+(in-package #:classic.schema.alpha)
 
 ;;; ============================================================
 ;;; classic-workflow-state — a named state in a workflow

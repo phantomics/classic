@@ -20,7 +20,7 @@
   "persist-entity stores an entity retrievable by classic-uri struct."
   (with-clean-strategy ()
     (let* ((article (make-test-article))
-           (retrieved (retrieve-entity *test-strategy* (classic::uri article) nil)))
+           (retrieved (retrieve-entity *test-strategy* (classic.schema.alpha:uri article) nil)))
       (is-true retrieved)
       (is (eq article retrieved)))))
 
@@ -107,7 +107,7 @@ the old relation index entries rather than accumulating."
       (is (= 0 (length (query-relation *test-strategy* "schema:author"
                                         (uri-string bob)))))
       ;; Change author to Bob and re-persist
-      (setf (classic:author article) (uri-string bob))
+      (setf (classic.schema.alpha:author article) (uri-string bob))
       (persist-entity *test-strategy* article)
       ;; Now only Bob should appear, not Jane
       (is (= 0 (length (query-relation *test-strategy* "schema:author"

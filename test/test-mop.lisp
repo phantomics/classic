@@ -93,7 +93,7 @@
   "find-slot-by-predicate finds schema:headline on classic-article."
   (let ((slot (find-slot-by-predicate 'classic-article "schema:headline")))
     (is-true slot)
-    (is (eq 'classic::headline (c2mop:slot-definition-name slot)))))
+    (is (eq 'classic.schema.alpha:headline (c2mop:slot-definition-name slot)))))
 
 (test find-slot-by-predicate-missing
   "find-slot-by-predicate returns nil for a non-existent predicate."

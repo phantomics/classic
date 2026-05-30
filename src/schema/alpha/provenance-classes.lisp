@@ -11,7 +11,7 @@
 ;;;; core. This file contains only the class definitions, which will
 ;;;; move to the schema package in a future refactor.
 
-(in-package #:classic)
+(in-package #:classic.schema.alpha)
 
 ;;; ============================================================
 ;;; classic-federation-provenance — per-entity provenance record

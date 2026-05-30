@@ -6,7 +6,7 @@
 ;;;;   classic-comment       ↔ schema:Comment / sioc:Post
 ;;;;   classic-media-object  ↔ schema:MediaObject
 
-(in-package #:classic)
+(in-package #:classic.schema.alpha)
 
 ;;; ============================================================
 ;;; classic-creative-work — any authored content

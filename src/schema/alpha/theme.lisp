@@ -14,7 +14,7 @@
 ;;;; Assets (CSS, JS, images) are stored externally. The theme carries
 ;;;; URI/path references to assets, not the assets themselves.
 
-(in-package #:classic)
+(in-package #:classic.schema.alpha)
 
 ;;; ============================================================
 ;;; classic-theme — a theme resource

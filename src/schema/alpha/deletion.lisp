@@ -11,7 +11,7 @@
 ;;;; states and transitions to any existing workflow.
 ;;;; The purge-entity function provides hard deletion for admin use.
 
-(in-package #:classic)
+(in-package #:classic.schema.alpha)
 
 ;;; ============================================================
 ;;; classic-deletable — mixin for deletion-aware content

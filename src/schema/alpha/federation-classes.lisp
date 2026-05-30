@@ -8,7 +8,7 @@
 ;;;; the persistence protocol like any other CLASSIC resource. The
 ;;;; federation protocol layer (src/federation/) operates on these classes.
 
-(in-package #:classic)
+(in-package #:classic.schema.alpha)
 
 ;;; ============================================================
 ;;; classic-instance-descriptor — self-description of an instance

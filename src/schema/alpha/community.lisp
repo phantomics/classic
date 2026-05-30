@@ -7,7 +7,7 @@
 ;;;;   classic-forum     ↔ sioc:Forum
 ;;;;   classic-post      ↔ sioc:Post
 
-(in-package #:classic)
+(in-package #:classic.schema.alpha)
 
 ;;; ============================================================
 ;;; classic-space — a bounded hosting context

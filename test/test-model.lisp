@@ -66,16 +66,16 @@
   "classic-resource auto-parses string URIs to classic-uri structs."
   (let ((r (make-instance 'classic-resource
                           :uri "classic:test.com,2026:posts/abc123-hello")))
-    (is (classic-uri-p (classic::uri r)))
-    (is (string= "test.com" (classic-uri-authority (classic::uri r))))))
+    (is (classic-uri-p (classic.schema.alpha:uri r)))
+    (is (string= "test.com" (classic-uri-authority (classic.schema.alpha:uri r))))))
 
 (test named-resource-accepts-label
   "classic-named-resource accepts :label and :description."
   (let ((r (make-instance 'classic-named-resource
                           :label "Test Label"
                           :description "Test Desc")))
-    (is (string= "Test Label" (classic::label r)))
-    (is (string= "Test Desc" (classic::description r)))))
+    (is (string= "Test Label" (classic.schema.alpha:label r)))
+    (is (string= "Test Desc" (classic.schema.alpha:description r)))))
 
 (test all-model-classes-instantiate
   "All model classes instantiate without error with minimal args."
@@ -115,7 +115,7 @@
 (test publication-has-persistence-strategy-slot
   "classic-publication has a persistence-strategy slot."
   (let ((p (make-instance 'classic-publication)))
-    (is-true (slot-exists-p p 'classic::persistence-strategy))))
+    (is-true (slot-exists-p p 'classic.schema.alpha:persistence-strategy))))
 
 (test creative-work-has-body-slot
   "classic-creative-work has body slot with :blob persistence."

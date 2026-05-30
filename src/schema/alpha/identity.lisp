@@ -5,7 +5,7 @@
 ;;;;   classic-user-account ↔ sioc:UserAccount
 ;;;;   classic-role         ↔ sioc:Role
 
-(in-package #:classic)
+(in-package #:classic.schema.alpha)
 
 ;;; ============================================================
 ;;; classic-user-account — an account on a publication

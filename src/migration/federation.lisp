@@ -12,7 +12,7 @@
 ;;; Instance descriptor extension
 ;;; ============================================================
 
-;;; The classic-instance-descriptor gains a schema-manifest slot
+;;; The classic.schema.alpha:classic-instance-descriptor gains a schema-manifest slot
 ;;; linking it to the instance's current schema manifest.
 ;;; Rather than modifying the existing class definition, we add
 ;;; a generic function protocol for manifest access.
@@ -63,8 +63,8 @@ Returns a federation-compatibility-report."
         (translatable nil)
         (incompatible nil))
     ;; Classes at the same version are compatible
-    (let ((all-local (class-versions local-manifest))
-          (all-remote (class-versions remote-manifest)))
+    (let ((all-local (classic.schema.alpha:class-versions local-manifest))
+          (all-remote (classic.schema.alpha:class-versions remote-manifest)))
       (dolist (entry all-local)
         (let* ((class-name (car entry))
                (local-v (cdr entry))

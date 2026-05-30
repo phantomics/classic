@@ -1,7 +1,7 @@
 ;;;; registry.lisp — Migration registry, predicate registry, and DSL
 ;;;;
 ;;;; The migration registry maps (class-name . from-version) keys to
-;;;; classic-schema-migration instances. The predicate registry maps
+;;;; classic.schema.alpha:classic-schema-migration instances. The predicate registry maps
 ;;;; RDF predicate strings to (class slot-name version) triples for
 ;;;; O(1) lookup replacing the linear scan in find-slot-by-predicate.
 ;;;;
@@ -16,19 +16,19 @@
 
 (defvar *migration-registry* (make-hash-table :test 'equal)
   "Maps (class-name-string . from-version-string) to
-classic-schema-migration instances.")
+classic.schema.alpha:classic-schema-migration instances.")
 
 (defun register-migration (migration)
   "Register MIGRATION in the global migration registry.
 Signals an error if a migration for the same class and from-version
 already exists."
-  (let ((key (cons (string (target-class migration))
-                   (from-version migration))))
+  (let ((key (cons (string (classic.schema.alpha:target-class migration))
+                   (classic.schema.alpha:from-version migration))))
     (when (gethash key *migration-registry*)
       (warn "Overwriting existing migration for ~A version ~A -> ~A"
-            (target-class migration)
-            (from-version migration)
-            (to-version migration)))
+            (classic.schema.alpha:target-class migration)
+            (classic.schema.alpha:from-version migration)
+            (classic.schema.alpha:to-version migration)))
     (setf (gethash key *migration-registry*) migration)))
 
 (defun find-migration (class-name from-version)
@@ -60,11 +60,11 @@ to-version must match the next migration's from-version."
         (unless migration
           (return nil))
         (push migration path)
-        (setf current (to-version migration))))))
+        (setf current (classic.schema.alpha:to-version migration))))))
 
 (defun list-migrations (&key class-name)
   "List all registered migrations, optionally filtered by CLASS-NAME.
-Returns a list of classic-schema-migration instances."
+Returns a list of classic.schema.alpha:classic-schema-migration instances."
   (let ((results nil)
         (filter (when class-name (string class-name))))
     (maphash (lambda (key migration)
@@ -74,7 +74,7 @@ Returns a list of classic-schema-migration instances."
              *migration-registry*)
     (sort results #'string<
           :key (lambda (m) (format nil "~A:~A"
-                                   (target-class m) (from-version m))))))
+                                   (classic.schema.alpha:target-class m) (classic.schema.alpha:from-version m))))))
 
 (defun clear-migration-registry ()
   "Remove all registered migrations. Primarily for testing."
@@ -132,10 +132,10 @@ Scans all classic-class classes and registers their slot predicates."
 
 (defun %parse-migration-operation (op-form authority authority-date)
   "Parse a single operation form from the DSL into a
-classic-migration-operation instance."
+classic.schema.alpha:classic-migration-operation instance."
   (destructuring-bind (op-type &rest args) op-form
-    (let ((op (make-instance 'classic-migration-operation
-                :uri (mint-uri 'classic-migration-operation
+    (let ((op (make-instance 'classic.schema.alpha:classic-migration-operation
+                :uri (mint-uri 'classic.schema.alpha:classic-migration-operation
                                authority authority-date
                                :slug (format nil "~A" op-type))
                 :label (format nil "~A" op-type)
@@ -148,40 +148,40 @@ classic-migration-operation instance."
                (new-name (if (eq (second args) '->)
                              (third args)
                              (getf (rest args) :new-name))))
-           (setf (target-slot op) old-name)
-           (setf (new-slot-name op) new-name)))
+           (setf (classic.schema.alpha:target-slot op) old-name)
+           (setf (classic.schema.alpha:new-slot-name op) new-name)))
         (:add-slot
          ;; (:add-slot name :predicate "..." :persistence :triple :default nil)
          (let ((name (first args))
                (plist (rest args)))
-           (setf (target-slot op) name)
-           (setf (new-predicate op) (getf plist :predicate))
-           (setf (new-persistence op) (getf plist :persistence))
-           (setf (default-value op) (getf plist :default))))
+           (setf (classic.schema.alpha:target-slot op) name)
+           (setf (classic.schema.alpha:new-predicate op) (getf plist :predicate))
+           (setf (classic.schema.alpha:new-persistence op) (getf plist :persistence))
+           (setf (classic.schema.alpha:default-value op) (getf plist :default))))
         (:remove-slot
          ;; (:remove-slot name)
-         (setf (target-slot op) (first args)))
+         (setf (classic.schema.alpha:target-slot op) (first args)))
         (:transform-slot
          ;; (:transform-slot old-name -> new-name :transform-fn fn-name)
          ;; or (:transform-slot old-name :new-name new :transform-fn fn)
          (let ((old-name (first args)))
-           (setf (target-slot op) old-name)
+           (setf (classic.schema.alpha:target-slot op) old-name)
            (if (eq (second args) '->)
                (progn
-                 (setf (new-slot-name op) (third args))
-                 (setf (transform-fn-name op)
+                 (setf (classic.schema.alpha:new-slot-name op) (third args))
+                 (setf (classic.schema.alpha:transform-fn-name op)
                        (getf (cdddr args) :transform-fn)))
                (progn
-                 (setf (new-slot-name op) (getf (rest args) :new-name))
-                 (setf (transform-fn-name op)
+                 (setf (classic.schema.alpha:new-slot-name op) (getf (rest args) :new-name))
+                 (setf (classic.schema.alpha:transform-fn-name op)
                        (getf (rest args) :transform-fn))))))
         (:rename-predicate
          ;; (:rename-predicate slot-name :old "old:pred" :new "new:pred")
          (let ((slot-name (first args))
                (plist (rest args)))
-           (setf (target-slot op) slot-name)
-           (setf (old-predicate op) (getf plist :old))
-           (setf (new-predicate op) (getf plist :new))))
+           (setf (classic.schema.alpha:target-slot op) slot-name)
+           (setf (classic.schema.alpha:old-predicate op) (getf plist :old))
+           (setf (classic.schema.alpha:new-predicate op) (getf plist :new))))
         (:create-class
          ;; (:create-class :superclasses (super1 super2)
          ;;                :metaclass classic-class    ; optional
@@ -189,10 +189,10 @@ classic-migration-operation instance."
          ;;                                   :persistence ...
          ;;                                   :default ...) ...))
          (let ((plist args))
-           (setf (superclasses op) (getf plist :superclasses))
-           (setf (class-metaclass op)
+           (setf (classic.schema.alpha:superclasses op) (getf plist :superclasses))
+           (setf (classic.schema.alpha:class-metaclass op)
                  (or (getf plist :metaclass) 'classic-class))
-           (setf (slot-specs op) (getf plist :slots)))))
+           (setf (classic.schema.alpha:slot-specs op) (getf plist :slots)))))
       op)))
 
 (defmacro define-schema-migration ((class-name from-version
@@ -212,7 +212,7 @@ Syntax:
     (:transform-slot keywords -> tags :transform-fn migrate-keywords-to-tags)
     (:remove-slot date-modified)
     (:rename-slot old-name -> new-name)
-    (:create-class :superclasses (classic-named-resource)
+    (:create-class :superclasses (classic.schema.alpha:classic-named-resource)
                    :metaclass classic-class
                    :slots ((start-time :predicate \"schema:startDate\"
                                        :persistence :triple)
@@ -252,8 +252,8 @@ Operations are applied in the order listed."
                                     `(%parse-migration-operation
                                       ',op-form authority authority-date))
                                   op-forms)))
-              (migration (make-instance 'classic-schema-migration
-                           :uri (mint-uri 'classic-schema-migration
+              (migration (make-instance 'classic.schema.alpha:classic-schema-migration
+                           :uri (mint-uri 'classic.schema.alpha:classic-schema-migration
                                           authority authority-date
                                           :slug (format nil "~A-~A-to-~A"
                                                         ',class-name
@@ -279,10 +279,10 @@ Operations are applied in the order listed."
          (register-migration migration)
          ;; Update predicate registry for any predicate renames
          (dolist (op ops)
-           (when (eq (operation-type op) :rename-predicate)
-             (register-predicate (new-predicate op)
+           (when (eq (classic.schema.alpha:operation-type op) :rename-predicate)
+             (register-predicate (classic.schema.alpha:new-predicate op)
                                  ',class-name
-                                 (target-slot op)
+                                 (classic.schema.alpha:target-slot op)
                                  ,to-version)))
          migration))))
 
@@ -331,7 +331,7 @@ persistent slots on CLASS-NAME whose predicate starts with PREFIX."
 
 (defmacro define-namespace-migration ((old-prefix new-prefix
                                        &key version-bump
-                                            (compatibility :full))
+                                            (classic.schema.alpha:compatibility :full))
                                       docstring &rest class-names)
   "Generate per-class schema migrations that rename all predicates
 from OLD-PREFIX to NEW-PREFIX for each class in CLASS-NAMES.
@@ -349,7 +349,7 @@ Example:
                                :compatibility :full)
     \"Rename syndication: namespace for consistency.\"
     classic-syndication-feed
-    classic-federation-event)
+    classic.schema.alpha:classic-federation-event)
 
 This expands to one define-schema-migration call per class, each
 containing :rename-predicate operations for every slot whose predicate
@@ -358,7 +358,7 @@ finalized before this macro is expanded."
   (let ((migrations nil))
     (dolist (class-name class-names)
       (let* ((class (find-class class-name))
-             (from-version (class-schema-version class))
+             (classic.schema.alpha:from-version (class-schema-version class))
              (matching-slots (%slots-with-namespace class-name old-prefix))
              (old-prefix-len (length old-prefix)))
         (when matching-slots

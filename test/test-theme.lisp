@@ -68,10 +68,10 @@
     (let ((theme (make-test-theme *test-strategy* "Base Theme"
                    :capabilities '("frame.hero" "aggregate.tabular"))))
       (is (typep theme 'classic-theme))
-      (is (equal "Base Theme" (classic:label theme)))
-      (is (null (classic:parent-theme theme)))
+      (is (equal "Base Theme" (classic.schema.alpha:label theme)))
+      (is (null (classic.schema.alpha:parent-theme theme)))
       (is (equal '("frame.hero" "aggregate.tabular")
-                 (classic:theme-capabilities theme))))))
+                 (classic.schema.alpha:theme-capabilities theme))))))
 
 (def-test theme-override-instantiation ()
   "classic-theme-override can be instantiated with tier and template."
@@ -81,8 +81,8 @@
                                          (uri-string theme) :frame
                                          '(document (@ :title "Custom")))))
       (is (typep override 'classic-theme-override))
-      (is (eq :frame (classic:override-tier override)))
-      (is (equal (uri-string theme) (classic:base-theme override))))))
+      (is (eq :frame (classic.schema.alpha:override-tier override)))
+      (is (equal (uri-string theme) (classic.schema.alpha:base-theme override))))))
 
 (def-test theme-bindings-instantiation ()
   "classic-theme-bindings can be instantiated with key-value entries."
@@ -93,7 +93,7 @@
                                          '(("primary-color" . "#2a5db0")
                                            ("sidebar" . t)))))
       (is (typep bindings 'classic-theme-bindings))
-      (is (= 2 (length (classic:bindings-entries bindings)))))))
+      (is (= 2 (length (classic.schema.alpha:bindings-entries bindings)))))))
 
 ;;; ============================================================
 ;;; Theme chain resolution
@@ -103,7 +103,7 @@
   "Root theme (no parent) resolves to a single-element chain."
   (with-clean-strategy ()
     (let ((root (make-test-theme *test-strategy* "Root")))
-      (let ((chain (classic:resolve-theme-chain root *test-strategy*)))
+      (let ((chain (classic.schema.alpha:resolve-theme-chain root *test-strategy*)))
         (is (= 1 (length chain)))
         (is (eq root (first chain)))))))
 
@@ -113,7 +113,7 @@
     (let* ((parent (make-test-theme *test-strategy* "Parent"))
            (child (make-test-theme *test-strategy* "Child"
                     :parent-uri (uri-string parent))))
-      (let ((chain (classic:resolve-theme-chain child *test-strategy*)))
+      (let ((chain (classic.schema.alpha:resolve-theme-chain child *test-strategy*)))
         (is (= 2 (length chain)))
         (is (eq child (first chain)))
         (is (eq parent (second chain)))))))
@@ -126,7 +126,7 @@
                   :parent-uri (uri-string root)))
            (leaf (make-test-theme *test-strategy* "Leaf"
                    :parent-uri (uri-string mid))))
-      (let ((chain (classic:resolve-theme-chain leaf *test-strategy*)))
+      (let ((chain (classic.schema.alpha:resolve-theme-chain leaf *test-strategy*)))
         (is (= 3 (length chain)))
         (is (eq leaf (first chain)))
         (is (eq mid (second chain)))
@@ -144,8 +144,8 @@
            (child (make-test-theme *test-strategy* "Child"
                     :parent-uri (uri-string parent)
                     :capabilities '("aggregate.tabular"))))
-      (let* ((chain (classic:resolve-theme-chain child *test-strategy*))
-             (caps (classic:resolve-theme-capabilities chain)))
+      (let* ((chain (classic.schema.alpha:resolve-theme-chain child *test-strategy*))
+             (caps (classic.schema.alpha:resolve-theme-capabilities chain)))
         (is (= 2 (length caps)))
         (is (member "frame.hero" caps :test #'equal))
         (is (member "aggregate.tabular" caps :test #'equal))))))
@@ -158,8 +158,8 @@
            (child (make-test-theme *test-strategy* "Child"
                     :parent-uri (uri-string parent)
                     :capabilities '("frame.hero" "aggregate.tabular"))))
-      (let* ((chain (classic:resolve-theme-chain child *test-strategy*))
-             (caps (classic:resolve-theme-capabilities chain)))
+      (let* ((chain (classic.schema.alpha:resolve-theme-chain child *test-strategy*))
+             (caps (classic.schema.alpha:resolve-theme-capabilities chain)))
         ;; frame.hero appears once, not twice
         (is (= 3 (length caps)))))))
 
@@ -177,11 +177,11 @@
                           '(("color" . "blue") ("font" . "serif")))
       (make-test-bindings *test-strategy* (uri-string child)
                           '(("color" . "red")))
-      (let* ((chain (classic:resolve-theme-chain child *test-strategy*))
-             (resolved (classic:resolve-theme-bindings chain *test-strategy*)))
+      (let* ((chain (classic.schema.alpha:resolve-theme-chain child *test-strategy*))
+             (resolved (classic.schema.alpha:resolve-theme-bindings chain *test-strategy*)))
         ;; color overridden to red, font preserved from parent
-        (is (equal "red" (classic:theme-binding-value resolved "color")))
-        (is (equal "serif" (classic:theme-binding-value resolved "font")))))))
+        (is (equal "red" (classic.schema.alpha:theme-binding-value resolved "color")))
+        (is (equal "serif" (classic.schema.alpha:theme-binding-value resolved "font")))))))
 
 (def-test bindings-unoverridden-preserved ()
   "Parent bindings are preserved when child doesn't override them."
@@ -192,10 +192,10 @@
       (make-test-bindings *test-strategy* (uri-string parent)
                           '(("sidebar" . t) ("posts-per-page" . 10)))
       ;; Child has no bindings
-      (let* ((chain (classic:resolve-theme-chain child *test-strategy*))
-             (resolved (classic:resolve-theme-bindings chain *test-strategy*)))
-        (is (eq t (classic:theme-binding-value resolved "sidebar")))
-        (is (= 10 (classic:theme-binding-value resolved "posts-per-page")))))))
+      (let* ((chain (classic.schema.alpha:resolve-theme-chain child *test-strategy*))
+             (resolved (classic.schema.alpha:resolve-theme-bindings chain *test-strategy*)))
+        (is (eq t (classic.schema.alpha:theme-binding-value resolved "sidebar")))
+        (is (= 10 (classic.schema.alpha:theme-binding-value resolved "posts-per-page")))))))
 
 (def-test bindings-multiple-resources-merge ()
   "Multiple bindings resources on the same theme merge correctly."
@@ -207,12 +207,12 @@
       (make-test-bindings *test-strategy* (uri-string theme)
                           '(("heading-font" . "sans-serif"))
                           :description "MultiTypography")
-      (let* ((chain (classic:resolve-theme-chain theme *test-strategy*))
-             (resolved (classic:resolve-theme-bindings chain *test-strategy*)))
+      (let* ((chain (classic.schema.alpha:resolve-theme-chain theme *test-strategy*))
+             (resolved (classic.schema.alpha:resolve-theme-bindings chain *test-strategy*)))
         (is (equal "white"
-                   (classic:theme-binding-value resolved "bg-color")))
+                   (classic.schema.alpha:theme-binding-value resolved "bg-color")))
         (is (equal "sans-serif"
-                   (classic:theme-binding-value resolved "heading-font")))))))
+                   (classic.schema.alpha:theme-binding-value resolved "heading-font")))))))
 
 ;;; ============================================================
 ;;; Override resolution
@@ -226,7 +226,7 @@
                                          (uri-string theme) :frame
                                          '(document "Custom Frame"))))
       (declare (ignore override))
-      (let ((overrides (classic:resolve-theme-overrides theme
+      (let ((overrides (classic.schema.alpha:resolve-theme-overrides theme
                                                         *test-strategy*)))
         (is (= 1 (length overrides)))
         (is (eq :frame (car (first overrides))))))))
@@ -239,7 +239,7 @@
                                          (uri-string theme) :frame
                                          '(document "Custom"))))
       (declare (ignore override))
-      (let ((overrides (classic:resolve-theme-overrides theme
+      (let ((overrides (classic.schema.alpha:resolve-theme-overrides theme
                                                         *test-strategy*)))
         ;; Only :frame has an override, not :feature
         (is (null (cdr (assoc :feature overrides))))))))
@@ -259,7 +259,7 @@
                   :persistence-strategy *test-strategy*
                   :ui-theme (uri-string theme))))
       (persist-entity *test-strategy* pub)
-      (is (equal (uri-string theme) (classic:ui-theme pub))))))
+      (is (equal (uri-string theme) (classic.schema.alpha:ui-theme pub))))))
 
 (def-test publication-theme-retrievable ()
   "Theme is retrievable from persistence via the publication's ui-theme."
@@ -273,10 +273,10 @@
                   :ui-theme (uri-string theme))))
       (persist-entity *test-strategy* pub)
       (let ((retrieved-theme (retrieve-entity *test-strategy*
-                                             (classic:ui-theme pub) nil)))
+                                             (classic.schema.alpha:ui-theme pub) nil)))
         (is-true retrieved-theme)
         (is (typep retrieved-theme 'classic-theme))
-        (is (equal "Retrievable Theme" (classic:label retrieved-theme)))))))
+        (is (equal "Retrievable Theme" (classic.schema.alpha:label retrieved-theme)))))))
 
 ;;; ============================================================
 ;;; Lenses (Fresnel-style property selection)
@@ -302,23 +302,23 @@
   (with-clean-strategy ()
     (let ((theme (make-test-themed-with-lenses
                   *test-strategy* "Lensed-Theme"
-                  '((:class classic:classic-article
+                  '((:class classic.schema.alpha:classic-article
                      :purpose :default
                      :properties (headline author body))))))
       (let ((retrieved (retrieve-entity *test-strategy*
                                         (uri-string theme) nil)))
         (is-true retrieved)
-        (is (= 1 (length (classic:theme-lenses retrieved))))
-        (let ((lens (first (classic:theme-lenses retrieved))))
-          (is (eq 'classic:classic-article (classic:lens-class lens)))
-          (is (eq :default (classic:lens-purpose lens))))))))
+        (is (= 1 (length (classic.schema.alpha:theme-lenses retrieved))))
+        (let ((lens (first (classic.schema.alpha:theme-lenses retrieved))))
+          (is (eq 'classic.schema.alpha:classic-article (classic.schema.alpha:lens-class lens)))
+          (is (eq :default (classic.schema.alpha:lens-purpose lens))))))))
 
 (def-test lens-properties-bare-symbol ()
   "lens-properties normalizes bare-symbol property specs to plist form."
-  (let ((spec '(:class classic:classic-article
+  (let ((spec '(:class classic.schema.alpha:classic-article
                 :purpose :default
                 :properties (headline body keywords))))
-    (let ((normalized (classic:lens-properties spec)))
+    (let ((normalized (classic.schema.alpha:lens-properties spec)))
       (is (= 3 (length normalized)))
       (is (equal '(:slot headline) (first normalized)))
       (is (equal '(:slot body) (second normalized)))
@@ -326,19 +326,19 @@
 
 (def-test lens-properties-with-overrides ()
   "lens-properties preserves :display, :sublens, :purpose overrides."
-  (let ((spec '(:class classic:classic-article
+  (let ((spec '(:class classic.schema.alpha:classic-article
                 :purpose :default
                 :properties (headline
-                             (author :sublens classic:classic-person
+                             (author :sublens classic.schema.alpha:classic-person
                                      :purpose :label)
                              (date-created :display :date)
                              (keywords :display :list)))))
-    (let ((normalized (classic:lens-properties spec)))
+    (let ((normalized (classic.schema.alpha:lens-properties spec)))
       (is (= 4 (length normalized)))
       (is (equal '(:slot headline) (first normalized)))
       (let ((author (second normalized)))
         (is (eq 'author (getf author :slot)))
-        (is (eq 'classic:classic-person (getf author :sublens)))
+        (is (eq 'classic.schema.alpha:classic-person (getf author :sublens)))
         (is (eq :label (getf author :purpose))))
       (is (eq :date (getf (third normalized) :display)))
       (is (eq :list (getf (fourth normalized) :display))))))
@@ -348,33 +348,33 @@
   (with-clean-strategy ()
     (let ((theme (make-test-themed-with-lenses
                   *test-strategy* "FL-Default"
-                  '((:class classic:classic-article
+                  '((:class classic.schema.alpha:classic-article
                      :purpose :default
                      :properties (headline body))))))
-      (let* ((chain (classic:resolve-theme-chain theme *test-strategy*))
-             (resolved (classic:resolve-theme-lenses chain))
-             (lens (classic:find-lens resolved 'classic:classic-article)))
+      (let* ((chain (classic.schema.alpha:resolve-theme-chain theme *test-strategy*))
+             (resolved (classic.schema.alpha:resolve-theme-lenses chain))
+             (lens (classic.schema.alpha:find-lens resolved 'classic.schema.alpha:classic-article)))
         (is-true lens)
-        (is (eq 'classic:classic-article (classic:lens-class lens)))
-        (is (eq :default (classic:lens-purpose lens)))))))
+        (is (eq 'classic.schema.alpha:classic-article (classic.schema.alpha:lens-class lens)))
+        (is (eq :default (classic.schema.alpha:lens-purpose lens)))))))
 
 (def-test find-lens-explicit-purpose ()
   "find-lens finds a lens with an explicit non-default purpose."
   (with-clean-strategy ()
     (let ((theme (make-test-themed-with-lenses
                   *test-strategy* "FL-Label"
-                  '((:class classic:classic-article
+                  '((:class classic.schema.alpha:classic-article
                      :purpose :default
                      :properties (headline author body))
-                    (:class classic:classic-article
+                    (:class classic.schema.alpha:classic-article
                      :purpose :label
                      :properties (headline))))))
-      (let* ((chain (classic:resolve-theme-chain theme *test-strategy*))
-             (resolved (classic:resolve-theme-lenses chain))
-             (label-lens (classic:find-lens resolved 'classic:classic-article
+      (let* ((chain (classic.schema.alpha:resolve-theme-chain theme *test-strategy*))
+             (resolved (classic.schema.alpha:resolve-theme-lenses chain))
+             (label-lens (classic.schema.alpha:find-lens resolved 'classic.schema.alpha:classic-article
                                             :purpose :label)))
         (is-true label-lens)
-        (is (eq :label (classic:lens-purpose label-lens)))
+        (is (eq :label (classic.schema.alpha:lens-purpose label-lens)))
         (is (= 1 (length (getf label-lens :properties))))))))
 
 (def-test find-lens-no-match ()
@@ -382,14 +382,14 @@
   (with-clean-strategy ()
     (let ((theme (make-test-themed-with-lenses
                   *test-strategy* "FL-NoMatch"
-                  '((:class classic:classic-article
+                  '((:class classic.schema.alpha:classic-article
                      :properties (headline))))))
-      (let* ((chain (classic:resolve-theme-chain theme *test-strategy*))
-             (resolved (classic:resolve-theme-lenses chain)))
+      (let* ((chain (classic.schema.alpha:resolve-theme-chain theme *test-strategy*))
+             (resolved (classic.schema.alpha:resolve-theme-lenses chain)))
         ;; No lens for classic-comment
-        (is (null (classic:find-lens resolved 'classic:classic-comment)))
+        (is (null (classic.schema.alpha:find-lens resolved 'classic.schema.alpha:classic-comment)))
         ;; No :summary purpose lens for classic-article
-        (is (null (classic:find-lens resolved 'classic:classic-article
+        (is (null (classic.schema.alpha:find-lens resolved 'classic.schema.alpha:classic-article
                                      :purpose :summary)))))))
 
 (def-test find-lens-superclass-fallback ()
@@ -399,33 +399,33 @@
     ;; classic-article (a subclass) when no article-specific lens exists.
     (let ((theme (make-test-themed-with-lenses
                   *test-strategy* "FL-Super"
-                  '((:class classic:classic-creative-work
+                  '((:class classic.schema.alpha:classic-creative-work
                      :purpose :default
                      :properties (author body))))))
-      (let* ((chain (classic:resolve-theme-chain theme *test-strategy*))
-             (resolved (classic:resolve-theme-lenses chain))
-             (lens (classic:find-lens resolved 'classic:classic-article)))
+      (let* ((chain (classic.schema.alpha:resolve-theme-chain theme *test-strategy*))
+             (resolved (classic.schema.alpha:resolve-theme-lenses chain))
+             (lens (classic.schema.alpha:find-lens resolved 'classic.schema.alpha:classic-article)))
         (is-true lens)
         ;; The lens we found is the creative-work one
-        (is (eq 'classic:classic-creative-work
-                (classic:lens-class lens)))))))
+        (is (eq 'classic.schema.alpha:classic-creative-work
+                (classic.schema.alpha:lens-class lens)))))))
 
 (def-test resolve-lenses-root ()
   "A root theme's lenses resolve to a single-theme alist."
   (with-clean-strategy ()
     (let ((theme (make-test-themed-with-lenses
                   *test-strategy* "Root-Lensed"
-                  '((:class classic:classic-article
+                  '((:class classic.schema.alpha:classic-article
                      :properties (headline body))
-                    (:class classic:classic-person
+                    (:class classic.schema.alpha:classic-person
                      :purpose :label
                      :properties (agent-name))))))
-      (let* ((chain (classic:resolve-theme-chain theme *test-strategy*))
-             (resolved (classic:resolve-theme-lenses chain)))
+      (let* ((chain (classic.schema.alpha:resolve-theme-chain theme *test-strategy*))
+             (resolved (classic.schema.alpha:resolve-theme-lenses chain)))
         (is (= 2 (length resolved)))
-        (is-true (assoc (cons 'classic:classic-article :default) resolved
+        (is-true (assoc (cons 'classic.schema.alpha:classic-article :default) resolved
                         :test #'equal))
-        (is-true (assoc (cons 'classic:classic-person :label) resolved
+        (is-true (assoc (cons 'classic.schema.alpha:classic-person :label) resolved
                         :test #'equal))))))
 
 (def-test resolve-lenses-child-overrides-parent ()
@@ -434,22 +434,22 @@ preserving parent lenses for unique pairs."
   (with-clean-strategy ()
     (let* ((parent (make-test-themed-with-lenses
                     *test-strategy* "Parent-Lensed"
-                    '((:class classic:classic-article
+                    '((:class classic.schema.alpha:classic-article
                        :purpose :default
                        :properties (headline author body))
-                      (:class classic:classic-person
+                      (:class classic.schema.alpha:classic-person
                        :purpose :default
                        :properties (agent-name email)))))
            (child (make-test-themed-with-lenses
                    *test-strategy* "Child-Lensed"
-                   '((:class classic:classic-article
+                   '((:class classic.schema.alpha:classic-article
                       :purpose :default
                       :properties (headline body)))   ; overrides
                    :parent-uri (uri-string parent))))
-      (let* ((chain (classic:resolve-theme-chain child *test-strategy*))
-             (resolved (classic:resolve-theme-lenses chain))
-             (article-lens (classic:find-lens resolved 'classic:classic-article))
-             (person-lens (classic:find-lens resolved 'classic:classic-person)))
+      (let* ((chain (classic.schema.alpha:resolve-theme-chain child *test-strategy*))
+             (resolved (classic.schema.alpha:resolve-theme-lenses chain))
+             (article-lens (classic.schema.alpha:find-lens resolved 'classic.schema.alpha:classic-article))
+             (person-lens (classic.schema.alpha:find-lens resolved 'classic.schema.alpha:classic-person)))
         ;; Child's article lens wins (2 properties, not 3)
         (is (= 2 (length (getf article-lens :properties))))
         ;; Parent's person lens preserved
@@ -462,30 +462,30 @@ contribute lenses for unique (class, purpose) pairs."
   (with-clean-strategy ()
     (let* ((root (make-test-themed-with-lenses
                   *test-strategy* "GC-Root"
-                  '((:class classic:classic-article
+                  '((:class classic.schema.alpha:classic-article
                      :purpose :default
                      :properties (headline author body keywords)))))
            (mid (make-test-themed-with-lenses
                  *test-strategy* "GC-Mid"
-                 '((:class classic:classic-article
+                 '((:class classic.schema.alpha:classic-article
                     :purpose :label
                     :properties (headline))
-                   (:class classic:classic-person
+                   (:class classic.schema.alpha:classic-person
                     :purpose :default
                     :properties (agent-name email)))
                  :parent-uri (uri-string root)))
            (leaf (make-test-themed-with-lenses
                   *test-strategy* "GC-Leaf"
-                  '((:class classic:classic-article
+                  '((:class classic.schema.alpha:classic-article
                      :purpose :default
                      :properties (headline body)))   ; overrides root
                   :parent-uri (uri-string mid))))
-      (let* ((chain (classic:resolve-theme-chain leaf *test-strategy*))
-             (resolved (classic:resolve-theme-lenses chain))
-             (article-default (classic:find-lens resolved 'classic:classic-article))
-             (article-label (classic:find-lens resolved 'classic:classic-article
+      (let* ((chain (classic.schema.alpha:resolve-theme-chain leaf *test-strategy*))
+             (resolved (classic.schema.alpha:resolve-theme-lenses chain))
+             (article-default (classic.schema.alpha:find-lens resolved 'classic.schema.alpha:classic-article))
+             (article-label (classic.schema.alpha:find-lens resolved 'classic.schema.alpha:classic-article
                                                :purpose :label))
-             (person-default (classic:find-lens resolved 'classic:classic-person)))
+             (person-default (classic.schema.alpha:find-lens resolved 'classic.schema.alpha:classic-person)))
         ;; Article :default lens comes from leaf (2 properties)
         (is (= 2 (length (getf article-default :properties))))
         ;; Article :label lens preserved from mid
