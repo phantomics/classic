@@ -882,11 +882,32 @@ version \"0\" so :create-class migrations registered with from-version
                                              :mode :auto)))
           (is (eq 0 (getf result :skipped))))))))
 
+(def-test depends-on-clause-parses-correctly ()
+  "define-schema-migration parses :depends-on clauses and records
+the dependency as (class-name-string . from-version-string)."
+  (with-clean-migration-state ()
+    ;; First migration: a hypothetical dependency target
+    (classic:define-schema-migration (test-dep-parent "1" -> "2")
+      "Parent migration."
+      (:add-slot foo :predicate "test:foo"
+                     :persistence :triple :default nil))
+    ;; Second migration depends on the first
+    (classic:define-schema-migration (test-dep-child "1" -> "2")
+      "Child migration with dependency."
+      (:depends-on (test-dep-parent "1" -> "2"))
+      (:add-slot bar :predicate "test:bar"
+                     :persistence :triple :default nil))
+    (let* ((child (classic:find-migration 'test-dep-child "1"))
+           (deps (classic:depends-on child)))
+      (is (= 1 (length deps)))
+      (is (equal "TEST-DEP-PARENT" (car (first deps))))
+      (is (equal "1" (cdr (first deps)))))))
+
 (def-test create-class-depends-on-resolves ()
   "A migration can depends-on a :create-class migration via the
 \"0\" -> \"1\" version pair, and toposort orders them correctly.
 Constructs migrations directly (not via the DSL) because the
-depends-on parsing path is exercised by other tests."
+depends-on parsing path is exercised by the prior test."
   (with-clean-migration-state ()
     (let* ((mig-a (make-instance 'classic-schema-migration
                     :uri (make-test-uri :class 'classic-schema-migration
@@ -913,6 +934,38 @@ depends-on parsing path is exercised by other tests."
         ;; A must come before B
         (is (eq mig-a (first sorted)))
         (is (eq mig-b (second sorted)))))))
+
+(def-test depends-on-multiple-dependencies ()
+  "define-schema-migration accepts multiple :depends-on clauses and
+records each dependency. Order of dependencies in the depends-on list
+is preserved (via the macro's internal nreverse)."
+  (with-clean-migration-state ()
+    ;; Define two parent migrations
+    (classic:define-schema-migration (test-multi-parent-a "1" -> "2")
+      "First parent."
+      (:add-slot foo :predicate "test:foo"
+                     :persistence :triple :default nil))
+    (classic:define-schema-migration (test-multi-parent-b "1" -> "2")
+      "Second parent."
+      (:add-slot bar :predicate "test:bar"
+                     :persistence :triple :default nil))
+    ;; Child depends on both
+    (classic:define-schema-migration (test-multi-child "1" -> "2")
+      "Child with two dependencies."
+      (:depends-on (test-multi-parent-a "1" -> "2"))
+      (:depends-on (test-multi-parent-b "1" -> "2"))
+      (:add-slot baz :predicate "test:baz"
+                     :persistence :triple :default nil))
+    (let* ((child (classic:find-migration 'test-multi-child "1"))
+           (deps (classic:depends-on child)))
+      (is (= 2 (length deps)))
+      ;; Both dependencies recorded as (class-name . from-version) pairs
+      (is-true (find "TEST-MULTI-PARENT-A" deps
+                      :key #'car :test #'equal))
+      (is-true (find "TEST-MULTI-PARENT-B" deps
+                      :key #'car :test #'equal))
+      ;; All recorded with their from-version
+      (is (every (lambda (dep) (equal "1" (cdr dep))) deps)))))
 
 (def-test federation-compatibility-local-only ()
   "A class present locally but missing on the remote peer is reported

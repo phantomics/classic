@@ -232,7 +232,7 @@ Operations are applied in the order listed."
     (dolist (clause clauses)
       (case (first clause)
         (:compatibility (setf compat (second clause)))
-        (:depends-on (push (rest clause) deps))
+        (:depends-on (push (second clause) deps))
         (:trigger (setf trigger-form (second clause)))
         (otherwise (push clause op-forms))))
     (setf op-forms (nreverse op-forms))
