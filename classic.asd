@@ -20,6 +20,7 @@
     ((:file "metaclass")))
    (:file "protocol")
    (:file "uri")
+   (:file "workflow-engine")
    (:module "model"
     :serial t
     :components
@@ -41,6 +42,7 @@
      :serial t
      :components
      ((:file "model")
+      (:file "manifest-helpers")
       (:file "registry")
       (:file "runner")
       (:file "persistence")
@@ -51,6 +53,7 @@
      :components
      ((:file "transport")
       (:file "provenance")
+      (:file "provenance-engine")
       (:file "protocol")
       (:file "delivery")
       (:file "updates")

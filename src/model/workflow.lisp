@@ -1,61 +1,20 @@
-;;;; workflow.lisp — Workflow state machine layer
+;;;; workflow.lisp — Workflow state machine ontological classes
 ;;;;
 ;;;; Treats workflow state as a first-class ontological concept.
 ;;;; A workflow definition is itself a CLASSIC resource: states,
 ;;;; transitions, and history entries are all part of the semantic graph.
 ;;;;
-;;;; The classic-stateful mixin grants any content object participation
-;;;; in a workflow state machine, checked via attempt-transition which
-;;;; validates transition existence, role permissions, and optional
-;;;; guard predicates.
+;;;; This file defines the ontological CLASSES. The workflow engine
+;;;; (condition types, generic functions, lookup helpers, the
+;;;; attempt-transition transition logic) lives in src/workflow-engine.lisp
+;;;; in the core, which is schema-agnostic.
 ;;;;
-;;;; Role resolution uses the actor-role-label generic function,
-;;;; allowing imprint models to define their own account-to-role
-;;;; mapping via normal CLOS method dispatch.
+;;;; The default method on attempt-transition specializes on
+;;;; classic-stateful (defined here) and constructs
+;;;; classic-state-history-entry instances (also defined here), so it
+;;;; lives in this file alongside the class definitions.
 
 (in-package #:classic)
-
-;;; ============================================================
-;;; Condition types
-;;; ============================================================
-
-(define-condition workflow-error (error)
-  ((message :initarg :message :reader workflow-error-message))
-  (:report (lambda (c s)
-             (format s "Workflow error: ~A" (workflow-error-message c))))
-  (:documentation "Base condition for workflow-related errors."))
-
-(define-condition invalid-transition (workflow-error)
-  ((from-state :initarg :from-state :reader invalid-transition-from)
-   (to-state   :initarg :to-state   :reader invalid-transition-to))
-  (:report (lambda (c s)
-             (format s "Invalid transition: no transition from ~S to ~S"
-                     (invalid-transition-from c)
-                     (invalid-transition-to c))))
-  (:documentation "Signaled when no transition exists between two states."))
-
-(define-condition permission-denied (workflow-error)
-  ((actor-role :initarg :actor-role :reader permission-denied-role)
-   (required   :initarg :required  :reader permission-denied-required)
-   (from-state :initarg :from-state :reader permission-denied-from)
-   (to-state   :initarg :to-state   :reader permission-denied-to))
-  (:report (lambda (c s)
-             (format s "Permission denied: role ~S cannot transition ~S → ~S ~
-                        (requires ~S)"
-                     (permission-denied-role c)
-                     (permission-denied-from c)
-                     (permission-denied-to c)
-                     (permission-denied-required c))))
-  (:documentation "Signaled when the actor's role lacks permission for a transition."))
-
-(define-condition guard-failed (workflow-error)
-  ((from-state :initarg :from-state :reader guard-failed-from)
-   (to-state   :initarg :to-state   :reader guard-failed-to))
-  (:report (lambda (c s)
-             (format s "Guard failed: transition ~S → ~S rejected by guard predicate"
-                     (guard-failed-from c)
-                     (guard-failed-to c))))
-  (:documentation "Signaled when a transition's guard predicate returns NIL."))
 
 ;;; ============================================================
 ;;; classic-workflow-state — a named state in a workflow
@@ -242,47 +201,13 @@ exportable as RDF, and suitable for compliance auditing."))
   "workflow-history")
 
 ;;; ============================================================
-;;; Role resolution protocol
+;;; Default attempt-transition method (specialized on classic-stateful)
 ;;; ============================================================
-
-(defgeneric actor-role-label (actor)
-  (:documentation
-   "Return the role label string for ACTOR in the context of a
-workflow operation. Application models define methods on their
-account classes. This is the extension point that connects the
-workflow framework to application-specific identity models."))
-
-;;; ============================================================
-;;; Workflow lookup helpers
-;;; ============================================================
-
-(defun find-workflow-state (workflow state-label)
-  "Find the classic-workflow-state in WORKFLOW whose label matches
-STATE-LABEL. Returns the state object or NIL."
-  (find state-label (workflow-states workflow)
-        :key #'label :test #'equal))
-
-(defun find-transition (workflow from-label to-label)
-  "Find the classic-workflow-transition in WORKFLOW that connects
-FROM-LABEL to TO-LABEL. Returns the transition object or NIL."
-  (find-if (lambda (tr)
-             (and (equal (from-state tr) from-label)
-                  (equal (to-state tr) to-label)))
-           (transitions workflow)))
-
-;;; ============================================================
-;;; The core transition engine
-;;; ============================================================
-
-(defgeneric attempt-transition (stateful-obj to-state-label actor)
-  (:documentation
-   "Attempt to transition STATEFUL-OBJ to the state named TO-STATE-LABEL,
-with ACTOR as the initiating agent. Checks:
-  1. A valid transition exists from current-state to to-state-label
-  2. The actor's role matches the transition's required-role
-  3. The transition's guard predicate (if any) returns non-NIL
-On success, updates current-state, records a history entry, and returns
-the stateful object. On failure, signals a workflow-error condition."))
+;;;
+;;; The generic function attempt-transition is defined in
+;;; src/workflow-engine.lisp (core). This default method specializes
+;;; on classic-stateful and constructs classic-state-history-entry
+;;; instances, so it lives here with the class definitions.
 
 (defmethod attempt-transition ((obj classic-stateful)
                                (to-state-label string)
