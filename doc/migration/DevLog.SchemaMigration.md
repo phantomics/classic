@@ -697,3 +697,31 @@ compile time. The bug was avoided in the test by constructing
 migration instances directly, leaving the macro-level fix for a
 separate change that addresses the existing DSL implementation
 without entangling it with the `:create-class` enhancement.
+
+
+## Addendum: Factorization Confirmation (2026-05-29)
+
+The schema migration system was the chief design pressure behind the
+schema/core factorization completed on 2026-05-29 (see
+`doc/DevLog.SchemaFactorization.md`). Factoring the migration classes
+out of the core `classic` package and into `classic.schema.alpha`
+confirmed that the migration system's design holds up under
+relocation: no protocol generics needed to change, no client code
+needed restructuring, and the runtime engine continued operating
+unchanged after the migration classes moved to the schema package.
+
+The migration system is now positioned as schema vocabulary about
+schema changes — classes whose role is to describe how one schema
+version differs from another — while the runtime that interprets and
+applies those descriptions remains in core. This is the cleanest
+expression of the system's two layers: data about migrations
+(schema) and the engine that executes them (core).
+
+The `:create-class` operation, the pre-existing `:depends-on` DSL
+bug, and the refined federation reporting carried through the
+factorization without modification.
+
+**Total Classic test checks after factorization: 692** (the seven
+additional checks beyond the 685 above came from the multi-dependency
+ordering test for `:create-class`, written after this DevLog's main
+body was complete).

@@ -279,29 +279,56 @@ Introspection utilities query these annotations at runtime:
 
 ## Project Structure
 
+Classic is factored into a core framework (the `classic` package)
+and an ontological schema (the `classic.schema.alpha` package). See
+`doc/Schema.md` for the rationale and `doc/SchemaContract.md` for
+the interface between them.
+
 ```
 classic/
-  classic.asd                    -- system definition
+  classic.asd                          -- system definition
   src/
-    packages.lisp                -- package definitions
+    packages.lisp                      -- package definitions
     mop/
-      metaclass.lisp             -- classic-class, slot annotations
-    protocol.lisp                -- persistence protocol generics
-    uri.lisp                     -- classic: URI scheme
-    model/
-      resource.lisp              -- RDF/RDFS foundation
-      agent.lisp                 -- FOAF agents
-      content.lisp               -- Schema.org content types
-      community.lisp             -- SIOC community structure
-      identity.lisp              -- SIOC identity
-      workflow.lisp              -- workflow state machines
-      publication.lisp           -- top-level publication
+      metaclass.lisp                   -- classic-class, slot annotations
+    protocol.lisp                      -- persistence protocol generics
+    uri.lisp                           -- classic: URI scheme
+    workflow-engine.lisp               -- workflow protocol and engine
+    schema/
+      alpha/                           -- classic.schema.alpha package
+        resource.lisp                  -- RDF/RDFS foundation
+        agent.lisp                     -- FOAF agents
+        content.lisp                   -- Schema.org content types
+        community.lisp                 -- SIOC community structure
+        identity.lisp                  -- SIOC identity
+        workflow-classes.lisp          -- workflow state machine classes
+        federation-classes.lisp        -- peers, feeds, instance descriptors
+        deletion.lisp                  -- tombstone classes
+        theme.lisp                     -- presentation themes
+        publication.lisp               -- top-level publication
+        provenance-classes.lisp        -- federation provenance, events
+        outbox-class.lisp              -- outbox classes
+        migration-classes.lisp         -- schema migration metadata
     persistence/
-      memory.lisp                -- in-memory backend
-    models/
-      blog.lisp                  -- blog application model
-  test/                          -- FiveAM + Hamcrest test suite
-  doc/                           -- specifications and design documents
+      memory.lisp                      -- in-memory backend
+    federation/
+      protocol.lisp                    -- federation protocol generics
+      transport.lisp                   -- transport abstraction
+      delivery.lisp                    -- syndication delivery
+      updates.lisp                     -- federated update propagation
+      outbox.lisp                      -- outbox engine
+      provenance-engine.lisp           -- provenance recording, retention
+    migration/
+      registry.lisp                    -- migration registration and DSL
+      manifest-helpers.lisp            -- manifest construction helpers
+      runner.lisp                      -- migration execution
+      data-migration.lisp              -- data-only migration operations
+      persistence.lisp                 -- manifest persistence
+      federation.lisp                  -- federation-aware migration
+    imprint/
+      blog.lisp                        -- blog imprint
+  test/                                -- FiveAM + Hamcrest test suite
+  doc/                                 -- specifications and design documents
 ```
 
 
@@ -314,8 +341,9 @@ The test suite uses FiveAM with cl-hamcrest matchers:
 (classic-tests:run-all-tests)
 ```
 
-267 checks across 7 suites: MOP, URI, protocol, memory backend,
-model hierarchy, workflow engine, and blog integration.
+692 checks across suites covering MOP, URI, protocol, memory backend,
+schema class hierarchy, workflow engine, federation, migration system,
+and blog integration.
 
 
 ## Dependencies
