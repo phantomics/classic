@@ -27,7 +27,7 @@
     :predicate "migration:operationType"
     :documentation "Keyword identifying the operation kind:
 :rename-slot, :add-slot, :remove-slot, :transform-slot,
-:rename-predicate.")
+:rename-predicate, :create-class.")
    (target-slot
     :accessor target-slot
     :initarg :target-slot
@@ -74,7 +74,7 @@ migrating existing entities.")
     :persistence :triple
     :predicate "migration:newPersistence"
     :documentation "For :add-slot, the persistence type of the new slot.")
-   (transform-fn-name
+    (transform-fn-name
     :accessor transform-fn-name
     :initarg :transform-fn-name
     :initform nil
@@ -82,12 +82,53 @@ migrating existing entities.")
     :predicate "migration:transformFunction"
     :documentation "Symbol naming the CL function that transforms slot
 values. The function lives in the ASDF system, not the triplestore.
-Signature: (old-value entity) -> new-value."))
+Signature: (old-value entity) -> new-value.")
+   (superclasses
+    :accessor superclasses
+    :initarg :superclasses
+    :initform nil
+    :persistence :triple
+    :predicate "migration:createSuperclasses"
+    :documentation "For :create-class, the list of superclass name symbols
+the introduced class inherits from. NIL for other operations.")
+   (class-metaclass
+    :accessor class-metaclass
+    :initarg :class-metaclass
+    :initform nil
+    :persistence :triple
+    :predicate "migration:createMetaclass"
+    :documentation "For :create-class, the symbol naming the metaclass
+of the introduced class (typically CLASSIC-CLASS). NIL for other
+operations.")
+   (slot-specs
+    :accessor slot-specs
+    :initarg :slot-specs
+    :initform nil
+    :persistence :blob
+    :format :sexp
+    :documentation "For :create-class, the list of slot specifications
+that the introduced class defines. Each spec is a plist with at minimum
+:name, plus optional :predicate, :persistence, :default, etc. NIL for
+other operations.
+
+This is a record of intent for federation compatibility reporting and
+dependency resolution; the actual class definition lives in the schema
+package's source files."))
   (:metaclass classic-class)
   (:documentation
    "A single atomic schema change operation within a migration.
 Operations are the building blocks of migrations, each describing
-one structural change to a class's slots or predicates."))
+one structural change to a class's slots, predicates, or class
+existence.
+
+Valid operation-type values:
+  :rename-slot       -- rename a slot, preserving values
+  :add-slot          -- add a new slot with a default value
+  :remove-slot       -- remove a slot, unbinding its value
+  :transform-slot    -- transform a slot's value via a function
+  :rename-predicate  -- change the RDF predicate of a slot
+  :create-class      -- introduce a new class (records intent;
+                        the defclass form lives in the schema package)"))
 
 (defmethod uri-namespace-prefix ((class (eql 'classic-migration-operation)))
   "migration-operations")

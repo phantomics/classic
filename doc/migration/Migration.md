@@ -150,6 +150,50 @@ system, not in the migration metadata).
 This is metadata-only: it informs the persistence layer's triple
 migration but does not change the entity's slot value.
 
+**`:create-class`** -- declare the introduction of a new class.
+Used in migrations from version `"0"` (the sentinel for "class did
+not exist") to `"1"`:
+
+```lisp
+(define-schema-migration (classic-event "0" -> "1")
+  "Introduce event as a first-class resource type."
+  (:compatibility :backward)
+  (:create-class
+    :superclasses (classic-named-resource)
+    :metaclass classic-class
+    :slots ((start-time
+              :predicate "schema:startDate"
+              :persistence :triple)
+            (location
+              :predicate "schema:location"
+              :persistence :relation))))
+```
+
+The `:metaclass` keyword is optional and defaults to `classic-class`.
+The `:slots` value is a list of slot specifications; each spec is a
+list with a slot name followed by a plist of slot options.
+
+`:create-class` records the *intent* of a class introduction. The
+actual `defclass` form lives in the schema package's source files.
+The operation is consumed by:
+
+- **Dependency resolution**: other migrations can `:depends-on
+  (classic-event "0" -> "1")` to ensure ordering
+- **Federation compatibility reporting**: peers without the class
+  are reported as `:local-only` in the compatibility report (see
+  Federation Compatibility below)
+- **Documentation**: the migration log preserves the history of when
+  each class was introduced
+
+`:create-class` migrations are not reversible (a peer that does not
+have the class cannot receive entities of that type). Applications
+that send to peers without a class must decide at the application
+layer whether to drop entities or translate them to a more general
+type.
+
+`:create-class` migrations have an `:eager` default trigger because
+no entity-level work is required at migration time.
+
 
 ## Per-Class Version Tracking
 
@@ -286,12 +330,28 @@ compared to assess compatibility:
   ;; => ("CLASSIC-COMMENT" "CLASSIC-PERSON")
 
   (federation-compatibility-report-translatable-classes report)
-  ;; => (("CLASSIC-ARTICLE" "2" "1"))
+  ;; => (("CLASSIC-ARTICLE" "2" "1")
+  ;;     ("CLASSIC-EVENT" "1" NIL :LOCAL-ONLY))
 
   (federation-compatibility-report-incompatible-classes report)
   ;; => NIL
   )
 ```
+
+Translatable class entries may carry a marker keyword in the fourth
+position:
+
+- No marker -- bidirectional translation works
+- `:receive-only` -- only inbound translation works (peer's older
+  version can be migrated to ours, but not the reverse)
+- `:local-only` -- the class exists locally but not on the remote
+  peer (typically because the peer is at an older schema version
+  that predates the class's introduction). Entities of this class
+  cannot be sent to the remote peer in a form it can interpret.
+
+Classes that exist on the remote peer but not locally are reported
+as incompatible -- we cannot interpret entities of a class we do
+not know.
 
 When sending content to a peer at a different schema version,
 entities are translated automatically:

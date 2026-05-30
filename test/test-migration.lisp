@@ -758,3 +758,212 @@ those with removes or transforms are not."
     ;; Both classes should have migrations registered
     (is-true (classic:find-migration 'classic-federation-provenance "1"))
     (is-true (classic:find-migration 'classic-federation-event "1"))))
+
+;;; ============================================================
+;;; :create-class operation
+;;; ============================================================
+
+(def-test create-class-dsl-parses-correctly ()
+  "define-schema-migration accepts :create-class operations and stores
+their metadata (superclasses, metaclass, slot-specs) on the operation."
+  (with-clean-migration-state ()
+    (classic:define-schema-migration (test-event "0" -> "1")
+      "Introduce test-event class."
+      (:create-class
+        :superclasses (classic-named-resource)
+        :metaclass classic-class
+        :slots ((start-time
+                  :predicate "schema:startDate"
+                  :persistence :triple)
+                (location
+                  :predicate "schema:location"
+                  :persistence :relation))))
+    (let* ((migration (classic:find-migration 'test-event "0"))
+           (ops (classic:operations migration))
+           (op (first ops)))
+      (is-true migration)
+      (is (= 1 (length ops)))
+      (is (eq :create-class (classic:operation-type op)))
+      (is (equal '(classic-named-resource) (classic:superclasses op)))
+      (is (eq 'classic-class (classic:class-metaclass op)))
+      (is (= 2 (length (classic:slot-specs op)))))))
+
+(def-test create-class-default-metaclass ()
+  "Omitting :metaclass in :create-class defaults to classic-class."
+  (with-clean-migration-state ()
+    (classic:define-schema-migration (test-default-meta "0" -> "1")
+      "Test default metaclass."
+      (:create-class
+        :superclasses (classic-resource)
+        :slots nil))
+    (let* ((migration (classic:find-migration 'test-default-meta "0"))
+           (op (first (classic:operations migration))))
+      (is (eq 'classic-class (classic:class-metaclass op))))))
+
+(def-test create-class-is-not-reversible ()
+  "Migrations containing :create-class operations are not reversible."
+  (with-clean-migration-state ()
+    (classic:define-schema-migration (test-not-rev "0" -> "1")
+      "Test reversibility."
+      (:create-class
+        :superclasses (classic-named-resource)
+        :slots nil))
+    (let ((migration (classic:find-migration 'test-not-rev "0")))
+      (is-false (classic:reversible-p migration)))))
+
+(def-test create-class-default-trigger-is-eager ()
+  "default-migration-trigger returns :eager for :create-class-only
+migrations because no entity-level work is required."
+  (with-clean-migration-state ()
+    (classic:define-schema-migration (test-eager "0" -> "1")
+      "Test trigger."
+      (:create-class
+        :superclasses (classic-named-resource)
+        :slots nil))
+    (let ((migration (classic:find-migration 'test-eager "0")))
+      (is (eq :eager (classic:default-migration-trigger nil migration))))))
+
+(def-test create-class-find-migration-path-from-zero ()
+  "find-migration-path locates a migration registered at from-version \"0\"."
+  (with-clean-migration-state ()
+    (classic:define-schema-migration (test-path "0" -> "1")
+      "Test path from zero."
+      (:create-class
+        :superclasses (classic-named-resource)
+        :slots nil))
+    (let ((path (classic:find-migration-path 'test-path "0" "1")))
+      (is-true path)
+      (is (= 1 (length path)))
+      (is (equal "0" (classic:from-version (first path))))
+      (is (equal "1" (classic:to-version (first path)))))))
+
+(def-test create-class-apply-operation-is-noop ()
+  "apply-operation on a :create-class operation returns the entity
+unchanged (no entity-level work for class introductions)."
+  (with-clean-strategy ()
+    (let ((op (make-instance 'classic-migration-operation
+                :uri (make-test-uri :class 'classic-migration-operation
+                                    :slug "noop-test")
+                :operation-type :create-class
+                :superclasses '(classic-named-resource)
+                :class-metaclass 'classic-class
+                :slot-specs nil))
+          (entity (make-test-article :headline "Unchanged")))
+      (let ((result (classic:apply-operation op entity)))
+        (is (eq entity result))
+        (is (equal "Unchanged" (classic:headline result)))))))
+
+(def-test migrate-store-handles-new-class ()
+  "migrate-store treats classes missing from the source manifest as
+version \"0\" so :create-class migrations registered with from-version
+\"0\" are found."
+  (with-clean-migration-state ()
+    (with-clean-strategy ()
+      (classic:define-schema-migration (test-introduced "0" -> "1")
+        "A new class."
+        (:create-class
+          :superclasses (classic-named-resource)
+          :slots nil))
+      (let ((old-manifest (make-instance 'classic-schema-manifest
+                            :uri (make-test-uri :class 'classic-schema-manifest
+                                                :slug "old")
+                            :manifest-version "0.1"
+                            :class-versions '(("CLASSIC-ARTICLE" . "1"))))
+            (new-manifest (make-instance 'classic-schema-manifest
+                            :uri (make-test-uri :class 'classic-schema-manifest
+                                                :slug "new")
+                            :manifest-version "0.2"
+                            :class-versions '(("CLASSIC-ARTICLE" . "1")
+                                              ("TEST-INTRODUCED" . "1")))))
+        ;; No entities of test-introduced exist; migration runs as a
+        ;; no-op but should not error or report :skipped.
+        (let ((result (classic:migrate-store *test-strategy*
+                                             old-manifest new-manifest
+                                             :mode :auto)))
+          (is (eq 0 (getf result :skipped))))))))
+
+(def-test create-class-depends-on-resolves ()
+  "A migration can depends-on a :create-class migration via the
+\"0\" -> \"1\" version pair, and toposort orders them correctly.
+Constructs migrations directly (not via the DSL) because the
+depends-on parsing path is exercised by other tests."
+  (with-clean-migration-state ()
+    (let* ((mig-a (make-instance 'classic-schema-migration
+                    :uri (make-test-uri :class 'classic-schema-migration
+                                        :slug "create-dep-a")
+                    :target-class 'test-class-a
+                    :from-version "0" :to-version "1"
+                    :reversible-p nil
+                    :depends-on nil
+                    :operations nil))
+           (mig-b (make-instance 'classic-schema-migration
+                    :uri (make-test-uri :class 'classic-schema-migration
+                                        :slug "create-dep-b")
+                    :target-class 'test-class-b
+                    :from-version "0" :to-version "1"
+                    :reversible-p nil
+                    ;; depends on test-class-a "0" -> "1"
+                    :depends-on (list (cons "TEST-CLASS-A" "0"))
+                    :operations nil)))
+      (classic:register-migration mig-a)
+      (classic:register-migration mig-b)
+      ;; Give them in reverse order to test sorting
+      (let ((sorted (classic:toposort-migrations (list mig-b mig-a))))
+        (is (= 2 (length sorted)))
+        ;; A must come before B
+        (is (eq mig-a (first sorted)))
+        (is (eq mig-b (second sorted)))))))
+
+(def-test federation-compatibility-local-only ()
+  "A class present locally but missing on the remote peer is reported
+as :local-only in the translatable-classes list."
+  (with-clean-migration-state ()
+    (let ((local-m (make-instance 'classic-schema-manifest
+                     :uri (make-test-uri :class 'classic-schema-manifest
+                                         :slug "fed-localonly-local")
+                     :manifest-version "0.2"
+                     :class-versions '(("CLASSIC-ARTICLE" . "1")
+                                       ("TEST-NEW-CLASS" . "1"))))
+          (remote-m (make-instance 'classic-schema-manifest
+                      :uri (make-test-uri :class 'classic-schema-manifest
+                                          :slug "fed-localonly-remote")
+                      :manifest-version "0.1"
+                      :class-versions '(("CLASSIC-ARTICLE" . "1")))))
+      (let* ((report (classic:assess-federation-compatibility
+                      local-m remote-m))
+             (translatable (classic::federation-compatibility-report-translatable-classes
+                            report))
+             (local-only (find-if (lambda (entry)
+                                    (and (>= (length entry) 4)
+                                         (eq :local-only (fourth entry))))
+                                  translatable)))
+        (is-true local-only)
+        (is (equal "TEST-NEW-CLASS" (first local-only)))
+        (is (equal "1" (second local-only)))
+        (is-false (third local-only))))))
+
+(def-test federation-compatibility-remote-only-is-incompatible ()
+  "A class present on the remote peer but missing locally is reported
+as incompatible (we cannot interpret what we don't know)."
+  (with-clean-migration-state ()
+    (let ((local-m (make-instance 'classic-schema-manifest
+                     :uri (make-test-uri :class 'classic-schema-manifest
+                                         :slug "fed-remoteonly-local")
+                     :manifest-version "0.1"
+                     :class-versions '(("CLASSIC-ARTICLE" . "1"))))
+          (remote-m (make-instance 'classic-schema-manifest
+                      :uri (make-test-uri :class 'classic-schema-manifest
+                                          :slug "fed-remoteonly-remote")
+                      :manifest-version "0.2"
+                      :class-versions '(("CLASSIC-ARTICLE" . "1")
+                                        ("TEST-REMOTE-CLASS" . "1")))))
+      (let* ((report (classic:assess-federation-compatibility
+                      local-m remote-m))
+             (incompatible (classic::federation-compatibility-report-incompatible-classes
+                            report))
+             (remote-class (find-if (lambda (entry)
+                                      (equal "TEST-REMOTE-CLASS" (first entry)))
+                                    incompatible)))
+        (is-true remote-class)
+        (is-false (second remote-class))
+        (is (equal "1" (third remote-class)))))))

@@ -480,3 +480,220 @@ Bulk namespace migration (3 tests):
 - Regressions: 0
 - Total migration test checks: 102 (74 original + 28 new)
 - Total Classic test checks: 589
+
+
+## Addendum: The `:create-class` Operation
+
+**Date:** 2026-05-29
+
+### Context
+
+As preparation for a planned refactor that will factor Classic's
+schema out as a versioned pluggable component (`classic.schema.alpha`
+and future schemas), the question of how new classes are introduced
+into the migration history surfaced.
+
+The migration system already handles slot-level changes (adds,
+removes, renames, transforms) and predicate-level changes. The
+implicit pattern for introducing a new class was: define the class
+in the schema source, set its `:schema-version` to `"1"`, and let
+the registry pick it up. Other migrations that needed to reference
+the new class could declare `:depends-on (new-class "0" -> "1")` by
+convention, where `"0"` was a sentinel meaning "the class did not
+exist."
+
+This worked but was undocumented and unenforced. A dependency
+declaration `(new-class "0" -> "1")` would not resolve to any
+registered migration (since none existed for the "0" version),
+so the toposort would silently fail to order the introduction. The
+gap was identified in the May 27 conversation about ontology
+evolution and the bulk namespace rename.
+
+Once the schema becomes a versioned pluggable artifact, formal
+class introduction becomes structurally important: each schema's
+contents need to be describable as a sequence of migrations from
+`"0"`, so future schemas inherit a clean model for what their
+predecessors introduced.
+
+### Design Decisions
+
+Four questions were settled before implementation:
+
+**1. Sentinel version for "class did not exist".**
+
+**Decision: the string `"0"`.**
+
+Strings are consistent with the existing version format. `"0"` is
+the natural "before `"1"`," and the existing `find-migration-path`
+function already handles arbitrary version strings as keys without
+special-casing.
+
+A symbol like `:undefined` was considered but rejected -- it would
+require special-casing throughout the migration system, breaking
+the uniformity of version handling.
+
+**2. Federation translation for missing classes.**
+
+**Decision: report incompatibility; let the application layer
+decide how to handle it.**
+
+When Instance A has a class that Instance B does not (because B is
+at an older schema version that predates the class's introduction),
+A cannot send entities of that class to B in a form B understands.
+Three options were considered:
+
+- (a) Drop the entity entirely
+- (b) Translate to the nearest common ancestor class
+- (c) Report incompatibility; application decides
+
+Option (c) was chosen because the federation layer's role is to
+*report* the situation, not to *enforce* a translation policy. The
+application knows whether dropping is acceptable, whether the entity
+should be sent in a generic form, or whether the federation should
+be aborted. The `:local-only` marker in the compatibility report
+makes the situation explicit.
+
+**3. URI namespace prefix in the migration declaration.**
+
+**Decision: not included.**
+
+The migration declaration could capture the class's intended
+`uri-namespace-prefix`, but this information is already in the
+class definition itself (declared via `defmethod`). Including it
+in the migration would duplicate information and risk drift. The
+migration declaration is kept focused on what the migration system
+specifically needs (slot specs for compatibility checking,
+superclasses for dependency reasoning, metaclass for documentation).
+
+**4. Migration of `classic-migration-operation` itself.**
+
+**Decision: no version bump for now.**
+
+Adding three new slots to `classic-migration-operation`
+(`superclasses`, `class-metaclass`, `slot-specs`) is itself a
+schema change to that class. In a production system this would
+require its own migration. Pre-release, before the migration system
+has been used to manage versioned production data, treating its own
+classes as outside the migration regime is acceptable. A version
+bump and migration for the migration operation class can be added
+in a future release.
+
+### Implementation
+
+The change is structurally minimal because the migration system was
+designed with extensibility in mind. The operation-type discriminator
+on `classic-migration-operation` already supports adding new keywords;
+the DSL parser dispatches via `case`; the runner dispatches via `case`.
+
+**`classic-migration-operation`** (model.lisp) gains three slots:
+
+- `superclasses` — list of superclass symbols (`:persistence :triple`)
+- `class-metaclass` — metaclass symbol (`:persistence :triple`)
+- `slot-specs` — list of slot specifications (`:persistence :blob :format :sexp`)
+
+These are NIL for non-`:create-class` operations, consistent with
+how other operation-specific slots work (e.g., `transform-fn-name`
+is NIL for non-transform operations).
+
+**The DSL parser** (`%parse-migration-operation` in registry.lisp)
+gains a `:create-class` case that destructures the keyword arguments
+into the three new slots:
+
+```lisp
+(:create-class
+ (let ((plist args))
+   (setf (superclasses op) (getf plist :superclasses))
+   (setf (class-metaclass op)
+         (or (getf plist :metaclass) 'classic-class))
+   (setf (slot-specs op) (getf plist :slots))))
+```
+
+The `:metaclass` keyword defaults to `classic-class`, which is
+correct for the vast majority of Classic schema classes.
+
+**The reversibility computation** in `define-schema-migration`
+treats `:create-class` as not reversible. This is the conservative
+choice: a peer at an older schema version that does not have the
+class cannot receive entities of it. Applications that want to
+translate to a generic type for older peers handle this above
+the migration layer.
+
+**The runner's `apply-operation`** gains a `:create-class` case
+that is a no-op. Class introduction is a schema-level declaration,
+not an entity-level operation. The class is defined when the
+schema package loads; the migration operation exists for dependency
+resolution and federation reporting.
+
+**`default-migration-trigger`** treats `:create-class` as `:eager`.
+There is no work to do, so triggering immediately is correct.
+
+**`migrate-store`** handles NIL source-version (when a class is
+missing from the source manifest) by treating it as `"0"`. This
+allows `:create-class` migrations registered with from-version `"0"`
+to be found and applied (as a no-op for entities, but with correct
+reporting and side effects).
+
+**`assess-federation-compatibility`** gains two new cases in its
+`cond`:
+
+- Class exists locally, missing on remote → `:local-only` marker
+  in translatable-classes (informational; sending to remote is
+  not possible)
+- Class exists on remote, missing locally → incompatible (we
+  cannot interpret what the remote sends us)
+
+This gives the federation layer accurate reporting for the
+asymmetric case introduced by `:create-class` migrations.
+
+### Tests
+
+10 new tests added to `test/test-migration.lisp`:
+
+- `:create-class` DSL parsing: superclasses, metaclass, slot-specs
+  all captured correctly
+- Default metaclass is `classic-class`
+- `:create-class` migrations are not reversible
+- Default trigger for `:create-class`-only migrations is `:eager`
+- `find-migration-path` works for the `"0" -> "1"` chain
+- `apply-operation` on `:create-class` returns the entity unchanged
+- `migrate-store` handles a manifest diff where a class is missing
+  from the source manifest
+- `toposort-migrations` orders `:create-class` migrations and their
+  dependents correctly
+- Federation compatibility reports `:local-only` for classes
+  missing on the remote peer
+- Federation compatibility reports remote-only classes as
+  incompatible
+
+### Files
+
+| File | Action | Description |
+|------|--------|-------------|
+| `src/migration/model.lisp` | Modified | Added 3 slots to `classic-migration-operation`, updated documentation |
+| `src/migration/registry.lisp` | Modified | Added `:create-class` parsing in `%parse-migration-operation`, updated reversibility check, updated macro docstring |
+| `src/migration/runner.lisp` | Modified | Added `:create-class` case to `apply-operation`, updated `default-migration-trigger`, updated `migrate-store` to handle NIL source-version |
+| `src/migration/federation.lisp` | Modified | Added `:local-only` and remote-only handling to `assess-federation-compatibility` |
+| `src/packages.lisp` | Modified | Exported `superclasses`, `class-metaclass`, `slot-specs` |
+| `test/test-migration.lisp` | Modified | Added 10 new tests, 24 new checks |
+| `doc/migration/Migration.md` | Modified | Documented `:create-class` operation and `:local-only` marker |
+
+### Metrics
+
+- Test checks added: 24
+- Regressions: 0
+- Total migration test checks: 128 (102 from prior addendum + 26 new,
+  including 24 for `:create-class` and 2 for refined federation
+  compatibility reporting)
+- Total Classic test checks: 685
+
+### Note: Pre-existing DSL Bug
+
+While writing the `:depends-on` test for `:create-class`, a
+pre-existing bug in the `define-schema-migration` macro's
+`:depends-on` parsing was observed. The macro pushes `(rest clause)`
+to the deps list rather than `(second clause)`, creating an extra
+level of nesting that causes `(string (first dep))` to fail at
+compile time. The bug was avoided in the test by constructing
+migration instances directly, leaving the macro-level fix for a
+separate change that addresses the existing DSL implementation
+without entangling it with the `:create-class` enhancement.

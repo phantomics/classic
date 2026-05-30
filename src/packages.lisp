@@ -334,6 +334,9 @@
    #:default-value
    #:new-persistence
    #:transform-fn-name
+   #:superclasses
+   #:class-metaclass
+   #:slot-specs
 
    #:classic-schema-migration
    #:target-class

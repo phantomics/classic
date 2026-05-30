@@ -81,6 +81,13 @@
        ;; this operation exists to inform the persistence layer's
        ;; triple migration (e.g. SPARQL DELETE/INSERT).
        ;; No entity-level action needed for in-memory instances.
+       nil)
+      (:create-class
+       ;; Class introduction is a schema-level declaration, not an
+       ;; entity-level operation. The class is defined when the schema
+       ;; package loads. This operation records the introduction for
+       ;; dependency resolution and federation compatibility reporting
+       ;; but performs no work at entity migration time.
        nil))
     entity))
 
@@ -161,13 +168,15 @@ MIGRATIONS is a list of classic-schema-migration instances."
 
 (defun default-migration-trigger (strategy migration)
   "Default trigger function for migrations. Returns:
-  :eager    — for schema-only changes (renames, adds, predicate renames)
+  :eager    — for schema-only changes (renames, adds, predicate renames,
+              class introductions)
   :deferred — for migrations with data transforms or removals"
   (declare (ignore strategy))
   (let ((ops (operations migration)))
     (if (every (lambda (op)
                  (member (operation-type op)
-                         '(:rename-slot :add-slot :rename-predicate)))
+                         '(:rename-slot :add-slot :rename-predicate
+                           :create-class)))
                ops)
         :eager
         :deferred)))
@@ -201,11 +210,16 @@ Returns a plist (:migrated N :skipped M :deferred D) with counts."
         (deferred-list nil))
     (dolist (diff diffs)
       (destructuring-bind (class-name from-v to-v) diff
-        (let ((path (find-migration-path class-name from-v to-v)))
+        ;; A NIL from-version means the class was introduced in the
+        ;; target manifest (no entry in the source manifest). Treat
+        ;; this as version "0" so :create-class migrations registered
+        ;; with from-version "0" can be found.
+        (let* ((effective-from (or from-v "0"))
+               (path (find-migration-path class-name effective-from to-v)))
           (if (null path)
               (progn
                 (warn "No migration path for ~A v~A -> v~A; skipping"
-                      class-name from-v to-v)
+                      class-name effective-from to-v)
                 (incf skipped))
               ;; Determine whether to run or defer
               (let* ((trigger-result
@@ -217,19 +231,21 @@ Returns a plist (:migrated N :skipped M :deferred D) with counts."
                      (class-sym (find-symbol class-name
                                             (find-package :classic))))
                 (case trigger-result
-                  ((:eager :lazy)
-                   ;; Run migration on all entities of this class
-                   (maphash (lambda (uri entity)
-                              (declare (ignore uri))
-                              (when (and class-sym
-                                         (typep entity class-sym))
-                                (migrate-entity entity from-v to-v)
-                                (persist-entity strategy entity)
-                                (incf migrated)))
-                            (strategy-entities strategy)))
-                  (:deferred
-                   (push (list class-name from-v to-v path)
-                         deferred-list))))))))
+                   ((:eager :lazy)
+                    ;; Run migration on all entities of this class.
+                    ;; For :create-class migrations (effective-from "0"),
+                    ;; no entities exist yet, so the maphash is a no-op.
+                    (maphash (lambda (uri entity)
+                               (declare (ignore uri))
+                               (when (and class-sym
+                                          (typep entity class-sym))
+                                 (migrate-entity entity effective-from to-v)
+                                 (persist-entity strategy entity)
+                                 (incf migrated)))
+                             (strategy-entities strategy)))
+                   (:deferred
+                    (push (list class-name effective-from to-v path)
+                          deferred-list))))))))
     (list :migrated migrated
           :skipped skipped
           :deferred (length deferred-list)

@@ -181,7 +181,18 @@ classic-migration-operation instance."
                (plist (rest args)))
            (setf (target-slot op) slot-name)
            (setf (old-predicate op) (getf plist :old))
-           (setf (new-predicate op) (getf plist :new)))))
+           (setf (new-predicate op) (getf plist :new))))
+        (:create-class
+         ;; (:create-class :superclasses (super1 super2)
+         ;;                :metaclass classic-class    ; optional
+         ;;                :slots ((slot-name :predicate "..."
+         ;;                                   :persistence ...
+         ;;                                   :default ...) ...))
+         (let ((plist args))
+           (setf (superclasses op) (getf plist :superclasses))
+           (setf (class-metaclass op)
+                 (or (getf plist :metaclass) 'classic-class))
+           (setf (slot-specs op) (getf plist :slots)))))
       op)))
 
 (defmacro define-schema-migration ((class-name from-version
@@ -200,7 +211,16 @@ Syntax:
     (:add-slot summary :predicate \"schema:abstract\" :persistence :triple :default nil)
     (:transform-slot keywords -> tags :transform-fn migrate-keywords-to-tags)
     (:remove-slot date-modified)
-    (:rename-slot old-name -> new-name))
+    (:rename-slot old-name -> new-name)
+    (:create-class :superclasses (classic-named-resource)
+                   :metaclass classic-class
+                   :slots ((start-time :predicate \"schema:startDate\"
+                                       :persistence :triple)
+                           (location :predicate \"schema:location\"
+                                     :persistence :relation))))
+
+For :create-class migrations, use FROM-VERSION \"0\" (sentinel
+meaning the class did not exist before this version).
 
 Operations are applied in the order listed."
   (declare (ignore arrow))
@@ -217,11 +237,14 @@ Operations are applied in the order listed."
         (otherwise (push clause op-forms))))
     (setf op-forms (nreverse op-forms))
     (setf deps (nreverse deps))
-    ;; Determine reversibility: reversible if no :remove-slot or
-    ;; :transform-slot operations
+    ;; Determine reversibility: reversible if no :remove-slot,
+    ;; :transform-slot, or :create-class operations. :create-class is
+    ;; not reversible because peers without the class cannot receive
+    ;; entities of that class (handled at the application layer).
     (let ((reversible (not (some (lambda (op)
                                    (member (first op)
-                                           '(:remove-slot :transform-slot)))
+                                           '(:remove-slot :transform-slot
+                                             :create-class)))
                                  op-forms))))
       `(let* ((authority "classic.system")
               (authority-date "2026")

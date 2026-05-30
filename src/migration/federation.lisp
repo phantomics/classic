@@ -48,11 +48,14 @@ or instance descriptor). Default returns NIL (no manifest attached).")
 (defun assess-federation-compatibility (local-manifest remote-manifest)
   "Compare two schema manifests and produce a compatibility report.
 
-Each class falls into one of three categories:
+Each class falls into one of four categories:
   - Compatible: same version on both sides (no translation needed)
   - Translatable: versions differ but a migration path exists in both
-    directions (or the migration is marked reversible)
-  - Incompatible: versions differ and no migration path exists
+    directions (or the migration is marked reversible). May be flagged
+    :receive-only (only inbound translation works) or :local-only (the
+    class exists locally but not on the remote peer).
+  - Incompatible: versions differ and no migration path exists, or the
+    class exists on the remote but not locally (we cannot interpret it).
 
 Returns a federation-compatibility-report."
   (let ((diffs (manifests-differ-p local-manifest remote-manifest))
@@ -72,6 +75,16 @@ Returns a federation-compatibility-report."
     (dolist (diff diffs)
       (destructuring-bind (class-name local-v remote-v) diff
         (cond
+          ;; Class exists locally but not on remote -> :local-only
+          ;; (cannot send to remote; remote cannot interpret entities
+          ;; of this class)
+          ((and local-v (null remote-v))
+           (push (list class-name local-v remote-v :local-only)
+                 translatable))
+          ;; Class exists on remote but not locally -> incompatible
+          ;; (we cannot interpret what the remote sends us)
+          ((and (null local-v) remote-v)
+           (push (list class-name local-v remote-v) incompatible))
           ;; Both directions have paths -> translatable
           ((and local-v remote-v
                 (find-migration-path class-name remote-v local-v)
