@@ -331,7 +331,7 @@ persistent slots on CLASS-NAME whose predicate starts with PREFIX."
 
 (defmacro define-namespace-migration ((old-prefix new-prefix
                                        &key version-bump
-                                            (classic.schema.alpha:compatibility :full))
+                                            (compatibility :full))
                                       docstring &rest class-names)
   "Generate per-class schema migrations that rename all predicates
 from OLD-PREFIX to NEW-PREFIX for each class in CLASS-NAMES.
@@ -358,7 +358,7 @@ finalized before this macro is expanded."
   (let ((migrations nil))
     (dolist (class-name class-names)
       (let* ((class (find-class class-name))
-             (classic.schema.alpha:from-version (class-schema-version class))
+             (from-version (class-schema-version class))
              (matching-slots (%slots-with-namespace class-name old-prefix))
              (old-prefix-len (length old-prefix)))
         (when matching-slots

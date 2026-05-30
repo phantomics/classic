@@ -412,7 +412,7 @@ deleted (soft delete) but retains it for audit purposes."))
        (list :type :ack)))
     (:batch
      ;; Process each operation in the batch sequentially
-     (let ((classic.schema.alpha:operations (getf message :operations))
+     (let ((operations (getf message :operations))
            (processed 0))
        (dolist (op operations)
          (let ((op-type (getf op :op-type))

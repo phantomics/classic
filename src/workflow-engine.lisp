@@ -81,13 +81,13 @@ workflow framework to application-specific identity models."))
 ;;; responds to the expected accessors, the helper works regardless of
 ;;; which schema defines them.
 
-(defun find-workflow-state (classic.schema.alpha:workflow state-label)
+(defun find-workflow-state (workflow state-label)
   "Find the workflow state in WORKFLOW whose label matches STATE-LABEL.
 Returns the state object or NIL."
   (find state-label (classic.schema.alpha:workflow-states workflow)
         :key #'classic.schema.alpha:label :test #'equal))
 
-(defun find-transition (classic.schema.alpha:workflow from-label to-label)
+(defun find-transition (workflow from-label to-label)
   "Find the workflow transition in WORKFLOW that connects FROM-LABEL
 to TO-LABEL. Returns the transition object or NIL."
   (find-if (lambda (tr)

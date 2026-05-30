@@ -397,6 +397,7 @@
    #:federation-event-type
    #:federation-event-entity-uri
    #:federation-event-peer-authority
+   #:federation-event-publication-uri
    #:federation-event-delivery-status
    #:federation-event-attempt-count
    #:federation-event-last-attempt-at

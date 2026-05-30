@@ -92,7 +92,7 @@ Returns a federation-compatibility-report."
                     ;; Check if forward path is reversible
                     (let ((path (find-migration-path class-name
                                                     remote-v local-v)))
-                      (every #'reversible-p path))))
+                      (every #'classic.schema.alpha:reversible-p path))))
            (push (list class-name local-v remote-v) translatable))
           ;; Only one direction -> partially translatable (still usable
           ;; for receive but not send)

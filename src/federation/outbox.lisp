@@ -76,7 +76,7 @@ Each operation in the batch is individually logged in the
 federation event log.
 
 Returns a plist (:sent N :acknowledged P) with counts."
-  (let ((classic.schema.alpha:operations (nreverse (classic.schema.alpha:outbox-pending-operations outbox)))
+  (let ((operations (nreverse (classic.schema.alpha:outbox-pending-operations outbox)))
         (peer-auth (classic.schema.alpha:outbox-peer-authority outbox))
         (source-auth (classic.schema.alpha:uri-base-authority publication))
         (sent 0)

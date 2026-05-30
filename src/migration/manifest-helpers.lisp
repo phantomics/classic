@@ -28,7 +28,7 @@ Returns a classic.schema.alpha:classic-schema-manifest instance (not persisted).
                                (cons (string (class-name cls))
                                      (class-schema-version cls))))
                            class-list))
-         (classic.schema.alpha:uri (mint-uri 'classic.schema.alpha:classic-schema-manifest authority authority-date
+         (uri (mint-uri 'classic.schema.alpha:classic-schema-manifest authority authority-date
                         :slug (format nil "manifest-~A" version))))
     (make-instance 'classic.schema.alpha:classic-schema-manifest
                    :uri uri

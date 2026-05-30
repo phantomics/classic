@@ -140,7 +140,7 @@ Returns a list of classic.schema.alpha:classic-federation-event instances."
                (declare (ignore uri))
                (when (and (typep entity 'classic.schema.alpha:classic-federation-event)
                           (equal pub-uri
-                                 (federation-event-publication-uri entity))
+                                 (classic.schema.alpha:federation-event-publication-uri entity))
                           (or (null status)
                               (eq status
                                   (classic.schema.alpha:federation-event-delivery-status entity)))
