@@ -82,7 +82,7 @@
   (let ((article (make-instance 'classic-article
                    :uri (make-test-uri :slug "signal-test")
                    :headline 42)))
-    (signals classic:validation-failed
+    (signals classic::validation-failed
       (classic:validate-entity article :on-error :signal))))
 
 (def-test validate-entity-warns-on-error ()
@@ -127,7 +127,7 @@
           (article (make-instance 'classic-article
                      :uri (make-test-uri :slug "yes-validate")
                      :headline 42)))
-      (signals classic:validation-failed
+      (signals classic::validation-failed
         (persist-entity *test-strategy* article)))))
 
 (def-test validate-on-persist-t-allows-valid ()

@@ -16,7 +16,7 @@
     (declare (ignore transport))
     (let ((uri-a (write-and-publish blog-a "Prov Persist" "Content.")))
       ;; Provenance should exist as a persisted entity
-      (let ((prov (classic:find-provenance
+      (let ((prov (classic.engine.ref:find-provenance
                    (classic-blog:blog-publication blog-b)
                    uri-a
                    (classic-blog:blog-strategy blog-b))))
@@ -33,7 +33,7 @@
     (declare (ignore transport))
     (write-and-publish blog-a "Scoped Test" "Content.")
     (let* ((pub-b (classic-blog:blog-publication blog-b))
-           (prov-list (classic:find-all-provenance
+           (prov-list (classic.engine.ref:find-all-provenance
                        pub-b (classic-blog:blog-strategy blog-b))))
       (is (= 1 (length prov-list)))
       (is (equal (uri-string pub-b)
@@ -45,7 +45,7 @@
       (make-federated-pair)
     (declare (ignore transport))
     (let ((uri-a (write-and-publish blog-a "Retrieve Prov" "Content.")))
-      (let ((prov (classic:find-provenance
+      (let ((prov (classic.engine.ref:find-provenance
                    (classic-blog:blog-publication blog-b)
                    uri-a
                    (classic-blog:blog-strategy blog-b))))
@@ -88,7 +88,7 @@
       (make-federated-pair)
     (let ((uri-a (write-and-publish blog-a "Retract Prov" "Content.")))
       ;; Verify it's :current
-      (let ((prov (classic:find-provenance
+      (let ((prov (classic.engine.ref:find-provenance
                    (classic-blog:blog-publication blog-b)
                    uri-a
                    (classic-blog:blog-strategy blog-b))))
@@ -98,10 +98,10 @@
                                                  :name "Ed" :role :editor)))
         (declare (ignore editor))
         ;; Directly send a retraction message to simulate
-        (classic:receive-retraction (classic-blog:blog-publication blog-b)
+        (classic.engine.ref:receive-retraction (classic-blog:blog-publication blog-b)
                                    uri-a "alpha.dev")
         ;; Provenance should now be :retracted
-        (let ((prov (classic:find-provenance
+        (let ((prov (classic.engine.ref:find-provenance
                      (classic-blog:blog-publication blog-b)
                      uri-a
                      (classic-blog:blog-strategy blog-b))))
@@ -121,7 +121,7 @@
       (make-federated-pair)
     (declare (ignore blog-b))
     (write-and-publish blog-a "Event Log Test" "Content.")
-    (let ((events (classic:query-federation-events
+    (let ((events (classic.engine.ref:query-federation-events
                    (classic-blog:blog-strategy blog-a)
                    (classic-blog:blog-publication blog-a)
                    :event-type :publish)))
@@ -138,7 +138,7 @@
       (make-federated-pair)
     (declare (ignore transport))
     (write-and-publish blog-a "Receive Log" "Content.")
-    (let ((events (classic:query-federation-events
+    (let ((events (classic.engine.ref:query-federation-events
                    (classic-blog:blog-strategy blog-b)
                    (classic-blog:blog-publication blog-b)
                    :event-type :receive)))
@@ -152,11 +152,11 @@
       (make-federated-pair)
     (declare (ignore blog-b))
     (write-and-publish blog-a "Status Filter" "Content.")
-    (let ((delivered (classic:query-federation-events
+    (let ((delivered (classic.engine.ref:query-federation-events
                      (classic-blog:blog-strategy blog-a)
                      (classic-blog:blog-publication blog-a)
                      :status :delivered))
-          (failed (classic:query-federation-events
+          (failed (classic.engine.ref:query-federation-events
                    (classic-blog:blog-strategy blog-a)
                    (classic-blog:blog-publication blog-a)
                    :status :failed)))
@@ -169,11 +169,11 @@
       (make-federated-pair)
     (declare (ignore blog-b))
     (write-and-publish blog-a "Peer Filter" "Content.")
-    (let ((beta-events (classic:query-federation-events
+    (let ((beta-events (classic.engine.ref:query-federation-events
                         (classic-blog:blog-strategy blog-a)
                         (classic-blog:blog-publication blog-a)
                         :peer-authority "beta.dev"))
-          (other-events (classic:query-federation-events
+          (other-events (classic.engine.ref:query-federation-events
                          (classic-blog:blog-strategy blog-a)
                          (classic-blog:blog-publication blog-a)
                          :peer-authority "other.dev")))
@@ -192,7 +192,7 @@
       (classic-blog:publish-post blog-a 1 :account editor)
       (classic-blog:archive-post blog-a 1 :account editor)
       (classic-blog:delete-post blog-a 1 :account editor)
-      (let ((retract-events (classic:query-federation-events
+      (let ((retract-events (classic.engine.ref:query-federation-events
                              (classic-blog:blog-strategy blog-a)
                              (classic-blog:blog-publication blog-a)
                              :event-type :retract)))
@@ -216,12 +216,13 @@
       (persist-entity *test-strategy* pub)
       ;; Create several delivered events
       (dotimes (i 5)
-        (classic:log-federation-event *test-strategy* pub :publish
-                                     (format nil "uri:entity-~D" i)
-                                     "peer.dev"
-                                     :status :delivered))
+        (classic.engine.ref:log-federation-event
+         *test-strategy* pub :publish
+         (format nil "uri:entity-~D" i)
+         "peer.dev"
+         :status :delivered))
       ;; Verify events exist
-      (is (= 5 (length (classic:query-federation-events
+      (is (= 5 (length (classic.engine.ref:query-federation-events
                          *test-strategy* pub :status :delivered))))
       ;; Apply retention with max-count 2 for delivered
       (let ((policy (make-instance 'classic-retention-policy
@@ -230,11 +231,11 @@
                       :label "Test Policy"
                       :rules '((:delivered . (:max-age nil :max-count 2))
                                 (:failed . (:max-age nil :max-count nil))))))
-        (let ((result (classic:apply-retention-policy
+        (let ((result (classic.engine.ref:apply-retention-policy
                        *test-strategy* pub policy)))
           (is (= 3 (getf result :pruned)))
           ;; Only 2 delivered events should remain
-          (is (= 2 (length (classic:query-federation-events
+          (is (= 2 (length (classic.engine.ref:query-federation-events
                             *test-strategy* pub
                             :status :delivered)))))))))
 
@@ -251,16 +252,16 @@
       (persist-entity *test-strategy* pub)
       ;; Create failed events
       (dotimes (i 3)
-        (classic:log-federation-event *test-strategy* pub :publish
-                                     (format nil "uri:fail-~D" i)
-                                     "peer.dev"
-                                     :status :failed))
+        (classic.engine.ref:log-federation-event *test-strategy* pub :publish
+                                                 (format nil "uri:fail-~D" i)
+                                                 "peer.dev"
+                                                 :status :failed))
       ;; Apply default policy
-      (let ((policy (classic:make-default-retention-policy
+      (let ((policy (classic.engine.ref:make-default-retention-policy
                      "failed.dev" "2026")))
-        (classic:apply-retention-policy *test-strategy* pub policy)
+        (classic.engine.ref:apply-retention-policy *test-strategy* pub policy)
         ;; All 3 failed events should remain
-        (is (= 3 (length (classic:query-federation-events
+        (is (= 3 (length (classic.engine.ref:query-federation-events
                           *test-strategy* pub :status :failed))))))))
 
 ;;; ============================================================
@@ -284,10 +285,10 @@
 
 (def-test delivery-acknowledged-p-recognizes-ack ()
   "delivery-acknowledged-p returns T for :ack responses."
-  (is-true (classic:delivery-acknowledged-p '(:type :ack)))
-  (is-true (classic:delivery-acknowledged-p '(:type :retract-response)))
-  (is-false (classic:delivery-acknowledged-p '(:type :error :message "fail")))
-  (is-false (classic:delivery-acknowledged-p nil)))
+  (is-true (classic.engine.ref:delivery-acknowledged-p '(:type :ack)))
+  (is-true (classic.engine.ref:delivery-acknowledged-p '(:type :retract-response)))
+  (is-false (classic.engine.ref:delivery-acknowledged-p '(:type :error :message "fail")))
+  (is-false (classic.engine.ref:delivery-acknowledged-p nil)))
 
 (def-test publish-checks-ack-on-delivery ()
   "publish-to-peers logs :delivered only when peer acknowledges."
@@ -296,7 +297,7 @@
     (declare (ignore blog-b))
     (write-and-publish blog-a "Ack Check" "Content.")
     ;; The direct-transport always acks, so events should be :delivered
-    (let ((events (classic:query-federation-events
+    (let ((events (classic.engine.ref:query-federation-events
                    (classic-blog:blog-strategy blog-a)
                    (classic-blog:blog-publication blog-a)
                    :event-type :publish
@@ -321,7 +322,7 @@
       (let ((article (make-instance 'classic-article
                        :uri (make-test-uri :slug "idem-new")
                        :headline "New Article")))
-        (let ((result (classic:idempotent-receive pub article "peer.dev")))
+        (let ((result (classic.engine.ref:idempotent-receive pub article "peer.dev")))
           (is-true result)
           (is (equal "New Article" (headline result))))))))
 
@@ -353,7 +354,7 @@
                           :uri entity-uri
                           :headline "New Title"
                           :modified-at (local-time:now))))
-        (let ((result (classic:idempotent-receive pub new-entity "peer.dev")))
+        (let ((result (classic.engine.ref:idempotent-receive pub new-entity "peer.dev")))
           (is-true result)
           ;; The stored entity should now have the new title
           (let ((stored (retrieve-entity *test-strategy* entity-uri nil)))
@@ -384,7 +385,7 @@
                           :modified-at (local-time:adjust-timestamp
                                         (local-time:now)
                                         (offset :hour -1)))))
-        (let ((result (classic:idempotent-receive pub old-entity "peer.dev")))
+        (let ((result (classic.engine.ref:idempotent-receive pub old-entity "peer.dev")))
           ;; Should return NIL (rejected)
           (is (null result))
           ;; Local copy should still have current title
@@ -410,16 +411,16 @@
       (classic-blog:publish-post blog-a 1 :account editor)
       ;; Manually create a pending event to simulate a failed first delivery
       (let ((post-uri (uri-string (first (classic-blog:get-posts blog-a)))))
-        (classic:log-federation-event strategy pub :publish
-                                     post-uri "beta.dev"
-                                     :status :pending))
+        (classic.engine.ref:log-federation-event strategy pub :publish
+                                                 post-uri "beta.dev"
+                                                 :status :pending))
       ;; Run retry
-      (let ((result (classic:run-federation-retry pub strategy transport)))
+      (let ((result (classic.engine.ref:run-federation-retry pub strategy transport)))
         (is (<= 1 (getf result :retried)))
         (is (<= 1 (getf result :succeeded)))
         ;; The pending event should now be :delivered or :retrying->:delivered
-        (let ((pending (classic:query-federation-events strategy pub
-                                                        :status :pending)))
+        (let ((pending (classic.engine.ref:query-federation-events
+                        strategy pub :status :pending)))
           (is (= 0 (length pending))))))))
 
 (def-test retry-exhausts-after-max-attempts ()
@@ -436,7 +437,7 @@
       (persist-entity *test-strategy* pub)
       (register-with-transport transport pub)
       ;; Create a failed event with max attempts already reached
-      (let ((event (classic:log-federation-event
+      (let ((event (classic.engine.ref:log-federation-event
                     *test-strategy* pub :publish
                     "uri:exhaust-entity" "nobody.dev"
                     :status :failed)))
@@ -444,7 +445,7 @@
               classic:*retry-max-attempts*)
         (persist-entity *test-strategy* event))
       ;; Run retry
-      (let ((result (classic:run-federation-retry pub *test-strategy* transport)))
+      (let ((result (classic.engine.ref:run-federation-retry pub *test-strategy* transport)))
         (is (= 1 (getf result :exhausted)))
         (is (= 0 (getf result :succeeded)))))))
 
@@ -459,11 +460,11 @@
                        :uri (make-test-uri :slug "older")
                        :modified-at old-time)))
     ;; New is newer than old
-    (is-true (classic:entity-newer-p new-entity old-entity))
+    (is-true (classic.engine.ref:entity-newer-p new-entity old-entity))
     ;; Old is not newer than new
-    (is-false (classic:entity-newer-p old-entity new-entity))
+    (is-false (classic.engine.ref:entity-newer-p old-entity new-entity))
     ;; Same entity is not newer than itself
-    (is-false (classic:entity-newer-p new-entity new-entity))))
+    (is-false (classic.engine.ref:entity-newer-p new-entity new-entity))))
 
 ;;; ============================================================
 ;;; Phase C: Logical Clock
@@ -500,8 +501,8 @@
                      :logical-clock 3
                      :modified-at (local-time:now))))
     ;; Despite having an older timestamp, higher clock wins
-    (is-true (classic:entity-newer-p high-clock low-clock))
-    (is-false (classic:entity-newer-p low-clock high-clock))))
+    (is-true (classic.engine.ref:entity-newer-p high-clock low-clock))
+    (is-false (classic.engine.ref:entity-newer-p low-clock high-clock))))
 
 ;;; ============================================================
 ;;; Phase C: Update Propagation
@@ -519,7 +520,7 @@
                                :title "Original Title" :text "Original text.")
       (classic-blog:publish-post blog-a 1 :account editor-a)
       ;; Verify B received it
-      (let ((federated (classic:list-federated-content
+      (let ((federated (classic.engine.ref:list-federated-content
                         (classic-blog:blog-publication blog-b))))
         (is (= 1 (length federated)))
         (is (equal "Original Title" (headline (first federated)))))
@@ -557,7 +558,7 @@
                        :uri entity-uri
                        :headline "Version 2"
                        :logical-clock 2)))
-        (let ((result (classic:receive-update pub updated "peer.dev")))
+        (let ((result (classic.engine.ref:receive-update pub updated "peer.dev")))
           (is-true result)
           (let ((stored (retrieve-entity *test-strategy* entity-uri nil)))
             (is (equal "Version 2" (headline stored)))))))))
@@ -568,26 +569,26 @@
     (let* ((pub-uri (make-test-uri :class 'classic-publication
                                    :slug "update-reject-pub"))
            (pub (make-instance 'classic-publication
-                  :uri pub-uri
-                  :label "Update Reject"
-                  :persistence-strategy *test-strategy*
-                  :uri-base-authority "reject.dev"))
+                               :uri pub-uri
+                               :label "Update Reject"
+                               :persistence-strategy *test-strategy*
+                               :uri-base-authority "reject.dev"))
            (entity-uri (make-test-uri :slug "reject-entity")))
       (persist-entity *test-strategy* pub)
       ;; Store existing entity with clock=5
       (let ((existing (make-instance 'classic-article
-                        :uri entity-uri
-                        :headline "Current"
-                        :logical-clock 5)))
+                                     :uri entity-uri
+                                     :headline "Current"
+                                     :logical-clock 5)))
         (persist-entity *test-strategy* existing)
         (record-federation-provenance pub (uri-string existing)
-                                     "peer.dev" *test-strategy*))
+                                      "peer.dev" *test-strategy*))
       ;; Try to receive update with clock=3 (stale)
       (let ((stale (make-instance 'classic-article
-                     :uri entity-uri
-                     :headline "Stale"
-                     :logical-clock 3)))
-        (let ((result (classic:receive-update pub stale "peer.dev")))
+                                  :uri entity-uri
+                                  :headline "Stale"
+                                  :logical-clock 3)))
+        (let ((result (classic.engine.ref:receive-update pub stale "peer.dev")))
           (is (null result))
           ;; Local copy unchanged
           (let ((stored (retrieve-entity *test-strategy* entity-uri nil)))
@@ -599,19 +600,19 @@
 
 (def-test outbox-enqueue-and-count ()
   "Operations can be enqueued and counted."
-  (let ((outbox (classic:make-outbox "peer.dev" :threshold 5)))
-    (is (= 0 (classic:outbox-pending-count outbox)))
-    (classic:enqueue-operation outbox :publish "uri:entity-1")
-    (is (= 1 (classic:outbox-pending-count outbox)))
-    (classic:enqueue-operation outbox :publish "uri:entity-2")
-    (is (= 2 (classic:outbox-pending-count outbox)))))
+  (let ((outbox (classic.engine.ref:make-outbox "peer.dev" :threshold 5)))
+    (is (= 0 (classic.engine.ref:outbox-pending-count outbox)))
+    (classic.engine.ref:enqueue-operation outbox :publish "uri:entity-1")
+    (is (= 1 (classic.engine.ref:outbox-pending-count outbox)))
+    (classic.engine.ref:enqueue-operation outbox :publish "uri:entity-2")
+    (is (= 2 (classic.engine.ref:outbox-pending-count outbox)))))
 
 (def-test outbox-signals-flush-at-threshold ()
   "enqueue-operation returns :flush-needed when threshold is reached."
-  (let ((outbox (classic:make-outbox "peer.dev" :threshold 2)))
-    (is (eq :queued (classic:enqueue-operation outbox :publish "uri:e1")))
+  (let ((outbox (classic.engine.ref:make-outbox "peer.dev" :threshold 2)))
+    (is (eq :queued (classic.engine.ref:enqueue-operation outbox :publish "uri:e1")))
     (is (eq :flush-needed
-            (classic:enqueue-operation outbox :publish "uri:e2")))))
+            (classic.engine.ref:enqueue-operation outbox :publish "uri:e2")))))
 
 (def-test outbox-flush-sends-batch ()
   "flush-outbox sends a :batch message and clears the queue."
@@ -620,45 +621,45 @@
     (declare (ignore blog-b))
     (let* ((strategy (classic-blog:blog-strategy blog-a))
            (pub (classic-blog:blog-publication blog-a))
-           (outbox (classic:make-outbox "beta.dev" :threshold 10)))
+           (outbox (classic.engine.ref:make-outbox "beta.dev" :threshold 10)))
       ;; Write a post so we have an entity to reference
       (let ((editor (classic-blog:create-account blog-a
                                                  :name "Ed" :role :editor)))
         (classic-blog:write-post blog-a :account editor
                                  :title "Batch Test" :text "Content."))
       ;; Enqueue operations
-      (classic:enqueue-operation outbox :publish
+      (classic.engine.ref:enqueue-operation outbox :publish
                                 (uri-string (first (classic-blog:get-posts blog-a))))
-      (is (= 1 (classic:outbox-pending-count outbox)))
+      (is (= 1 (classic.engine.ref:outbox-pending-count outbox)))
       ;; Flush
-      (let ((result (classic:flush-outbox outbox pub strategy transport)))
+      (let ((result (classic.engine.ref:flush-outbox outbox pub strategy transport)))
         (is (= 1 (getf result :sent)))
         (is-true (getf result :acknowledged))
         ;; Queue cleared
-        (is (= 0 (classic:outbox-pending-count outbox)))))))
+        (is (= 0 (classic.engine.ref:outbox-pending-count outbox)))))))
 
 (def-test outbox-check-flush-interval ()
   "check-flush-needed detects when flush interval has elapsed."
-  (let ((outbox (classic:make-outbox "peer.dev" :threshold 100
+  (let ((outbox (classic.engine.ref:make-outbox "peer.dev" :threshold 100
                                                 :interval 1)))
     ;; No pending ops: no flush needed
-    (is (null (classic:check-flush-needed outbox)))
+    (is (null (classic.engine.ref:check-flush-needed outbox)))
     ;; Add an operation
-    (classic:enqueue-operation outbox :publish "uri:e1")
+    (classic.engine.ref:enqueue-operation outbox :publish "uri:e1")
     ;; Set last-flush to 2 seconds ago
     (setf (classic.schema.alpha:outbox-last-flush-at outbox)
           (local-time:adjust-timestamp (local-time:now) (offset :sec -2)))
     ;; Now interval has elapsed with pending ops
-    (is (eq :flush-needed (classic:check-flush-needed outbox)))))
+    (is (eq :flush-needed (classic.engine.ref:check-flush-needed outbox)))))
 
 (def-test clear-outbox-discards-operations ()
   "clear-outbox empties the queue without sending."
-  (let ((outbox (classic:make-outbox "peer.dev" :threshold 10)))
-    (classic:enqueue-operation outbox :publish "uri:e1")
-    (classic:enqueue-operation outbox :retract "uri:e2")
-    (is (= 2 (classic:outbox-pending-count outbox)))
-    (classic:clear-outbox outbox)
-    (is (= 0 (classic:outbox-pending-count outbox)))))
+  (let ((outbox (classic.engine.ref:make-outbox "peer.dev" :threshold 10)))
+    (classic.engine.ref:enqueue-operation outbox :publish "uri:e1")
+    (classic.engine.ref:enqueue-operation outbox :retract "uri:e2")
+    (is (= 2 (classic.engine.ref:outbox-pending-count outbox)))
+    (classic.engine.ref:clear-outbox outbox)
+    (is (= 0 (classic.engine.ref:outbox-pending-count outbox)))))
 
 ;;; ============================================================
 ;;; Phase C: Blog edit-post integration

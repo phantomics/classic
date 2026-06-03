@@ -140,6 +140,6 @@
         (with-persistence (*test-strategy* article)
           (setf (classic.schema.alpha:headline article) "Still Valid")))
       ;; Invalid entity: should signal
-      (signals classic:validation-failed
+      (signals classic::validation-failed
         (with-persistence (*test-strategy* article)
           (setf (classic.schema.alpha:headline article) 42))))))

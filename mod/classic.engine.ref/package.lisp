@@ -12,10 +12,24 @@
   (:use #:cl #:classic)
   (:export
 
+   ;; ---- Persistence Protocol ----
+   #:persist-entity
+   #:retrieve-entity
+   #:persist-relation
+   #:query-relation
+   #:query-relation-subjects
+   #:delete-entity
+   #:remove-relation
+   
    ;; ---- Workflow Engine (conditions and protocol) ----
+   #:actor-role-label
    #:find-transition
    #:find-workflow-state
+   #:attempt-transition
 
+   ;; ---- Federation: Transport ----
+   #:register-with-transport
+   
    ;; ---- Federation: Protocol ----
    #:describe-instance
    #:register-peer

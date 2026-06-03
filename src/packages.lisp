@@ -37,17 +37,17 @@
 
    ;; ---- Persistence Protocol ----
    #:classic-persistence-strategy
-   #:persist-entity
-   #:retrieve-entity
-   #:persist-relation
-   #:query-relation
-   #:query-relation-subjects
-   #:delete-entity
-   #:remove-relation
+   ;; #:persist-entity
+   ;; #:retrieve-entity
+   ;; #:persist-relation
+   ;; #:query-relation
+   ;; #:query-relation-subjects
+   ;; #:delete-entity
+   ;; #:remove-relation
    #:invalidate-derived
    #:rebuild-derived
    #:validate-entity
-   #:validation-failed
+   ;; #:validation-failed
    #:with-persistence
    #:validation-failed-entity
    #:validation-failed-errors
@@ -102,7 +102,7 @@
    #:federation-transport
    #:direct-transport
    #:transport-registry
-   #:register-with-transport
+   ;; #:register-with-transport
    #:federation-send
    #:federation-receive
 
@@ -452,32 +452,32 @@
 ;;; Application model packages
 ;;; ============================================================
 
-;; (defpackage #:classic-blog
-;;   (:use #:cl #:classic #:classic.schema.alpha)
-;;   (:export
-;;    #:blog
-;;    #:blog-publication
-;;    #:blog-container
-;;    #:blog-strategy
-;;    #:blog-authority
-;;    #:blog-authority-date
-;;    #:blog-workflow
-;;    #:blog-roles
-;;    #:make-blog
-;;    #:write-post
-;;    #:list-posts
-;;    #:show-post
-;;    #:get-posts
-;;    #:create-account
-;;    #:publish-post
-;;    #:blog-account
-;;    #:blog-account-role
-;;    #:blog-article
-;;    #:blog-transport
-;;    #:blog-federation-roles
-;;    #:list-federated-content
-;;    #:edit-post
-;;    #:archive-post
-;;    #:delete-post
-;;    #:restore-post
-;;    #:purge-post))
+(defpackage #:classic-blog
+  (:use #:cl #:classic #:classic.schema.alpha)
+  (:export
+   #:blog
+   #:blog-publication
+   #:blog-container
+   #:blog-strategy
+   #:blog-authority
+   #:blog-authority-date
+   #:blog-workflow
+   #:blog-roles
+   #:make-blog
+   #:write-post
+   #:list-posts
+   #:show-post
+   #:get-posts
+   #:create-account
+   #:publish-post
+   #:blog-account
+   #:blog-account-role
+   #:blog-article
+   #:blog-transport
+   #:blog-federation-roles
+   #:list-federated-content
+   #:edit-post
+   #:archive-post
+   #:delete-post
+   #:restore-post
+   #:purge-post))

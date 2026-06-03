@@ -142,7 +142,7 @@ Returns (values blog-a blog-b transport)."
   (multiple-value-bind (blog-a blog-b transport) (make-federated-pair)
     (declare (ignore transport))
     (write-and-publish blog-a "Federated Post" "Content from A.")
-    (let ((federated (classic:list-federated-content
+    (let ((federated (classic.engine.ref:list-federated-content
                       (classic-blog:blog-publication blog-b))))
       (is (= 1 (length federated)))
       (is (string= "Federated Post" (headline (first federated)))))))
@@ -152,7 +152,7 @@ Returns (values blog-a blog-b transport)."
   (multiple-value-bind (blog-a blog-b transport) (make-federated-pair)
     (declare (ignore transport))
     (let ((uri-a (write-and-publish blog-a "URI Test" "Content.")))
-      (let ((federated (classic:list-federated-content
+      (let ((federated (classic.engine.ref:list-federated-content
                         (classic-blog:blog-publication blog-b))))
         (is (= 1 (length federated)))
         (is (string= uri-a (uri-string (first federated))))
@@ -178,7 +178,7 @@ Returns (values blog-a blog-b transport)."
     (let ((editor (classic-blog:create-account blog-a :name "Ed" :role :editor)))
       (classic-blog:write-post blog-a :account editor
                                       :title "Draft Only" :text "Not published."))
-    (let ((federated (classic:list-federated-content
+    (let ((federated (classic.engine.ref:list-federated-content
                       (classic-blog:blog-publication blog-b))))
       (is (= 0 (length federated))))))
 
@@ -202,7 +202,7 @@ Returns (values blog-a blog-b transport)."
     (create-feed (classic-blog:blog-publication blog-a) :type :all-published)
     ;; No subscribe-to-feed call!
     (write-and-publish blog-a "No Sub Test" "Should not appear on C.")
-    (let ((federated (classic:list-federated-content
+    (let ((federated (classic.engine.ref:list-federated-content
                       (classic-blog:blog-publication blog-c))))
       (is (= 0 (length federated))))))
 
@@ -299,7 +299,7 @@ Returns (values blog-a blog-b transport)."
       (classic-blog:publish-post blog-b 1 :account editor-b))
     ;; B should have 2 posts total (1 local + 1 federated)
     (let ((all-posts (classic-blog:get-posts blog-b))
-          (federated (classic:list-federated-content
+          (federated (classic.engine.ref:list-federated-content
                       (classic-blog:blog-publication blog-b))))
       ;; Local posts are in the blog container
       (is (= 1 (length all-posts)))

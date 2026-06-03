@@ -16,7 +16,7 @@
   (with-clean-strategy ()
     (let ((article (make-test-article)))
       (is (= 1 (entity-count *test-strategy*)))
-      (is-true (classic:delete-entity *test-strategy* (uri-string article)))
+      (is-true (classic.engine.ref:delete-entity *test-strategy* (uri-string article)))
       (is (= 0 (entity-count *test-strategy*)))
       (is (null (retrieve-entity *test-strategy* (uri-string article) nil))))))
 
@@ -26,20 +26,20 @@
     (let* ((person (make-test-person))
            (article (make-test-article :author-uri (uri-string person))))
       ;; Verify relation is indexed
-      (is-true (classic:query-relation *test-strategy*
+      (is-true (classic.engine.ref:query-relation *test-strategy*
                                        "schema:author"
                                        (uri-string person)))
       ;; Delete the article
-      (classic:delete-entity *test-strategy* (uri-string article))
+      (classic.engine.ref:delete-entity *test-strategy* (uri-string article))
       ;; Relation should be cleaned
-      (is (null (classic:query-relation *test-strategy*
+      (is (null (classic.engine.ref:query-relation *test-strategy*
                                         "schema:author"
                                         (uri-string person)))))))
 
 (def-test delete-entity-returns-nil-for-unknown ()
   "delete-entity returns NIL when the URI is not found."
   (with-clean-strategy ()
-    (is-false (classic:delete-entity *test-strategy*
+    (is-false (classic.engine.ref:delete-entity *test-strategy*
                                      "classic:unknown,2026:x/y"))))
 
 ;;; ============================================================
@@ -51,17 +51,17 @@
   (with-clean-strategy ()
     (persist-relation *test-strategy* "uri:a" "pred:x" "uri:b")
     (persist-relation *test-strategy* "uri:a" "pred:x" "uri:c")
-    (is-true (classic:remove-relation *test-strategy* "uri:a" "pred:x" "uri:b"))
+    (is-true (classic.engine.ref:remove-relation *test-strategy* "uri:a" "pred:x" "uri:b"))
     ;; uri:b removed, uri:c remains
-    (is (null (classic:query-relation *test-strategy* "pred:x" "uri:b")))
+    (is (null (classic.engine.ref:query-relation *test-strategy* "pred:x" "uri:b")))
     (is (equal '("uri:a")
-               (classic:query-relation *test-strategy* "pred:x" "uri:c")))))
+               (classic.engine.ref:query-relation *test-strategy* "pred:x" "uri:c")))))
 
 (def-test remove-relation-returns-nil-for-missing ()
   "remove-relation returns NIL when the triple doesn't exist."
   (with-clean-strategy ()
-    (is-false (classic:remove-relation *test-strategy*
-                                       "uri:a" "pred:x" "uri:z"))))
+    (is-false (classic.engine.ref:remove-relation *test-strategy*
+                                                  "uri:a" "pred:x" "uri:z"))))
 
 ;;; ============================================================
 ;;; Persistence protocol: query-relation-subjects (reverse lookup)
@@ -72,7 +72,7 @@
   (with-clean-strategy ()
     (persist-relation *test-strategy* "uri:author" "schema:wrote" "uri:post1")
     (persist-relation *test-strategy* "uri:author" "schema:wrote" "uri:post2")
-    (let ((results (classic:query-relation-subjects
+    (let ((results (classic.engine.ref:query-relation-subjects
                     *test-strategy* "uri:author" "schema:wrote")))
       (is (= 2 (length results)))
       (is (member "uri:post1" results :test #'equal))
@@ -81,7 +81,7 @@
 (def-test query-relation-subjects-empty-for-unknown ()
   "query-relation-subjects returns NIL for unknown subjects."
   (with-clean-strategy ()
-    (is (null (classic:query-relation-subjects
+    (is (null (classic.engine.ref:query-relation-subjects
                *test-strategy* "uri:nobody" "schema:wrote")))))
 
 ;;; ============================================================
@@ -96,7 +96,7 @@
                                            :slug "test-container")
                        :contains '("uri:a" "uri:b" "uri:c"))))
       (persist-entity *test-strategy* container)
-      (is-true (classic.schema.alpha:remove-from-container container "uri:b"
+      (is-true (classic.schema:remove-from-container container "uri:b"
                                               *test-strategy*))
       (is (equal '("uri:a" "uri:c") (contains container))))))
 
@@ -108,7 +108,7 @@
                                            :slug "test-container-2")
                        :contains '("uri:a"))))
       (persist-entity *test-strategy* container)
-      (is-false (classic.schema.alpha:remove-from-container container "uri:z"
+      (is-false (classic.schema:remove-from-container container "uri:z"
                                                *test-strategy*)))))
 
 ;;; ============================================================
@@ -180,9 +180,9 @@
       (classic-blog:delete-post blog 1 :account editor
                                 :reason "policy violation")
       (let ((post (first (classic-blog:get-posts blog :status "deleted"))))
-        (is-true (classic.schema.alpha:deleted-at post))
-        (is-true (classic.schema.alpha:deleted-by post))
-        (is (equal "policy violation" (classic.schema.alpha:deletion-reason post)))))))
+        (is-true (classic.schema:deleted-at post))
+        (is-true (classic.schema:deleted-by post))
+        (is (equal "policy violation" (classic.schema:deletion-reason post)))))))
 
 (def-test restore-post-from-archived ()
   "restore-post transitions archived post back to published."
@@ -292,14 +292,14 @@
                                :title "Retract Test" :text "Will retract.")
       (classic-blog:publish-post alice-blog 1 :account editor)
       ;; Verify digest received the post
-      (is (= 1 (length (classic:list-federated-content
+      (is (= 1 (length (classic.engine.ref:list-federated-content
                          (classic-blog:blog-publication digest)))))
       ;; Alice archives then deletes the post
       (classic-blog:archive-post alice-blog 1 :account editor)
       (classic-blog:delete-post alice-blog 1 :account editor)
       ;; Digest should no longer show it in federated content
       ;; (it's marked deleted via retraction)
-      (is (= 0 (length (classic:list-federated-content
+      (is (= 0 (length (classic.engine.ref:list-federated-content
                          (classic-blog:blog-publication digest))))))))
 
 ;;; ============================================================
@@ -314,9 +314,9 @@
       (classic-blog:write-post blog :account editor
                                :title "Pred Test" :text ".")
       (let ((post (first (classic-blog:get-posts blog :include-deleted t))))
-        (is-false (classic.schema.alpha:entity-deleted-p post))
+        (is-false (classic.schema:entity-deleted-p post))
         (classic-blog:delete-post blog 1 :account editor)
-        (is-true (classic.schema.alpha:entity-deleted-p post))))))
+        (is-true (classic.schema:entity-deleted-p post))))))
 
 (def-test entity-archived-p-works ()
   "entity-archived-p returns T for archived entities."
@@ -327,6 +327,6 @@
                                :title "Arch Pred" :text ".")
       (classic-blog:publish-post blog 1 :account editor)
       (let ((post (first (classic-blog:get-posts blog :include-deleted t))))
-        (is-false (classic.schema.alpha:entity-archived-p post))
+        (is-false (classic.schema:entity-archived-p post))
         (classic-blog:archive-post blog 1 :account editor)
-        (is-true (classic.schema.alpha:entity-archived-p post))))))
+        (is-true (classic.schema:entity-archived-p post))))))
