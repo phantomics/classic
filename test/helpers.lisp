@@ -149,21 +149,21 @@ Returns the person instance."
       (persist-entity strategy person))
     person))
 
-(defun make-test-blog (&key (name "Test Blog")
-                            (authority "test.example")
-                            (authority-date "2026"))
-  "Create a full blog with workflow, roles, and in-memory persistence.
-Returns the blog struct."
-  (classic-blog:make-blog :name name
-                          :authority authority
-                          :authority-date authority-date))
+;; (defun make-test-blog (&key (name "Test Blog")
+;;                             (authority "test.example")
+;;                             (authority-date "2026"))
+;;   "Create a full blog with workflow, roles, and in-memory persistence.
+;; Returns the blog struct."
+;;   (classic-blog:make-blog :name name
+;;                           :authority authority
+;;                           :authority-date authority-date))
 
-(defun make-test-accounts (blog)
-  "Create a writer and editor account on BLOG.
-Returns (values writer-account editor-account)."
-  (let ((writer (classic-blog:create-account blog :name "Writer" :role :writer))
-        (editor (classic-blog:create-account blog :name "Editor" :role :editor)))
-    (values writer editor)))
+;; (defun make-test-accounts (blog)
+;;   "Create a writer and editor account on BLOG.
+;; Returns (values writer-account editor-account)."
+;;   (let ((writer (classic-blog:create-account blog :name "Writer" :role :writer))
+;;         (editor (classic-blog:create-account blog :name "Editor" :role :editor)))
+;;     (values writer editor)))
 
 (defun entity-count (strategy)
   "Return the number of entities stored in STRATEGY."

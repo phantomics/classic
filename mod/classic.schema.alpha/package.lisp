@@ -157,6 +157,8 @@
    #:actor
    #:transitioned-at
 
+   ;; #:attempt-transition
+
    ;; ---- Federation infrastructure classes ----
    #:classic-instance-descriptor
    #:instance-uri

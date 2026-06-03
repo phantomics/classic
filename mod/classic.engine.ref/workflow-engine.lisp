@@ -109,14 +109,70 @@ with ACTOR as the initiating agent. Checks:
 On success, updates current-state, records a history entry, and returns
 the stateful object. On failure, signals a workflow-error condition."))
 
-;;; The default method is defined in the schema file where
-;;; classic.schema:classic-stateful is defined, because it specializes on classic-stateful
-;;; and creates classic.schema:classic-state-history-entry instances. Defining the
-;;; method here would require the class to exist at compile time, which
-;;; would defeat the engine/schema split.
+;;; ============================================================
+;;; Default attempt-transition method (specialized on classic-stateful)
+;;; ============================================================
 ;;;
-;;; However, since the engine and schema currently live in the same
-;;; package (CLASSIC), and the schema file is loaded after the engine
-;;; file in the current ASDF system, the schema file defines the
-;;; default method. After the schema factorization to classic.schema.alpha,
-;;; the schema package will continue to define this method.
+;;; The generic function attempt-transition is defined in
+;;; src/workflow-engine.lisp (core). This default method specializes
+;;; on classic-stateful and constructs classic-state-history-entry
+;;; instances, so it lives here with the class definitions.
+
+(defmethod attempt-transition ((obj classic.schema:classic-stateful)
+                               (to-state-label string)
+                               actor)
+  (let* ((wf (classic.schema:workflow obj))
+         (current (classic.schema:current-state obj))
+         (transition (classic.schema::find-transition wf current to-state-label)))
+    ;; 1. Check transition exists
+    (unless transition
+      (error 'invalid-transition
+             :from-state current
+             :to-state to-state-label
+             :message (format nil "No transition from ~S to ~S"
+                              current to-state-label)))
+    ;; 2. Check role permission
+    (let ((actor-role (classic.schema::actor-role-label actor))
+          (req-role (classic.schema:required-role transition)))
+      (when (and req-role
+                 (not (equal actor-role req-role)))
+        (error 'permission-denied
+               :actor-role actor-role
+               :required req-role
+               :from-state current
+               :to-state to-state-label
+               :message (format nil "Role ~S cannot transition ~S → ~S ~
+                                     (requires ~S)"
+                                actor-role current to-state-label req-role))))
+    ;; 3. Check guard predicate
+    (let ((guard-fn (guard transition)))
+      (when (and guard-fn
+                 (not (funcall guard-fn obj actor)))
+        (error 'guard-failed
+               :from-state current
+               :to-state to-state-label
+               :message (format nil "Guard rejected transition ~S → ~S"
+                                current to-state-label))))
+    ;; All checks passed — perform the transition.
+    ;; Derive the history entry's URI from the parent object's URI,
+    ;; so history entries are proper CLASSIC resources without needing
+    ;; external authority configuration.
+    (let* ((obj-uri (let ((u (uri obj)))
+                      (if (classic-uri-p u) u (classic.schema::parse-classic-uri u))))
+           (entry-uri (make-classic-uri
+                       :authority (classic.schema::classic-uri-authority obj-uri)
+                       :authority-date (classic.schema::classic-uri-authority-date obj-uri)
+                       :path (format nil "workflow-history/~A"
+                                     (classic.schema::classic-uri-local-id obj-uri))
+                       :local-id (generate-local-id)))
+           (history-entry (make-instance 'classic-state-history-entry
+                                         :uri entry-uri
+                                         :from-state current
+                                         :to-state to-state-label
+                                         :actor (if (typep actor 'classic-resource)
+                                                    (classic.schema::uri-string actor)
+                                                    (princ-to-string actor))
+                                         :transitioned-at (local-time:now))))
+      (push history-entry (classic.schema:state-history obj))
+      (setf (classic.schema:current-state obj) to-state-label))
+    obj))
