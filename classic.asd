@@ -36,47 +36,49 @@
    ;; separate ASDF system (classic.schema.alpha) that depends on classic.
    ;; For now it lives in this system alongside the core, but in its own
    ;; directory and package to make the boundary explicit.
-   (:module "schema/alpha"
-    :serial t
-    :components
-    ((:file "resource")
-     (:file "agent")
-     (:file "content")
-     (:file "community")
-     (:file "identity")
-     (:file "workflow-classes")
-     (:file "federation-classes")
-     (:file "deletion")
-     (:file "theme")
-     (:file "publication")
-     (:file "provenance-classes")
-     (:file "outbox-class")
-     (:file "migration-classes")))
+   ;; (:module "schema/alpha"
+   ;;  :serial t
+   ;;  :components
+   ;;  ((:file "resource")
+   ;;   (:file "agent")
+   ;;   (:file "content")
+   ;;   (:file "community")
+   ;;   (:file "identity")
+   ;;   (:file "workflow-classes")
+   ;;   (:file "federation-classes")
+   ;;   (:file "deletion")
+   ;;   (:file "theme")
+   ;;   (:file "publication")
+   ;;   (:file "provenance-classes")
+   ;;   (:file "outbox-class")
+   ;;   (:file "migration-classes")))
    ;; Migration system (engine code that operates on schema classes)
-   (:module "migration"
-    :serial t
-    :components
-    ((:file "manifest-helpers")
-     (:file "registry")
-     (:file "runner")
-     (:file "persistence")
-     (:file "data-migration")
-     (:file "federation")))
+   ;; (:module "migration"
+   ;;  :serial t
+   ;;  :components
+   ;;  ((:file "manifest-helpers")
+   ;;   (:file "registry")
+   ;;   (:file "runner")
+   ;;   (:file "persistence")
+   ;;   (:file "data-migration")
+   ;;   (:file "federation")))
    ;; Federation system (engine code that operates on schema classes)
-   (:module "federation"
-    :serial t
-    :components
-    ((:file "transport")
-     (:file "provenance-engine")
-     (:file "protocol")
-     (:file "delivery")
-     (:file "updates")
-     (:file "outbox")))
+   ;; (:module "federation"
+   ;;  :serial t
+   ;;  :components
+   ;;  ((:file "transport")
+   ;;   (:file "provenance-engine")
+   ;;   (:file "protocol")
+   ;;   (:file "delivery")
+   ;;   (:file "updates")
+   ;;   (:file "outbox")))
    ;; Imprint applications (reference implementations on the alpha schema)
-   (:module "imprint"
-    :serial t
-    :components
-    ((:file "blog")))))
+   ;; (:module "imprint"
+   ;;  :serial t
+   ;;  :components
+   ;;  ((:file "blog")))
+
+   ))
 
 (asdf:defsystem "classic/tests"
   :description "Test suite for CLASSIC"
