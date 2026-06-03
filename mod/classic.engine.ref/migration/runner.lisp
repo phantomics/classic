@@ -4,7 +4,7 @@
 ;;;; persistence stores. Handles topological sorting of migration
 ;;;; dependencies and trigger evaluation for eager/lazy/deferred dispatch.
 
-(in-package #:classic)
+(in-package #:classic.engine.ref)
 
 ;;; ============================================================
 ;;; Condition types
@@ -18,8 +18,8 @@
 
 (define-condition no-migration-path (migration-error)
   ((class-name :initarg :class-name :reader no-migration-path-class)
-   (classic.schema.alpha:from-version :initarg :from-version :reader no-migration-path-from)
-   (classic.schema.alpha:to-version :initarg :to-version :reader no-migration-path-to))
+   (classic.schema:from-version :initarg :from-version :reader no-migration-path-from)
+   (classic.schema:to-version :initarg :to-version :reader no-migration-path-to))
   (:report (lambda (c s)
              (format s "No migration path from ~A v~A to v~A"
                      (no-migration-path-class c)
@@ -30,7 +30,7 @@
   ((migrations :initarg :migrations :reader migration-cycle-migrations))
   (:report (lambda (c s)
              (format s "Cycle detected in migration dependencies: ~A"
-                     (mapcar (lambda (m) (classic.schema.alpha:label m))
+                     (mapcar (lambda (m) (classic.schema:label m))
                              (migration-cycle-migrations c))))))
 
 ;;; ============================================================
@@ -40,30 +40,30 @@
 (defun apply-operation (op entity)
   "Apply a single migration operation to ENTITY. Returns the
 (possibly modified) entity. Operates on the live CLOS instance."
-  (let ((op-type (classic.schema.alpha:operation-type op)))
+  (let ((op-type (classic.schema:operation-type op)))
     (case op-type
       (:rename-slot
-       (let ((old-name (classic.schema.alpha:target-slot op))
-             (new-name (classic.schema.alpha:new-slot-name op)))
+       (let ((old-name (classic.schema:target-slot op))
+             (new-name (classic.schema:new-slot-name op)))
          ;; Read value from old slot, write to new slot
          (when (slot-boundp entity old-name)
            (let ((value (slot-value entity old-name)))
              (setf (slot-value entity new-name) value)
              (slot-makunbound entity old-name)))))
       (:add-slot
-       (let ((slot-name (classic.schema.alpha:target-slot op))
-             (default (classic.schema.alpha:default-value op)))
+       (let ((slot-name (classic.schema:target-slot op))
+             (default (classic.schema:default-value op)))
          ;; Only set if not already bound (idempotent)
          (unless (slot-boundp entity slot-name)
            (setf (slot-value entity slot-name) default))))
       (:remove-slot
-       (let ((slot-name (classic.schema.alpha:target-slot op)))
+       (let ((slot-name (classic.schema:target-slot op)))
          (when (slot-boundp entity slot-name)
            (slot-makunbound entity slot-name))))
       (:transform-slot
-       (let ((old-name (classic.schema.alpha:target-slot op))
-             (new-name (or (classic.schema.alpha:new-slot-name op) (classic.schema.alpha:target-slot op)))
-             (fn-name (classic.schema.alpha:transform-fn-name op)))
+       (let ((old-name (classic.schema:target-slot op))
+             (new-name (or (classic.schema:new-slot-name op) (classic.schema:target-slot op)))
+             (fn-name (classic.schema:transform-fn-name op)))
          (when (slot-boundp entity old-name)
            (let* ((old-value (slot-value entity old-name))
                   (fn (if (functionp fn-name)
@@ -106,7 +106,7 @@ Signals no-migration-path if no chain of migrations exists."
              :message (format nil "No migration path from ~A v~A to v~A"
                               class-name from-version to-version)))
     (dolist (migration path)
-      (dolist (op (classic.schema.alpha:operations migration))
+      (dolist (op (classic.schema:operations migration))
         (apply-operation op entity)))
     entity))
 
@@ -119,7 +119,7 @@ Signals no-migration-path if no chain of migrations exists."
 Returns an ordered list where each migration appears after all
 its dependencies. Signals migration-cycle if a cycle is detected.
 
-MIGRATIONS is a list of classic.schema.alpha:classic-schema-migration instances."
+MIGRATIONS is a list of classic.schema:classic-schema-migration instances."
   (let ((in-degree (make-hash-table :test 'equal))
         (dependents (make-hash-table :test 'equal))
         (migration-map (make-hash-table :test 'equal))
@@ -127,13 +127,13 @@ MIGRATIONS is a list of classic.schema.alpha:classic-schema-migration instances.
         (result nil))
     ;; Build key for each migration
     (dolist (m migrations)
-      (let ((key (cons (string (classic.schema.alpha:target-class m)) (classic.schema.alpha:from-version m))))
+      (let ((key (cons (string (classic.schema:target-class m)) (classic.schema:from-version m))))
         (setf (gethash key migration-map) m)
         (setf (gethash key in-degree) 0)))
     ;; Count in-degrees from depends-on links
     (dolist (m migrations)
-      (let ((key (cons (string (classic.schema.alpha:target-class m)) (classic.schema.alpha:from-version m))))
-        (dolist (dep (classic.schema.alpha:depends-on m))
+      (let ((key (cons (string (classic.schema:target-class m)) (classic.schema:from-version m))))
+        (dolist (dep (classic.schema:depends-on m))
           ;; dep is (class-name-string . from-version-string)
           (when (gethash dep migration-map)
             (incf (gethash key in-degree 0))
@@ -172,9 +172,9 @@ MIGRATIONS is a list of classic.schema.alpha:classic-schema-migration instances.
               class introductions)
   :deferred — for migrations with data transforms or removals"
   (declare (ignore strategy))
-  (let ((ops (classic.schema.alpha:operations migration)))
+  (let ((ops (classic.schema:operations migration)))
     (if (every (lambda (op)
-                 (member (classic.schema.alpha:operation-type op)
+                 (member (classic.schema:operation-type op)
                          '(:rename-slot :add-slot :rename-predicate
                            :create-class)))
                ops)
@@ -183,7 +183,7 @@ MIGRATIONS is a list of classic.schema.alpha:classic-schema-migration instances.
 
 (defun evaluate-trigger (strategy migration)
   "Evaluate the trigger for MIGRATION. Returns :eager, :lazy, or :deferred."
-  (let ((trigger-fn (classic.schema.alpha:migration-trigger migration)))
+  (let ((trigger-fn (classic.schema:migration-trigger migration)))
     (if trigger-fn
         (funcall trigger-fn strategy migration)
         (default-migration-trigger strategy migration))))
@@ -235,7 +235,7 @@ Returns a plist (:migrated N :skipped M :deferred D) with counts."
                     ;; Run migration on all entities of this class.
                     ;; For :create-class migrations (effective-from "0"),
                     ;; no entities exist yet, so the maphash is a no-op.
-                    (maphash (lambda (classic.schema.alpha:uri entity)
+                    (maphash (lambda (uri entity)
                                (declare (ignore uri))
                                (when (and class-sym
                                           (typep entity class-sym))

@@ -9,7 +9,7 @@
 ;;;; It operates on the federation ontological classes defined in
 ;;;; src/model/federation.lisp.
 
-(in-package #:classic)
+(in-package #:classic.engine.ref)
 
 ;;; ============================================================
 ;;; Provenance metadata on federated entities
@@ -33,27 +33,27 @@
 
 (defgeneric describe-instance (publication)
   (:documentation
-   "Build and return a classic.schema.alpha:classic-instance-descriptor for PUBLICATION,
+   "Build and return a classic.schema:classic-instance-descriptor for PUBLICATION,
 reflecting its current configuration, federation roles, and
 supported content classes."))
 
-(defmethod describe-instance ((pub classic.schema.alpha:classic-publication))
-  (let ((authority (classic.schema.alpha:uri-base-authority pub)))
-    (make-instance 'classic.schema.alpha:classic-instance-descriptor
-                   :uri (mint-uri 'classic.schema.alpha:classic-instance-descriptor
+(defmethod describe-instance ((pub classic.schema:classic-publication))
+  (let ((authority (classic.schema:uri-base-authority pub)))
+    (make-instance 'classic.schema:classic-instance-descriptor
+                   :uri (mint-uri 'classic.schema:classic-instance-descriptor
                                   authority
                                   (or (classic-uri-authority-date
-                                       (let ((u (classic.schema.alpha:uri pub)))
+                                       (let ((u (classic.schema:uri pub)))
                                          (if (classic-uri-p u) u
                                              (parse-classic-uri u))))
                                       "2026")
                                   :slug (format nil "~A-descriptor" authority))
-                   :label (format nil "Instance: ~A" (classic.schema.alpha:label pub))
+                   :label (format nil "Instance: ~A" (classic.schema:label pub))
                    :instance-uri authority
                    :federation-roles nil    ; set by caller
-                   :supported-classes '(classic.schema.alpha:classic-article classic-post
-                                        classic.schema.alpha:classic-comment classic-person
-                                        classic.schema.alpha:classic-container classic.schema.alpha:classic-forum)
+                   :supported-classes '(classic.schema:classic-article classic-post
+                                        classic.schema:classic-comment classic-person
+                                        classic.schema:classic-container classic.schema:classic-forum)
                    :peer-instances nil)))
 
 ;;; ============================================================
@@ -63,17 +63,17 @@ supported content classes."))
 (defgeneric register-peer (publication peer-descriptor source-authority)
   (:documentation
    "Register a peer instance from its descriptor. Creates a
-classic.schema.alpha:classic-federation-peer and stores it in the local persistence."))
+classic.schema:classic-federation-peer and stores it in the local persistence."))
 
-(defmethod register-peer ((pub classic.schema.alpha:classic-publication)
+(defmethod register-peer ((pub classic.schema:classic-publication)
                           peer-descriptor source-authority)
-  (let* ((strategy (classic.schema.alpha:persistence-strategy pub))
-         (authority (classic.schema.alpha:uri-base-authority pub))
+  (let* ((strategy (classic.schema:persistence-strategy pub))
+         (authority (classic.schema:uri-base-authority pub))
          (auth-date (classic-uri-authority-date
-                     (let ((u (classic.schema.alpha:uri pub)))
+                     (let ((u (classic.schema:uri pub)))
                        (if (classic-uri-p u) u (parse-classic-uri u)))))
-         (peer (make-instance 'classic.schema.alpha:classic-federation-peer
-                              :uri (mint-uri 'classic.schema.alpha:classic-federation-peer
+         (peer (make-instance 'classic.schema:classic-federation-peer
+                              :uri (mint-uri 'classic.schema:classic-federation-peer
                                              authority auth-date
                                              :slug source-authority)
                               :label (format nil "Peer: ~A" source-authority)
@@ -81,7 +81,7 @@ classic.schema.alpha:classic-federation-peer and stores it in the local persiste
                               :peer-descriptor-uri (when peer-descriptor
                                                      (uri-string peer-descriptor))
                               :peer-roles (when peer-descriptor
-                                            (classic.schema.alpha:federation-roles peer-descriptor))
+                                            (classic.schema:federation-roles peer-descriptor))
                               :peer-relationship :federated
                               :last-synced (local-time:now))))
     (persist-entity strategy peer)
@@ -98,11 +98,11 @@ Both sides exchange instance descriptors and register each other
 as peers. The handshake is bidirectional; roles are asymmetric
 (determined by each instance's federation-roles configuration)."))
 
-(defmethod establish-federation ((pub-a classic.schema.alpha:classic-publication)
-                                 (pub-b classic.schema.alpha:classic-publication)
+(defmethod establish-federation ((pub-a classic.schema:classic-publication)
+                                 (pub-b classic.schema:classic-publication)
                                  transport)
-  (let ((auth-a (classic.schema.alpha:uri-base-authority pub-a))
-        (auth-b (classic.schema.alpha:uri-base-authority pub-b)))
+  (let ((auth-a (classic.schema:uri-base-authority pub-a))
+        (auth-b (classic.schema:uri-base-authority pub-b)))
     ;; A requests B's descriptor
     (let ((response-b (federation-send transport auth-b
                                        (list :type :descriptor-request
@@ -127,17 +127,17 @@ as peers. The handshake is bidirectional; roles are asymmetric
 like :all-published. FILTER-FN is an optional predicate function
 (entity -> boolean) for custom filtering."))
 
-(defmethod create-feed ((pub classic.schema.alpha:classic-publication) &key (type :all-published) filter-fn)
-  (let* ((strategy (classic.schema.alpha:persistence-strategy pub))
-         (authority (classic.schema.alpha:uri-base-authority pub))
+(defmethod create-feed ((pub classic.schema:classic-publication) &key (type :all-published) filter-fn)
+  (let* ((strategy (classic.schema:persistence-strategy pub))
+         (authority (classic.schema:uri-base-authority pub))
          (auth-date (classic-uri-authority-date
-                     (let ((u (classic.schema.alpha:uri pub)))
+                     (let ((u (classic.schema:uri pub)))
                        (if (classic-uri-p u) u (parse-classic-uri u)))))
-         (feed (make-instance 'classic.schema.alpha:classic-syndication-feed
-                              :uri (mint-uri 'classic.schema.alpha:classic-syndication-feed
+         (feed (make-instance 'classic.schema:classic-syndication-feed
+                              :uri (mint-uri 'classic.schema:classic-syndication-feed
                                              authority auth-date
                                              :slug (format nil "feed-~(~A~)" type))
-                              :label (format nil "~A (~A)" (classic.schema.alpha:label pub) type)
+                              :label (format nil "~A (~A)" (classic.schema:label pub) type)
                               :feed-type type
                               :source-instance (uri-string pub)
                               :filter-predicate filter-fn
@@ -148,11 +148,11 @@ like :all-published. FILTER-FN is an optional predicate function
 
 (defun find-feed (publication feed-type)
   "Find a syndication feed on PUBLICATION by type. Scans persisted entities."
-  (let ((strategy (classic.schema.alpha:persistence-strategy publication)))
-    (maphash (lambda (classic.schema.alpha:uri entity)
+  (let ((strategy (classic.schema:persistence-strategy publication)))
+    (maphash (lambda (uri entity)
                (declare (ignore uri))
-               (when (and (typep entity 'classic.schema.alpha:classic-syndication-feed)
-                          (eq feed-type (classic.schema.alpha:feed-type entity)))
+               (when (and (typep entity 'classic.schema:classic-syndication-feed)
+                          (eq feed-type (classic.schema:feed-type entity)))
                  (return-from find-feed entity)))
              (strategy-entities strategy))
     nil))
@@ -161,8 +161,8 @@ like :all-published. FILTER-FN is an optional predicate function
   "Add a subscriber to a publication's feed."
   (let ((feed (find-feed publication feed-type)))
     (when feed
-      (pushnew subscriber-authority (classic.schema.alpha:feed-subscribers feed) :test #'equal)
-      (persist-entity (classic.schema.alpha:persistence-strategy publication) feed)
+      (pushnew subscriber-authority (classic.schema:feed-subscribers feed) :test #'equal)
+      (persist-entity (classic.schema:persistence-strategy publication) feed)
       feed)))
 
 ;;; ============================================================
@@ -174,11 +174,11 @@ like :all-published. FILTER-FN is an optional predicate function
    "Subscribe SUBSCRIBER to PUBLISHER's feed of type FEED-TYPE
 via TRANSPORT. Sends a subscription message to the publisher."))
 
-(defmethod subscribe-to-feed ((subscriber classic.schema.alpha:classic-publication)
-                              (publisher classic.schema.alpha:classic-publication)
+(defmethod subscribe-to-feed ((subscriber classic.schema:classic-publication)
+                              (publisher classic.schema:classic-publication)
                               feed-type transport)
-  (let ((sub-auth (classic.schema.alpha:uri-base-authority subscriber))
-        (pub-auth (classic.schema.alpha:uri-base-authority publisher)))
+  (let ((sub-auth (classic.schema:uri-base-authority subscriber))
+        (pub-auth (classic.schema:uri-base-authority publisher)))
     (federation-send transport pub-auth
                      (list :type :subscribe
                            :feed-type feed-type
@@ -193,23 +193,23 @@ via TRANSPORT. Sends a subscription message to the publisher."))
    "Push ENTITY to all peers subscribed to feeds matching this entity.
 Called by the on-state-change hook when an entity is published."))
 
-(defmethod publish-to-peers ((pub classic.schema.alpha:classic-publication) entity transport)
-  (let ((source-auth (classic.schema.alpha:uri-base-authority pub))
+(defmethod publish-to-peers ((pub classic.schema:classic-publication) entity transport)
+  (let ((source-auth (classic.schema:uri-base-authority pub))
         (entity-uri (uri-string entity))
-        (strategy (classic.schema.alpha:persistence-strategy pub))
+        (strategy (classic.schema:persistence-strategy pub))
         (syndicated-count 0))
     ;; Find all feeds on this publication
-    (maphash (lambda (classic.schema.alpha:uri feed-entity)
+    (maphash (lambda (uri feed-entity)
                (declare (ignore uri))
-               (when (typep feed-entity 'classic.schema.alpha:classic-syndication-feed)
+               (when (typep feed-entity 'classic.schema:classic-syndication-feed)
                  ;; Check if entity matches the feed's filter
-                 (let ((matches (or (eq :all-published (classic.schema.alpha:feed-type feed-entity))
-                                    (and (classic.schema.alpha:filter-predicate feed-entity)
-                                         (funcall (classic.schema.alpha:filter-predicate feed-entity)
+                 (let ((matches (or (eq :all-published (classic.schema:feed-type feed-entity))
+                                    (and (classic.schema:filter-predicate feed-entity)
+                                         (funcall (classic.schema:filter-predicate feed-entity)
                                                   entity)))))
                    (when matches
                      ;; Send to each subscriber
-                     (dolist (subscriber-auth (classic.schema.alpha:feed-subscribers feed-entity))
+                     (dolist (subscriber-auth (classic.schema:feed-subscribers feed-entity))
                        (handler-case
                            (let ((response
                                    (federation-send transport subscriber-auth
@@ -247,8 +247,8 @@ Called by the on-state-change hook when an entity is published."))
 The entity retains its canonical URI from the originating instance.
 Provenance is recorded so the entity can be identified as federated."))
 
-(defmethod receive-from-peer ((pub classic.schema.alpha:classic-publication) entity source-authority)
-  (let ((strategy (classic.schema.alpha:persistence-strategy pub))
+(defmethod receive-from-peer ((pub classic.schema:classic-publication) entity source-authority)
+  (let ((strategy (classic.schema:persistence-strategy pub))
         (entity-uri (uri-string entity)))
     ;; Store the entity locally with its original URI
     (persist-entity strategy entity)
@@ -269,8 +269,8 @@ Provenance is recorded so the entity can be identified as federated."))
 Returns the entity or NIL. When TRANSPORT is provided and the
 entity is not found locally, queries known peers."))
 
-(defmethod resolve-entity ((pub classic.schema.alpha:classic-publication) uri &key transport)
-  (let* ((strategy (classic.schema.alpha:persistence-strategy pub))
+(defmethod resolve-entity ((pub classic.schema:classic-publication) uri &key transport)
+  (let* ((strategy (classic.schema:persistence-strategy pub))
          (uri-str (etypecase uri
                     (classic-uri (uri-string uri))
                     (string uri)))
@@ -300,16 +300,16 @@ entity is not found locally, queries known peers."))
 may have received it via syndication. Called when an entity is
 soft-deleted locally."))
 
-(defmethod retract-from-peers ((pub classic.schema.alpha:classic-publication) entity transport)
-  (let ((source-auth (classic.schema.alpha:uri-base-authority pub))
+(defmethod retract-from-peers ((pub classic.schema:classic-publication) entity transport)
+  (let ((source-auth (classic.schema:uri-base-authority pub))
         (entity-uri (uri-string entity))
-        (strategy (classic.schema.alpha:persistence-strategy pub))
+        (strategy (classic.schema:persistence-strategy pub))
         (retracted-count 0))
     ;; Iterate over all feeds and their subscribers
-    (maphash (lambda (classic.schema.alpha:uri feed-entity)
+    (maphash (lambda (uri feed-entity)
                (declare (ignore uri))
-               (when (typep feed-entity 'classic.schema.alpha:classic-syndication-feed)
-                 (dolist (subscriber-auth (classic.schema.alpha:feed-subscribers feed-entity))
+               (when (typep feed-entity 'classic.schema:classic-syndication-feed)
+                 (dolist (subscriber-auth (classic.schema:feed-subscribers feed-entity))
                    (handler-case
                        (let ((response
                                (federation-send transport subscriber-auth
@@ -343,23 +343,23 @@ soft-deleted locally."))
    "Process a retraction from a peer. Marks the federated copy as
 deleted (soft delete) but retains it for audit purposes."))
 
-(defmethod receive-retraction ((pub classic.schema.alpha:classic-publication) entity-uri
+(defmethod receive-retraction ((pub classic.schema:classic-publication) entity-uri
                                source-authority
                                &key retracted-at reason)
-  (let* ((strategy (classic.schema.alpha:persistence-strategy pub))
+  (let* ((strategy (classic.schema:persistence-strategy pub))
          (entity (retrieve-entity strategy entity-uri nil)))
     (when entity
       ;; Mark as deleted via workflow if stateful
-      (when (typep entity 'classic.schema.alpha:classic-stateful)
+      (when (typep entity 'classic.schema:classic-stateful)
         ;; Directly set state — we don't use attempt-transition here
         ;; because the retraction comes from a peer, not a local actor,
         ;; and the local workflow may not have the same transitions.
-        (let ((old-state (classic.schema.alpha:current-state entity)))
-          (setf (classic.schema.alpha:current-state entity) "deleted")
+        (let ((old-state (classic.schema:current-state entity)))
+          (setf (classic.schema:current-state entity) "deleted")
           ;; Record in history
-          (push (make-instance 'classic.schema.alpha:classic-state-history-entry
+          (push (make-instance 'classic.schema:classic-state-history-entry
                   :uri (make-classic-uri
-                        :authority (classic.schema.alpha:uri-base-authority pub)
+                        :authority (classic.schema:uri-base-authority pub)
                         :authority-date "2026"
                         :path "workflow-history/retraction"
                         :local-id (generate-local-id))
@@ -367,17 +367,17 @@ deleted (soft delete) but retains it for audit purposes."))
                   :to-state "deleted"
                   :actor "federation:retraction"
                   :transitioned-at (or retracted-at (local-time:now)))
-                (classic.schema.alpha:state-history entity))))
+                (classic.schema:state-history entity))))
       ;; Record deletion metadata if deletable
-      (when (typep entity 'classic.schema.alpha:classic-deletable)
-        (setf (classic.schema.alpha:deleted-at entity) (or retracted-at (local-time:now)))
-        (setf (classic.schema.alpha:deleted-by entity) "federation:retraction")
+      (when (typep entity 'classic.schema:classic-deletable)
+        (setf (classic.schema:deleted-at entity) (or retracted-at (local-time:now)))
+        (setf (classic.schema:deleted-by entity) "federation:retraction")
         (when reason
-          (setf (classic.schema.alpha:deletion-reason entity) reason)))
+          (setf (classic.schema:deletion-reason entity) reason)))
       ;; Update provenance sync status to retracted
       (let ((prov (find-provenance pub entity-uri strategy)))
         (when prov
-          (setf (classic.schema.alpha:provenance-sync-status prov) :retracted)
+          (setf (classic.schema:provenance-sync-status prov) :retracted)
           (persist-entity strategy prov)))
       ;; Log the receive-retraction event
       (log-federation-event strategy pub :retract entity-uri
@@ -395,7 +395,7 @@ deleted (soft delete) but retains it for audit purposes."))
                                        publication message)
   (case (getf message :type)
     (:resolve
-     (let ((entity (retrieve-entity (classic.schema.alpha:persistence-strategy publication)
+     (let ((entity (retrieve-entity (classic.schema:persistence-strategy publication)
                                     (getf message :uri) nil)))
        (list :type :resolve-response :entity entity)))
     (:retract
@@ -447,15 +447,15 @@ deleted (soft delete) but retains it for audit purposes."))
    "Return all entities in PUBLICATION that were received from
 federation peers (i.e., not locally authored)."))
 
-(defmethod list-federated-content ((pub classic.schema.alpha:classic-publication))
-  (let ((strategy (classic.schema.alpha:persistence-strategy pub))
+(defmethod list-federated-content ((pub classic.schema:classic-publication))
+  (let ((strategy (classic.schema:persistence-strategy pub))
         (results nil))
     ;; Query all provenance records for this publication
     (dolist (prov (find-all-provenance pub strategy))
       ;; Skip retracted entries
-      (unless (eq :retracted (classic.schema.alpha:provenance-sync-status prov))
+      (unless (eq :retracted (classic.schema:provenance-sync-status prov))
         (let ((entity (retrieve-entity strategy
-                                       (classic.schema.alpha:provenance-entity-uri prov) nil)))
-          (when (and entity (classic.schema.alpha:entity-visible-p entity))
+                                       (classic.schema:provenance-entity-uri prov) nil)))
+          (when (and entity (classic.schema:entity-visible-p entity))
             (push entity results)))))
     (nreverse results)))

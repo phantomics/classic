@@ -7,7 +7,7 @@
 ;;;; The default methods are no-ops. Application code specializes them
 ;;;; for specific migrations that require data-level work.
 
-(in-package #:classic)
+(in-package #:classic.engine.ref)
 
 ;;; ============================================================
 ;;; Data migration protocol
@@ -16,7 +16,7 @@
 (defgeneric apply-data-migration (migration strategy)
   (:documentation
    "Apply data-level transformations beyond schema changes.
-MIGRATION is a classic.schema.alpha:classic-schema-migration instance. STRATEGY is the
+MIGRATION is a classic.schema:classic-schema-migration instance. STRATEGY is the
 persistence backend to operate on.
 
 Default method is a no-op. Specialize for migrations that need to:
@@ -28,7 +28,7 @@ Default method is a no-op. Specialize for migrations that need to:
 Data migrations run as a separate phase after schema migration.
 They may be long-running and should support checkpointing where
 possible.")
-  (:method ((migration classic.schema.alpha:classic-schema-migration) strategy)
+  (:method ((migration classic.schema:classic-schema-migration) strategy)
     (declare (ignore strategy))
     ;; Default: no data migration needed
     nil))
@@ -40,7 +40,7 @@ possible.")
 
 Used by trigger functions to decide eager vs. deferred timing.
 Default returns zero (no data migration).")
-  (:method ((migration classic.schema.alpha:classic-schema-migration) strategy)
+  (:method ((migration classic.schema:classic-schema-migration) strategy)
     (declare (ignore strategy))
     (list :entity-count 0 :estimated-seconds 0)))
 
@@ -49,7 +49,7 @@ Default returns zero (no data migration).")
    "Validate that a data migration completed successfully by checking
 post-conditions. Returns T if valid, or a list of validation errors.
 Default returns T (no validation).")
-  (:method ((migration classic.schema.alpha:classic-schema-migration) strategy)
+  (:method ((migration classic.schema:classic-schema-migration) strategy)
     (declare (ignore strategy))
     t))
 
@@ -78,12 +78,12 @@ If validation fails, the error is recorded but processing continues."
                   (incf completed)
                   (progn
                     (incf failed)
-                    (push (list :migration (classic.schema.alpha:label migration)
+                    (push (list :migration (classic.schema:label migration)
                                 :validation-errors valid)
                           errors)))))
         (error (e)
           (incf failed)
-          (push (list :migration (classic.schema.alpha:label migration)
+          (push (list :migration (classic.schema:label migration)
                       :error (princ-to-string e))
                 errors))))
     (list :completed completed

@@ -53,25 +53,27 @@
    ;;   (:file "outbox-class")
    ;;   (:file "migration-classes")))
    ;; Migration system (engine code that operates on schema classes)
-   ;; (:module "migration"
-   ;;  :serial t
-   ;;  :components
-   ;;  ((:file "manifest-helpers")
-   ;;   (:file "registry")
-   ;;   (:file "runner")
-   ;;   (:file "persistence")
-   ;;   (:file "data-migration")
-   ;;   (:file "federation")))
+   (:module "migration"
+    :serial t
+    :components
+    (;; (:file "manifest-helpers")
+     ;; (:file "registry")
+     ;; (:file "runner")
+     (:file "persistence")
+     ;; (:file "data-migration")
+     ;; (:file "federation")
+     ))
    ;; Federation system (engine code that operates on schema classes)
-   ;; (:module "federation"
-   ;;  :serial t
-   ;;  :components
-   ;;  ((:file "transport")
-   ;;   (:file "provenance-engine")
-   ;;   (:file "protocol")
-   ;;   (:file "delivery")
-   ;;   (:file "updates")
-   ;;   (:file "outbox")))
+   (:module "federation"
+    :serial t
+    :components
+    ((:file "transport")
+     ;; (:file "provenance-engine")
+     ;; (:file "protocol")
+     ;; (:file "delivery")
+     ;; (:file "updates")
+     ;; (:file "outbox")
+     ))
    ;; Imprint applications (reference implementations on the alpha schema)
    ;; (:module "imprint"
    ;;  :serial t

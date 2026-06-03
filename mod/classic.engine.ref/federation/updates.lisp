@@ -6,7 +6,7 @@
 ;;;; than their stored copy's clock, providing causal ordering
 ;;;; without requiring synchronized wall clocks.
 
-(in-package #:classic)
+(in-package #:classic.engine.ref)
 
 ;;; ============================================================
 ;;; Update propagation to peers
@@ -23,20 +23,20 @@ The entity's logical clock should be incremented before calling
 this function (via increment-logical-clock). The peer uses the
 logical clock to determine whether to accept the update."))
 
-(defmethod propagate-update ((pub classic.schema.alpha:classic-publication) entity transport)
-  (let ((source-auth (classic.schema.alpha:uri-base-authority pub))
+(defmethod propagate-update ((pub classic.schema:classic-publication) entity transport)
+  (let ((source-auth (classic.schema:uri-base-authority pub))
         (entity-uri (uri-string entity))
-        (strategy (classic.schema.alpha:persistence-strategy pub))
+        (strategy (classic.schema:persistence-strategy pub))
         (updated-count 0))
-    (maphash (lambda (classic.schema.alpha:uri feed-entity)
+    (maphash (lambda (classic.schema:uri feed-entity)
                (declare (ignore uri))
-               (when (typep feed-entity 'classic.schema.alpha:classic-syndication-feed)
-                 (let ((matches (or (eq :all-published (classic.schema.alpha:feed-type feed-entity))
-                                    (and (classic.schema.alpha:filter-predicate feed-entity)
-                                         (funcall (classic.schema.alpha:filter-predicate feed-entity)
+               (when (typep feed-entity 'classic.schema:classic-syndication-feed)
+                 (let ((matches (or (eq :all-published (classic.schema:feed-type feed-entity))
+                                    (and (classic.schema:filter-predicate feed-entity)
+                                         (funcall (classic.schema:filter-predicate feed-entity)
                                                   entity)))))
                    (when matches
-                     (dolist (subscriber-auth (classic.schema.alpha:feed-subscribers feed-entity))
+                     (dolist (subscriber-auth (classic.schema:feed-subscribers feed-entity))
                        (handler-case
                            (let ((response
                                    (federation-send transport subscriber-auth
@@ -76,8 +76,8 @@ provenance is updated. If rejected (stale), the update is ignored.
 
 Returns the entity if accepted, NIL if rejected."))
 
-(defmethod receive-update ((pub classic.schema.alpha:classic-publication) entity source-authority)
-  (let* ((strategy (classic.schema.alpha:persistence-strategy pub))
+(defmethod receive-update ((pub classic.schema:classic-publication) entity source-authority)
+  (let* ((strategy (classic.schema:persistence-strategy pub))
          (entity-uri (uri-string entity))
          (existing (retrieve-entity strategy entity-uri nil)))
     (cond
@@ -99,8 +99,8 @@ Returns the entity if accepted, NIL if rejected."))
        ;; Update provenance
        (let ((prov (find-provenance pub entity-uri strategy)))
          (when prov
-           (setf (classic.schema.alpha:provenance-received-at prov) (local-time:now))
-           (setf (classic.schema.alpha:provenance-sync-status prov) :current)
+           (setf (classic.schema:provenance-received-at prov) (local-time:now))
+           (setf (classic.schema:provenance-sync-status prov) :current)
            (persist-entity strategy prov)))
        (log-federation-event strategy pub :receive entity-uri source-authority
                              :status :delivered)

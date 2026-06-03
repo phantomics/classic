@@ -12,10 +12,10 @@
 ;;;; provides threshold-based auto-flush and explicit flush, with
 ;;;; interval checking available for callers who poll.
 ;;;;
-;;;; The classic.schema.alpha:classic-federation-outbox class lives in
+;;;; The classic.schema:classic-federation-outbox class lives in
 ;;;; src/schema/alpha/outbox-class.lisp.
 
-(in-package #:classic)
+(in-package #:classic.engine.ref)
 
 ;;; ============================================================
 ;;; Outbox management
@@ -25,8 +25,8 @@
                                         (authority "classic.system")
                                         (authority-date "2026"))
   "Create a new outbox for PEER-AUTHORITY with the given flush settings."
-  (make-instance 'classic.schema.alpha:classic-federation-outbox
-    :uri (mint-uri 'classic.schema.alpha:classic-federation-outbox authority authority-date
+  (make-instance 'classic.schema:classic-federation-outbox
+    :uri (mint-uri 'classic.schema:classic-federation-outbox authority authority-date
                    :slug (format nil "outbox-~A" peer-authority))
     :label (format nil "Outbox: ~A" peer-authority)
     :peer-authority peer-authority
@@ -44,9 +44,9 @@ ENTITY-URI is the URI string of the affected entity.
 EXTRA-PLIST is additional data for the operation (e.g., :reason for
 retractions)."
   (push (list* operation-type entity-uri extra-plist)
-        (classic.schema.alpha:outbox-pending-operations outbox))
-  (if (>= (length (classic.schema.alpha:outbox-pending-operations outbox))
-           (classic.schema.alpha:outbox-flush-threshold outbox))
+        (classic.schema:outbox-pending-operations outbox))
+  (if (>= (length (classic.schema:outbox-pending-operations outbox))
+           (classic.schema:outbox-flush-threshold outbox))
       :flush-needed
       :queued))
 
@@ -58,9 +58,9 @@ flush and there are pending operations, NIL otherwise.
 This function is intended to be called periodically by a timer
 or polling loop. The current implementation checks wall-clock time;
 a production version might use monotonic time."
-  (let ((interval (classic.schema.alpha:outbox-flush-interval outbox))
-        (pending (classic.schema.alpha:outbox-pending-operations outbox))
-        (last-flush (classic.schema.alpha:outbox-last-flush-at outbox)))
+  (let ((interval (classic.schema:outbox-flush-interval outbox))
+        (pending (classic.schema:outbox-pending-operations outbox))
+        (last-flush (classic.schema:outbox-last-flush-at outbox)))
     (when (and (plusp interval)
                pending
                last-flush
@@ -76,9 +76,9 @@ Each operation in the batch is individually logged in the
 federation event log.
 
 Returns a plist (:sent N :acknowledged P) with counts."
-  (let ((operations (nreverse (classic.schema.alpha:outbox-pending-operations outbox)))
-        (peer-auth (classic.schema.alpha:outbox-peer-authority outbox))
-        (source-auth (classic.schema.alpha:uri-base-authority publication))
+  (let ((operations (nreverse (classic.schema:outbox-pending-operations outbox)))
+        (peer-auth (classic.schema:outbox-peer-authority outbox))
+        (source-auth (classic.schema:uri-base-authority publication))
         (sent 0)
         (acknowledged nil))
     (when operations
@@ -110,15 +110,15 @@ Returns a plist (:sent N :acknowledged P) with counts."
                                  :status :failed
                                  :error-info (princ-to-string e))))))
     ;; Clear queue and update flush time
-    (setf (classic.schema.alpha:outbox-pending-operations outbox) nil)
-    (setf (classic.schema.alpha:outbox-last-flush-at outbox) (local-time:now))
+    (setf (classic.schema:outbox-pending-operations outbox) nil)
+    (setf (classic.schema:outbox-last-flush-at outbox) (local-time:now))
     (list :sent sent :acknowledged acknowledged)))
 
 (defun outbox-pending-count (outbox)
   "Return the number of pending operations in OUTBOX."
-  (length (classic.schema.alpha:outbox-pending-operations outbox)))
+  (length (classic.schema:outbox-pending-operations outbox)))
 
 (defun clear-outbox (outbox)
   "Discard all pending operations in OUTBOX without sending."
-  (setf (classic.schema.alpha:outbox-pending-operations outbox) nil)
-  (setf (classic.schema.alpha:outbox-last-flush-at outbox) (local-time:now)))
+  (setf (classic.schema:outbox-pending-operations outbox) nil)
+  (setf (classic.schema:outbox-last-flush-at outbox) (local-time:now)))

@@ -80,8 +80,8 @@
 
    ;; ---- Workflow Engine (conditions and protocol) ----
    #:actor-role-label
-   #:find-transition
-   #:find-workflow-state
+   ;; #:find-transition
+   ;; #:find-workflow-state
    #:attempt-transition
    #:workflow-error
    #:invalid-transition
@@ -104,87 +104,87 @@
    #:federation-receive
 
    ;; ---- Federation: Protocol ----
-   #:describe-instance
-   #:register-peer
-   #:establish-federation
-   #:create-feed
-   #:subscribe-to-feed
-   #:publish-to-peers
-   #:receive-from-peer
-   #:resolve-entity
-   #:list-federated-content
-   #:entity-source-instance
-   #:entity-federated-p
-   #:retract-from-peers
-   #:receive-retraction
+   ;; #:describe-instance
+   ;; #:register-peer
+   ;; #:establish-federation
+   ;; #:create-feed
+   ;; #:subscribe-to-feed
+   ;; #:publish-to-peers
+   ;; #:receive-from-peer
+   ;; #:resolve-entity
+   ;; #:list-federated-content
+   ;; #:entity-source-instance
+   ;; #:entity-federated-p
+   ;; #:retract-from-peers
+   ;; #:receive-retraction
 
    ;; ---- Federation: Provenance Engine ----
-   #:record-federation-provenance
-   #:find-provenance
-   #:find-all-provenance
+   ;; #:record-federation-provenance
+   ;; #:find-provenance
+   ;; #:find-all-provenance
 
    ;; ---- Federation: Event Log ----
-   #:log-federation-event
-   #:update-event-status
-   #:query-federation-events
+   ;; #:log-federation-event
+   ;; #:update-event-status
+   ;; #:query-federation-events
 
    ;; ---- Federation: Retention Policy ----
-   #:apply-retention-policy
-   #:make-default-retention-policy
+   ;; #:apply-retention-policy
+   ;; #:make-default-retention-policy
 
    ;; ---- Federation: Delivery Confirmation and Retry ----
-   #:delivery-acknowledged-p
-   #:entity-newer-p
-   #:idempotent-receive
-   #:run-federation-retry
+   ;; #:delivery-acknowledged-p
+   ;; #:entity-newer-p
+   ;; #:idempotent-receive
+   ;; #:run-federation-retry
    #:*retry-max-attempts*
    #:*retry-backoff-base*
 
    ;; ---- Federation: Update Propagation ----
-   #:propagate-update
-   #:receive-update
+   ;; #:propagate-update
+   ;; #:receive-update
 
    ;; ---- Federation: Outbox ----
-   #:make-outbox
-   #:enqueue-operation
-   #:check-flush-needed
-   #:flush-outbox
-   #:outbox-pending-count
-   #:clear-outbox
+   ;; #:make-outbox
+   ;; #:enqueue-operation
+   ;; #:check-flush-needed
+   ;; #:flush-outbox
+   ;; #:outbox-pending-count
+   ;; #:clear-outbox
 
    ;; ---- Schema Migration: Manifest Helpers ----
-   #:build-current-manifest
-   #:all-classic-classes
-   #:manifest-class-version
-   #:manifests-differ-p
+   ;; #:build-current-manifest
+   ;; #:all-classic-classes
+   ;; #:manifest-class-version
+   ;; #:manifests-differ-p
 
    ;; ---- Schema Migration: Registry ----
-   #:register-migration
-   #:find-migration
-   #:find-migration-path
-   #:list-migrations
-   #:clear-migration-registry
+   ;; #:register-migration
+   ;; #:find-migration
+   ;; #:find-migration-path
+   ;; #:list-migrations
+   ;; #:clear-migration-registry
    #:define-schema-migration
    #:define-namespace-migration
-   #:classes-using-namespace
+   ;; #:classes-using-namespace
 
    ;; ---- Schema Migration: Predicate Registry ----
-   #:register-predicate
-   #:predicate->slot
-   #:predicate-history
-   #:rebuild-predicate-registry
-   #:clear-predicate-registry
+   ;; #:register-predicate
+   ;; #:predicate->slot
+   ;; #:predicate-history
+   ;; #:rebuild-predicate-registry
+   ;; #:clear-predicate-registry
 
    ;; ---- Schema Migration: Runner ----
    #:migration-error
    #:no-migration-path
    #:migration-cycle
-   #:apply-operation
-   #:migrate-entity
-   #:toposort-migrations
-   #:evaluate-trigger
-   #:default-migration-trigger
-   #:migrate-store
+   ;; #:apply-operation
+   ;; #:migrate-entity
+   ;; #:toposort-migrations
+   ;; #:evaluate-trigger
+   ;; #:default-migration-trigger
+   ;; #:migrate-store
 
    ;; ---- Schema Migration: Persistence Integration ----
    #:entity-schema-version
@@ -193,7 +193,7 @@
    #:apply-data-migration
    #:estimate-data-migration
    #:validate-data-migration
-   #:run-data-migrations
+   ;; #:run-data-migrations
 
    ;; ---- Schema Migration: Federation Integration ----
    #:instance-schema-manifest
@@ -201,9 +201,10 @@
    #:federation-compatibility-report-compatible-classes
    #:federation-compatibility-report-translatable-classes
    #:federation-compatibility-report-incompatible-classes
-   #:assess-federation-compatibility
-   #:translate-entity-for-peer
-   #:translate-entity-from-peer))
+   ;; #:assess-federation-compatibility
+   ;; #:translate-entity-for-peer
+   ;; #:translate-entity-from-peer
+   ))
 
 ;;; ============================================================
 ;;; classic.schema.alpha — reference schema package
@@ -448,32 +449,32 @@
 ;;; Application model packages
 ;;; ============================================================
 
-(defpackage #:classic-blog
-  (:use #:cl #:classic #:classic.schema.alpha)
-  (:export
-   #:blog
-   #:blog-publication
-   #:blog-container
-   #:blog-strategy
-   #:blog-authority
-   #:blog-authority-date
-   #:blog-workflow
-   #:blog-roles
-   #:make-blog
-   #:write-post
-   #:list-posts
-   #:show-post
-   #:get-posts
-   #:create-account
-   #:publish-post
-   #:blog-account
-   #:blog-account-role
-   #:blog-article
-   #:blog-transport
-   #:blog-federation-roles
-   #:list-federated-content
-   #:edit-post
-   #:archive-post
-   #:delete-post
-   #:restore-post
-   #:purge-post))
+;; (defpackage #:classic-blog
+;;   (:use #:cl #:classic #:classic.schema.alpha)
+;;   (:export
+;;    #:blog
+;;    #:blog-publication
+;;    #:blog-container
+;;    #:blog-strategy
+;;    #:blog-authority
+;;    #:blog-authority-date
+;;    #:blog-workflow
+;;    #:blog-roles
+;;    #:make-blog
+;;    #:write-post
+;;    #:list-posts
+;;    #:show-post
+;;    #:get-posts
+;;    #:create-account
+;;    #:publish-post
+;;    #:blog-account
+;;    #:blog-account-role
+;;    #:blog-article
+;;    #:blog-transport
+;;    #:blog-federation-roles
+;;    #:list-federated-content
+;;    #:edit-post
+;;    #:archive-post
+;;    #:delete-post
+;;    #:restore-post
+;;    #:purge-post))

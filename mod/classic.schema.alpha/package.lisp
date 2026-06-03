@@ -8,6 +8,7 @@
 ;;; imprint code and tests.
 
 (defpackage #:classic.schema.alpha
+  (:nicknames #:classic.schema)
   (:use #:cl #:classic)
   (:export
 

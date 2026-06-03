@@ -10,7 +10,7 @@
 ;;;; by Origin's supervisor, with configurable interval and backoff.
 ;;;; Comments mark the expansion points for this future work.
 
-(in-package #:classic)
+(in-package #:classic.engine.ref)
 
 ;;; ============================================================
 ;;; Acknowledgment extraction
@@ -54,8 +54,8 @@ Used by idempotent-receive to reject stale content from peers."
        (> incoming-clock existing-clock))
       ;; Fall back to timestamp comparison
       (t
-       (let ((incoming-time (or (classic.schema.alpha:modified-at incoming) (classic.schema.alpha:created-at incoming)))
-             (existing-time (or (classic.schema.alpha:modified-at existing) (classic.schema.alpha:created-at existing))))
+       (let ((incoming-time (or (classic.schema:modified-at incoming) (classic.schema:created-at incoming)))
+             (existing-time (or (classic.schema:modified-at existing) (classic.schema:created-at existing))))
          (cond
            ;; No timestamps to compare: accept
            ((or (null incoming-time) (null existing-time)) t)
@@ -75,8 +75,8 @@ ensures that retried messages don't overwrite newer data.
 
 Returns the entity if accepted, NIL if rejected as stale."))
 
-(defmethod idempotent-receive ((pub classic.schema.alpha:classic-publication) entity source-authority)
-  (let* ((strategy (classic.schema.alpha:persistence-strategy pub))
+(defmethod idempotent-receive ((pub classic.schema:classic-publication) entity source-authority)
+  (let* ((strategy (classic.schema:persistence-strategy pub))
          (entity-uri (uri-string entity))
          (existing (retrieve-entity strategy entity-uri nil)))
     (cond
@@ -90,8 +90,8 @@ Returns the entity if accepted, NIL if rejected as stale."))
        ;; Update provenance received-at timestamp
        (let ((prov (find-provenance pub entity-uri strategy)))
          (when prov
-           (setf (classic.schema.alpha:provenance-received-at prov) (local-time:now))
-           (setf (classic.schema.alpha:provenance-sync-status prov) :current)
+           (setf (classic.schema:provenance-received-at prov) (local-time:now))
+           (setf (classic.schema:provenance-sync-status prov) :current)
            (persist-entity strategy prov)))
        ;; Log the update receive
        (log-federation-event strategy pub :receive entity-uri source-authority
@@ -157,7 +157,7 @@ Exponential backoff (using *retry-backoff-base*) would space
 retries over time. The synchronous version here provides the
 same logic without the timer infrastructure."))
 
-(defmethod run-federation-retry ((pub classic.schema.alpha:classic-publication) strategy transport)
+(defmethod run-federation-retry ((pub classic.schema:classic-publication) strategy transport)
   (let ((retried 0)
         (succeeded 0)
         (exhausted 0))
@@ -169,16 +169,16 @@ same logic without the timer infrastructure."))
       (dolist (event (append pending-events failed-events))
         (cond
           ;; Exhausted: too many attempts
-          ((>= (classic.schema.alpha:federation-event-attempt-count event) *retry-max-attempts*)
+          ((>= (classic.schema:federation-event-attempt-count event) *retry-max-attempts*)
            (incf exhausted))
           ;; Retryable
           (t
            (incf retried)
            (update-event-status strategy event :retrying)
-           (let ((msg-type (classic.schema.alpha:federation-event-type event))
-                 (entity-uri (classic.schema.alpha:federation-event-entity-uri event))
-                 (peer-auth (classic.schema.alpha:federation-event-peer-authority event))
-                 (source-auth (classic.schema.alpha:uri-base-authority pub)))
+           (let ((msg-type (classic.schema:federation-event-type event))
+                 (entity-uri (classic.schema:federation-event-entity-uri event))
+                 (peer-auth (classic.schema:federation-event-peer-authority event))
+                 (source-auth (classic.schema:uri-base-authority pub)))
              (handler-case
                  (let ((response
                          (case msg-type
