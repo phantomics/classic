@@ -74,11 +74,11 @@
      ;; (:file "updates")
      ;; (:file "outbox")
      ))
-   Imprint applications (reference implementations on the alpha schema)
-   (:module "imprint"
-    :serial t
-    :components
-    ((:file "blog")))
+   ;; Imprint applications (reference implementations on the alpha schema)
+   ;; (:module "imprint"
+   ;;  :serial t
+   ;;  :components
+   ;;  ((:file "blog")))
 
    ))
 
