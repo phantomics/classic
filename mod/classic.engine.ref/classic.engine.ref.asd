@@ -18,5 +18,7 @@
    (:file "migration/data-migration")
    (:file "migration/federation")
    (:file "migration/manifest-helpers")
+   (:file "migration/persistence")
    (:file "migration/registry")
-   (:file "migration/runner")))
+   (:file "migration/runner")
+   (:file "migration/transport")))

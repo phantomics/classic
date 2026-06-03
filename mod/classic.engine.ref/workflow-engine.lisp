@@ -69,7 +69,7 @@
 ;;    "Return the role label string for ACTOR in the context of a
 ;; workflow operation. Application models define methods on their
 ;; account classes. This is the extension point that connects the
-;; workflow framework to application-specific identity models.")
+;; workflow framework to application-specific identity models."))
 
 ;;; ============================================================
 ;;; Workflow lookup helpers
@@ -81,19 +81,19 @@
 ;;; responds to the expected accessors, the helper works regardless of
 ;;; which schema defines them.
 
-(defun find-workflow-state (workflow state-label)
-  "Find the workflow state in WORKFLOW whose label matches STATE-LABEL.
-Returns the state object or NIL."
-  (find state-label (classic.schema:workflow-states workflow)
-        :key #'classic.schema:label :test #'equal))
+;; (defun find-workflow-state (workflow state-label)
+;;   "Find the workflow state in WORKFLOW whose label matches STATE-LABEL.
+;; Returns the state object or NIL."
+;;   (find state-label (classic.schema:workflow-states workflow)
+;;         :key #'classic.schema:label :test #'equal))
 
-(defun find-transition (workflow from-label to-label)
-  "Find the workflow transition in WORKFLOW that connects FROM-LABEL
-to TO-LABEL. Returns the transition object or NIL."
-  (find-if (lambda (tr)
-             (and (equal (classic.schema:from-state tr) from-label)
-                  (equal (classic.schema:to-state tr) to-label)))
-           (classic.schema:transitions workflow)))
+;; (defun find-transition (workflow from-label to-label)
+;;   "Find the workflow transition in WORKFLOW that connects FROM-LABEL
+;; to TO-LABEL. Returns the transition object or NIL."
+;;   (find-if (lambda (tr)
+;;              (and (equal (classic.schema:from-state tr) from-label)
+;;                   (equal (classic.schema:to-state tr) to-label)))
+;;            (classic.schema:transitions workflow)))
 
 ;;; ============================================================
 ;;; The core transition engine

@@ -79,10 +79,10 @@
    #:uri-namespace-prefix
 
    ;; ---- Workflow Engine (conditions and protocol) ----
-   #:actor-role-label
+   ;; #:actor-role-label
    ;; #:find-transition
    ;; #:find-workflow-state
-   #:attempt-transition
+   ;; #:attempt-transition
    #:workflow-error
    #:invalid-transition
    #:permission-denied
@@ -94,6 +94,9 @@
    ;; ---- Persistence: In-Memory Backend ----
    #:memory-persistence-strategy
    #:strategy-entities
+   #:strategy-relations
+   #:ensure-version-table
+   #:*memory-version-tables*
 
    ;; ---- Federation: Transport ----
    #:federation-transport
