@@ -64,7 +64,7 @@
 ;;; Role resolution protocol
 ;;; ============================================================
 
-(defgeneric actor-role-label (classic.schema:actor)
+(defgeneric actor-role-label (actor)
   (:documentation
    "Return the role label string for ACTOR in the context of a
 workflow operation. Application models define methods on their
@@ -123,7 +123,7 @@ the stateful object. On failure, signals a workflow-error condition."))
                                actor)
   (let* ((wf (classic.schema:workflow obj))
          (current (classic.schema:current-state obj))
-         (transition (classic.schema::find-transition wf current to-state-label)))
+         (transition (find-transition wf current to-state-label)))
     ;; 1. Check transition exists
     (unless transition
       (error 'invalid-transition
@@ -132,7 +132,7 @@ the stateful object. On failure, signals a workflow-error condition."))
              :message (format nil "No transition from ~S to ~S"
                               current to-state-label)))
     ;; 2. Check role permission
-    (let ((actor-role (classic.schema::actor-role-label actor))
+    (let ((actor-role (actor-role-label actor))
           (req-role (classic.schema:required-role transition)))
       (when (and req-role
                  (not (equal actor-role req-role)))
@@ -145,7 +145,7 @@ the stateful object. On failure, signals a workflow-error condition."))
                                      (requires ~S)"
                                 actor-role current to-state-label req-role))))
     ;; 3. Check guard predicate
-    (let ((guard-fn (guard transition)))
+    (let ((guard-fn (classic.schema:guard transition)))
       (when (and guard-fn
                  (not (funcall guard-fn obj actor)))
         (error 'guard-failed
@@ -157,20 +157,20 @@ the stateful object. On failure, signals a workflow-error condition."))
     ;; Derive the history entry's URI from the parent object's URI,
     ;; so history entries are proper CLASSIC resources without needing
     ;; external authority configuration.
-    (let* ((obj-uri (let ((u (uri obj)))
-                      (if (classic-uri-p u) u (classic.schema::parse-classic-uri u))))
+    (let* ((obj-uri (let ((u (classic.schema:uri obj)))
+                      (if (classic-uri-p u) u (parse-classic-uri u))))
            (entry-uri (make-classic-uri
-                       :authority (classic.schema::classic-uri-authority obj-uri)
-                       :authority-date (classic.schema::classic-uri-authority-date obj-uri)
+                       :authority (classic-uri-authority obj-uri)
+                       :authority-date (classic-uri-authority-date obj-uri)
                        :path (format nil "workflow-history/~A"
-                                     (classic.schema::classic-uri-local-id obj-uri))
+                                     (classic-uri-local-id obj-uri))
                        :local-id (generate-local-id)))
-           (history-entry (make-instance 'classic-state-history-entry
+           (history-entry (make-instance 'classic.schema:classic-state-history-entry
                                          :uri entry-uri
                                          :from-state current
                                          :to-state to-state-label
-                                         :actor (if (typep actor 'classic-resource)
-                                                    (classic.schema::uri-string actor)
+                                         :actor (if (typep actor 'classic.schema:classic-resource)
+                                                    (uri-string actor)
                                                     (princ-to-string actor))
                                          :transitioned-at (local-time:now))))
       (push history-entry (classic.schema:state-history obj))
