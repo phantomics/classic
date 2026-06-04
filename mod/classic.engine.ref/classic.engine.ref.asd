@@ -1,3 +1,12 @@
+;;;; classic.engine.ref.asd — ASDF system definitions
+;;;; for Classic's reference engine
+;;;;
+;;;; Collected application methods for Classic's building off of a
+;;;; schema, resolved following Classic's core and a schema deriving
+;;;; therefrom. This is the most complex part of the main Classic
+;;;; application, completing the foundation that composers, persistence
+;;;; layers and other adjuct modules build on.
+
 (asdf:defsystem "classic.engine.ref"
   :description "Classic Engine: Reference Edition"
   :version "0.1.0"

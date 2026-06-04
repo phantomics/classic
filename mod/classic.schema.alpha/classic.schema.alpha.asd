@@ -1,3 +1,9 @@
+;;;; classic.schema.alpha.asd — ASDF system definitions
+;;;; for Classic's original reference schema
+;;;;
+;;;; The basic elements of Classic publications, largely
+;;;; deriving from semantic web vocabulary.
+
 (asdf:defsystem "classic.schema.alpha"
   :description "Classic Schema: Alpha Edition"
   :version "0.1.0"

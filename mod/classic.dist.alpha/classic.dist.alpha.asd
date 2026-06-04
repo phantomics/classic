@@ -1,3 +1,9 @@
+;;;; classic.dist.alpha.asd — ASDF system definitions
+;;;; for Classic's reference distribution
+;;;;
+;;;; A system packaging Classic's baseline reference systems
+;;;; providing users with a single entry point from which to
+;;;; load a working Classic system.
 
 (asdf:defsystem "classic.dist.alpha"
   :description "Classic Distribution: Alpha Edition"

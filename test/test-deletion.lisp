@@ -206,6 +206,7 @@
   "Writers lack the editor role needed for deletion."
   (let ((blog (make-test-blog)))
     (multiple-value-bind (writer editor) (make-test-accounts blog)
+      (declare (ignore editor))
       (classic-blog:write-post blog :account writer
                                :title "Writer Delete"
                                :text "Should fail.")

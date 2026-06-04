@@ -5,7 +5,7 @@
 ;;; The schema package uses CL and CLASSIC (to inherit core symbols
 ;;; like CLASSIC-CLASS metaclass, MINT-URI, etc.), then defines its
 ;;; ontological classes. Schema symbols are exported for use by
-;;; imprint code and tests.
+;;; model code and tests.
 
 (defpackage #:classic.schema.alpha
   (:nicknames #:classic.schema)

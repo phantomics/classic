@@ -123,6 +123,7 @@ the old relation index entries rather than accumulating."
                                          :headline "Article A"))
            (article-b (make-test-article :author-uri (uri-string jane)
                                          :headline "Article B")))
+      (declare (ignore article-b))
       ;; Both articles reference Jane
       (is (= 2 (length (query-relation *test-strategy* "schema:author"
                                         (uri-string jane)))))

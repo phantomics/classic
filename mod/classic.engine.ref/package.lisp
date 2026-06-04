@@ -114,5 +114,4 @@
    ;; ---- Schema Migration: Federation Integration ----
    #:assess-federation-compatibility
    #:translate-entity-for-peer
-   #:translate-entity-from-peer
-   ))
+   #:translate-entity-from-peer))

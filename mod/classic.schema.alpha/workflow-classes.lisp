@@ -201,17 +201,6 @@ exportable as RDF, and suitable for compliance auditing."))
   "workflow-history")
 
 ;;; ============================================================
-;;; Role resolution protocol
-;;; ============================================================
-
-;; (defgeneric actor-role-label (classic.schema:actor)
-;;   (:documentation
-;;    "Return the role label string for ACTOR in the context of a
-;; workflow operation. Application models define methods on their
-;; account classes. This is the extension point that connects the
-;; workflow framework to application-specific identity models."))
-
-;;; ============================================================
 ;;; Workflow lookup helpers
 ;;; ============================================================
 ;;;
@@ -234,71 +223,3 @@ to TO-LABEL. Returns the transition object or NIL."
              (and (equal (classic.schema:from-state tr) from-label)
                   (equal (classic.schema:to-state tr) to-label)))
            (classic.schema:transitions workflow)))
-
-;;; ============================================================
-;;; Default attempt-transition method (specialized on classic-stateful)
-;;; ============================================================
-;;;
-;;; The generic function attempt-transition is defined in
-;;; src/workflow-engine.lisp (core). This default method specializes
-;;; on classic-stateful and constructs classic-state-history-entry
-;;; instances, so it lives here with the class definitions.
-
-;; (defmethod attempt-transition ((obj classic-stateful)
-;;                                (to-state-label string)
-;;                                actor)
-;;   (let* ((wf (workflow obj))
-;;          (current (current-state obj))
-;;          (transition (find-transition wf current to-state-label)))
-;;     ;; 1. Check transition exists
-;;     (unless transition
-;;       (error 'invalid-transition
-;;              :from-state current
-;;              :to-state to-state-label
-;;              :message (format nil "No transition from ~S to ~S"
-;;                               current to-state-label)))
-;;     ;; 2. Check role permission
-;;     (let ((actor-role (actor-role-label actor))
-;;           (req-role (required-role transition)))
-;;       (when (and req-role
-;;                  (not (equal actor-role req-role)))
-;;         (error 'permission-denied
-;;                :actor-role actor-role
-;;                :required req-role
-;;                :from-state current
-;;                :to-state to-state-label
-;;                :message (format nil "Role ~S cannot transition ~S → ~S ~
-;;                                      (requires ~S)"
-;;                                 actor-role current to-state-label req-role))))
-;;     ;; 3. Check guard predicate
-;;     (let ((guard-fn (guard transition)))
-;;       (when (and guard-fn
-;;                  (not (funcall guard-fn obj actor)))
-;;         (error 'guard-failed
-;;                :from-state current
-;;                :to-state to-state-label
-;;                :message (format nil "Guard rejected transition ~S → ~S"
-;;                                 current to-state-label))))
-;;     ;; All checks passed — perform the transition.
-;;     ;; Derive the history entry's URI from the parent object's URI,
-;;     ;; so history entries are proper CLASSIC resources without needing
-;;     ;; external authority configuration.
-;;     (let* ((obj-uri (let ((u (uri obj)))
-;;                       (if (classic-uri-p u) u (parse-classic-uri u))))
-;;            (entry-uri (make-classic-uri
-;;                        :authority (classic-uri-authority obj-uri)
-;;                        :authority-date (classic-uri-authority-date obj-uri)
-;;                        :path (format nil "workflow-history/~A"
-;;                                      (classic-uri-local-id obj-uri))
-;;                        :local-id (generate-local-id)))
-;;            (history-entry (make-instance 'classic-state-history-entry
-;;                                          :uri entry-uri
-;;                                          :from-state current
-;;                                          :to-state to-state-label
-;;                                          :actor (if (typep actor 'classic-resource)
-;;                                                     (uri-string actor)
-;;                                                     (princ-to-string actor))
-;;                                          :transitioned-at (local-time:now))))
-;;       (push history-entry (state-history obj))
-;;       (setf (current-state obj) to-state-label))
-;;     obj))

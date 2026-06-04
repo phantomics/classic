@@ -56,16 +56,6 @@ Each version table is a hash-table mapping URI string -> version string.")
       (setf (gethash strategy *memory-version-tables*)
             (make-hash-table :test 'equal))))
 
-;; (defmethod entity-schema-version ((strategy memory-persistence-strategy) uri)
-;;   (let ((uri-key (normalize-uri-key uri)))
-;;     (gethash uri-key (ensure-version-table strategy))))
-
-;; (defmethod (setf entity-schema-version) (version
-;;                                          (strategy memory-persistence-strategy)
-;;                                          uri)
-;;   (let ((uri-key (normalize-uri-key uri)))
-;;     (setf (gethash uri-key (ensure-version-table strategy)) version)))
-
 ;;; ============================================================
 ;;; Version-stamped persistence
 ;;; ============================================================

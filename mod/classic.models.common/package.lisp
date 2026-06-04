@@ -11,9 +11,6 @@
    #:blog-authority-date
    #:blog-workflow
    #:blog-roles
-
-   ;; #:actor-role-label
-
    #:make-blog
    #:write-post
    #:list-posts

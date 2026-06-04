@@ -12,13 +12,13 @@
   "Entity is persisted after body completes normally."
   (with-clean-strategy ()
     (let ((article (make-instance 'classic-article
-                     :uri (make-test-uri :slug "wp-normal")
-                     :headline "Before")))
+                                  :uri (make-test-uri :slug "wp-normal")
+                                  :headline "Before")))
       (with-persistence (*test-strategy* article)
         (setf (classic.schema.alpha:headline article) "After"))
       ;; Should be persisted
       (let ((retrieved (retrieve-entity *test-strategy*
-                                       (uri-string article) nil)))
+                                        (uri-string article) nil)))
         (is-true retrieved)
         (is (equal "After" (classic.schema.alpha:headline retrieved)))))))
 
@@ -26,8 +26,8 @@
   "with-persistence returns the value of the last form in body."
   (with-clean-strategy ()
     (let ((article (make-instance 'classic-article
-                     :uri (make-test-uri :slug "wp-retval")
-                     :headline "Test")))
+                                  :uri (make-test-uri :slug "wp-retval")
+                                  :headline "Test")))
       (let ((result (with-persistence (*test-strategy* article)
                       (setf (classic.schema.alpha:headline article) "Updated")
                       :my-return-value)))
@@ -41,8 +41,8 @@
   "Entity is NOT persisted if body signals an error."
   (with-clean-strategy ()
     (let ((article (make-instance 'classic-article
-                     :uri (make-test-uri :slug "wp-error")
-                     :headline "Original")))
+                                  :uri (make-test-uri :slug "wp-error")
+                                  :headline "Original")))
       ;; Pre-persist with original value
       (persist-entity *test-strategy* article)
       ;; Try to mutate + persist, but signal an error
@@ -68,12 +68,12 @@
   "Multiple entities are all persisted after body completes."
   (with-clean-strategy ()
     (let ((article (make-instance 'classic-article
-                     :uri (make-test-uri :slug "wp-multi-a")
-                     :headline "Article"))
+                                  :uri (make-test-uri :slug "wp-multi-a")
+                                  :headline "Article"))
           (person (make-instance 'classic-person
-                    :uri (make-test-uri :class 'classic-person
-                                        :slug "wp-multi-p")
-                    :agent-name "Author")))
+                                 :uri (make-test-uri :class 'classic-person
+                                                     :slug "wp-multi-p")
+                                 :agent-name "Author")))
       (with-persistence (*test-strategy* (article person))
         (setf (classic.schema.alpha:headline article) "Updated Article")
         (setf (classic.schema.alpha:agent-name person) "Updated Author"))
@@ -85,11 +85,11 @@
       (is (equal "Updated Article"
                  (classic.schema.alpha:headline
                   (retrieve-entity *test-strategy*
-                                  (uri-string article) nil))))
+                                   (uri-string article) nil))))
       (is (equal "Updated Author"
                  (classic.schema.alpha:agent-name
                   (retrieve-entity *test-strategy*
-                                  (uri-string person) nil)))))))
+                                   (uri-string person) nil)))))))
 
 ;;; ============================================================
 ;;; Integration with workflow transitions
@@ -100,11 +100,11 @@
   (let ((blog (make-test-blog)))
     (multiple-value-bind (writer editor) (make-test-accounts blog)
       (declare (ignore writer))
-      (classic-blog:write-post blog :account editor
-                               :title "WP Workflow" :text "Content.")
+      (classic.models.common:write-post blog :account editor
+                                             :title "WP Workflow" :text "Content.")
       ;; publish-post now uses with-persistence internally
-      (classic-blog:publish-post blog 1 :account editor)
-      (let ((post (first (classic-blog:get-posts blog :status "published"))))
+      (classic.models.common:publish-post blog 1 :account editor)
+      (let ((post (first (classic.models.common:get-posts blog :status "published"))))
         (is-true post)
         (is (equal "published" (current-state post)))))))
 
@@ -113,15 +113,15 @@
   (let ((blog (make-test-blog)))
     (multiple-value-bind (writer editor) (make-test-accounts blog)
       (declare (ignore editor))
-      (classic-blog:write-post blog :account writer
-                               :title "WP Fail" :text "Content.")
+      (classic.models.common:write-post blog :account writer
+                                             :title "WP Fail" :text "Content.")
       ;; Writer tries to publish -- should fail (permission denied)
       ;; publish-post handles the error internally and returns nil
-      (let ((result (classic-blog:publish-post blog 1 :account writer)))
+      (let ((result (classic.models.common:publish-post blog 1 :account writer)))
         (is (null result))
         ;; Post should still be draft
-        (let ((post (first (classic-blog:get-posts blog
-                                                   :include-deleted t))))
+        (let ((post (first (classic.models.common:get-posts blog
+                                                            :include-deleted t))))
           (is (equal "draft" (current-state post))))))))
 
 ;;; ============================================================
@@ -133,8 +133,8 @@
   (with-clean-strategy ()
     (let ((classic:*validate-on-persist* t)
           (article (make-instance 'classic-article
-                     :uri (make-test-uri :slug "wp-validate")
-                     :headline "Valid")))
+                                  :uri (make-test-uri :slug "wp-validate")
+                                  :headline "Valid")))
       ;; Valid entity: should persist fine
       (finishes
         (with-persistence (*test-strategy* article)
