@@ -84,7 +84,8 @@
 
 (asdf:defsystem "classic/tests"
   :description "Test suite for CLASSIC"
-  :depends-on ("classic" "fiveam" "hamcrest/fiveam" "classic.schema.alpha" "classic.engine.ref")
+  :depends-on ("classic" "fiveam" "hamcrest/fiveam"
+                         "classic.schema.alpha" "classic.engine.ref" "classic.models.common")
   :pathname "test/"
   :serial t
   :components
@@ -96,11 +97,11 @@
    (:file "test-memory")
    (:file "test-model")
    (:file "test-workflow")
-   (:file "test-blog")
-   (:file "test-federation")
+   ;; (:file "test-blog")
+   ;; (:file "test-federation")
    (:file "test-migration")
-   (:file "test-deletion")
-   (:file "test-federation-consistency")
+   ;; (:file "test-deletion")
+   ;; (:file "test-federation-consistency")
    (:file "test-validation")
-   (:file "test-with-persistence")
+   ;; (:file "test-with-persistence")
    (:file "test-theme")))

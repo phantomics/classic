@@ -20,7 +20,7 @@
 ;;;;   (publish-post *blog* 1 :account *bob*)
 ;;;;   (show-post *blog* 1)
 
-(in-package #:classic-blog)
+(in-package #:classic.models.common)
 
 ;;; ============================================================
 ;;; Blog-specific classes (application-level composition)
@@ -672,4 +672,4 @@ Returns the post instance, or NIL if the index is invalid."
 
 (defmethod list-federated-content ((blog blog))
   "List all content received from federation peers on this blog."
-  (classic:list-federated-content (blog-publication blog)))
+  (list-federated-content (blog-publication blog)))
