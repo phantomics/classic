@@ -36,6 +36,7 @@
    #:register-peer
    #:establish-federation
    #:create-feed
+   #:find-feed
    #:subscribe-to-feed
    #:publish-to-peers
    #:receive-from-peer

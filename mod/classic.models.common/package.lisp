@@ -1,6 +1,7 @@
 
 (defpackage #:classic.models.common ;; #:classic-blog
   (:use #:cl #:classic #:classic.schema.alpha #:classic.engine.ref)
+  (:nicknames #:classic-blog)
   (:export
    #:blog
    #:blog-publication

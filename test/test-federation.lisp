@@ -127,7 +127,7 @@ Returns (values blog-a blog-b transport)."
   "subscribe-to-feed adds the subscriber to the feed's subscriber list."
   (multiple-value-bind (blog-a blog-b transport) (make-federated-pair)
     (declare (ignore blog-b))
-    (let ((feed (classic::find-feed (classic-blog:blog-publication blog-a) :all-published)))
+    (let ((feed (find-feed (classic-blog:blog-publication blog-a) :all-published)))
       (is-true feed)
       (is (= 1 (length (feed-subscribers feed))))
       (is (string= "beta.dev" (first (feed-subscribers feed))))

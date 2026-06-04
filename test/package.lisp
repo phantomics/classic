@@ -4,8 +4,7 @@
 ;;;; composable CLOS-aware assertions.
 
 (defpackage #:classic-tests
-  (:use #:cl #:classic #:classic.schema.alpha
-        #:classic.engine.ref #:classic.models.common)
+  (:use #:cl #:classic #:classic.dist.alpha)
   ;; Import FiveAM symbols explicitly to avoid package lock issues
   (:import-from #:fiveam
                 #:def-suite #:in-suite #:def-test #:test
