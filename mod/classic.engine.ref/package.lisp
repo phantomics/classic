@@ -20,6 +20,7 @@
    #:query-relation-subjects
    #:delete-entity
    #:remove-relation
+   #:normalize-uri-key
    
    ;; ---- Workflow Engine (conditions and protocol) ----
    #:actor-role-label

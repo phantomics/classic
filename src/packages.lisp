@@ -37,17 +37,17 @@
 
    ;; ---- Persistence Protocol ----
    #:classic-persistence-strategy
-   ;; #:persist-entity
-   ;; #:retrieve-entity
-   ;; #:persist-relation
-   ;; #:query-relation
-   ;; #:query-relation-subjects
-   ;; #:delete-entity
-   ;; #:remove-relation
+   #:persist-entity
+   #:retrieve-entity
+   #:persist-relation
+   #:query-relation
+   #:query-relation-subjects
+   #:delete-entity
+   #:remove-relation
    #:invalidate-derived
    #:rebuild-derived
    #:validate-entity
-   ;; #:validation-failed
+   #:validation-failed
    #:with-persistence
    #:validation-failed-entity
    #:validation-failed-errors

@@ -138,19 +138,19 @@ the old relation index entries rather than accumulating."
     (let ((person (make-test-person)))
       ;; normalize-uri-key should accept the person object and return its URI string
       (is (string= (uri-string person)
-                    (classic::normalize-uri-key person))))))
+                    (normalize-uri-key person))))))
 
 (test normalize-uri-key-handles-structs
   "normalize-uri-key handles classic-uri structs."
   (let* ((uri (make-test-uri))
-         (key (classic::normalize-uri-key uri)))
+         (key (normalize-uri-key uri)))
     (is (stringp key))
     (is (string= (uri-string uri) key))))
 
 (test normalize-uri-key-handles-strings
   "normalize-uri-key passes strings through."
   (is (string= "classic:x,y:z/abc"
-                (classic::normalize-uri-key "classic:x,y:z/abc"))))
+                (normalize-uri-key "classic:x,y:z/abc"))))
 
 ;;; ============================================================
 ;;; Print representation
