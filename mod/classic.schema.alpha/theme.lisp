@@ -51,6 +51,20 @@ themes and child themes.")
     :documentation "List of capability identifier strings this theme
 provides. Example: (\"frame.hero\" \"aggregate.tabular\").
 The Composer matches these against its capability registry.")
+   (excluded-capabilities
+    :accessor excluded-capabilities
+    :initarg :excluded-capabilities
+    :initform nil
+    :persistence :triple
+    :predicate "theme:excludedCapabilities"
+    :slot-type (or null list)
+    :documentation "List of capability identifier strings to exclude
+from the inherited parent capabilities. Applied before this theme's
+own capabilities are merged in, so a child can both exclude a parent
+capability and add its own contributions in the same theme. Excluding
+a capability that wasn't inherited is a silent no-op. The exclusion
+only applies to ancestor contributions; the theme's own declared
+capabilities are always present in the resolved set.")
    (required-capabilities
     :accessor required-capabilities
     :initarg :required-capabilities
@@ -286,11 +300,26 @@ Detects cycles by tracking seen URIs. Returns NIL if THEME is NIL."
 Child capabilities extend parent capabilities. Returns a deduplicated
 list of capability identifier strings.
 
+Each theme's EXCLUDED-CAPABILITIES are subtracted from the
+inherited accumulator before that theme's own CAPABILITIES are merged
+in. This lets a child opt out of a parent capability while still
+making its own contributions in the same theme. Excluding a
+capability that wasn't inherited is a silent no-op. A theme's own
+declared CAPABILITIES are never subject to its own EXCLUDED-CAPABILITIES.
+
 THEME-CHAIN is ordered most-specific-first (as returned by
 resolve-theme-chain)."
   (let ((caps nil))
     ;; Walk from root to child so child entries end up first
     (dolist (theme (reverse theme-chain))
+      ;; Subtract this theme's exclusions from what has been inherited
+      ;; so far. Does not affect the theme's own declared capabilities.
+      (let ((excluded (excluded-capabilities theme)))
+        (when excluded
+          (setf caps (remove-if (lambda (c)
+                                  (member c excluded :test #'equal))
+                                caps))))
+      ;; Merge this theme's own capabilities into the accumulator
       (dolist (cap (theme-capabilities theme))
         (pushnew cap caps :test #'equal)))
     (nreverse caps)))

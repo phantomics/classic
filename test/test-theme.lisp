@@ -9,6 +9,7 @@
 ;;; ============================================================
 
 (defun make-test-theme (strategy name &key parent-uri capabilities
+                                           excluded-capabilities
                                            tier-templates
                                            (authority "test.example")
                                            (authority-date "2026"))
@@ -19,6 +20,7 @@
                  :label name
                  :parent-theme parent-uri
                  :capabilities capabilities
+                 :excluded-capabilities excluded-capabilities
                  :tier-templates tier-templates
                  :theme-version "1.0")))
     (persist-entity strategy theme)
@@ -162,6 +164,88 @@
              (caps (classic.schema.alpha:resolve-theme-capabilities chain)))
         ;; frame.hero appears once, not twice
         (is (= 3 (length caps)))))))
+
+(def-test capabilities-child-excludes-parent ()
+  "Child theme can exclude an inherited parent capability."
+  (with-clean-strategy ()
+    (let* ((parent (make-test-theme *test-strategy* "Parent"
+                     :capabilities '("frame.hero" "aggregate.tabular")))
+           (child (make-test-theme *test-strategy* "Child"
+                    :parent-uri (uri-string parent)
+                    :excluded-capabilities '("frame.hero"))))
+      (let* ((chain (classic.schema.alpha:resolve-theme-chain child *test-strategy*))
+             (caps (classic.schema.alpha:resolve-theme-capabilities chain)))
+        (is (= 1 (length caps)))
+        (is (not (member "frame.hero" caps :test #'equal)))
+        (is (member "aggregate.tabular" caps :test #'equal))))))
+
+(def-test capabilities-exclusion-of-uninherited-is-noop ()
+  "Excluding a capability that no ancestor declared is a silent no-op."
+  (with-clean-strategy ()
+    (let* ((parent (make-test-theme *test-strategy* "Parent"
+                     :capabilities '("frame.hero")))
+           (child (make-test-theme *test-strategy* "Child"
+                    :parent-uri (uri-string parent)
+                    :capabilities '("frame.sidebar")
+                    :excluded-capabilities '("nonexistent.capability"))))
+      (let* ((chain (classic.schema.alpha:resolve-theme-chain child *test-strategy*))
+             (caps (classic.schema.alpha:resolve-theme-capabilities chain)))
+        (is (= 2 (length caps)))
+        (is (member "frame.hero" caps :test #'equal))
+        (is (member "frame.sidebar" caps :test #'equal))))))
+
+(def-test capabilities-exclude-then-add ()
+  "A theme's own capabilities are not subject to its own exclusions:
+excluding a capability while also declaring it in CAPABILITIES yields
+a resolved set that contains the capability."
+  (with-clean-strategy ()
+    (let* ((parent (make-test-theme *test-strategy* "Parent"
+                     :capabilities '("frame.hero")))
+           (child (make-test-theme *test-strategy* "Child"
+                    :parent-uri (uri-string parent)
+                    :capabilities '("frame.hero")
+                    :excluded-capabilities '("frame.hero"))))
+      (let* ((chain (classic.schema.alpha:resolve-theme-chain child *test-strategy*))
+             (caps (classic.schema.alpha:resolve-theme-capabilities chain)))
+        ;; Parent's frame.hero is excluded, but child re-declares it.
+        ;; Own additions are applied last, so the capability is present.
+        (is (= 1 (length caps)))
+        (is (member "frame.hero" caps :test #'equal))))))
+
+(def-test capabilities-grandchild-excludes-grandparent ()
+  "A grandchild can exclude a capability that originated in the grandparent
+and was passed through the parent."
+  (with-clean-strategy ()
+    (let* ((root (make-test-theme *test-strategy* "Root"
+                   :capabilities '("frame.hero" "frame.sidebar")))
+           (mid (make-test-theme *test-strategy* "Mid"
+                  :parent-uri (uri-string root)
+                  :capabilities '("aggregate.tabular")))
+           (leaf (make-test-theme *test-strategy* "Leaf"
+                   :parent-uri (uri-string mid)
+                   :excluded-capabilities '("frame.hero"))))
+      (let* ((chain (classic.schema.alpha:resolve-theme-chain leaf *test-strategy*))
+             (caps (classic.schema.alpha:resolve-theme-capabilities chain)))
+        (is (= 2 (length caps)))
+        (is (not (member "frame.hero" caps :test #'equal)))
+        (is (member "frame.sidebar" caps :test #'equal))
+        (is (member "aggregate.tabular" caps :test #'equal))))))
+
+(def-test capabilities-multiple-exclusions ()
+  "A child can exclude several inherited capabilities at once."
+  (with-clean-strategy ()
+    (let* ((parent (make-test-theme *test-strategy* "Parent"
+                     :capabilities '("frame.hero"
+                                     "frame.sidebar"
+                                     "aggregate.tabular")))
+           (child (make-test-theme *test-strategy* "Child"
+                    :parent-uri (uri-string parent)
+                    :excluded-capabilities '("frame.hero"
+                                             "frame.sidebar"))))
+      (let* ((chain (classic.schema.alpha:resolve-theme-chain child *test-strategy*))
+             (caps (classic.schema.alpha:resolve-theme-capabilities chain)))
+        (is (= 1 (length caps)))
+        (is (equal '("aggregate.tabular") caps))))))
 
 ;;; ============================================================
 ;;; Bindings resolution

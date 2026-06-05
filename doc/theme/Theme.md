@@ -70,6 +70,7 @@ The primary theme resource. Inherits from `classic-named-resource`.
 | `parent-theme` | `:relation` | `theme:parentTheme` | URI of the parent theme (NIL for root themes) |
 | `theme-version` | `:triple` | `theme:version` | Version string for compatibility tracking |
 | `capabilities` | `:triple` | `theme:capabilities` | List of capability identifiers this theme provides |
+| `excluded-capabilities` | `:triple` | `theme:excludedCapabilities` | List of inherited capabilities this theme opts out of |
 | `required-capabilities` | `:triple` | `theme:requiredCapabilities` | Capabilities that content using this theme expects |
 | `tier-templates` | `:blob` | `theme:tierTemplates` | Alist mapping tier keywords to Lexis template fragments |
 | `asset-base-uri` | `:triple` | `theme:assetBaseURI` | Base URI/path for external assets |
@@ -349,6 +350,32 @@ Composer resolves this chain before composition begins.
 ;; Union of all capabilities, child extending parent
 ```
 
+A child theme can opt out of an inherited capability by listing its
+identifier in `excluded-capabilities`. Exclusion is applied to the
+inherited accumulator before the theme's own `capabilities` are merged
+in, which has two consequences worth noting:
+
+- A theme's own declared `capabilities` are never subject to its own
+  `excluded-capabilities`. Listing the same capability in both yields
+  a resolved set that contains the capability — own additions are
+  applied last.
+- Excluding a capability that wasn't inherited is a silent no-op.
+
+```lisp
+;; Parent declares: ("frame.hero" "aggregate.tabular")
+;; Child declares:  :capabilities          ("frame.sidebar")
+;;                  :excluded-capabilities ("frame.hero")
+
+(resolve-theme-capabilities chain)
+;; => ("aggregate.tabular" "frame.sidebar")
+;; "frame.hero" was subtracted from the parent contribution
+;; before the child's own capabilities were added.
+```
+
+Exclusion composes through multi-level inheritance: a grandchild can
+exclude a capability that originated in the grandparent and was passed
+through the parent unchanged.
+
 ### Merging Bindings
 
 ```lisp
@@ -423,6 +450,23 @@ Composer resolves this chain before composition begins.
     :asset-manifest '((:stylesheets ("dark.css")))))
 
 (persist-entity strategy *dark-theme*)
+```
+
+A child can also opt out of capabilities the parent declared:
+
+```lisp
+;; A minimalist variant that drops the hero frame the parent provides.
+(defvar *minimal-theme*
+  (make-instance 'classic-theme
+    :uri (mint-uri 'classic-theme "myblog.dev" "2026"
+                   :slug "classic-minimal")
+    :label "Classic Minimal"
+    :parent-theme (uri-string *base-theme*)
+    :theme-version "1.0"
+    :excluded-capabilities '("frame.hero")
+    :asset-base-uri "/themes/classic-minimal/"))
+
+(persist-entity strategy *minimal-theme*)
 ```
 
 ### Configuration Bindings

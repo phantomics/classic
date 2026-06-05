@@ -207,6 +207,7 @@
    #:parent-theme
    #:theme-version
    #:theme-capabilities
+   #:excluded-capabilities
    #:required-capabilities
    #:tier-templates
    #:asset-base-uri
