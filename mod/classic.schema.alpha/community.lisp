@@ -20,6 +20,7 @@
     :initform nil
     :persistence :relation
     :predicate "sioc:has_host"
+    :slot-type (or null string)
     :documentation "URI of the hosting entity for this space.
 Maps to sioc:has_host."))
   (:metaclass classic-class)
@@ -41,6 +42,7 @@ Could represent an entire site or a major section of one."))
     :initform nil
     :persistence :relation
     :predicate "sioc:has_space"
+    :slot-type (or null string)
     :documentation "URI of the space this container belongs to.
 Maps to sioc:has_space.")
    (contains
@@ -49,6 +51,7 @@ Maps to sioc:has_space.")
     :initform nil
     :persistence :relation
     :predicate "sioc:container_of"
+    :slot-type (or null list)
     :documentation "List of URIs of items in this container.
 Maps to sioc:container_of.")
    (storage-granularity
@@ -57,6 +60,7 @@ Maps to sioc:container_of.")
     :initform :individual
     :persistence :triple
     :predicate "classic:storageGranularity"
+    :slot-type (or null keyword) ;; ?? SINGULAR
     :documentation "Controls how the flat-file persistence backend
 stores items in this container.
   :individual — one file per contained item (default, appropriate for
@@ -123,6 +127,7 @@ and UI rendering purposes."))
     :initform nil
     :persistence :relation
     :predicate "sioc:has_container"
+    :slot-type (or null string)
     :documentation "URI of the container this post belongs to.
 Maps to sioc:has_container.")
    (reply-of
@@ -131,6 +136,7 @@ Maps to sioc:has_container.")
     :initform nil
     :persistence :relation
     :predicate "sioc:reply_of"
+    :slot-type (or null string)
     :documentation "URI of the post this is a reply to (if any).
 Maps to sioc:reply_of.")
    (has-reply
@@ -139,6 +145,7 @@ Maps to sioc:reply_of.")
     :initform nil
     :persistence :relation
     :predicate "sioc:has_reply"
+    :slot-type (or null list)
     :documentation "List of URIs of replies to this post.
 Maps to sioc:has_reply."))
   (:metaclass classic-class)

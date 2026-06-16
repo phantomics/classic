@@ -24,6 +24,7 @@
     :initform nil
     :persistence :triple
     :predicate "classic:deletedAt"
+    :slot-type (or null local-time:timestamp)
     :documentation "Timestamp when this entity was soft-deleted.")
    (deleted-by
     :accessor deleted-by
@@ -31,6 +32,7 @@
     :initform nil
     :persistence :relation
     :predicate "classic:deletedBy"
+    :slot-type (or null string)
     :documentation "URI of the actor who performed the deletion.")
    (deletion-reason
     :accessor deletion-reason
@@ -38,6 +40,7 @@
     :initform nil
     :persistence :triple
     :predicate "classic:deletionReason"
+    :slot-type (or null string) ;; ?? TYPE
     :documentation "Human-readable reason for deletion."))
   (:metaclass classic-class)
   (:documentation

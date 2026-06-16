@@ -18,6 +18,7 @@
     :initform nil
     :persistence :relation
     :predicate "sioc:account_of"
+    :slot-type (or null string)
     :documentation "URI of the agent (person/org) who owns this account.
 Maps to sioc:account_of. The inverse of foaf:account on classic-agent.")
    (member-of
@@ -26,6 +27,7 @@ Maps to sioc:account_of. The inverse of foaf:account on classic-agent.")
     :initform nil
     :persistence :relation
     :predicate "sioc:member_of"
+    :slot-type (or null string)
     :documentation "URI of the space/community this account belongs to.
 Maps to sioc:member_of."))
   (:metaclass classic-class)
@@ -49,6 +51,7 @@ on multiple federated instances."))
     :initform nil
     :persistence :relation
     :predicate "sioc:has_scope"
+    :slot-type (or null string)
     :documentation "URI of the space/container this role applies to.
 Maps to sioc:has_scope.")
    (has-permission
@@ -57,6 +60,7 @@ Maps to sioc:has_scope.")
     :initform nil
     :persistence :triple
     :predicate "sioc:has_function"
+    :slot-type (or null list)
     :documentation "List of permission keywords for this role.
 Maps to sioc:has_function."))
   (:metaclass classic-class)

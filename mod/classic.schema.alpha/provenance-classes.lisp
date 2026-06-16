@@ -24,6 +24,7 @@
     :initform nil
     :persistence :triple
     :predicate "federation:entityURI"
+    :slot-type (or null string)
     :documentation "URI of the federated entity this record describes.")
    (source-authority
     :accessor provenance-source-authority
@@ -31,6 +32,7 @@
     :initform nil
     :persistence :triple
     :predicate "federation:sourceAuthority"
+    :slot-type (or null string)
     :documentation "Authority string of the instance this entity came from.")
    (received-at
     :accessor provenance-received-at
@@ -38,6 +40,7 @@
     :initform nil
     :persistence :triple
     :predicate "federation:receivedAt"
+    :slot-type (or null local-time:timestamp)
     :documentation "Timestamp when this entity was received.")
    (sync-status
     :accessor provenance-sync-status
@@ -45,6 +48,7 @@
     :initform :current
     :persistence :triple
     :predicate "federation:syncStatus"
+    :slot-type (or null keyword)
     :documentation "Synchronization status keyword:
 :current   — entity matches the canonical copy on the source
 :stale     — entity may differ from the canonical copy
@@ -55,6 +59,7 @@
     :initform nil
     :persistence :relation
     :predicate "federation:belongsToPublication"
+    :slot-type (or null string)
     :documentation "URI of the publication that received this entity.
 Scopes provenance to individual publications."))
   (:metaclass classic-class)
@@ -80,6 +85,7 @@ resource."))
     :initform nil
     :persistence :triple
     :predicate "federation:eventType"
+    :slot-type (or null keyword)
     :documentation "Event type keyword:
 :publish  — entity sent to a peer
 :retract  — retraction sent to a peer
@@ -92,6 +98,7 @@ resource."))
     :initform nil
     :persistence :triple
     :predicate "federation:eventEntityURI"
+    :slot-type (or null string)
     :documentation "URI of the entity this event concerns.")
    (event-peer-authority
     :accessor federation-event-peer-authority
@@ -99,6 +106,7 @@ resource."))
     :initform nil
     :persistence :triple
     :predicate "federation:eventPeerAuthority"
+    :slot-type (or null string)
     :documentation "Authority string of the peer involved.")
    (delivery-status
     :accessor federation-event-delivery-status
@@ -106,6 +114,7 @@ resource."))
     :initform :pending
     :persistence :triple
     :predicate "federation:deliveryStatus"
+    :slot-type (or null keyword)
     :documentation "Delivery status keyword:
 :pending   — not yet delivered
 :delivered — confirmed delivered
@@ -117,6 +126,7 @@ resource."))
     :initform 0
     :persistence :triple
     :predicate "federation:attemptCount"
+    :slot-type (integer 0)
     :documentation "Number of delivery attempts made.")
    (last-attempt-at
     :accessor federation-event-last-attempt-at
@@ -124,6 +134,7 @@ resource."))
     :initform nil
     :persistence :triple
     :predicate "federation:lastAttemptAt"
+    :slot-type (or null local-time:timestamp)
     :documentation "Timestamp of the most recent delivery attempt.")
    (event-error-info
     :accessor federation-event-error-info
@@ -131,6 +142,7 @@ resource."))
     :initform nil
     :persistence :blob
     :format :sexp
+    :slot-type (or null list)
     :documentation "Error details from failed delivery attempts.")
    (event-publication-uri
     :accessor federation-event-publication-uri
@@ -138,6 +150,7 @@ resource."))
     :initform nil
     :persistence :relation
     :predicate "federation:eventBelongsToPublication"
+    :slot-type (or null string)
     :documentation "URI of the publication that generated this event."))
   (:metaclass classic-class)
   (:documentation
@@ -162,6 +175,7 @@ Provides the foundation for retry logic and delivery confirmation."))
                 (:retrying  . (:max-age 604800 :max-count nil)))
     :persistence :blob
     :format :sexp
+    :slot-type (or null list)
     :documentation "Alist of (delivery-status . policy-spec) pairs.
 Each policy-spec is a plist with:
   :max-age    — maximum age in seconds (NIL = keep forever)

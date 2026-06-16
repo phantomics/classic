@@ -31,6 +31,7 @@
     :initform nil
     :persistence :triple
     :predicate "migration:operationType"
+    :slot-type (or null keyword)
     :documentation "Keyword identifying the operation kind:
 :rename-slot, :add-slot, :remove-slot, :transform-slot,
 :rename-predicate, :create-class.")
@@ -40,6 +41,7 @@
     :initform nil
     :persistence :triple
     :predicate "migration:targetSlot"
+    :slot-type (or null symbol)
     :documentation "Symbol naming the slot affected by this operation.
 For :rename-slot, this is the old slot name.")
    (new-slot-name
@@ -48,6 +50,7 @@ For :rename-slot, this is the old slot name.")
     :initform nil
     :persistence :triple
     :predicate "migration:newSlotName"
+    :slot-type (or null symbol)
     :documentation "For :rename-slot and :transform-slot, the new
 slot name. NIL for operations that don't rename.")
    (old-predicate
@@ -56,6 +59,7 @@ slot name. NIL for operations that don't rename.")
     :initform nil
     :persistence :triple
     :predicate "migration:oldPredicate"
+    :slot-type (or null string)
     :documentation "For :rename-predicate, the original RDF predicate URI.")
    (new-predicate
     :accessor new-predicate
@@ -63,6 +67,7 @@ slot name. NIL for operations that don't rename.")
     :initform nil
     :persistence :triple
     :predicate "migration:newPredicate"
+    :slot-type (or null string)
     :documentation "For :rename-predicate and :add-slot, the new RDF
 predicate URI.")
    (default-value
@@ -71,6 +76,7 @@ predicate URI.")
     :initform nil
     :persistence :triple
     :predicate "migration:defaultValue"
+    ;; :slot-type (or null string) ;; ?? TYPE
     :documentation "For :add-slot, the default value to assign when
 migrating existing entities.")
    (new-persistence
@@ -79,6 +85,7 @@ migrating existing entities.")
     :initform nil
     :persistence :triple
     :predicate "migration:newPersistence"
+    :slot-type keyword
     :documentation "For :add-slot, the persistence type of the new slot.")
    (transform-fn-name
     :accessor transform-fn-name
@@ -86,6 +93,7 @@ migrating existing entities.")
     :initform nil
     :persistence :triple
     :predicate "migration:transformFunction"
+    :slot-type (or null symbol)
     :documentation "Symbol naming the CL function that transforms slot
 values. The function lives in the ASDF system, not the triplestore.
 Signature: (old-value entity) -> new-value.")
@@ -95,6 +103,7 @@ Signature: (old-value entity) -> new-value.")
     :initform nil
     :persistence :triple
     :predicate "migration:createSuperclasses"
+    :slot-type (or null list)
     :documentation "For :create-class, the list of superclass name symbols
 the introduced class inherits from. NIL for other operations.")
    (class-metaclass
@@ -103,6 +112,7 @@ the introduced class inherits from. NIL for other operations.")
     :initform nil
     :persistence :triple
     :predicate "migration:createMetaclass"
+    :slot-type (or null symbol)
     :documentation "For :create-class, the symbol naming the metaclass
 of the introduced class (typically CLASSIC-CLASS). NIL for other
 operations.")
@@ -112,6 +122,7 @@ operations.")
     :initform nil
     :persistence :blob
     :format :sexp
+    :slot-type (or null list)
     :documentation "For :create-class, the list of slot specifications
 that the introduced class defines. Each spec is a plist with at minimum
 :name, plus optional :predicate, :persistence, :default, etc. NIL for
@@ -150,6 +161,7 @@ Valid operation-type values:
     :initform nil
     :persistence :triple
     :predicate "migration:targetClass"
+    :slot-type (or null symbol)
     :documentation "Symbol naming the CLOS class being migrated.")
    (from-version
     :accessor from-version
@@ -157,6 +169,7 @@ Valid operation-type values:
     :initform nil
     :persistence :triple
     :predicate "migration:fromVersion"
+    :slot-type (or null string)
     :documentation "Schema version string of the source (pre-migration).")
    (to-version
     :accessor to-version
@@ -164,6 +177,7 @@ Valid operation-type values:
     :initform nil
     :persistence :triple
     :predicate "migration:toVersion"
+    :slot-type (or null string)
     :documentation "Schema version string of the target (post-migration).")
    (compatibility
     :accessor compatibility
@@ -171,6 +185,7 @@ Valid operation-type values:
     :initform :full
     :persistence :triple
     :predicate "migration:compatibility"
+    :slot-type (or null keyword)
     :documentation "Compatibility mode keyword:
 :backward  — new code can read old data
 :forward   — old code can read new data
@@ -182,6 +197,7 @@ Valid operation-type values:
     :initform nil
     :persistence :triple
     :predicate "migration:reversible"
+    :slot-type boolean
     :documentation "Whether this migration can be applied in reverse
 for federation translation to older peers. T if all operations are
 invertible (renames, adds with defaults). NIL if any operation is
@@ -192,6 +208,7 @@ lossy (transforms, removes without capture).")
     :initform nil
     :persistence :relation
     :predicate "migration:hasOperation"
+    :slot-type (or null list)
     :documentation "Ordered list of classic-migration-operation instances.")
    (depends-on
     :accessor depends-on
@@ -199,6 +216,7 @@ lossy (transforms, removes without capture).")
     :initform nil
     :persistence :relation
     :predicate "migration:dependsOn"
+    :slot-type (or null list)
     :documentation "List of classic-schema-migration URIs that must
 complete before this migration can run. Establishes the migration DAG.")
    (trigger
@@ -207,6 +225,7 @@ complete before this migration can run. Establishes the migration DAG.")
     :initform nil
     :persistence :blob
     :format :lisp-predicate
+    :slot-type (or null list) ;; ?? TYPE
     :documentation "Trigger function: (strategy migration) -> keyword.
 Returns :eager (run at startup), :lazy (run on first entity read),
 or :deferred (run only when explicitly invoked). NIL means use the
@@ -235,6 +254,7 @@ transform functions referenced by operations live in ASDF systems."))
     :initform nil
     :persistence :triple
     :predicate "migration:manifestVersion"
+    :slot-type (or null string)
     :documentation "System-wide version label (e.g. \"0.2.0\").
 This is the coordination layer: a manifest pins specific
 per-class versions into a coherent system snapshot.")
@@ -244,6 +264,7 @@ per-class versions into a coherent system snapshot.")
     :initform nil
     :persistence :blob
     :format :sexp
+    :slot-type (or null list)
     :documentation "Association list of (class-name-string . version-string)
 pairs. Each entry records the schema version of one class at the
 time this manifest was created. Example:
@@ -254,6 +275,7 @@ time this manifest was created. Example:
     :initform nil
     :persistence :relation
     :predicate "migration:parentManifest"
+    :slot-type (or null string)
     :documentation "URI of the previous manifest in the version chain.
 NIL for the initial manifest."))
   (:metaclass classic-class)

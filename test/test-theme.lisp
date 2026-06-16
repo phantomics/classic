@@ -11,6 +11,7 @@
 (defun make-test-theme (strategy name &key parent-uri capabilities
                                            excluded-capabilities
                                            tier-templates
+                                           slot-fills
                                            (authority "test.example")
                                            (authority-date "2026"))
   "Create, persist, and return a classic-theme."
@@ -22,6 +23,7 @@
                  :capabilities capabilities
                  :excluded-capabilities excluded-capabilities
                  :tier-templates tier-templates
+                 :slot-fills slot-fills
                  :theme-version "1.0")))
     (persist-entity strategy theme)
     theme))
@@ -297,6 +299,129 @@ and was passed through the parent."
                    (classic.schema.alpha:theme-binding-value resolved "bg-color")))
         (is (equal "sans-serif"
                    (classic.schema.alpha:theme-binding-value resolved "heading-font")))))))
+
+;;; ============================================================
+;;; Slot-fill resolution
+;;; ============================================================
+
+(def-test slot-fills-instantiation ()
+  "A theme with slot-fills persists and round-trips correctly."
+  (with-clean-strategy ()
+    (let* ((fills '(("theme.brand" . (image (@ :src "/logo.svg")))
+                    ("theme.footer-extras" . (paragraph "Footer text"))))
+           (theme (make-test-theme *test-strategy* "Filled-Theme"
+                    :slot-fills fills)))
+      (is (equal fills (classic.schema.alpha:slot-fills theme)))
+      (let ((retrieved (retrieve-entity *test-strategy*
+                                        (uri-string theme) nil)))
+        (is (equal fills (classic.schema.alpha:slot-fills retrieved)))))))
+
+(def-test slot-fills-root-theme ()
+  "Resolver returns the root theme's slot-fills unchanged when the
+chain contains a single theme."
+  (with-clean-strategy ()
+    (let* ((fills '(("theme.brand" . (image (@ :src "/logo.svg")))))
+           (theme (make-test-theme *test-strategy* "Root-Filled"
+                    :slot-fills fills)))
+      (let* ((chain (classic.schema.alpha:resolve-theme-chain theme *test-strategy*))
+             (resolved (classic.schema.alpha:resolve-theme-slot-fills chain)))
+        (is (= 1 (length resolved)))
+        (is (equal '(image (@ :src "/logo.svg"))
+                   (classic.schema.alpha:theme-slot-fill
+                    resolved "theme.brand")))))))
+
+(def-test slot-fills-child-extends-parent ()
+  "Child slot-fills are added to parent's; unmatched parent entries
+are preserved through inheritance."
+  (with-clean-strategy ()
+    (let* ((parent (make-test-theme *test-strategy* "Parent-Fills"
+                     :slot-fills '(("theme.brand"
+                                    . (image (@ :src "/parent-logo.svg"))))))
+           (child (make-test-theme *test-strategy* "Child-Fills"
+                    :parent-uri (uri-string parent)
+                    :slot-fills '(("theme.footer-extras"
+                                   . (paragraph "Child footer"))))))
+      (let* ((chain (classic.schema.alpha:resolve-theme-chain child *test-strategy*))
+             (resolved (classic.schema.alpha:resolve-theme-slot-fills chain)))
+        (is (= 2 (length resolved)))
+        ;; Parent's fill preserved
+        (is (equal '(image (@ :src "/parent-logo.svg"))
+                   (classic.schema.alpha:theme-slot-fill
+                    resolved "theme.brand")))
+        ;; Child's fill added
+        (is (equal '(paragraph "Child footer")
+                   (classic.schema.alpha:theme-slot-fill
+                    resolved "theme.footer-extras")))))))
+
+(def-test slot-fills-child-overrides-parent ()
+  "Child slot-fills replace parent's on matching slot-name."
+  (with-clean-strategy ()
+    (let* ((parent (make-test-theme *test-strategy* "Parent-Brand"
+                     :slot-fills '(("theme.brand"
+                                    . (image (@ :src "/parent-logo.svg"))))))
+           (child (make-test-theme *test-strategy* "Child-Brand"
+                    :parent-uri (uri-string parent)
+                    :slot-fills '(("theme.brand"
+                                   . (image (@ :src "/child-logo.svg")))))))
+      (let* ((chain (classic.schema.alpha:resolve-theme-chain child *test-strategy*))
+             (resolved (classic.schema.alpha:resolve-theme-slot-fills chain)))
+        (is (= 1 (length resolved)))
+        (is (equal '(image (@ :src "/child-logo.svg"))
+                   (classic.schema.alpha:theme-slot-fill
+                    resolved "theme.brand")))))))
+
+(def-test slot-fills-grandchild-chain ()
+  "Three-level merge: grandchild overrides parent which overrode root."
+  (with-clean-strategy ()
+    (let* ((root (make-test-theme *test-strategy* "Root-3"
+                   :slot-fills '(("theme.brand"
+                                  . (image (@ :src "/root-logo.svg")))
+                                 ("theme.tagline"
+                                  . (heading "Root tagline")))))
+           (mid (make-test-theme *test-strategy* "Mid-3"
+                  :parent-uri (uri-string root)
+                  :slot-fills '(("theme.brand"
+                                 . (image (@ :src "/mid-logo.svg"))))))
+           (leaf (make-test-theme *test-strategy* "Leaf-3"
+                   :parent-uri (uri-string mid)
+                   :slot-fills '(("theme.footer-extras"
+                                  . (paragraph "Leaf footer"))))))
+      (let* ((chain (classic.schema.alpha:resolve-theme-chain leaf *test-strategy*))
+             (resolved (classic.schema.alpha:resolve-theme-slot-fills chain)))
+        (is (= 3 (length resolved)))
+        ;; Mid overrode root; mid's value wins
+        (is (equal '(image (@ :src "/mid-logo.svg"))
+                   (classic.schema.alpha:theme-slot-fill
+                    resolved "theme.brand")))
+        ;; Root's tagline propagates all the way down
+        (is (equal '(heading "Root tagline")
+                   (classic.schema.alpha:theme-slot-fill
+                    resolved "theme.tagline")))
+        ;; Leaf adds a new fill
+        (is (equal '(paragraph "Leaf footer")
+                   (classic.schema.alpha:theme-slot-fill
+                    resolved "theme.footer-extras")))))))
+
+(def-test theme-slot-fill-lookup ()
+  "theme-slot-fill returns the value for a known slot-name and the
+default for an unknown one."
+  (with-clean-strategy ()
+    (let* ((theme (make-test-theme *test-strategy* "Lookup-Theme"
+                    :slot-fills '(("theme.brand"
+                                   . (image (@ :src "/logo.svg"))))))
+           (chain (classic.schema.alpha:resolve-theme-chain theme *test-strategy*))
+           (resolved (classic.schema.alpha:resolve-theme-slot-fills chain)))
+      ;; Known slot-name returns its subtree
+      (is (equal '(image (@ :src "/logo.svg"))
+                 (classic.schema.alpha:theme-slot-fill
+                  resolved "theme.brand")))
+      ;; Unknown slot-name returns NIL by default
+      (is (null (classic.schema.alpha:theme-slot-fill
+                 resolved "theme.unknown")))
+      ;; Unknown slot-name with explicit default returns the default
+      (is (eq :missing
+              (classic.schema.alpha:theme-slot-fill
+               resolved "theme.unknown" :missing))))))
 
 ;;; ============================================================
 ;;; Override resolution

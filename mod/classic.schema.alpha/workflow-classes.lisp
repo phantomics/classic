@@ -27,6 +27,7 @@
     :initform nil
     :persistence :triple
     :predicate "workflow:permittedRole"
+    :slot-type (or null list)
     :documentation "List of role label strings permitted to operate
 on content in this state.")
    (permitted-ops
@@ -35,6 +36,7 @@ on content in this state.")
     :initform nil
     :persistence :triple
     :predicate "workflow:permittedOperation"
+    :slot-type (or null list)
     :documentation "List of operation keywords allowed in this state
 (e.g. :read :edit :comment)."))
   (:metaclass classic-class)
@@ -56,12 +58,14 @@ state and what operations are permitted."))
     :initarg :from-state
     :persistence :triple
     :predicate "workflow:fromState"
+    :slot-type (or null string)
     :documentation "Label string of the source state.")
    (to-state
     :accessor to-state
     :initarg :to-state
     :persistence :triple
     :predicate "workflow:toState"
+    :slot-type (or null string)
     :documentation "Label string of the target state.")
    (required-role
     :accessor required-role
@@ -69,6 +73,7 @@ state and what operations are permitted."))
     :initform nil
     :persistence :triple
     :predicate "workflow:requiredRole"
+    :slot-type (or null string)
     :documentation "Role label string required to trigger this transition.
 NIL means any role can trigger it.")
    (guard
@@ -77,6 +82,7 @@ NIL means any role can trigger it.")
     :initform nil
     :persistence :blob
     :format :lisp-predicate
+    :slot-type (or null list)
     :documentation "Optional guard predicate: a function of (object actor)
 that must return non-NIL for the transition to proceed. NIL means
 no guard (always permitted if role check passes)."))
@@ -100,6 +106,7 @@ Mirrors workflow:Transition."))
     :initform nil
     :persistence :relation
     :predicate "workflow:hasState"
+    :slot-type (or null list)
     :documentation "List of classic-workflow-state instances.")
    (transitions
     :accessor transitions
@@ -107,6 +114,7 @@ Mirrors workflow:Transition."))
     :initform nil
     :persistence :relation
     :predicate "workflow:hasTransition"
+    :slot-type (or null list)
     :documentation "List of classic-workflow-transition instances.")
    (initial-state
     :accessor initial-state
@@ -114,6 +122,7 @@ Mirrors workflow:Transition."))
     :initform nil
     :persistence :triple
     :predicate "workflow:initialState"
+    :slot-type (or null string)
     :documentation "Label string of the starting state for new content
 entering this workflow."))
   (:metaclass classic-class)
@@ -137,6 +146,7 @@ definition."))
     :initform nil
     :persistence :triple
     :predicate "workflow:currentState"
+    :slot-type (or null string)
     :documentation "Label string of the content's current workflow state.")
    (workflow
     :accessor workflow
@@ -144,6 +154,7 @@ definition."))
     :initform nil
     :persistence :relation
     :predicate "workflow:governedBy"
+    :slot-type (or null string classic-workflow)
     :documentation "The classic-workflow instance (or URI) governing
 this content object.")
    (state-history
@@ -152,6 +163,7 @@ this content object.")
     :initform nil
     :persistence :relation
     :predicate "workflow:stateHistory"
+    :slot-type (or null list)
     :documentation "List of classic-state-history-entry instances,
 newest first. Provides a complete audit trail."))
   (:metaclass classic-class)
@@ -170,18 +182,21 @@ classic-workflow via attempt-transition."))
     :initarg :from-state
     :persistence :triple
     :predicate "workflow:historyFromState"
+    :slot-type (or null string)
     :documentation "Label string of the state before transition.")
    (history-to-state
     :accessor history-to-state
     :initarg :to-state
     :persistence :triple
     :predicate "workflow:historyToState"
+    :slot-type (or null string)
     :documentation "Label string of the state after transition.")
    (actor
     :accessor actor
     :initarg :actor
     :persistence :relation
     :predicate "workflow:actor"
+    :slot-type (or null string)
     :documentation "URI string of the account that performed the transition.")
    (transitioned-at
     :accessor transitioned-at
@@ -189,6 +204,7 @@ classic-workflow via attempt-transition."))
     :initform nil
     :persistence :triple
     :predicate "workflow:transitionedAt"
+    :slot-type (or null local-time:timestamp)
     :documentation "Timestamp of the transition."))
   (:metaclass classic-class)
   (:documentation
