@@ -5,6 +5,10 @@
 ;;;; publications: blog, forum, wiki, social network and so on.
 ;;;; These are made available for use in Classic imprints and as
 ;;;; templates for developers to work from.
+;;;;
+;;;; Layering: the universal vocabulary (context, workflows, accounts,
+;;;; articles, federation) underpins domain presets (blog; later forum,
+;;;; wiki). Presets compose the universals into familiar shapes.
 
 (asdf:defsystem "classic.models.common"
   :description "Classic Models: Common Basic Templates"
@@ -14,4 +18,9 @@
   :serial t
   :components
   ((:file "package")
+   (:file "context")
+   (:file "workflows")
+   (:file "accounts")
+   (:file "articles")
+   (:file "federation")
    (:file "blog")))
