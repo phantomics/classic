@@ -43,3 +43,27 @@
 ;;; print-object  ((imprint publication-imprint) stream)  <- ((blog blog) stream)
 ;;;   Note: the original printed "(~D posts)"; keep or generalize to
 ;;;   "(~D items)" since the imprint is content-type-neutral.
+
+;;; ============================================================
+;;; Publication structure
+;;; ============================================================
+
+(defstruct (publication-imprint (:constructor %make-imprint))
+  "An imprint backed by a CLASSIC publication with workflow support."
+  (publication nil :type (or null classic-publication))
+  (container   nil :type (or null classic-container))
+  (strategy    nil :type (or null classic-persistence-strategy))
+  (authority      "" :type string)
+  (authority-date "" :type string)
+  (workflow    nil)
+  (roles       (make-hash-table :test 'equal) :type hash-table)
+  (persons     (make-hash-table :test 'equal) :type hash-table)
+  ;; Federation (opt-in)
+  (transport   nil :type (or null federation-transport))
+  (federation-roles nil :type list))
+
+(defmethod print-object ((imprint publication-imprint) stream)
+  (print-unreadable-object (imprint stream :type t)
+    (format stream "~A (~D posts)"
+            (label (imprint-publication imprint))
+            (length (contains (imprint-container imprint))))))
