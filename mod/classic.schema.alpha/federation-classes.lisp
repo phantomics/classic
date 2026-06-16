@@ -21,6 +21,7 @@
     :initform nil
     :persistence :triple
     :predicate "classic:instanceURI"
+    :slot-type (or null string)
     :documentation "The canonical authority URI identifying this instance.")
    (federation-roles
     :accessor federation-roles
@@ -28,6 +29,7 @@
     :initform nil
     :persistence :triple
     :predicate "classic:federationRole"
+    :slot-type (or null list)
     :documentation "List of role keywords this instance fulfills:
 :publisher, :aggregator, :mirror, :delegate, :workflow-host.")
    (supported-classes
@@ -36,6 +38,7 @@
     :initform nil
     :persistence :triple
     :predicate "classic:supportsContentClass"
+    :slot-type (or null list)
     :documentation "List of content class name symbols this instance supports.")
    (peer-instances
     :accessor peer-instances
@@ -43,6 +46,7 @@
     :initform nil
     :persistence :relation
     :predicate "classic:hasPeer"
+    :slot-type (or null list)
     :documentation "List of URIs of known federation peers."))
   (:metaclass classic-class)
   (:documentation
@@ -65,6 +69,7 @@ when two instances establish a federation relationship."))
     :initform nil
     :persistence :triple
     :predicate "classic:peerURI"
+    :slot-type (or null string)
     :documentation "The peer instance's canonical authority URI.")
    (peer-descriptor-uri
     :accessor peer-descriptor-uri
@@ -72,6 +77,7 @@ when two instances establish a federation relationship."))
     :initform nil
     :persistence :relation
     :predicate "classic:peerDescriptor"
+    :slot-type (or null string)
     :documentation "URI of the peer's instance descriptor resource.")
    (peer-roles
     :accessor peer-roles
@@ -79,6 +85,7 @@ when two instances establish a federation relationship."))
     :initform nil
     :persistence :triple
     :predicate "classic:peerRole"
+    :slot-type (or null keyword) ;; ?? TYPE
     :documentation "The peer's declared federation roles.")
    (peer-relationship
     :accessor peer-relationship
@@ -86,6 +93,7 @@ when two instances establish a federation relationship."))
     :initform nil
     :persistence :triple
     :predicate "classic:peerRelationship"
+    :slot-type (or null keyword)
     :documentation "This instance's relationship to the peer:
 :subscribes-to, :publishes-to, :mirrors, etc.")
    (last-synced
@@ -94,6 +102,7 @@ when two instances establish a federation relationship."))
     :initform nil
     :persistence :triple
     :predicate "classic:lastSynced"
+    :slot-type (or null local-time:timestamp)
     :documentation "Timestamp of last successful synchronization."))
   (:metaclass classic-class)
   (:documentation
@@ -115,6 +124,7 @@ Stored in the local persistence layer."))
     :initform :all-published
     :persistence :triple
     :predicate "syndication:feedType"
+    :slot-type (or null keyword)
     :documentation "Feed type keyword: :all-published, :by-tag, :by-type, etc.")
    (source-instance
     :accessor source-instance
@@ -122,6 +132,7 @@ Stored in the local persistence layer."))
     :initform nil
     :persistence :relation
     :predicate "syndication:sourceInstance"
+    :slot-type (or null string)
     :documentation "URI of the instance that publishes this feed.")
    (filter-predicate
     :accessor filter-predicate
@@ -135,6 +146,7 @@ which entities appear in this feed. Not persisted — runtime configuration.")
     :initform nil
     :persistence :relation
     :predicate "syndication:hasSubscriber"
+    :slot-type (or null list)
     :documentation "List of peer URIs subscribed to this feed.")
    (last-updated
     :accessor last-updated
@@ -142,6 +154,7 @@ which entities appear in this feed. Not persisted — runtime configuration.")
     :initform nil
     :persistence :triple
     :predicate "syndication:lastModified"
+    :slot-type (or null local-time:timestamp)
     :documentation "Timestamp of last content change in this feed."))
   (:metaclass classic-class)
   (:documentation

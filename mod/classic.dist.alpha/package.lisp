@@ -210,6 +210,7 @@
    #:excluded-capabilities
    #:required-capabilities
    #:tier-templates
+   #:slot-fills
    #:asset-base-uri
    #:asset-manifest
 
@@ -233,8 +234,10 @@
    #:resolve-theme-capabilities
    #:resolve-theme-overrides
    #:resolve-theme-bindings
+   #:resolve-theme-slot-fills
    #:resolve-theme-lenses
    #:theme-binding-value
+   #:theme-slot-fill
    #:find-lens
 
    ;; ---- Publication (top-level) ----

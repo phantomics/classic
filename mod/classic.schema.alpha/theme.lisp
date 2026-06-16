@@ -82,6 +82,7 @@ required capabilities are met before composition.")
     :persistence :blob
     :format :sexp
     :predicate "theme:tierTemplates"
+    :slot-type (or null list)
     :documentation "Alist mapping tier keywords to Lexis template
 fragments. Example:
   ((:frame . (document (@ :title (template.slot (@ :name \"page-title\")))
@@ -89,6 +90,34 @@ fragments. Example:
                (template.slot (@ :name \"main-content\"))
                (footer ...)))
    (:adjunct . (section (@ :title \"Related\") ...)))")
+   (slot-fills
+    :accessor slot-fills
+    :initarg :slot-fills
+    :initform nil
+    :persistence :blob
+    :format :sexp
+    :predicate "theme:slotFills"
+    :slot-type (or null list)
+    :documentation "Alist mapping Lexis template slot names (strings) to
+Lexis subtrees that fill those slots in the resolved templates. Names
+correspond to (template.slot (@ :name \"...\")) placeholders within
+tier templates. Slot names are global across tiers; theme authors
+typically use prefix conventions like \"theme.brand\" or
+\"theme.footer-extras\" to namespace their extension points.
+
+Example:
+  ((\"theme.brand\" . (web-link (@ :uri \"/\")
+                       (image (@ :src \"/logo.svg\"))))
+   (\"theme.footer-extras\" . (widget-area (@ :id \"footer-widgets\"))))
+
+Child theme fills override parent fills on matching slot names.
+Unmatched parent fills are preserved through inheritance.
+
+Note: 'slot' here refers to a Lexis template extension point
+(template.slot), not a CLOS slot on the classic-theme class.
+classic-theme-override replaces a whole tier template; slot-fills
+fills designated extension points within tier templates without
+replacing them.")
    (asset-base-uri
     :accessor asset-base-uri
     :initarg :asset-base-uri
@@ -106,6 +135,7 @@ Example: \"/themes/classic-default/\" or
     :initform nil
     :persistence :blob
     :format :sexp
+    :slot-type (or null list)
     :predicate "theme:assetManifest"
     :documentation "S-expression describing theme asset files relative
 to asset-base-uri. Example:
@@ -120,6 +150,7 @@ to asset-base-uri. Example:
     :persistence :blob
     :format :sexp
     :predicate "theme:lenses"
+    :slot-type (or null list)
     :documentation "List of lens specifications declaring which slots of
 a class to display, in what order, with what display modes, and how
 relation slots should be rendered via sublens references.
@@ -190,6 +221,7 @@ One of :frame, :feature, :adjunct, :aggregate, :operative.")
     :persistence :blob
     :format :sexp
     :predicate "theme:overrideTemplate"
+    :slot-type (or null list)
     :documentation "Lexis template fragment that replaces the base
 theme's template for this tier.")
    (additional-capabilities
@@ -236,6 +268,7 @@ the entire frame template."))
     :persistence :blob
     :format :sexp
     :predicate "theme:bindingsEntries"
+    :slot-type (or null list)
     :documentation "Alist of (key . value) configuration pairs.
 Keys are strings. Values are strings, keywords, numbers, or booleans.
 Example:
@@ -372,6 +405,48 @@ each theme are found by scanning the persistence store."
   "Look up KEY in RESOLVED-BINDINGS (a merged alist from
 resolve-theme-bindings). Returns the value, or DEFAULT if not found."
   (let ((entry (assoc key resolved-bindings :test #'equal)))
+    (if entry
+        (cdr entry)
+        default)))
+
+;;; ============================================================
+;;; Slot-fill resolution
+;;; ============================================================
+;;;
+;;; Slot fills carry Lexis subtrees keyed by template-slot name.
+;;; The composer substitutes (template.slot (@ :name "...")) nodes
+;;; in resolved tier templates with the corresponding fill subtree.
+;;; This lets a child theme contribute content at designated
+;;; extension points without overriding the parent's tier template.
+
+(defun resolve-theme-slot-fills (theme-chain)
+  "Merge slot-fills from all themes in THEME-CHAIN.
+Child fills override parent fills on matching slot-name.
+Unmatched parent fills are preserved.
+
+Returns a merged alist of (slot-name . lexis-subtree) entries, where
+slot-name is a string corresponding to a (template.slot (@ :name ...))
+node within a tier template.
+
+THEME-CHAIN is ordered most-specific-first (as returned by
+RESOLVE-THEME-CHAIN). Slot names are global across tiers; theme
+authors typically use prefix conventions (\"theme.brand\",
+\"theme.footer-extras\") to namespace their extension points."
+  (let ((merged nil))
+    ;; Walk root-to-child so child entries override ancestors
+    (dolist (theme (reverse theme-chain))
+      (dolist (entry (slot-fills theme))
+        (let ((existing (assoc (car entry) merged :test #'equal)))
+          (if existing
+              (setf (cdr existing) (cdr entry))
+              (push entry merged)))))
+    (nreverse merged)))
+
+(defun theme-slot-fill (resolved-fills slot-name &optional default)
+  "Look up SLOT-NAME in RESOLVED-FILLS (a merged alist from
+resolve-theme-slot-fills). Returns the Lexis subtree, or DEFAULT
+if no fill is defined for that slot name."
+  (let ((entry (assoc slot-name resolved-fills :test #'equal)))
     (if entry
         (cdr entry)
         default)))

@@ -18,6 +18,7 @@
     :initform nil
     :persistence :triple
     :predicate "foaf:name"
+    :slot-type (or null string) ;; ?? TYPE
     :documentation "The agent's display name. Maps to foaf:name.")
    (accounts
     :accessor accounts
@@ -25,6 +26,7 @@
     :initform nil
     :persistence :relation
     :predicate "foaf:account"
+    :slot-type (or null list)
     :documentation "List of user account URIs associated with this agent.
 Maps to foaf:account."))
   (:metaclass classic-class)
@@ -47,6 +49,7 @@ Mirrors foaf:Agent."))
     :initform nil
     :persistence :triple
     :predicate "foaf:mbox"
+    :slot-type (or null string)
     :documentation "Email address. Maps to foaf:mbox."))
   (:metaclass classic-class)
   (:documentation

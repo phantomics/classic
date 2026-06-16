@@ -17,11 +17,13 @@
     :initform nil
     :persistence :triple
     :predicate "federation:outboxPeerAuthority"
+    :slot-type (or null string)
     :documentation "Authority string of the peer this outbox is for.")
    (pending-operations
     :accessor outbox-pending-operations
     :initarg :pending-operations
     :initform nil
+    :slot-type (or null list)
     :documentation "List of (operation-type entity-uri . extra-plist) entries
 awaiting dispatch. Not persisted — runtime state only. Operations
 are logged in the federation event log on flush for durability.")
@@ -31,6 +33,7 @@ are logged in the federation event log on flush for durability.")
     :initform 1
     :persistence :triple
     :predicate "federation:flushThreshold"
+    :slot-type (integer 1)
     :documentation "Flush when this many operations accumulate.
 Default 1 means immediate send (current behavior). Set higher
 for batch efficiency on high-traffic publications.")
@@ -40,6 +43,7 @@ for batch efficiency on high-traffic publications.")
     :initform 0
     :persistence :triple
     :predicate "federation:flushInterval"
+    :slot-type (ingeger 0)
     :documentation "Maximum seconds between flushes, regardless of
 operation count. 0 means no interval-based flushing (threshold only).
 Requires an external timer to call check-flush-needed periodically.")
@@ -47,6 +51,7 @@ Requires an external timer to call check-flush-needed periodically.")
     :accessor outbox-last-flush-at
     :initarg :last-flush-at
     :initform nil
+    :slot-type (or null local-time:timestamp)
     :documentation "Timestamp of the last flush. Runtime state, not persisted."))
   (:metaclass classic-class)
   (:documentation

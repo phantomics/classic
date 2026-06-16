@@ -93,6 +93,7 @@ news sites, and editorial content. Mirrors schema:Article."))
     :initform nil
     :persistence :relation
     :predicate "schema:parentItem"
+    :slot-type (or null string)
     :documentation "URI of the content item this comment is attached to.
 Maps to schema:parentItem."))
   (:metaclass classic-class)
@@ -114,6 +115,7 @@ The parent-item relation ties comments to their host content objects."))
     :initform nil
     :persistence :triple
     :predicate "schema:contentUrl"
+    :slot-type (or null string)
     :documentation "URL where the media content can be retrieved.
 Maps to schema:contentUrl.")
    (encoding-format
@@ -122,6 +124,7 @@ Maps to schema:contentUrl.")
     :initform nil
     :persistence :triple
     :predicate "schema:encodingFormat"
+    :slot-type (or null string)
     :documentation "MIME type of the media (e.g. \"image/jpeg\").
 Maps to schema:encodingFormat."))
   (:metaclass classic-class)

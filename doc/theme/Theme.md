@@ -73,6 +73,7 @@ The primary theme resource. Inherits from `classic-named-resource`.
 | `excluded-capabilities` | `:triple` | `theme:excludedCapabilities` | List of inherited capabilities this theme opts out of |
 | `required-capabilities` | `:triple` | `theme:requiredCapabilities` | Capabilities that content using this theme expects |
 | `tier-templates` | `:blob` | `theme:tierTemplates` | Alist mapping tier keywords to Lexis template fragments |
+| `slot-fills` | `:blob` | `theme:slotFills` | Alist mapping template-slot names (strings) to Lexis subtrees that fill those extension points (see "Template Slot Fills" below) |
 | `asset-base-uri` | `:triple` | `theme:assetBaseURI` | Base URI/path for external assets |
 | `asset-manifest` | `:blob` | `theme:assetManifest` | S-expression describing asset files |
 | `lenses` | `:blob` | `theme:lenses` | List of lens specs declaring property-level selection per class (see "Lenses" below) |
@@ -327,6 +328,97 @@ each property in the lens, with the author rendered via the person
 `:label` lens and dates formatted as date strings.
 
 
+## Template Slot Fills: Structural Extension Points
+
+There are two senses of "slot" in play in this document:
+
+- **CLOS slot.** A field on the `classic-theme` class — `parent-theme`,
+  `capabilities`, `tier-templates`, and so on. These are storage.
+- **Template slot.** A `(template.slot (@ :name "..."))` node within
+  a tier template's Lexis form. These are designated extension points
+  that the Composer recognizes during rendering.
+
+The `slot-fills` slot (a CLOS slot) holds named subtrees that fill
+template slots (the Lexis nodes).
+
+### The Problem It Solves
+
+A parent theme provides a tier template that contains template-slot
+placeholders at points where child themes might want to contribute
+content:
+
+```lisp
+(:tier-templates
+  ((:frame
+    . (document (@ :title (template.slot (@ :name "page-title")))
+        (header (template.slot (@ :name "theme.brand")))
+        (template.slot (@ :name "main-content"))
+        (template.slot (@ :name "theme.footer-extras"))
+        (footer ...)))))
+```
+
+A child theme that wants to add a logo subtree at `theme.brand` and a
+widget area at `theme.footer-extras` could fork the parent's entire
+frame template, but that loses the maintenance benefit of inheritance:
+any future change to the parent's frame is silently lost. The
+`classic-theme-override` mechanism replaces a whole tier wholesale,
+which is also too coarse.
+
+`slot-fills` is the fine-grained alternative. The child supplies just
+the subtrees for the named extension points, leaving the rest of the
+parent's template intact.
+
+### How Fills Work
+
+`slot-fills` is an alist of `(slot-name . lexis-subtree)` pairs:
+
+```lisp
+(:slot-fills
+  (("theme.brand"
+    . (web-link (@ :uri "/")
+        (image (@ :src "/logo.svg")
+               (@ :alt "Site Logo"))))
+   ("theme.footer-extras"
+    . (widget-area (@ :id "footer-widgets")
+        (widget (@ :type "recent-posts"))
+        (widget (@ :type "social-links"))))))
+```
+
+Slot names are global across tiers. A fill keyed `"theme.brand"`
+applies to any `(template.slot (@ :name "theme.brand"))` node in any
+resolved tier template, regardless of whether it appears in the frame,
+adjunct, aggregate, or operative tier. Theme authors typically use
+prefix conventions (`theme.X` for theme-defined extension points,
+`page.X` for page-level slots filled by the composer itself) to
+namespace their slot names; the schema does not enforce this.
+
+### Inheritance
+
+Slot fills compose through the theme chain. Each theme's fills are
+merged into an accumulator from root to child; child entries
+override parent entries on matching slot-name; unmatched parent
+entries pass through unchanged.
+
+A child that wants to leave a parent's filled slot empty (suppressing
+the parent's contribution without supplying its own) can bind the
+slot name to `nil`. The composer is expected to treat a `nil` fill
+as "no contribution" — equivalent to the template slot remaining
+unfilled.
+
+### Slot Fills vs. `classic-theme-override`
+
+The two mechanisms address different scales:
+
+| Mechanism | Scope | When to use |
+|---|---|---|
+| `classic-theme-override` | An entire tier's template, replaced wholesale | The child needs a fundamentally different tier structure |
+| `slot-fills` | Designated `(template.slot (@ :name ...))` nodes within tier templates | The child wants to contribute content at known extension points the parent designated |
+
+These compose: a child theme can replace the frame tier (via
+override) AND supply slot fills for designated extension points
+within other tiers.
+
+
 ## Theme Chain Resolution
 
 Themes form an inheritance chain via `parent-theme` links. The
@@ -394,6 +486,17 @@ through the parent unchanged.
 ;; => ((:FRAME . #<CLASSIC-THEME-OVERRIDE ...>)
 ;;     (:ADJUNCT . #<CLASSIC-THEME-OVERRIDE ...>))
 ;; Only tiers with overrides appear
+```
+
+### Merging Slot Fills
+
+```lisp
+(let ((resolved (resolve-theme-slot-fills chain)))
+  (theme-slot-fill resolved "theme.brand")
+  ;; => (web-link (@ :uri "/") (image (@ :src "/logo.svg")))
+  ;; Child slot-fills override parent fills on matching slot-name
+  ;; Unmatched parent fills are preserved
+  )
 ```
 
 ### Resolving Lenses
@@ -468,6 +571,38 @@ A child can also opt out of capabilities the parent declared:
 
 (persist-entity strategy *minimal-theme*)
 ```
+
+### Filling Template Slots
+
+A child theme contributing content at parent extension points:
+
+```lisp
+;; Parent theme designates extension points in its frame:
+;; (template.slot (@ :name "theme.brand"))
+;; (template.slot (@ :name "theme.footer-extras"))
+
+(defvar *branded-theme*
+  (make-instance 'classic-theme
+    :uri (mint-uri 'classic-theme "myblog.dev" "2026"
+                   :slug "classic-branded")
+    :label "Classic Branded"
+    :parent-theme (uri-string *base-theme*)
+    :theme-version "1.0"
+    :slot-fills
+    `(("theme.brand"
+       . (web-link (@ :uri "/")
+           (image (@ :src "/assets/logo.svg")
+                  (@ :alt "Acme Blog"))))
+      ("theme.footer-extras"
+       . (paragraph (@ :class "copyright")
+           "© 2026 Acme Co. All rights reserved.")))))
+
+(persist-entity strategy *branded-theme*)
+```
+
+The child does not redefine the parent's frame template; it supplies
+subtrees for the parent's named extension points. The composer
+substitutes them at composition time.
 
 ### Configuration Bindings
 
