@@ -339,6 +339,7 @@ ACCOUNT must have the editor role. INDEX is 1-based from list-articles."
             article)
         (workflow-error (e)
           (format t "~%  ~A~%" e)
+          nil)))))
 
 ;;; delete-article   <- delete-post
 ;;;   attempt-deletion to "deleted"; on-entity-delete :soft;
@@ -415,7 +416,7 @@ store entirely. INDEX is 1-based from list-posts with :include-deleted."
   (let ((posts (get-articles imprint :include-deleted t)))
     (when (or (< index 1) (> index (length posts)))
       (format t "~%  No post #~D.~%" index)
-      (return-from purge-post nil))
+      (return-from purge-article nil))
     (let ((post (nth (1- index) posts)))
       ;; Fire deletion lifecycle hook
       (on-entity-delete (imprint-publication imprint) post :hard)

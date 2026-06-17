@@ -26,7 +26,7 @@
 ;;; Blog-specific classes (application-level composition)
 ;;; ============================================================
 
-(defclass blog-account (classic-user-account)
+(defclass publication-account (classic-user-account)
   ((blog-account-role
     :accessor blog-account-role
     :initarg :role

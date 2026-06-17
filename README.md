@@ -21,7 +21,7 @@ Classic requires SBCL and Quicklisp. To load the main system:
 Before we dive into the details of how Classic works, let's try a simple publishing task. We're going to create a blog at our Lisp REPL. Here's how it starts:
 
 ```lisp
-* (in-package #:classic-blog)
+* (in-package #:classic.models.common)
 
 * (defvar *blog* (make-blog :name "Engineering Blog"
                             :authority "team.dev"
@@ -42,9 +42,9 @@ Next we'll create user accounts with different roles. Writers can draft posts; e
 Alice writes a post. It enters the system as a draft:
 
 ```lisp
-* (write-post *blog* :account *alice*
-              :title "Getting Started with Classic"
-              :text "Classic is a composable publishing framework built on
+* (write-article *blog* :account *alice*
+                 :title "Getting Started with Classic"
+                 :text "Classic is a composable publishing framework built on
 semantic web concepts. Its CLOS classes mirror RDF, FOAF, SIOC, and
 Schema.org vocabularies, with custom MOP extensions for persistence
 metadata on slots."
@@ -66,7 +66,7 @@ from both classic-article and classic-thread-bearing."
 Let's list all the posts. Both are drafts, newest first:
 
 ```lisp
-* (list-posts *blog*)
+* (list-articles *blog*)
 
   #    Title                             Author          Status        Date
   ---  --------------------------------  --------------  ------------  ----------------
@@ -77,7 +77,7 @@ Let's list all the posts. Both are drafts, newest first:
 Alice tries to publish post #1. The workflow engine denies this. Her writer role doesn't have publish permission:
 
 ```lisp
-* (publish-post *blog* 1 :account *alice*)
+* (publish-article *blog* 1 :account *alice*)
 
   Permission denied: role "writer" cannot transition "draft" -> "published"
   (requires "editor")
@@ -86,7 +86,7 @@ Alice tries to publish post #1. The workflow engine denies this. Her writer role
 Bob, as an editor, publishes it:
 
 ```lisp
-* (publish-post *blog* 1 :account *bob*)
+* (publish-article *blog* 1 :account *bob*)
 
   Post "Why Ontological Composition Matters" transitioned: draft -> published
 ```
@@ -94,7 +94,7 @@ Bob, as an editor, publishes it:
 Let's view the published post with its full workflow history:
 
 ```lisp
-* (show-post *blog* 1)
+* (show-article *blog* 1)
 
 ------------------------------------------------------------
   Why Ontological Composition Matters
@@ -127,16 +127,16 @@ The listing now shows mixed statuses:
 Filter by status:
 
 ```lisp
-* (get-posts *blog* :status "published")  ; only published
-* (get-posts *blog* :status "draft")      ; only drafts
+* (get-articles *blog* :status "published")  ; only published
+* (get-articles *blog* :status "draft")      ; only drafts
 ```
 
 ### What Just Happened
 
 Behind this demo, several architectural layers are working:
 
-- Each post is a `blog-article` instance. This is a CLOS class that inherits from both `classic-article` (content with headline, body, keywords, author) and `classic-stateful` (workflow participation with state, history, guard predicates).
-- Each account is a `blog-account` linking a `classic-person` to a `classic-role` with specific permissions.
+- Each post is a `publication-article` instance. This is a CLOS class that inherits from both `classic-article` (content with headline, body, keywords, author) and `classic-stateful` (workflow participation with state, history, guard predicates).
+- Each account is a `publication-account` linking a `classic-person` to a `classic-role` with specific permissions.
 - The publishing workflow is a `classic-workflow` with states ("draft", "published"), a transition with a required role ("editor"), and immutable audit history entries.
 - All entities are stored in an in-memory persistence backend via the `classic-persistence-strategy` protocol.
 - Every class uses a custom MOP metaclass (`classic-class`) that annotates slots with RDF predicates and persistence strategies.
@@ -144,6 +144,26 @@ Behind this demo, several architectural layers are working:
 No database, no web server, no HTML rendering. The ontological model,
 persistence protocol, workflow engine, and identity system all work at
 the REPL.
+
+#### The Blog Model: A Preset, Not a Primitive
+
+`make-blog` is a thin convenience constructor. Underneath it, Classic has no
+notion of "blog" — only of *publications*. A blog is a `publication-imprint`
+configured with an editorial workflow (draft → published → archived) and an
+article-feed access pattern. The operations you just used — `write-article`,
+`publish-article`, `list-articles` — are content-neutral: they act on any
+publication imprint. Forthcoming presets (`make-forum`, `make-wiki`) assemble
+the same universals into different shapes: a forum pairs the article
+operations with a discussion workflow and a thread index; a wiki pairs them
+with an edit-published workflow and revision history. Because the content
+classes compose (a `publication-article` can also be a `classic-thread-bearing`
+entity), these shapes mingle rather than partition.
+
+In Classic, descriptors like "blog" and "forum" can thus be understood as terms
+expressing particular arrangements of Classic's classes and methods. When
+configured in these ways Classic will present a platform structure that's
+familiar to users of other media called by these names, but a wide variety
+of other content models are popular besides these.
 
 
 ## Architecture
@@ -294,21 +314,6 @@ classic/
     protocol.lisp                      -- persistence protocol generics
     uri.lisp                           -- classic: URI scheme
     workflow-engine.lisp               -- workflow protocol and engine
-    schema/
-      alpha/                           -- classic.schema.alpha package
-        resource.lisp                  -- RDF/RDFS foundation
-        agent.lisp                     -- FOAF agents
-        content.lisp                   -- Schema.org content types
-        community.lisp                 -- SIOC community structure
-        identity.lisp                  -- SIOC identity
-        workflow-classes.lisp          -- workflow state machine classes
-        federation-classes.lisp        -- peers, feeds, instance descriptors
-        deletion.lisp                  -- tombstone classes
-        theme.lisp                     -- presentation themes
-        publication.lisp               -- top-level publication
-        provenance-classes.lisp        -- federation provenance, events
-        outbox-class.lisp              -- outbox classes
-        migration-classes.lisp         -- schema migration metadata
     persistence/
       memory.lisp                      -- in-memory backend
     federation/
@@ -325,8 +330,28 @@ classic/
       data-migration.lisp              -- data-only migration operations
       persistence.lisp                 -- manifest persistence
       federation.lisp                  -- federation-aware migration
-    imprint/
-      blog.lisp                        -- blog imprint
+  mod/                                 -- modular systems; may be superseded by external libraries
+    classic.models.common/             -- common publication models
+      context.lisp                     -- publication-imprint context
+      workflows.lisp                   -- editorial workflow + role helpers
+      accounts.lisp                    -- publication-account, author resolution
+      articles.lisp                    -- publication-article + operations
+      federation.lisp                  -- opt-in syndication glue
+      blog.lisp                        -- make-blog preset
+    classic.schema.alpha/              -- classic.schema.alpha package
+      resource.lisp                    -- RDF/RDFS foundation
+      agent.lisp                       -- FOAF agents
+      content.lisp                     -- Schema.org content types
+      community.lisp                   -- SIOC community structure
+      identity.lisp                    -- SIOC identity
+      workflow-classes.lisp            -- workflow state machine classes
+      federation-classes.lisp          -- peers, feeds, instance descriptors
+      deletion.lisp                    -- tombstone classes
+      theme.lisp                       -- presentation themes
+      publication.lisp                 -- top-level publication
+      provenance-classes.lisp          -- federation provenance, events
+      outbox-class.lisp                -- outbox classes
+      migration-classes.lisp           -- schema migration metadata    
   test/                                -- FiveAM + Hamcrest test suite
   doc/                                 -- specifications and design documents
 ```

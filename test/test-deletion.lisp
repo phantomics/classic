@@ -284,8 +284,8 @@
                        (classic.models.common:imprint-publication alice-blog)
                        :all-published transport)
     ;; Alice writes and publishes
-    (let ((editor (classic-blog:create-account alice-blog
-                                               :name "Alice" :role :editor)))
+    (let ((editor (classic.models.common:create-account alice-blog
+                                                        :name "Alice" :role :editor)))
       (classic.models.common:write-article alice-blog :account editor
                                                       :title "Retract Test" :text "Will retract.")
       (classic.models.common:publish-article alice-blog 1 :account editor)
