@@ -630,7 +630,7 @@ those with removes or transforms are not."
   (classic.engine.ref:clear-predicate-registry)
   (classic.engine.ref:rebuild-predicate-registry)
   ;; schema:headline is defined on classic-article and inherited by
-  ;; blog-article. predicate->slot returns the first registered binding,
+  ;; publication-article. predicate->slot returns the first registered binding,
   ;; which may be either class. Check that we get a valid result.
   (multiple-value-bind (class-name slot-name version)
       (classic.engine.ref:predicate->slot "schema:headline")

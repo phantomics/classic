@@ -100,11 +100,11 @@
   (let ((blog (make-test-blog)))
     (multiple-value-bind (writer editor) (make-test-accounts blog)
       (declare (ignore writer))
-      (classic.models.common:write-post blog :account editor
-                                             :title "WP Workflow" :text "Content.")
-      ;; publish-post now uses with-persistence internally
-      (classic.models.common:publish-post blog 1 :account editor)
-      (let ((post (first (classic.models.common:get-posts blog :status "published"))))
+      (classic.models.common:write-article blog :account editor
+                                                :title "WP Workflow" :text "Content.")
+      ;; publish-article now uses with-persistence internally
+      (classic.models.common:publish-article blog 1 :account editor)
+      (let ((post (first (classic.models.common:get-articles blog :status "published"))))
         (is-true post)
         (is (equal "published" (current-state post)))))))
 
@@ -113,15 +113,15 @@
   (let ((blog (make-test-blog)))
     (multiple-value-bind (writer editor) (make-test-accounts blog)
       (declare (ignore editor))
-      (classic.models.common:write-post blog :account writer
-                                             :title "WP Fail" :text "Content.")
+      (classic.models.common:write-article blog :account writer
+                                                :title "WP Fail" :text "Content.")
       ;; Writer tries to publish -- should fail (permission denied)
-      ;; publish-post handles the error internally and returns nil
-      (let ((result (classic.models.common:publish-post blog 1 :account writer)))
+      ;; publish-article handles the error internally and returns nil
+      (let ((result (classic.models.common:publish-article blog 1 :account writer)))
         (is (null result))
         ;; Post should still be draft
-        (let ((post (first (classic.models.common:get-posts blog
-                                                            :include-deleted t))))
+        (let ((post (first (classic.models.common:get-articles blog
+                                                               :include-deleted t))))
           (is (equal "draft" (current-state post))))))))
 
 ;;; ============================================================
