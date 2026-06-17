@@ -332,16 +332,16 @@ capabilities from different layers:
 
 ```lisp
 ;; A blog post that participates in a workflow and supports deletion
-(defclass blog-article (classic-article
-                        classic-stateful
-                        classic-deletable)
+(defclass publication-article (classic-article
+                               classic-stateful
+                               classic-deletable)
   ()
   (:metaclass classic-class))
 
 ;; A media review post with an attached forum thread
-(defclass media-review-post (classic-article
-                             classic-thread-bearing
-                             classic-media-referencing)
+(defclass media-review-article (classic-article
+                                classic-thread-bearing
+                                classic-media-referencing)
   ((review-score :persistence :triple
                  :predicate "schema:reviewRating"))
   (:metaclass classic-class))
@@ -388,25 +388,38 @@ derived resolution path. Identity is not tied to a hostname.
 
 ## Project Structure
 
+The ontological classes described in this document live in the
+reference schema system, `classic.schema.alpha`, under `mod/`. The
+`classic-class` metaclass they depend on lives in the core `classic`
+system under `src/`.
+
 ```
-src/model/
-  resource.lisp      -- RDF/RDFS foundation (classic-resource,
-                        classic-named-resource)
-  agent.lisp         -- FOAF agents (classic-agent, classic-person,
-                        classic-organization)
-  content.lisp       -- Schema.org content (classic-creative-work,
-                        classic-article, classic-comment,
-                        classic-media-object)
-  community.lisp     -- SIOC community (classic-space,
-                        classic-container, classic-forum, classic-post)
-  identity.lisp      -- SIOC identity (classic-user-account,
-                        classic-role)
-  workflow.lisp      -- workflow state machines
-  federation.lisp    -- federation ontological classes
-  deletion.lisp      -- deletion support (classic-deletable)
-  publication.lisp   -- top-level publication
+mod/classic.schema.alpha/
+  resource.lisp           -- RDF/RDFS foundation (classic-resource,
+                             classic-named-resource)
+  agent.lisp              -- FOAF agents (classic-agent, classic-person,
+                             classic-organization)
+  content.lisp            -- Schema.org content (classic-creative-work,
+                             classic-article, classic-comment,
+                             classic-media-object)
+  community.lisp          -- SIOC community (classic-space,
+                             classic-container, classic-forum,
+                             classic-post)
+  identity.lisp           -- SIOC identity (classic-user-account,
+                             classic-role)
+  workflow-classes.lisp   -- workflow state machine classes
+  federation-classes.lisp -- federation infrastructure classes
+  provenance-classes.lisp -- federation provenance classes
+  outbox-class.lisp       -- federation outbox class
+  migration-classes.lisp  -- schema migration metadata classes
+  deletion.lisp           -- deletion support (classic-deletable)
+  theme.lisp              -- theme ontology
+  publication.lisp        -- top-level publication
 
 src/mop/
-  metaclass.lisp     -- classic-class, slot definition classes,
-                        introspection utilities
+  metaclass.lisp          -- classic-class, slot definition classes,
+                             introspection utilities (core system)
 ```
+
+See `doc/Schema.md` for the full layered layout (core, schema,
+engine, distribution, and common models).

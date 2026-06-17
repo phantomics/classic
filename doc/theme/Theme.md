@@ -667,13 +667,20 @@ lenses); the Composer defines the rendering.
 
 ## Project Structure
 
+The theme ontology lives in the reference schema system,
+`classic.schema.alpha`, under `mod/`.
+
 ```
-src/model/
-  theme.lisp         -- classic-theme (with lenses slot),
+mod/classic.schema.alpha/
+  theme.lisp         -- classic-theme (with lenses and slot-fills slots),
                         classic-theme-override,
                         classic-theme-bindings,
-                        chain/capabilities/overrides/bindings/lenses
-                        resolution helpers
+                        chain/capabilities/overrides/bindings/
+                        slot-fills/lenses resolution helpers
   publication.lisp   -- classic-publication (ui-theme slot references
                         a classic-theme URI)
 ```
+
+Theme *rendering* (consuming these resources to select templates,
+activate capabilities, fill template slots, and collect assets) is the
+Composer's responsibility, in a separate system.

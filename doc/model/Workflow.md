@@ -393,12 +393,24 @@ The blog application model demonstrates the full workflow system:
 
 ## Project Structure
 
+The workflow ontology is split between the schema (the classes) and
+the engine (the `attempt-transition` generic, its default method,
+condition types, and lookup helpers). The `attempt-transition` generic
+itself is declared in the core `classic` system so both layers can
+reach it; the engine supplies the default method.
+
 ```
-src/model/
-  workflow.lisp     -- classic-workflow, classic-workflow-state,
-                       classic-workflow-transition, classic-stateful,
-                       classic-state-history-entry, attempt-transition,
-                       condition types, lookup helpers
-  deletion.lisp     -- classic-deletable, extend-workflow-with-deletion,
-                       attempt-deletion, purge-entity, state predicates
+mod/classic.schema.alpha/
+  workflow-classes.lisp  -- classic-workflow, classic-workflow-state,
+                            classic-workflow-transition, classic-stateful,
+                            classic-state-history-entry
+  deletion.lisp          -- classic-deletable, extend-workflow-with-deletion,
+                            attempt-deletion, purge-entity, state predicates
+
+src/
+  workflow-engine.lisp   -- core: attempt-transition generic
+
+mod/classic.engine.ref/
+  workflow-engine.lisp   -- attempt-transition default method,
+                            condition types, lookup helpers
 ```

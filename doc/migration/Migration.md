@@ -404,18 +404,23 @@ Inspect registered migrations:
 ## Project Structure
 
 The migration classes are part of the `classic.schema.alpha` package
-(they are vocabulary about schema changes), and the runtime engine
-is part of the core `classic` package.
+(they are vocabulary about schema changes); the runtime engine is part
+of the reference engine, `classic.engine.ref`. Core (`classic`)
+contributes only the low-level version-stamping primitives.
 
 ```
-src/schema/alpha/
+mod/classic.schema.alpha/
   migration-classes.lisp  -- migration, operation, manifest classes
 
-src/migration/
+mod/classic.engine.ref/migration/
   manifest-helpers.lisp   -- manifest construction from live classes
   registry.lisp           -- migration registry, predicate registry, DSL
   runner.lisp             -- migration execution, toposort, triggers
-  persistence.lisp        -- version stamping, lazy migration
+  persistence.lisp        -- lazy migration integration
   data-migration.lisp     -- extensible stubs for data transforms
   federation.lisp         -- compatibility reporting, entity translation
+  transport.lisp          -- migration transport integration
+
+src/migration/
+  persistence.lisp        -- core: version stamping primitives
 ```

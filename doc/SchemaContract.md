@@ -310,7 +310,8 @@ hierarchy.
 ### Step 1: Create the schema directory and package
 
 ```
-src/schema/example/
+mod/classic.schema.example/
+  classic.schema.example.asd
   packages.lisp
   resource.lisp
   named-resource.lisp
@@ -444,13 +445,13 @@ Define `classic-migration-operation`, `classic-schema-migration`,
 
 ### Step 8: Register the schema with ASDF
 
-Add the schema to `classic.asd` as a module, or create a separate
-ASDF system depending on `classic`:
+Create a separate ASDF system depending on `classic`, alongside the
+other modules under `mod/`:
 
 ```lisp
 (asdf:defsystem "classic.schema.example"
   :depends-on ("classic")
-  :pathname "src/schema/example/"
+  :pathname "mod/classic.schema.example/"
   :serial t
   :components
   ((:file "packages")
