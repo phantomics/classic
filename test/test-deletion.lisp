@@ -1,4 +1,4 @@
-;;;; test-deletion.lisp — Tests for entity deletion and purge support
+??%;;;; test-deletion.lisp — Tests for entity deletion and purge support
 ;;;;
 ;;;; Covers persistence-level deletion, workflow-based soft deletion,
 ;;;; container cleanup, federation tombstones, and blog integration.
@@ -92,24 +92,24 @@
   "remove-from-container removes a URI from the contains list."
   (with-clean-strategy ()
     (let ((container (make-instance 'classic-container
-                       :uri (make-test-uri :class 'classic-container
-                                           :slug "test-container")
-                       :contains '("uri:a" "uri:b" "uri:c"))))
+                                    :uri (make-test-uri :class 'classic-container
+                                                        :slug "test-container")
+                                    :contains '("uri:a" "uri:b" "uri:c"))))
       (persist-entity *test-strategy* container)
       (is-true (classic.schema:remove-from-container container "uri:b"
-                                              *test-strategy*))
+                                                     *test-strategy*))
       (is (equal '("uri:a" "uri:c") (contains container))))))
 
 (def-test remove-from-container-returns-nil-for-missing ()
   "remove-from-container returns NIL when URI is not in container."
   (with-clean-strategy ()
     (let ((container (make-instance 'classic-container
-                       :uri (make-test-uri :class 'classic-container
-                                           :slug "test-container-2")
-                       :contains '("uri:a"))))
+                                    :uri (make-test-uri :class 'classic-container
+                                                        :slug "test-container-2")
+                                    :contains '("uri:a"))))
       (persist-entity *test-strategy* container)
       (is-false (classic.schema:remove-from-container container "uri:z"
-                                               *test-strategy*)))))
+                                                      *test-strategy*)))))
 
 ;;; ============================================================
 ;;; Deletion workflow (blog integration)
@@ -118,7 +118,7 @@
 (def-test blog-workflow-has-deletion-states ()
   "Blog workflow includes archived and deleted states."
   (let ((blog (make-test-blog)))
-    (let ((wf (classic-blog:blog-workflow blog)))
+    (let ((wf (classic.models.common:imprint-workflow blog)))
       (is-true (find-workflow-state wf "archived"))
       (is-true (find-workflow-state wf "deleted"))
       ;; Transitions exist
@@ -133,12 +133,12 @@
   (let ((blog (make-test-blog)))
     (multiple-value-bind (writer editor) (make-test-accounts blog)
       (declare (ignore writer))
-      (classic-blog:write-post blog :account editor
-                               :title "To Archive"
-                               :text "Will be archived.")
-      (classic-blog:publish-post blog 1 :account editor)
-      (classic-blog:archive-post blog 1 :account editor)
-      (let ((posts (classic-blog:get-posts blog :status "archived")))
+      (classic.models.common:write-article blog :account editor
+                                                :title "To Archive"
+                                                :text "Will be archived.")
+      (classic.models.common:publish-article blog 1 :account editor)
+      (classic.models.common:archive-article blog 1 :account editor)
+      (let ((posts (classic.models.common:get-articles blog :status "archived")))
         (is (= 1 (length posts)))
         (is (equal "archived" (current-state (first posts))))))))
 
@@ -147,13 +147,13 @@
   (let ((blog (make-test-blog)))
     (multiple-value-bind (writer editor) (make-test-accounts blog)
       (declare (ignore writer))
-      (classic-blog:write-post blog :account editor
-                               :title "To Delete"
-                               :text "Will be deleted.")
-      (classic-blog:publish-post blog 1 :account editor)
-      (classic-blog:archive-post blog 1 :account editor)
-      (classic-blog:delete-post blog 1 :account editor)
-      (let ((posts (classic-blog:get-posts blog :status "deleted")))
+      (classic.models.common:write-article blog :account editor
+                                                :title "To Delete"
+                                                :text "Will be deleted.")
+      (classic.models.common:publish-article blog 1 :account editor)
+      (classic.models.common:archive-article blog 1 :account editor)
+      (classic.models.common:delete-article blog 1 :account editor)
+      (let ((posts (classic.models.common:get-articles blog :status "deleted")))
         (is (= 1 (length posts)))
         (is (equal "deleted" (current-state (first posts))))))))
 
@@ -162,11 +162,11 @@
   (let ((blog (make-test-blog)))
     (multiple-value-bind (writer editor) (make-test-accounts blog)
       (declare (ignore writer))
-      (classic-blog:write-post blog :account editor
-                               :title "Draft Delete"
-                               :text "Deleting draft.")
-      (classic-blog:delete-post blog 1 :account editor)
-      (let ((posts (classic-blog:get-posts blog :status "deleted")))
+      (classic.models.common:write-article blog :account editor
+                                                :title "Draft Delete"
+                                                :text "Deleting draft.")
+      (classic.models.common:delete-article blog 1 :account editor)
+      (let ((posts (classic.models.common:get-articles blog :status "deleted")))
         (is (= 1 (length posts)))))))
 
 (def-test deleted-post-records-metadata ()
@@ -174,12 +174,12 @@
   (let ((blog (make-test-blog)))
     (multiple-value-bind (writer editor) (make-test-accounts blog)
       (declare (ignore writer))
-      (classic-blog:write-post blog :account editor
-                               :title "Metadata Test"
-                               :text "Check metadata.")
-      (classic-blog:delete-post blog 1 :account editor
-                                :reason "policy violation")
-      (let ((post (first (classic-blog:get-posts blog :status "deleted"))))
+      (classic.models.common:write-article blog :account editor
+                                                :title "Metadata Test"
+                                                :text "Check metadata.")
+      (classic.models.common:delete-article blog 1 :account editor
+                                       :reason "policy violation")
+      (let ((post (first (classic.models.common:get-articles blog :status "deleted"))))
         (is-true (classic.schema:deleted-at post))
         (is-true (classic.schema:deleted-by post))
         (is (equal "policy violation" (classic.schema:deletion-reason post)))))))
@@ -189,16 +189,16 @@
   (let ((blog (make-test-blog)))
     (multiple-value-bind (writer editor) (make-test-accounts blog)
       (declare (ignore writer))
-      (classic-blog:write-post blog :account editor
-                               :title "Restore Me"
-                               :text "Will be restored.")
-      (classic-blog:publish-post blog 1 :account editor)
-      (classic-blog:archive-post blog 1 :account editor)
+      (classic.models.common:write-article blog :account editor
+                                                :title "Restore Me"
+                                                :text "Will be restored.")
+      (classic.models.common:publish-article blog 1 :account editor)
+      (classic.models.common:archive-article blog 1 :account editor)
       ;; Verify it's archived
-      (is (= 0 (length (classic-blog:get-posts blog :status "published"))))
+      (is (= 0 (length (classic.models.common:get-articles blog :status "published"))))
       ;; Restore
-      (classic-blog:restore-post blog 1 :account editor)
-      (let ((posts (classic-blog:get-posts blog :status "published")))
+      (classic.models.common:restore-article blog 1 :account editor)
+      (let ((posts (classic.models.common:get-articles blog :status "published")))
         (is (= 1 (length posts)))
         (is (equal "published" (current-state (first posts))))))))
 
@@ -207,34 +207,32 @@
   (let ((blog (make-test-blog)))
     (multiple-value-bind (writer editor) (make-test-accounts blog)
       (declare (ignore editor))
-      (classic-blog:write-post blog :account writer
-                               :title "Writer Delete"
-                               :text "Should fail.")
+      (classic.models.common:write-article blog :account writer
+                                                :title "Writer Delete"
+                                                :text "Should fail.")
       ;; Writer tries to delete — should fail silently (returns nil)
-      (let ((result (classic-blog:delete-post blog 1 :account writer)))
+      (let ((result (classic.models.common:delete-article blog 1 :account writer)))
         (is (null result))
         ;; Post should still be in draft
         (is (equal "draft"
                    (current-state
-                    (first (classic-blog:get-posts blog
-                                                   :include-deleted t)))))))))
+                    (first (classic.models.common:get-articles blog :include-deleted t)))))))))
 
 (def-test get-posts-hides-deleted-by-default ()
   "get-posts without :include-deleted filters out deleted and archived."
   (let ((blog (make-test-blog)))
     (multiple-value-bind (writer editor) (make-test-accounts blog)
       (declare (ignore writer))
-      (classic-blog:write-post blog :account editor
-                               :title "Visible" :text "Stays.")
-      (classic-blog:write-post blog :account editor
-                               :title "Hidden" :text "Goes away.")
-      (classic-blog:publish-post blog 1 :account editor)
-      (classic-blog:delete-post blog 2 :account editor)
+      (classic.models.common:write-article blog :account editor
+                                                :title "Visible" :text "Stays.")
+      (classic.models.common:write-article blog :account editor
+                                                :title "Hidden" :text "Goes away.")
+      (classic.models.common:publish-article blog 1 :account editor)
+      (classic.models.common:delete-article blog 2 :account editor)
       ;; Default: only visible posts
-      (is (= 1 (length (classic-blog:get-posts blog))))
+      (is (= 1 (length (classic.models.common:get-articles blog))))
       ;; With include-deleted: all posts
-      (is (= 2 (length (classic-blog:get-posts blog
-                                                :include-deleted t)))))))
+      (is (= 2 (length (classic.models.common:get-articles blog :include-deleted t)))))))
 
 ;;; ============================================================
 ;;; Hard deletion (purge)
@@ -245,23 +243,22 @@
   (let ((blog (make-test-blog)))
     (multiple-value-bind (writer editor) (make-test-accounts blog)
       (declare (ignore writer))
-      (classic-blog:write-post blog :account editor
-                               :title "Purge Me" :text "Gone forever.")
-      (classic-blog:purge-post blog 1 :account editor)
+      (classic.models.common:write-article blog :account editor
+                                                :title "Purge Me" :text "Gone forever.")
+      (classic.models.common:purge-article blog 1 :account editor)
       ;; Not even in include-deleted
-      (is (= 0 (length (classic-blog:get-posts blog
-                                                :include-deleted t)))))))
+      (is (= 0 (length (classic.models.common:get-articles blog :include-deleted t)))))))
 
 (def-test purge-removes-from-container ()
   "purge-post removes the URI from the container's contains list."
   (let ((blog (make-test-blog)))
     (multiple-value-bind (writer editor) (make-test-accounts blog)
       (declare (ignore writer))
-      (classic-blog:write-post blog :account editor
-                               :title "Purge Container" :text "Check container.")
-      (is (= 1 (length (contains (classic-blog:blog-container blog)))))
-      (classic-blog:purge-post blog 1 :account editor)
-      (is (= 0 (length (contains (classic-blog:blog-container blog))))))))
+      (classic.models.common:write-article blog :account editor
+                                                :title "Purge Container" :text "Check container.")
+      (is (= 1 (length (contains (classic.models.common:imprint-container blog)))))
+      (classic.models.common:purge-article blog 1 :account editor)
+      (is (= 0 (length (contains (classic.models.common:imprint-container blog))))))))
 
 ;;; ============================================================
 ;;; Federation tombstones
@@ -275,33 +272,33 @@
                                  :authority "digest-r.dev"))
          (transport (make-instance 'direct-transport)))
     ;; Set up federation
-    (register-with-transport transport (classic-blog:blog-publication alice-blog))
-    (register-with-transport transport (classic-blog:blog-publication digest))
-    (setf (classic-blog:blog-transport alice-blog) transport)
-    (setf (classic-blog:blog-federation-roles alice-blog) '(:publisher))
-    (establish-federation (classic-blog:blog-publication alice-blog)
-                          (classic-blog:blog-publication digest)
+    (register-with-transport transport (classic.models.common:imprint-publication alice-blog))
+    (register-with-transport transport (classic.models.common:imprint-publication digest))
+    (setf (classic.models.common:imprint-transport alice-blog) transport)
+    (setf (classic.models.common:imprint-federation-roles alice-blog) '(:publisher))
+    (establish-federation (classic.models.common:imprint-publication alice-blog)
+                          (classic.models.common:imprint-publication digest)
                           transport)
-    (create-feed (classic-blog:blog-publication alice-blog) :type :all-published)
-    (subscribe-to-feed (classic-blog:blog-publication digest)
-                       (classic-blog:blog-publication alice-blog)
+    (create-feed (classic.models.common:imprint-publication alice-blog) :type :all-published)
+    (subscribe-to-feed (classic.models.common:imprint-publication digest)
+                       (classic.models.common:imprint-publication alice-blog)
                        :all-published transport)
     ;; Alice writes and publishes
     (let ((editor (classic-blog:create-account alice-blog
                                                :name "Alice" :role :editor)))
-      (classic-blog:write-post alice-blog :account editor
-                               :title "Retract Test" :text "Will retract.")
-      (classic-blog:publish-post alice-blog 1 :account editor)
+      (classic.models.common:write-article alice-blog :account editor
+                                                      :title "Retract Test" :text "Will retract.")
+      (classic.models.common:publish-article alice-blog 1 :account editor)
       ;; Verify digest received the post
       (is (= 1 (length (classic.engine.ref:list-federated-content
-                         (classic-blog:blog-publication digest)))))
+                        (classic.models.common:imprint-publication digest)))))
       ;; Alice archives then deletes the post
-      (classic-blog:archive-post alice-blog 1 :account editor)
-      (classic-blog:delete-post alice-blog 1 :account editor)
+      (classic.models.common:archive-article alice-blog 1 :account editor)
+      (classic.models.common:delete-article alice-blog 1 :account editor)
       ;; Digest should no longer show it in federated content
       ;; (it's marked deleted via retraction)
       (is (= 0 (length (classic.engine.ref:list-federated-content
-                         (classic-blog:blog-publication digest))))))))
+                        (classic.models.common:imprint-publication digest))))))))
 
 ;;; ============================================================
 ;;; Deletion state predicates
@@ -312,11 +309,11 @@
   (let ((blog (make-test-blog)))
     (multiple-value-bind (writer editor) (make-test-accounts blog)
       (declare (ignore writer))
-      (classic-blog:write-post blog :account editor
-                               :title "Pred Test" :text ".")
-      (let ((post (first (classic-blog:get-posts blog :include-deleted t))))
+      (classic.models.common:write-article blog :account editor
+                                                :title "Pred Test" :text ".")
+      (let ((post (first (classic.models.common:get-articles blog :include-deleted t))))
         (is-false (classic.schema:entity-deleted-p post))
-        (classic-blog:delete-post blog 1 :account editor)
+        (classic.models.common:delete-article blog 1 :account editor)
         (is-true (classic.schema:entity-deleted-p post))))))
 
 (def-test entity-archived-p-works ()
@@ -324,10 +321,10 @@
   (let ((blog (make-test-blog)))
     (multiple-value-bind (writer editor) (make-test-accounts blog)
       (declare (ignore writer))
-      (classic-blog:write-post blog :account editor
-                               :title "Arch Pred" :text ".")
-      (classic-blog:publish-post blog 1 :account editor)
-      (let ((post (first (classic-blog:get-posts blog :include-deleted t))))
+      (classic.models.common:write-article blog :account editor
+                                                :title "Arch Pred" :text ".")
+      (classic.models.common:publish-article blog 1 :account editor)
+      (let ((post (first (classic.models.common:get-articles blog :include-deleted t))))
         (is-false (classic.schema:entity-archived-p post))
-        (classic-blog:archive-post blog 1 :account editor)
+        (classic.models.common:archive-article blog 1 :account editor)
         (is-true (classic.schema:entity-archived-p post))))))
