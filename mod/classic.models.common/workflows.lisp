@@ -77,7 +77,13 @@
 ;;;     (make-editorial-roles strategy authority authority-date) -> hash-table
 ;;;
 
-
+(defun make-editorial-roles (strategy authority authority-date)
+  (let ((roles (make-hash-table :test 'equal)))
+    (setf (gethash "writer" roles)
+          (make-role strategy authority authority-date "writer" '(:write))
+          (gethash "editor" roles)
+          (make-role strategy authority authority-date "editor" '(:write :publish)))
+    roles))
 
 ;;; make-editorial-workflow (NEW)        <- extracted from make-blog body
 ;;;   Builds the draft + published states, the publish transition
@@ -88,3 +94,26 @@
 ;;;   Signature suggestion:
 ;;;     (make-editorial-workflow strategy authority authority-date name)
 ;;;       -> classic-workflow
+
+
+(defun make-editorial-workflow (strategy authority authority-date name)
+  (let ((draft-state (make-workflow-state
+                      strategy authority authority-date
+                      "draft" :permitted-roles '("writer" "editor")
+                      :permitted-ops '(:read :edit)))
+        (published-state (make-workflow-state
+                          strategy authority authority-date
+                          "published" :permitted-roles '("editor")
+                          :permitted-ops '(:read)))
+        ;; Workflow transition: draft → published, requires editor
+        (publish-transition (make-workflow-transition
+                             strategy authority authority-date
+                             "publish" "draft" "published"
+                             :required-role "editor")))
+    (make-instance 'classic-workflow
+                   :uri (mint-uri 'classic-workflow authority authority-date
+                                  :slug (format nil "~A workflow" name))
+                   :label (format nil "~A Workflow" name)
+                   :workflow-states (list draft-state published-state)
+                   :transitions (list publish-transition)
+                   :initial-state "draft")))

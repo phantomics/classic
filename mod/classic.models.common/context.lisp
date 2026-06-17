@@ -48,7 +48,7 @@
 ;;; Publication structure
 ;;; ============================================================
 
-(defstruct (publication-imprint (:constructor %make-imprint))
+(defstruct (publication-imprint (:conc-name imprint-) (:constructor %make-imprint))
   "An imprint backed by a CLASSIC publication with workflow support."
   (publication nil :type (or null classic-publication))
   (container   nil :type (or null classic-container))

@@ -10,7 +10,7 @@
 (test make-blog-returns-struct
   "make-blog returns a blog struct."
   (let ((blog (make-test-blog)))
-    (is-true (classic.models.common::blog-p blog))))
+    (is-true (classic.models.common::publication-imprint-p blog))))
 
 (test make-blog-has-publication
   "Blog has a classic-publication with correct label."
@@ -65,7 +65,7 @@
     (classic.models.common:create-account blog :name "Alice" :role :writer)
     (classic.models.common:create-account blog :name "Alice" :role :editor)
     ;; Only one person named Alice should exist in the persons registry
-    (is (= 1 (hash-table-count (classic.models.common::blog-persons blog))))))
+    (is (= 1 (hash-table-count (classic.models.common::imprint-persons blog))))))
 
 ;;; ============================================================
 ;;; Article creation

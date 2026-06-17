@@ -1,4 +1,4 @@
-??%;;;; test-deletion.lisp — Tests for entity deletion and purge support
+;;;; test-deletion.lisp — Tests for entity deletion and purge support
 ;;;;
 ;;;; Covers persistence-level deletion, workflow-based soft deletion,
 ;;;; container cleanup, federation tombstones, and blog integration.

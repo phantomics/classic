@@ -13,17 +13,17 @@
   "Create two blogs with a shared transport, federated and subscribed.
 Returns (values blog-a blog-b transport)."
   (let* ((blog-a (classic.models.common:make-blog :name name-a
-                                         :authority auth-a
-                                         :authority-date "2026"))
+                                                  :authority auth-a
+                                                  :authority-date "2026"))
          (blog-b (classic.models.common:make-blog :name name-b
-                                         :authority auth-b
-                                         :authority-date "2026"))
+                                                  :authority auth-b
+                                                  :authority-date "2026"))
          (transport (make-instance 'direct-transport)))
     ;; Configure federation on both blogs
-    (setf (classic.models.common::blog-transport blog-a) transport
-          (classic.models.common::blog-federation-roles blog-a) '(:publisher)
-          (classic.models.common::blog-transport blog-b) transport
-          (classic.models.common::blog-federation-roles blog-b) '(:aggregator))
+    (setf (classic.models.common::imprint-transport blog-a) transport
+          (classic.models.common::imprint-federation-roles blog-a) '(:publisher)
+          (classic.models.common::imprint-transport blog-b) transport
+          (classic.models.common::imprint-federation-roles blog-b) '(:aggregator))
     ;; Register with transport
     (register-with-transport transport (classic.models.common:imprint-publication blog-a))
     (register-with-transport transport (classic.models.common:imprint-publication blog-b))
@@ -190,10 +190,10 @@ Returns (values blog-a blog-b transport)."
                                          :authority-date "2026"))
          (transport (make-instance 'direct-transport)))
     ;; Configure federation but DON'T subscribe C to A's feed
-    (setf (classic.models.common::blog-transport blog-a) transport
-          (classic.models.common::blog-federation-roles blog-a) '(:publisher)
-          (classic.models.common::blog-transport blog-c) transport
-          (classic.models.common::blog-federation-roles blog-c) '(:aggregator))
+    (setf (classic.models.common::imprint-transport blog-a) transport
+          (classic.models.common::imprint-federation-roles blog-a) '(:publisher)
+          (classic.models.common::imprint-transport blog-c) transport
+          (classic.models.common::imprint-federation-roles blog-c) '(:aggregator))
     (register-with-transport transport (classic.models.common:imprint-publication blog-a))
     (register-with-transport transport (classic.models.common:imprint-publication blog-c))
     (establish-federation (classic.models.common:imprint-publication blog-a)
