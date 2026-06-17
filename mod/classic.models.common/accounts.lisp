@@ -13,17 +13,6 @@
 
 (in-package #:classic.models.common)
 
-;;; ============================================================
-;;; Definitions to place in this file
-;;; ============================================================
-;;;
-;;; publication-account        (class)   <- blog-account
-;;;   Extends classic-user-account with a role slot.
-;;;   Slot accessor:
-;;;     publication-account-role  <- blog-account-role
-;;;       (keep :initarg :role and :predicate "sioc:has_function")
-;;;
-
 (defclass publication-account (classic-user-account)
   ((publication-account-role
     :accessor publication-account-role
@@ -38,19 +27,9 @@
 with a direct role slot, demonstrating application-level extension
 of the core identity model."))
 
-;;; actor-role-label  ((account publication-account))  <- ((account blog-account))
-;;;   CLOS dispatch point connecting accounts to the workflow engine.
-;;;
-
 (defmethod actor-role-label ((account publication-account))
   (let ((role (publication-account-role account)))
     (when role (label role))))
-
-;;; find-or-create-person    (unchanged)  <- find-or-create-person
-;;;   Body changes: param blog -> imprint; blog-persons -> imprint-persons;
-;;;   blog-authority/-date -> imprint-authority/-date;
-;;;   blog-strategy -> imprint-strategy.
-;;;
 
 ;;; ============================================================
 ;;; Account management
@@ -71,12 +50,6 @@ of the core identity model."))
           (persist-entity (imprint-strategy imprint) person)
           (setf (gethash name persons) person)
           person))))
-
-;;; create-account           (unchanged)  <- create-account
-;;;   Body changes: rename param blog -> imprint; blog-* -> imprint-*;
-;;;   make-instance 'blog-account -> 'publication-account.
-;;;   (Still keyed off the imprint's role registry.)
-;;;
 
 (defun create-account (imprint &key name role)
   "Create a user account on the imprint with the given role.
@@ -104,10 +77,6 @@ Returns a publication-account instance."
       (persist-entity (imprint-strategy imprint) account)
       account)))
 
-;;; resolve-author-name      (unchanged)  <- resolve-author-name
-;;;   Body changes: param blog -> imprint; blog-strategy -> imprint-strategy.
-;;;
-
 (defun resolve-author-name (imprint entity-uri)
   "Resolve an author URI string to a display name.
 Handles both classic-person URIs (direct) and blog-account URIs
@@ -126,9 +95,6 @@ Handles both classic-person URIs (direct) and blog-account URIs
                  (when (typep person 'classic-agent)
                    (agent-name person))))))
           (t (label entity)))))))
-
-;;; account-has-permission-p (unchanged)  <- account-has-permission-p
-;;;   Body changes: blog-account-role -> publication-account-role.
 
 (defun account-has-permission-p (account permission)
   "Check if ACCOUNT's role includes PERMISSION keyword."

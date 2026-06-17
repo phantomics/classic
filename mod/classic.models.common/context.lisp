@@ -19,32 +19,6 @@
 (in-package #:classic.models.common)
 
 ;;; ============================================================
-;;; Definitions to place in this file
-;;; ============================================================
-;;;
-;;; publication-imprint            (struct)   <- blog  (defstruct (blog ...))
-;;;   Target form:
-;;;     (defstruct (publication-imprint
-;;;                 (:conc-name imprint-)
-;;;                 (:constructor %make-imprint))
-;;;       ...slots...)
-;;;   Slots and their resulting accessors (rename blog-* -> imprint-*):
-;;;     publication       -> imprint-publication        <- blog-publication
-;;;     container         -> imprint-container          <- blog-container
-;;;     strategy          -> imprint-strategy           <- blog-strategy
-;;;     authority         -> imprint-authority          <- blog-authority
-;;;     authority-date    -> imprint-authority-date     <- blog-authority-date
-;;;     workflow          -> imprint-workflow           <- blog-workflow
-;;;     roles             -> imprint-roles              <- blog-roles
-;;;     persons           -> imprint-persons            <- blog-persons
-;;;     transport         -> imprint-transport          <- blog-transport
-;;;     federation-roles  -> imprint-federation-roles   <- blog-federation-roles
-;;;
-;;; print-object  ((imprint publication-imprint) stream)  <- ((blog blog) stream)
-;;;   Note: the original printed "(~D posts)"; keep or generalize to
-;;;   "(~D items)" since the imprint is content-type-neutral.
-
-;;; ============================================================
 ;;; Publication structure
 ;;; ============================================================
 

@@ -17,15 +17,6 @@
 
 (in-package #:classic.models.common)
 
-;;; ============================================================
-;;; Definitions to place in this file
-;;; ============================================================
-;;;
-;;; publication-article    (class)   <- blog-article
-;;;   Composition: (classic-article classic-stateful classic-deletable).
-;;;   No new slots; the mixin composition is the point.
-;;;
-
 (defclass publication-article (classic-article classic-stateful classic-deletable)
   ()
   (:metaclass classic-class)
@@ -36,19 +27,9 @@ classic-article, workflow participation from classic-stateful,
 and deletion metadata from classic-deletable. This is the mixin
 composition pattern that CLASSIC's design is built around."))
 
-;;; uri-namespace-prefix ((class (eql 'publication-article)))  <- (eql 'blog-article)
-;;;   Returns "articles" (unchanged string).
-;;;
-
 ;;; publication-article uses the same namespace prefix as classic-article.
 (defmethod uri-namespace-prefix ((class (eql 'publication-article)))
   "articles")
-
-;;; write-article    <- write-post
-;;;   Body: check-type account publication-account; mint-uri
-;;;   'publication-article; make-instance 'publication-article;
-;;;   imprint-* accessors. Returns the new article's URI string.
-;;;
 
 ;;; ============================================================
 ;;; Post creation (role-gated, creates drafts)
@@ -98,10 +79,6 @@ Returns the new post's URI string."
     (persist-entity (imprint-strategy imprint) (imprint-container imprint))
     (uri-string article)))
 
-;;; get-articles     <- get-posts
-;;;   Programmatic listing (newest first); STATUS / INCLUDE-DELETED.
-;;;
-
 ;;; ============================================================
 ;;; Article retrieval
 ;;; ============================================================
@@ -123,11 +100,6 @@ and deleted posts in the result."
                         (or include-deleted
                             (entity-visible-p entity))))
             collect entity)))
-
-;;; list-articles    <- list-posts
-;;;   Formatted REPL listing. (Kept combined: prints AND returns list.)
-;;;   Uses resolve-author-name, truncate-string, format-date.
-;;;
 
 ;;; ============================================================
 ;;; Listing
@@ -171,11 +143,6 @@ Returns the list of post instances."
                              (format-date date))))
           (format t "~%")))
     posts))
-
-;;; show-article     <- show-post
-;;;   Full single-article display with workflow history.
-;;;   (Kept combined: prints AND returns the article.)
-;;;
 
 ;;; ============================================================
 ;;; Single article display
@@ -225,11 +192,6 @@ Returns the article instance, or NIL if the index is invalid."
       (format t "~A~%" rule)
       article)))
 
-;;; publish-article  <- publish-post
-;;;   attempt-transition to "published"; fires on-state-change;
-;;;   calls syndicate-if-configured.
-;;;
-
 ;;; ============================================================
 ;;; Article state transitions
 ;;; ============================================================
@@ -258,11 +220,6 @@ ACCOUNT must have the editor role. INDEX is 1-based from list-articles."
         (workflow-error (e)
           (format t "~%  ~A~%" e)
           nil)))))
-
-;;; edit-article     <- edit-post
-;;;   Field updates + increment-logical-clock; propagate-update to peers
-;;;   when published and federation configured.
-
 
 ;;; ============================================================
 ;;; Article editing (with update propagation)
@@ -310,11 +267,6 @@ applied; others are left unchanged. INDEX is 1-based from list-articles."
             (format t "  Update propagated to ~D peer~:P~%" count))))
       article)))
 
-;;;
-;;; archive-article  <- archive-post
-;;;   attempt-deletion to "archived".
-;;;
-
 ;;; ============================================================
 ;;; Article deletion and archival
 ;;; ============================================================
@@ -340,11 +292,6 @@ ACCOUNT must have the editor role. INDEX is 1-based from list-articles."
         (workflow-error (e)
           (format t "~%  ~A~%" e)
           nil)))))
-
-;;; delete-article   <- delete-post
-;;;   attempt-deletion to "deleted"; on-entity-delete :soft;
-;;;   retract-if-configured.
-;;;
 
 (defun delete-article (imprint index &key account (reason "deleted by editor"))
   "Soft-delete article number INDEX. Transitions to the deleted state,
@@ -372,10 +319,6 @@ ACCOUNT must have the editor role. INDEX is 1-based from list-articles."
         (workflow-error (e)
           (format t "~%  ~A~%" e)
           nil)))))
-          
-;;; restore-article  <- restore-post
-;;;   attempt-transition back to "published"; clears deletion metadata.
-;;;
 
 (defun restore-article (imprint index &key account)
   "Restore article number INDEX from archived back to published.
@@ -402,10 +345,6 @@ with :include-deleted t."
         (workflow-error (e)
           (format t "~%  ~A~%" e)
           nil)))))
-          
-;;; purge-article    <- purge-post
-;;;   on-entity-delete :hard; purge-entity (hard delete).
-;;;
 
 (defun purge-article (imprint index &key account)
   "Permanently remove post number INDEX from the imprint.
@@ -426,9 +365,6 @@ store entirely. INDEX is 1-based from list-posts with :include-deleted."
       (format t "~%  Post ~S permanently deleted.~%"
               (or (headline post) (label post)))
       t)))
-          
-;;; truncate-string  (unchanged)  <- truncate-string   (display helper)
-;;; format-date      (unchanged)  <- format-date        (display helper)
 
 ;;; ============================================================
 ;;; Formatting helpers
