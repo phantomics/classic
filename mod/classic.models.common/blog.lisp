@@ -23,26 +23,11 @@
 (in-package #:classic.models.common)
 
 ;;; ============================================================
-;;; Blog structure
-;;; ============================================================
-
-(defstruct (publication-imprint (:constructor %make-publication-imprint))
-  "A blog backed by a CLASSIC publication with workflow support."
-  (publication nil :type (or null classic-publication))
-  (container   nil :type (or null classic-container))
-  (strategy    nil :type (or null classic-persistence-strategy))
-  (authority      "" :type string)
-  (authority-date "" :type string)
-  (workflow    nil)
-  (roles       (make-hash-table :test 'equal) :type hash-table)
-  (persons     (make-hash-table :test 'equal) :type hash-table)
-  ;; Federation (opt-in)
-  (transport   nil :type (or null federation-transport))
-  (federation-roles nil :type list))
-
-;;; ============================================================
 ;;; Blog creation (with workflow setup)
 ;;; ============================================================
+;;;
+;;; The publication-imprint struct itself is defined in context.lisp;
+;;; make-blog is a preset that configures one for blog use.
 
 (defun make-blog (&key (name "My Blog")
                        (authority "localhost")
@@ -81,10 +66,10 @@ a draft→published workflow. Returns a blog struct."
                                    :archive-role "editor"
                                    :delete-role "editor")
     ;; Register roles
-    (%make-publication-imprint :publication pub
-                               :container container
-                               :strategy strategy
-                               :authority authority
-                               :authority-date authority-date
-                               :workflow wf
-                               :roles roles)))
+    (%make-imprint :publication pub
+                   :container container
+                   :strategy strategy
+                   :authority authority
+                   :authority-date authority-date
+                   :workflow wf
+                   :roles roles)))

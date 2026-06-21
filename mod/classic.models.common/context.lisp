@@ -38,6 +38,6 @@
 
 (defmethod print-object ((imprint publication-imprint) stream)
   (print-unreadable-object (imprint stream :type t)
-    (format stream "~A (~D posts)"
+    (format stream "~A (~D items)"
             (label (imprint-publication imprint))
             (length (contains (imprint-container imprint))))))

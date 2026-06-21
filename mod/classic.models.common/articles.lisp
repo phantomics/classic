@@ -109,7 +109,7 @@ and deleted posts in the result."
   "Print a numbered listing of all imprint posts (newest first).
 STATUS filters by workflow state (NIL = all).
 Returns the list of post instances."
-  (let ((posts (get-posts imprint :status status)))
+  (let ((posts (get-articles imprint :status status)))
     (if (null posts)
         (format t "~%  No posts~@[ with status ~S~].~%" status)
         (let ((title-width 32)

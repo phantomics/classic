@@ -40,6 +40,10 @@
   :description "Blog application model integration"
   :in classic)
 
+(def-suite forum
+  :description "Forum application model integration"
+  :in classic)
+
 (def-suite federation
   :description "Federation: instance discovery, syndication, resolution"
   :in classic)
@@ -164,6 +168,26 @@ Returns (values writer-account editor-account)."
   (let ((writer (classic.models.common:create-account blog :name "Writer" :role :writer))
         (editor (classic.models.common:create-account blog :name "Editor" :role :editor)))
     (values writer editor)))
+
+(defun make-test-forum (&key (name "Test Forum")
+                             (authority "test.example")
+                             (authority-date "2026"))
+  "Create a forum with the discussion workflow and in-memory persistence.
+Returns the publication-imprint."
+  (classic.models.common:make-forum :name name
+                                    :authority authority
+                                    :authority-date authority-date))
+
+(defun make-test-members (forum)
+  "Create a member, a moderator, and an admin on FORUM.
+Returns (values member moderator admin)."
+  (let ((member (classic.models.common:create-member
+                 forum :name "Mel Member" :nickname "mel" :role :member))
+        (moderator (classic.models.common:create-member
+                    forum :name "Mo Derator" :nickname "mo" :role :moderator))
+        (admin (classic.models.common:create-member
+                forum :name "Ada Min" :nickname "ada" :role :admin)))
+    (values member moderator admin)))
 
 (defun entity-count (strategy)
   "Return the number of entities stored in STRATEGY."

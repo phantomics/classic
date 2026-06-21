@@ -23,9 +23,11 @@
    #:imprint-federation-roles
    #:imprint-has-federation-p
 
-   ;; ---- Workflows (universal + editorial preset shape) ----
+   ;; ---- Workflows (universal + editorial/discussion preset shapes) ----
    #:make-editorial-workflow
    #:make-editorial-roles
+   #:make-discussion-workflow
+   #:make-discussion-roles
    #:make-role
    #:make-workflow-state
    #:make-workflow-transition
@@ -57,4 +59,42 @@
    #:list-federated-content
 
    ;; ---- Blog preset ----
-   #:make-blog))
+   #:make-blog
+
+   ;; ---- Forum preset: classes ----
+   #:forum-account
+   #:member-nickname
+   #:member-title
+   #:member-joined-at
+   #:member-post-count
+   #:member-signature
+   #:forum-thread
+   #:thread-originating-post
+   #:thread-pinned-p
+   #:thread-locked-p
+   #:thread-view-count
+   #:forum-post
+   #:post-stickers
+   #:post-quotes
+   #:post-quoted-by
+
+   ;; ---- Forum preset: operations ----
+   #:make-forum
+   #:create-member
+   #:start-thread
+   #:post-reply
+   #:quote-post
+   #:react
+   #:unreact
+   #:hide-post
+   #:unhide-post
+   #:delete-post
+   #:pin-thread
+   #:unpin-thread
+   #:lock-thread
+   #:unlock-thread
+   #:list-threads
+   #:show-thread
+   #:show-post
+   #:member-profile
+   #:*default-stickers*))
