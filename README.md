@@ -165,11 +165,17 @@ configured in these ways Classic will present a platform structure that's
 familiar to users of other media called by these names, but a wide variety
 of other content models are popular besides these.
 
-A second worked example, a phpBB-style discussion board with members,
-threads, reaction stickers, quotes, and moderation, is available as a
-REPL walkthrough in [`doc/forum/Forum.md`](doc/forum/Forum.md). It
-demonstrates how a different content profile reuses the same universal
-machinery the blog preset is built on.
+Two additional worked examples are available as REPL walkthroughs:
+
+- **Forum** ([`doc/forum/Forum.md`](doc/forum/Forum.md)) — a
+  phpBB-style discussion board with members, threads, reaction
+  stickers, quotes, and moderation.
+- **Wiki** ([`doc/wiki/Wiki.md`](doc/wiki/Wiki.md)) — a
+  cross-referencing knowledge base with `[[wiki-links]]`, broken-link
+  healing, infobox sidebars, influence lineage, and revision history.
+
+Both demonstrate how different content profiles reuse the same
+universal machinery the blog preset is built on.
 
 
 ## Architecture

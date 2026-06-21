@@ -24,4 +24,5 @@
    (:file "articles")
    (:file "federation")
    (:file "blog")
-   (:file "forum")))
+   (:file "forum")
+   (:file "wiki")))

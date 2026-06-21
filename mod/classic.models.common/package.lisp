@@ -80,6 +80,7 @@
 
    ;; ---- Forum preset: operations ----
    #:make-forum
+   #:resolve-member-nickname
    #:create-member
    #:start-thread
    #:post-reply
@@ -97,4 +98,35 @@
    #:show-thread
    #:show-post
    #:member-profile
-   #:*default-stickers*))
+   #:*default-stickers*
+
+   ;; ---- Wiki preset: classes ----
+   #:wiki-page
+   #:page-anchor
+   #:page-links-to
+   #:page-linked-from
+   #:page-broken-links
+   #:page-infobox
+   #:page-influenced-by
+   #:wiki-revision
+   #:revision-of
+   #:revision-author
+   #:revision-comment
+   #:revision-version
+   #:revision-timestamp
+
+   ;; ---- Wiki preset: operations ----
+   #:make-wiki
+   #:create-page
+   #:edit-page
+   #:publish-page
+   #:delete-page
+   #:restore-page
+   #:find-page
+   #:list-pages
+   #:recent-changes
+   #:show-page
+   #:page-history
+   #:show-backlinks
+   #:orphan-pages
+   #:broken-link-report))

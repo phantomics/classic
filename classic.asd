@@ -57,6 +57,7 @@
    (:file "test-workflow")
     (:file "test-blog")
     (:file "test-forum")
+    (:file "test-wiki")
     (:file "test-federation")
    (:file "test-migration")
    (:file "test-deletion")

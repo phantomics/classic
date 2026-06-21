@@ -44,6 +44,10 @@
   :description "Forum application model integration"
   :in classic)
 
+(def-suite wiki
+  :description "Wiki application model integration"
+  :in classic)
+
 (def-suite federation
   :description "Federation: instance discovery, syndication, resolution"
   :in classic)
@@ -167,6 +171,22 @@ Returns the blog struct."
 Returns (values writer-account editor-account)."
   (let ((writer (classic.models.common:create-account blog :name "Writer" :role :writer))
         (editor (classic.models.common:create-account blog :name "Editor" :role :editor)))
+    (values writer editor)))
+
+(defun make-test-wiki (&key (name "Test Wiki")
+                            (authority "test.example")
+                            (authority-date "2026"))
+  "Create a wiki with the editorial workflow and in-memory persistence.
+Returns the publication-imprint."
+  (classic.models.common:make-wiki :name name
+                                   :authority authority
+                                   :authority-date authority-date))
+
+(defun make-test-wiki-accounts (wiki)
+  "Create a writer and editor on WIKI.
+Returns (values writer editor)."
+  (let ((writer (classic.models.common:create-account wiki :name "Writer" :role :writer))
+        (editor (classic.models.common:create-account wiki :name "Editor" :role :editor)))
     (values writer editor)))
 
 (defun make-test-forum (&key (name "Test Forum")
