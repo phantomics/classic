@@ -152,18 +152,24 @@ notion of "blog" — only of *publications*. A blog is a `publication-imprint`
 configured with an editorial workflow (draft → published → archived) and an
 article-feed access pattern. The operations you just used — `write-article`,
 `publish-article`, `list-articles` — are content-neutral: they act on any
-publication imprint. Forthcoming presets (`make-forum`, `make-wiki`) assemble
-the same universals into different shapes: a forum pairs the article
-operations with a discussion workflow and a thread index; a wiki pairs them
-with an edit-published workflow and revision history. Because the content
-classes compose (a `publication-article` can also be a `classic-thread-bearing`
-entity), these shapes mingle rather than partition.
+publication imprint. Other presets assemble the same universals into different
+shapes: the **forum** preset (`make-forum`) pairs a discussion workflow with a
+thread/post access pattern, and a future wiki would pair an edit-published
+workflow with revision history. Because the content classes compose (a
+`publication-article` can also be a `classic-thread-bearing` entity), these
+shapes mingle rather than partition.
 
 In Classic, descriptors like "blog" and "forum" can thus be understood as terms
 expressing particular arrangements of Classic's classes and methods. When
 configured in these ways Classic will present a platform structure that's
 familiar to users of other media called by these names, but a wide variety
 of other content models are popular besides these.
+
+A second worked example, a phpBB-style discussion board with members,
+threads, reaction stickers, quotes, and moderation, is available as a
+REPL walkthrough in [`doc/forum/Forum.md`](doc/forum/Forum.md). It
+demonstrates how a different content profile reuses the same universal
+machinery the blog preset is built on.
 
 
 ## Architecture
