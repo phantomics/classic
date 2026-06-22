@@ -13,20 +13,25 @@
 ;;;; created whose anchor matches another page's broken link, the broken
 ;;;; link is "healed" automatically.
 ;;;;
-;;;; Usage:
-;;;;   (defvar *w* (make-wiki :name "Classic Computers Wiki"
-;;;;                          :authority "retro.wiki"
-;;;;                          :authority-date "2026"))
-;;;;   (defvar *alice* (create-account *w* :name "Alice" :role :editor))
-;;;;   (defvar *bob* (create-account *w* :name "Bob" :role :writer))
-;;;;
-;;;;   (create-page *w* :account *bob* :title "Apple II"
-;;;;                    :body "Designed by [[Steve Wozniak]], using the [[MOS 6502]]."
-;;;;                    :infobox '(("Make" . "Apple Computer") ("Released" . "1977"))
-;;;;                    :influenced-by '("Apple I"))
-;;;;   (publish-page *w* "Apple II" :account *alice*)
-;;;;   (show-page *w* "Apple II")
-;;;;   (broken-link-report *w*)
+
+#|
+
+Usage:
+  (defvar *w* (make-wiki :name "Classic Computers Wiki"
+                         :authority "retro.wiki"
+                         :authority-date "2026"))
+  (defvar *alice* (create-account *w* :name "Alice" :role :editor))
+  (defvar *bob* (create-account *w* :name "Bob" :role :writer))
+
+  (create-page *w* :account *bob* :title "Amiga 1000"
+                   :body "Designed by [[Jay Miner]], using the [[Motorola 68000]]."
+                   :infobox '(("Make" . "Commodore") ("Released" . "1985"))
+                   :influenced-by '("Amiga 800"))
+  (publish-page *w* "Amiga 1000" :account *alice*)
+  (show-page *w* "Amiga 1000")
+  (broken-link-report *w*)
+
+|#
 
 (in-package #:classic.models.common)
 

@@ -77,36 +77,36 @@ editorial workflow is not blog-specific.
 ### Create pages with cross-references
 
 ```lisp
-(create-page *w* :account *bob* :title "Apple II"
-  :body "The [[Apple II]] was designed by [[Steve Wozniak]]
-         and used the [[MOS 6502]] CPU."
-  :infobox '(("Make" . "Apple Computer")
-             ("Released" . "1977")
-             ("Designer" . "Steve Wozniak")
-             ("CPU" . "MOS 6502"))
-  :influenced-by '("Apple I"))
+(create-page *w* :account *bob* :title "Amiga 1000"
+  :body "The [[Amiga 1000]] was designed by [[Jay Miner]]
+         and used the [[Motorola 68000]] CPU."
+  :infobox '(("Make" . "Commodore International")
+             ("Released" . "1985")
+             ("Designer" . "Jay Miner")
+             ("CPU" . "Motorola 68000"))
+  :influenced-by '("Atari 800"))
 ```
 
-At this point, `[[Steve Wozniak]]` and `[[MOS 6502]]` are broken
-links. The self-link `[[Apple II]]` was healed at creation.
+At this point, `[[Jay Miner]]` and `[[Motorola 68000]]` are broken
+links. The self-link `[[Amiga 1000]]` was healed at creation.
 
 ```lisp
-(publish-page *w* "Apple II" :account *alice*)
-;; Page "Apple II": draft → published
+(publish-page *w* "Amiga 1000" :account *alice*)
+;; Page "Amiga 1000": draft → published
 ```
 
-Create the MOS 6502 page — this **heals** the broken `[[MOS 6502]]`
-link on the Apple II page automatically:
+Create the Motorola 68000 page — this **heals** the broken `[[Motorola 68000]]`
+link on the Amiga 1000 page automatically:
 
 ```lisp
-(create-page *w* :account *bob* :title "MOS 6502"
-  :body "The [[MOS 6502]] was designed by [[Chuck Peddle]].
-         It powered the [[Apple II]] and [[Commodore PET]]."
-  :infobox '(("Manufacturer" . "MOS Technology")
-             ("Released" . "1975")
-             ("Designer" . "Chuck Peddle"))
+(create-page *w* :account *bob* :title "Motorola 68000"
+  :body "The [[Motorola 68000]] was designed by [[Tom Gunter]].
+         It powered the [[Amiga 1000]] and [[Apple Macintosh]]."
+  :infobox '(("Manufacturer" . "Motorola")
+             ("Released" . "1979")
+             ("Designer" . "Tom Gunter"))
   :influenced-by '("Motorola 6800"))
-(publish-page *w* "MOS 6502" :account *alice*)
+(publish-page *w* "Motorola 68000" :account *alice*)
 ```
 
 ### The page index
@@ -118,8 +118,8 @@ link on the Apple II page automatically:
 ```
   #    Page                                Status        Modified
   ---  ----------------------------------  ------------  ----------------
-    1  Apple II                            published     2026-06-21 05:12
-    2  MOS 6502                            published     2026-06-21 05:12
+    1  Amiga 1000                          published     2026-06-21 05:12
+    2  Motorola 68000                      published     2026-06-21 05:12
 ```
 
 Pages are listed alphabetically by anchor. A `:status` filter option
@@ -128,30 +128,30 @@ is available.
 ### Viewing a page
 
 ```lisp
-(show-page *w* "Apple II")
+(show-page *w* "Amiga 1000")
 ```
 
 ```
 ============================================================
-  Apple II                              [published]
+  Amiga 1000                            [published]
 ------------------------------------------------------------
-  Make:            Apple Computer
-  Released:        1977
-  Designer:        Steve Wozniak
-  CPU:             MOS 6502
+  Make:            Commodore
+  Released:        1985
+  Designer:        Jay Miner
+  CPU:             Motorola 68000
 ------------------------------------------------------------
-  The Apple II was designed by [?Steve Wozniak] and used the
-  MOS 6502 CPU. It competed with the [?Commodore PET].
+  The Amiga 1000 was designed by [?Jay Miner] and used the
+  Motorola 68000 CPU. It ran [?AmigaOS].
 
-  Influenced by: [?Apple I]
-  Linked from:   MOS 6502
-  Broken links:  Steve Wozniak, Commodore PET
+  Influenced by: [?Atari 800]
+  Linked from:   Motorola 68000
+  Broken links:  Jay Miner, AmigaOS
 ============================================================
 ```
 
-- **Resolved links** (like `[[MOS 6502]]`) render as bare text — the
+- **Resolved links** (like `[[Motorola 68000]]`) render as bare text — the
   content reads naturally.
-- **Broken links** (like `[[Steve Wozniak]]`) render as `[?name]` — a
+- **Broken links** (like `[[Jay Miner]]`) render as `[?name]` — a
   REPL-friendly equivalent of Wikipedia's red links.
 - The **infobox** sidebar shows structured metadata.
 - The **influenced by** section resolves anchors the same way links do.
@@ -161,17 +161,17 @@ is available.
 ### Editing and revision history
 
 ```lisp
-(edit-page *w* "Apple II" :account *alice*
-           :body "The [[Apple II]] was designed by [[Steve Wozniak]].
-                  It used the [[MOS 6502]]."
+(edit-page *w* "Amiga 1000" :account *alice*
+           :body "The [[Amiga 1000]] was designed by [[Jay Miner]].
+                  It used the [[Motorola 68000]]."
            :comment "Simplified text")
-;; Page "Apple II" updated (v1).
+;; Page "Amiga 1000" updated (v1).
 
-(page-history *w* "Apple II")
+(page-history *w* "Amiga 1000")
 ```
 
 ```
-  Revision history for: Apple II
+  Revision history for: Amiga 1000
 
   v1  by Alice  at 2026-06-21 05:12  — Simplified text
   v0  by Bob  at 2026-06-21 05:12  — Initial creation
@@ -184,13 +184,13 @@ backlinks removed, new backlinks added).
 ### "What links here?"
 
 ```lisp
-(show-backlinks *w* "MOS 6502")
+(show-backlinks *w* "Motorola 68000")
 ```
 
 ```
-  What links to: MOS 6502
+  What links to: Motorola 68000
 
-  1. Apple II
+  1. Amiga 1000
 ```
 
 ### Wiki-wide reports
@@ -202,8 +202,8 @@ backlinks removed, new backlinks added).
 ```
   Broken links across the wiki:
 
-  [[Chuck Peddle]]  referenced from: MOS 6502
-  [[Steve Wozniak]]  referenced from: Apple II
+  [[Tom Gunter]]  referenced from: Motorola 68000
+  [[Jay Miner]]  referenced from: Amiga 1000
 ```
 
 ```lisp
@@ -225,8 +225,8 @@ backlinks removed, new backlinks added).
 
   Page                                Author          Modified          v
   ----------------------------------  --------------  ----------------  ----
-  Apple II                            Bob             2026-06-21 05:12  1
-  MOS 6502                            Bob             2026-06-21 05:12  0
+  Amiga 1000                          Bob             2026-06-21 05:12  1
+  Motorola 68000                      Bob             2026-06-21 05:12  0
 ```
 
 ### Permission gating
@@ -285,22 +285,22 @@ Pass `:class` and the typed-slot values as keyword arguments:
 
 ```lisp
 (create-page *w* :account *bob* :class 'wiki-person
-             :title "Steve Wozniak" :body "Co-founder of Apple."
+             :title "Jay Miner" :body "Atari/Commodore engineer."
              :person-born "1950" :person-nationality "American"
-             :person-known-for '("Apple I" "Apple II"))
+             :person-known-for '("Atari 8-bit" "Amiga 1000"))
 
 (create-page *w* :account *bob* :class 'wiki-cpu
-             :title "MOS 6502" :body "A legendary 8-bit CPU."
-             :cpu-manufacturer "MOS Technology" :cpu-released "1975"
-             :cpu-clock-speed "1 MHz" :cpu-word-size "8-bit")
+             :title "Motorola 68000" :body "A legendary RISC CPU."
+             :cpu-manufacturer "Motorola" :cpu-released "1979"
+             :cpu-clock-speed "4 MHz" :cpu-word-size "32-bit")
 
 (create-page *w* :account *bob* :class 'wiki-computer
-             :title "Apple II" :body "One of the first mass-produced PCs."
-             :computer-manufacturer "Apple Computer"
-             :computer-released "1977"
-             :computer-designer "Steve Wozniak"
-             :computer-cpu "MOS 6502"
-             :computer-price "$1,298")
+             :title "Amiga 1000" :body "One of the first mass-produced PCs."
+             :computer-manufacturer "Commodore International"
+             :computer-released "1985"
+             :computer-designer "Jay Miner"
+             :computer-cpu "Motorola 68000"
+             :computer-price "$1,285")
 ```
 
 ### How lenses drive the rendering
@@ -328,7 +328,7 @@ All wiki links render with indicators in REPL output:
 | Indicator | Meaning |
 |---|---|
 | `[>Page Name]` | Resolved link to a generic wiki-page |
-| `[:>Steve Wozniak]` | Resolved link to a typed page (the `:` signals class-specific lens) |
+| `[:>Jay Miner]` | Resolved link to a typed page (the `:` signals class-specific lens) |
 | `[?Page Name]` | Broken link (target does not exist) |
 
 These appear in body text, infobox fields with `:display :link`, and
@@ -341,15 +341,15 @@ reference: resolves the anchor to a page, looks up that page's
 `:label` lens, and renders the compact form inline. Example output:
 
 ```
-  Manufacturer:    Apple Computer
-  Released:        1977
-  Designer:        [:>Steve Wozniak]
-  CPU:             MOS 6502 (1 MHz)       ← sublens: cpu label
-  Price:           $1,298
+  Manufacturer:    Commodore International
+  Released:        1985
+  Designer:        [:>Jay Miner]
+  CPU:             Motorola 68000 (1 MHz)       ← sublens: cpu label
+  Price:           $1,285
 ```
 
-The CPU field rendered via the MOS 6502's `:label` lens as
-`MOS 6502 (1 MHz)` rather than the bare anchor string.
+The CPU field rendered via the Motorola 68000's `:label` lens as
+`Motorola 68000 (1 MHz)` rather than the bare anchor string.
 
 
 ## Deferred

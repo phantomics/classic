@@ -43,7 +43,7 @@ lens resolution; three add the cross-class sublens chain.
 - **`:infobox`** — the full sidebar rendering (all typed fields, with
   display modes and sublens references).
 - **`:label`** — a compact one-line rendering for sublens targets
-  (headline + one distinguishing field, e.g. "MOS 6502 (1 MHz)").
+  (headline + one distinguishing field, e.g. "Motorola 68000 (4 MHz)").
 
 The `:label` purpose is what sublens references consume. Separating
 it from `:infobox` means the compact form can differ from the full
@@ -56,7 +56,7 @@ REPL output — you couldn't tell them from normal words). Three
 indicators now distinguish link states:
 
 - `[>Page Name]` — resolved, target is a generic wiki-page
-- `[:>Steve Wozniak]` — resolved, target is a typed page (the `:`
+- `[:>Jay Miner]` — resolved, target is a typed page (the `:`
   signals class-specific lens data)
 - `[?Page Name]` — broken (target does not exist)
 
@@ -182,7 +182,7 @@ bare text).
 | `typed-page-uses-lens-rendering` | `show-page` renders a typed page's infobox via the lens |
 | `generic-page-uses-alist-infobox` | `show-page` renders a generic page via the alist infobox |
 | `typed-page-link-indicator` | `[:>X]` for typed, `[>X]` for generic pages in body text |
-| `sublens-renders-compact-form` | A computer's CPU rendered via sublens as `"6502 (1 MHz)"` |
+| `sublens-renders-compact-form` | A computer's CPU rendered via sublens as `"68000 (4 MHz)"` |
 | `lens-display-link-resolves-anchor` | `:display :link` renders a typed slot as `[:>X]` |
 | `lens-display-list-renders-items` | `:display :list` renders items as link indicators |
 
