@@ -102,6 +102,22 @@
 
    ;; ---- Wiki preset: classes ----
    #:wiki-page
+   #:wiki-computer
+   #:computer-manufacturer
+   #:computer-released
+   #:computer-designer
+   #:computer-cpu
+   #:computer-price
+   #:wiki-cpu
+   #:cpu-manufacturer
+   #:cpu-released
+   #:cpu-designer
+   #:cpu-clock-speed
+   #:cpu-word-size
+   #:wiki-person
+   #:person-born
+   #:person-nationality
+   #:person-known-for
    #:page-anchor
    #:page-links-to
    #:page-linked-from

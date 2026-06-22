@@ -157,6 +157,136 @@ why, with a version number but no body snapshot (edit-log only)."))
   "revisions")
 
 ;;; ============================================================
+;;; Typed page subclasses
+;;; ============================================================
+;;;
+;;; These demonstrate MOP-annotated typed slots alongside the generic
+;;; alist infobox. Each carries class-specific metadata that the lens
+;;; system can render via per-class lens specs. Generic wiki-pages
+;;; continue to use the alist infobox; typed pages get lens-driven
+;;; rendering with alist fallback for ad-hoc fields.
+
+(defclass wiki-computer (wiki-page)
+  ((computer-manufacturer
+    :accessor computer-manufacturer
+    :initarg :computer-manufacturer
+    :initform nil
+    :persistence :triple
+    :predicate "wiki:manufacturer"
+    :slot-type (or null string))
+   (computer-released
+    :accessor computer-released
+    :initarg :computer-released
+    :initform nil
+    :persistence :triple
+    :predicate "wiki:released"
+    :slot-type (or null string))
+   (computer-designer
+    :accessor computer-designer
+    :initarg :computer-designer
+    :initform nil
+    :persistence :triple
+    :predicate "wiki:designer"
+    :slot-type (or null string)
+    :documentation "Anchor of the designer's wiki-person page.")
+   (computer-cpu
+    :accessor computer-cpu
+    :initarg :computer-cpu
+    :initform nil
+    :persistence :triple
+    :predicate "wiki:cpu"
+    :slot-type (or null string)
+    :documentation "Anchor of the CPU's wiki-cpu page.")
+   (computer-price
+    :accessor computer-price
+    :initarg :computer-price
+    :initform nil
+    :persistence :triple
+    :predicate "wiki:originalPrice"
+    :slot-type (or null string)))
+  (:metaclass classic-class)
+  (:documentation
+   "A wiki page about a computer. Typed slots carry structured metadata
+rendered via the lens system; the body carries free-form prose."))
+
+(defmethod uri-namespace-prefix ((class (eql 'wiki-computer)))
+  "pages")
+
+(defclass wiki-cpu (wiki-page)
+  ((cpu-manufacturer
+    :accessor cpu-manufacturer
+    :initarg :cpu-manufacturer
+    :initform nil
+    :persistence :triple
+    :predicate "wiki:manufacturer"
+    :slot-type (or null string))
+   (cpu-released
+    :accessor cpu-released
+    :initarg :cpu-released
+    :initform nil
+    :persistence :triple
+    :predicate "wiki:released"
+    :slot-type (or null string))
+   (cpu-designer
+    :accessor cpu-designer
+    :initarg :cpu-designer
+    :initform nil
+    :persistence :triple
+    :predicate "wiki:designer"
+    :slot-type (or null string)
+    :documentation "Anchor of the designer's wiki-person page.")
+   (cpu-clock-speed
+    :accessor cpu-clock-speed
+    :initarg :cpu-clock-speed
+    :initform nil
+    :persistence :triple
+    :predicate "wiki:clockSpeed"
+    :slot-type (or null string))
+   (cpu-word-size
+    :accessor cpu-word-size
+    :initarg :cpu-word-size
+    :initform nil
+    :persistence :triple
+    :predicate "wiki:wordSize"
+    :slot-type (or null string)))
+  (:metaclass classic-class)
+  (:documentation
+   "A wiki page about a CPU/microprocessor."))
+
+(defmethod uri-namespace-prefix ((class (eql 'wiki-cpu)))
+  "pages")
+
+(defclass wiki-person (wiki-page)
+  ((person-born
+    :accessor person-born
+    :initarg :person-born
+    :initform nil
+    :persistence :triple
+    :predicate "wiki:born"
+    :slot-type (or null string))
+   (person-nationality
+    :accessor person-nationality
+    :initarg :person-nationality
+    :initform nil
+    :persistence :triple
+    :predicate "wiki:nationality"
+    :slot-type (or null string))
+   (person-known-for
+    :accessor person-known-for
+    :initarg :person-known-for
+    :initform nil
+    :persistence :triple
+    :predicate "wiki:knownFor"
+    :slot-type (or null list)
+    :documentation "List of anchor strings for notable works/creations."))
+  (:metaclass classic-class)
+  (:documentation
+   "A wiki page about a person."))
+
+(defmethod uri-namespace-prefix ((class (eql 'wiki-person)))
+  "pages")
+
+;;; ============================================================
 ;;; Wiki creation (preset)
 ;;; ============================================================
 
@@ -192,6 +322,18 @@ a publication-imprint whose container holds wiki pages."
                                    :delete-from '("archived" "draft")
                                    :archive-role "editor"
                                    :delete-role "editor")
+    ;; Create a default wiki theme with lens specs for typed pages.
+    ;; This is the first runtime exercise of the theme → lens pipeline.
+    (let* ((theme-uri (mint-uri 'classic-theme authority authority-date
+                                :slug (format nil "~A theme" name)))
+           (theme (make-instance 'classic-theme
+                                 :uri theme-uri
+                                 :label (format nil "~A Theme" name)
+                                 :theme-version "1.0"
+                                 :lenses (wiki-default-lenses))))
+      (persist-entity strategy theme)
+      (setf (ui-theme pub) (uri-string theme))
+      (persist-entity strategy pub))
     (%make-imprint :publication pub
                    :container container
                    :strategy strategy
@@ -303,13 +445,29 @@ linked-from."
           (pushnew (uri-string page) (page-linked-from new-page)
                    :test #'equal))))))
 
+(defun page-typed-p (page)
+  "Return T if PAGE is a typed subclass (not a plain wiki-page)."
+  (and (typep page 'wiki-page)
+       (not (eq (type-of page) 'wiki-page))))
+
+(defun render-anchor-as-link (wiki anchor display)
+  "Render an anchor reference for REPL display:
+[>Display] for a resolved generic page,
+[:>Display] for a resolved typed page,
+[?Display] for a broken link."
+  (let ((target (find-page-by-anchor wiki anchor)))
+    (cond
+      ((null target)           (format nil "[?~A]" display))
+      ((page-typed-p target)   (format nil "[:>~A]" display))
+      (t                       (format nil "[>~A]" display)))))
+
 (defun render-wiki-text (wiki text)
-  "Replace [[refs]] in TEXT with display markers: resolved links render
-as bare text; broken links render as [?Anchor]. Returns a new string."
+  "Replace [[refs]] in TEXT with display markers:
+[>X] for resolved generic pages, [:>X] for resolved typed pages,
+[?X] for broken links. Returns a new string."
   (when (null text) (return-from render-wiki-text ""))
   (with-output-to-string (out)
-    (let ((pos 0) (len (length text)))
-      (declare (ignore len))
+    (let ((pos 0))
       (loop
         (let ((open (search "[[" text :start2 pos)))
           (unless open
@@ -326,11 +484,8 @@ as bare text; broken links render as [?Anchor]. Returns a new string."
                              (if pipe (subseq inner 0 pipe) inner)))
                    (display (if pipe
                                 (string-trim " " (subseq inner (1+ pipe)))
-                                anchor))
-                   (target (find-page-by-anchor wiki anchor)))
-              (if target
-                  (write-string display out)
-                  (format out "[?~A]" display))
+                                anchor)))
+              (write-string (render-anchor-as-link wiki anchor display) out)
               (setf pos (+ close 2)))))))))
 
 (defun compute-influences (wiki anchor)
@@ -344,17 +499,188 @@ of page-anchor strings."
     (nreverse results)))
 
 ;;; ============================================================
+;;; Lens specifications and renderer
+;;; ============================================================
+;;;
+;;; The wiki's default theme carries lens specs for each typed page
+;;; class. The renderer (render-via-lens) walks a lens's properties,
+;;; reads slot values via funcall on the accessor symbol, dispatches
+;;; on the :display mode, and follows :sublens references to render
+;;; related entities via their :label lens.
+
+(defun wiki-default-lenses ()
+  "Return the default lens specs for the wiki's typed page classes.
+Two purposes per class: :infobox (sidebar rendering) and :label
+(compact reference for sublens targets)."
+  (list
+   ;; ---- wiki-computer ----
+   (list :class 'wiki-computer :purpose :infobox
+         :properties '(computer-manufacturer
+                       (computer-released :display :text)
+                       (computer-designer :display :link)
+                       (computer-cpu :sublens wiki-cpu :purpose :label)
+                       (computer-price :display :text)))
+   (list :class 'wiki-computer :purpose :label
+         :properties '(headline (computer-released :display :text)))
+   ;; ---- wiki-cpu ----
+   (list :class 'wiki-cpu :purpose :infobox
+         :properties '(cpu-manufacturer
+                       (cpu-released :display :text)
+                       (cpu-designer :display :link)
+                       (cpu-clock-speed :display :text)
+                       (cpu-word-size :display :text)))
+   (list :class 'wiki-cpu :purpose :label
+         :properties '(headline (cpu-clock-speed :display :text)))
+   ;; ---- wiki-person ----
+   (list :class 'wiki-person :purpose :infobox
+         :properties '(person-born
+                       person-nationality
+                       (person-known-for :display :list)))
+   (list :class 'wiki-person :purpose :label
+         :properties '(headline (person-born :display :text)))))
+
+(defparameter *slot-label-overrides*
+  '(("HEADLINE" . "Title") ("CPU" . "CPU"))
+  "Manual label overrides for slot display names where the default
+derivation produces an unnatural result.")
+
+(defun slot-display-label (accessor-symbol)
+  "Derive a human-readable label from an accessor symbol name.
+'computer-manufacturer -> \"Manufacturer\", 'cpu-clock-speed -> \"Clock Speed\"."
+  (let* ((name (symbol-name accessor-symbol))
+         ;; Strip class prefix
+         (stripped (cond
+                     ((and (>= (length name) 9)
+                           (string= "COMPUTER-" name :end2 9))
+                      (subseq name 9))
+                     ((and (>= (length name) 4)
+                           (string= "CPU-" name :end2 4))
+                      (subseq name 4))
+                     ((and (>= (length name) 7)
+                           (string= "PERSON-" name :end2 7))
+                      (subseq name 7))
+                     (t name))))
+    ;; Check overrides first
+    (let ((override (assoc stripped *slot-label-overrides* :test #'string-equal)))
+      (when override (return-from slot-display-label (cdr override))))
+    ;; Convert "CLOCK-SPEED" -> "Clock Speed"
+    (with-output-to-string (out)
+      (let ((capitalize t))
+        (loop for ch across stripped
+              do (cond
+                   ((char= ch #\-)
+                    (write-char #\Space out)
+                    (setf capitalize t))
+                   (capitalize
+                    (write-char (char-upcase ch) out)
+                    (setf capitalize nil))
+                   (t
+                    (write-char (char-downcase ch) out))))))))
+
+(defun render-display-value (wiki value mode)
+  "Render VALUE according to display MODE for REPL output.
+Returns a string."
+  (cond
+    ((null value) "—")
+    ((eq mode :link)
+     ;; Value is an anchor string; render as a wiki link indicator
+     (render-anchor-as-link wiki value value))
+    ((eq mode :list)
+     ;; Value is a list of strings; render each as a link indicator
+     (if (listp value)
+         (format nil "~{~A~^, ~}"
+                 (mapcar (lambda (v)
+                           (render-anchor-as-link wiki v v))
+                         value))
+         (princ-to-string value)))
+    ((eq mode :date)
+     (if (typep value 'local-time:timestamp)
+         (format-date value)
+         (princ-to-string value)))
+    (t ;; :text or default
+     (princ-to-string value))))
+
+(defun render-sublens-value (wiki value sublens-class sublens-purpose
+                             resolved-lenses)
+  "Render VALUE (an anchor string) via the sublens: find the target
+page, look up its lens at SUBLENS-PURPOSE, and produce a compact
+rendering. Falls back to a link indicator if no lens or no target."
+  (let ((target (when value (find-page-by-anchor wiki value))))
+    (if (and target resolved-lenses)
+        (let ((lens (find-lens resolved-lenses (or sublens-class (type-of target))
+                               :purpose (or sublens-purpose :label))))
+          (if lens
+              ;; Render the target's label-lens properties inline
+              (let ((parts nil))
+                (dolist (prop (lens-properties lens))
+                  (let* ((slot (getf prop :slot))
+                         (val (when (and slot (slot-exists-p target slot)
+                                         (slot-boundp target slot))
+                                (funcall slot target))))
+                    (when val
+                      (push (princ-to-string val) parts))))
+                (let ((parts (nreverse parts)))
+                  (if (= 1 (length parts))
+                      (first parts)
+                      (format nil "~A (~{~A~^, ~})"
+                              (first parts) (rest parts)))))
+              ;; No lens; fall back to link indicator
+              (render-anchor-as-link wiki value value)))
+        ;; No target; render as link
+        (render-anchor-as-link wiki (or value "?") (or value "?")))))
+
+(defun resolve-wiki-lenses (wiki)
+  "Resolve the wiki's theme lenses. Returns the resolved lens alist,
+or NIL if no theme is attached."
+  (let* ((pub (imprint-publication wiki))
+         (theme-uri (ui-theme pub)))
+    (when theme-uri
+      (let ((theme (retrieve-entity (imprint-strategy wiki) theme-uri nil)))
+        (when (typep theme 'classic-theme)
+          (let ((chain (resolve-theme-chain theme (imprint-strategy wiki))))
+            (resolve-theme-lenses chain)))))))
+
+(defun render-via-lens (wiki entity resolved-lenses purpose stream)
+  "Render ENTITY's properties via a lens at PURPOSE. Writes to STREAM.
+Returns T if a lens was found and rendered, NIL otherwise (caller
+should fall back to the alist infobox)."
+  (let ((lens (find-lens resolved-lenses (type-of entity)
+                         :purpose purpose)))
+    (when lens
+      (dolist (prop (lens-properties lens))
+        (let* ((slot (getf prop :slot))
+               (display (getf prop :display))
+               (sublens-class (getf prop :sublens))
+               (sublens-purpose (getf prop :purpose))
+               (label (slot-display-label slot))
+               (val (when (and slot (slot-exists-p entity slot)
+                               (slot-boundp entity slot))
+                      (funcall slot entity))))
+          (when val
+            (let ((rendered (if sublens-class
+                                (render-sublens-value wiki val sublens-class
+                                                      sublens-purpose
+                                                      resolved-lenses)
+                                (render-display-value wiki val display))))
+              (format stream "  ~16A ~A~%" (format nil "~A:" label) rendered)))))
+      t)))
+
+;;; ============================================================
 ;;; Page operations
 ;;; ============================================================
 
-(defun create-page (wiki &key account title body
-                              (anchor nil)
+(defun create-page (wiki &rest all-keys
+                         &key account title body
+                              (anchor nil) (class 'wiki-page)
                               (infobox nil)
-                              (influenced-by nil))
+                              (influenced-by nil)
+                              &allow-other-keys)
   "Create a new wiki page as a draft. ACCOUNT must have :write
-permission. ANCHOR defaults to TITLE if not provided. Parses the body
-for [[refs]], resolves them, and heals broken links on other pages
-that reference this page's anchor. Returns the page."
+permission. ANCHOR defaults to TITLE if not provided. CLASS defaults
+to WIKI-PAGE; for typed pages, pass the subclass symbol and its slot
+values as additional keyword arguments (e.g. :computer-manufacturer).
+Parses the body for [[refs]], resolves them, and heals broken links on
+other pages that reference this page's anchor. Returns the page."
   (check-type account publication-account)
   (check-type title string)
   (check-type body string)
@@ -369,30 +695,38 @@ that reference this page's anchor. Returns the page."
     ;; Check for duplicate anchor
     (when (find-page-by-anchor wiki effective-anchor)
       (error "A page with anchor ~S already exists." effective-anchor))
-    ;; Resolve links
-    (multiple-value-bind (links-to broken)
-        (resolve-page-links wiki body)
-      (let* ((now (local-time:now))
-             (page-uri (mint-uri 'wiki-page
-                                 (imprint-authority wiki)
-                                 (imprint-authority-date wiki)
-                                 :slug effective-anchor :date now))
-             (page (make-instance 'wiki-page
-                                  :uri page-uri
-                                  :label title
-                                  :headline title
-                                  :author (account-of account)
-                                  :body body
-                                  :date-created now
-                                  :rdf-type "wiki:Page"
-                                  :anchor effective-anchor
-                                  :links-to links-to
-                                  :broken-links broken
-                                  :infobox infobox
-                                  :influenced-by influenced-by
-                                  :workflow (imprint-workflow wiki)
-                                  :current-state (initial-state
-                                                  (imprint-workflow wiki)))))
+    ;; Collect extra keyword args for typed page slots.
+    ;; Strip the keys we handle ourselves; pass the rest to make-instance.
+    (let ((extra-initargs
+            (loop for (k v) on all-keys by #'cddr
+                  unless (member k '(:account :title :body :anchor :class
+                                     :infobox :influenced-by))
+                    nconc (list k v))))
+      ;; Resolve links
+      (multiple-value-bind (links-to broken)
+          (resolve-page-links wiki body)
+        (let* ((now (local-time:now))
+               (page-uri (mint-uri class
+                                   (imprint-authority wiki)
+                                   (imprint-authority-date wiki)
+                                   :slug effective-anchor :date now))
+               (page (apply #'make-instance class
+                            :uri page-uri
+                            :label title
+                            :headline title
+                            :author (account-of account)
+                            :body body
+                            :date-created now
+                            :rdf-type "wiki:Page"
+                            :anchor effective-anchor
+                            :links-to links-to
+                            :broken-links broken
+                            :infobox infobox
+                            :influenced-by influenced-by
+                            :workflow (imprint-workflow wiki)
+                            :current-state (initial-state
+                                            (imprint-workflow wiki))
+                            extra-initargs)))
         (persist-entity (imprint-strategy wiki) page)
         ;; Register in container
         (push (uri-string page) (contains (imprint-container wiki)))
@@ -414,7 +748,7 @@ that reference this page's anchor. Returns the page."
                      :test #'equal)))
         ;; Write the initial revision
         (write-revision wiki page account "Initial creation")
-        page))))
+        page)))))
 
 (defun edit-page (wiki anchor &key account body title infobox
                                    influenced-by
@@ -635,11 +969,24 @@ influence lineage, backlinks, and broken-link summary. Returns the page."
               (or (headline page) (page-anchor page) "Untitled")
               (format nil "[~A]" (or (current-state page) "?"))
               thin)
-      ;; Infobox
-      (when (page-infobox page)
-        (dolist (entry (page-infobox page))
-          (format t "  ~16A ~A~%" (format nil "~A:" (car entry)) (cdr entry)))
-        (format t "~A~%" thin))
+      ;; Infobox: try lens-driven rendering for typed classes first,
+      ;; then fall back to the alist infobox for generic pages (or
+      ;; for ad-hoc fields that typed pages also carry).
+      (let* ((resolved-lenses (resolve-wiki-lenses wiki))
+             (lens-rendered (when resolved-lenses
+                              (render-via-lens wiki page resolved-lenses
+                                              :infobox *standard-output*))))
+        ;; If no lens was rendered, or there are also alist entries,
+        ;; show the alist infobox (below the lens-rendered fields).
+        (when (and (not lens-rendered) (page-infobox page))
+          (dolist (entry (page-infobox page))
+            (format t "  ~16A ~A~%" (format nil "~A:" (car entry)) (cdr entry))))
+        ;; Alist entries on a typed page that also has a lens:
+        ;; show them as supplementary fields.
+        (when (and lens-rendered (page-infobox page))
+          (dolist (entry (page-infobox page))
+            (format t "  ~16A ~A~%" (format nil "~A:" (car entry)) (cdr entry)))))
+      (format t "~A~%" thin)
       ;; Body with resolved links
       (let ((rendered (render-wiki-text wiki (body page))))
         (dolist (line (split-lines rendered))
@@ -649,8 +996,7 @@ influence lineage, backlinks, and broken-link summary. Returns the page."
       (when (page-influenced-by page)
         (format t "  Influenced by: ~{~A~^, ~}~%"
                 (mapcar (lambda (a)
-                          (if (find-page-by-anchor wiki a)
-                              a (format nil "[?~A]" a)))
+                          (render-anchor-as-link wiki a a))
                         (page-influenced-by page))))
       (let ((influences (compute-influences wiki (page-anchor page))))
         (when influences

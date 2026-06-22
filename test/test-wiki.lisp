@@ -295,7 +295,7 @@ clean up backlinks."
         (is (search "[?NoSuch]" output))))))
 
 (test show-page-renders-resolved-links
-  "show-page renders resolved [[refs]] as bare text (no brackets)."
+  "show-page renders resolved [[refs]] with a [>X] link indicator."
   (let ((wiki (make-test-wiki)))
     (multiple-value-bind (writer) (make-test-wiki-accounts wiki)
       (create-page wiki :account writer :title "Target" :body "T")
@@ -303,8 +303,8 @@ clean up backlinks."
                         :body "See [[Target]] here.")
       (let ((output (with-output-to-string (*standard-output*)
                       (show-page wiki "Source"))))
-        ;; Resolved: the word "Target" appears without brackets
-        (is (search "See Target here" output))
+        ;; Resolved link shows with [>...] indicator
+        (is (search "[>Target]" output))
         ;; No broken-link marker
         (is (null (search "[?" output)))))))
 
@@ -350,7 +350,7 @@ clean up backlinks."
 ;;; ============================================================
 
 (test influenced-by-display-resolves
-  "show-page renders influenced-by anchors as resolved or [?broken]."
+  "show-page renders influenced-by anchors as [>resolved] or [?broken]."
   (let ((wiki (make-test-wiki)))
     (multiple-value-bind (writer) (make-test-wiki-accounts wiki)
       (create-page wiki :account writer :title "Ancestor" :body "A")
@@ -358,7 +358,7 @@ clean up backlinks."
                         :influenced-by '("Ancestor" "Ghost"))
       (let ((output (with-output-to-string (*standard-output*)
                       (show-page wiki "Descendant"))))
-        (is (search "Ancestor" output))
+        (is (search "[>Ancestor]" output))
         (is (search "[?Ghost]" output))))))
 
 (test influences-computed-on-demand
@@ -372,3 +372,121 @@ other pages' influenced-by lists."
       (let ((output (with-output-to-string (*standard-output*)
                       (show-page wiki "Parent"))))
         (is (search "Child" output))))))
+
+;;; ============================================================
+;;; Typed page subclasses and lens-driven rendering
+;;; ============================================================
+
+(test create-typed-page-stores-slots
+  "A wiki-computer page stores its typed slot values."
+  (let ((wiki (make-test-wiki)))
+    (multiple-value-bind (writer) (make-test-wiki-accounts wiki)
+      (let ((page (create-page wiki :account writer
+                                    :class 'classic.models.common:wiki-computer
+                                    :title "Test Box"
+                                    :body "A computer."
+                                    :computer-manufacturer "Acme"
+                                    :computer-released "1980")))
+        (is (typep page 'classic.models.common:wiki-computer))
+        (is (string= "Acme" (classic.models.common:computer-manufacturer page)))
+        (is (string= "1980" (classic.models.common:computer-released page)))))))
+
+(test typed-page-uses-lens-rendering
+  "show-page renders a typed page's infobox via the lens system,
+not the alist."
+  (let ((wiki (make-test-wiki)))
+    (multiple-value-bind (writer) (make-test-wiki-accounts wiki)
+      (create-page wiki :account writer
+                        :class 'classic.models.common:wiki-cpu
+                        :title "Z80"
+                        :body "An 8-bit CPU."
+                        :cpu-manufacturer "Zilog"
+                        :cpu-clock-speed "2.5 MHz"
+                        :cpu-word-size "8-bit")
+      (let ((output (with-output-to-string (*standard-output*)
+                      (show-page wiki "Z80"))))
+        ;; Lens-rendered fields appear
+        (is (search "Zilog" output))
+        (is (search "2.5 MHz" output))
+        (is (search "8-bit" output))))))
+
+(test generic-page-uses-alist-infobox
+  "show-page renders a generic wiki-page via the alist infobox."
+  (let ((wiki (make-test-wiki)))
+    (multiple-value-bind (writer) (make-test-wiki-accounts wiki)
+      (create-page wiki :account writer :title "Generic"
+                        :body "A page."
+                        :infobox '(("Custom" . "Value")))
+      (let ((output (with-output-to-string (*standard-output*)
+                      (show-page wiki "Generic"))))
+        (is (search "Custom:" output))
+        (is (search "Value" output))))))
+
+(test typed-page-link-indicator
+  "Resolved links to typed pages show [:>X], generic pages show [>X]."
+  (let ((wiki (make-test-wiki)))
+    (multiple-value-bind (writer) (make-test-wiki-accounts wiki)
+      (create-page wiki :account writer
+                        :class 'classic.models.common:wiki-person
+                        :title "Ada" :body "."
+                        :person-born "1815")
+      (create-page wiki :account writer :title "Plain" :body ".")
+      (create-page wiki :account writer :title "Source"
+                        :body "See [[Ada]] and [[Plain]].")
+      (let ((output (with-output-to-string (*standard-output*)
+                      (show-page wiki "Source"))))
+        (is (search "[:>Ada]" output))
+        (is (search "[>Plain]" output))))))
+
+(test sublens-renders-compact-form
+  "A computer's CPU field rendered via sublens shows the CPU name and
+clock speed from the CPU's :label lens."
+  (let ((wiki (make-test-wiki)))
+    (multiple-value-bind (writer) (make-test-wiki-accounts wiki)
+      (create-page wiki :account writer
+                        :class 'classic.models.common:wiki-cpu
+                        :title "6502" :body "."
+                        :cpu-clock-speed "1 MHz")
+      (publish-page wiki "6502" :account (second
+                                          (multiple-value-list
+                                           (make-test-wiki-accounts wiki))))
+      (create-page wiki :account writer
+                        :class 'classic.models.common:wiki-computer
+                        :title "Apple II" :body "."
+                        :computer-cpu "6502")
+      (let ((output (with-output-to-string (*standard-output*)
+                      (show-page wiki "Apple II"))))
+        ;; Sublens renders CPU as "6502 (1 MHz)"
+        (is (search "6502 (1 MHz)" output))))))
+
+(test lens-display-link-resolves-anchor
+  "A typed slot with :display :link renders the anchor as a link indicator."
+  (let ((wiki (make-test-wiki)))
+    (multiple-value-bind (writer) (make-test-wiki-accounts wiki)
+      (create-page wiki :account writer
+                        :class 'classic.models.common:wiki-person
+                        :title "Woz" :body "."
+                        :person-born "1950")
+      (create-page wiki :account writer
+                        :class 'classic.models.common:wiki-computer
+                        :title "Apple II" :body "."
+                        :computer-designer "Woz")
+      (let ((output (with-output-to-string (*standard-output*)
+                      (show-page wiki "Apple II"))))
+        ;; Designer field renders as a link to the person page
+        (is (search "[:>Woz]" output))))))
+
+(test lens-display-list-renders-items
+  "A typed slot with :display :list renders items as link indicators."
+  (let ((wiki (make-test-wiki)))
+    (multiple-value-bind (writer) (make-test-wiki-accounts wiki)
+      (create-page wiki :account writer :title "X" :body ".")
+      (create-page wiki :account writer
+                        :class 'classic.models.common:wiki-person
+                        :title "Inventor" :body "."
+                        :person-known-for '("X" "Missing"))
+      (let ((output (with-output-to-string (*standard-output*)
+                      (show-page wiki "Inventor"))))
+        ;; "X" resolves, "Missing" is broken
+        (is (search "[>X]" output))
+        (is (search "[?Missing]" output))))))
