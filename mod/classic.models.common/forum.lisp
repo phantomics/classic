@@ -17,20 +17,24 @@
 ;;;;   forum-thread (classic-container)
 ;;;;     contains -> post URIs
 ;;;;   forum-post (classic-post + workflow + deletion)
-;;;;
-;;;; Usage:
-;;;;   (defvar *f* (make-forum :name "CL Watercooler"
-;;;;                           :authority "watercooler.dev"
-;;;;                           :authority-date "2026"))
-;;;;   (defvar *alice* (create-member *f* :name "Alice Hong"
-;;;;                                  :nickname "alice42"
-;;;;                                  :title "Founder" :role :admin))
-;;;;   (start-thread *f* :account *alice* :title "Favorite macro?"
-;;;;                     :body "What do you reach for most?")
-;;;;   (post-reply *f* 1 :account *alice* :body "DEFCLASS, easily.")
-;;;;   (react *f* 1 1 :account *alice* :sticker "star")
-;;;;   (list-threads *f*)
-;;;;   (show-thread *f* 1)
+
+#|
+
+Usage:
+  (defvar *f* (make-forum :name "CL Watercooler"
+                          :authority "watercooler.dev"
+                          :authority-date "2026"))
+  (defvar *alice* (create-member *f* :name "Alice Hong"
+                                 :nickname "alice42"
+                                 :title "Founder" :role :admin))
+  (start-thread *f* :account *alice* :title "Favorite macro?"
+                    :body "What do you reach for most?")
+  (post-reply *f* 1 :account *alice* :body "DEFCLASS, easily.")
+  (react *f* 1 1 :account *alice* :sticker "star")
+  (list-threads *f*)
+  (show-thread *f* 1)
+
+|#
 
 (in-package #:classic.models.common)
 

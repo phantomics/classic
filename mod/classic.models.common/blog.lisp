@@ -2,25 +2,29 @@
 ;;;;
 ;;;; Provides a REPL-friendly API for creating and reading blog posts,
 ;;;; with role-based workflow: writers create drafts, editors publish them.
-;;;;
-;;;; Usage:
-;;;;   (defvar *blog* (make-blog :name "Team Blog"
-;;;;                             :authority "team.dev"
-;;;;                             :authority-date "2026"))
-;;;;
-;;;;   (defvar *alice* (create-account *blog* :name "Alice" :role :writer))
-;;;;   (defvar *bob*   (create-account *blog* :name "Bob"   :role :editor))
-;;;;
-;;;;   (write-post *blog* :account *alice*
-;;;;                      :title "Lisp Is Great"
-;;;;                      :text "Lisp is great because..."
-;;;;                      :categories '("tech" "lisp"))
-;;;;
-;;;;   (list-posts *blog*)
-;;;;   (publish-post *blog* 1 :account *bob*)
-;;;;   (show-post *blog* 1)
+
+#|
+
+Usage:
+  (defvar *blog* (make-blog :name "Team Blog"
+                            :authority "team.dev"
+                            :authority-date "2026"))
+
+  (defvar *alice* (create-account *blog* :name "Alice" :role :writer))
+  (defvar *bob*   (create-account *blog* :name "Bob"   :role :editor))
+
+  (write-post *blog* :account *alice*
+                     :title "Lisp Is Great"
+                     :text "Lisp is great because..."
+                     :categories '("tech" "lisp"))
+
+  (list-posts *blog*)
+  (publish-post *blog* 1 :account *bob*)
+  (show-post *blog* 1)
 
 (in-package #:classic.models.common)
+
+|#
 
 ;;; ============================================================
 ;;; Blog creation (with workflow setup)
