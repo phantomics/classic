@@ -1,0 +1,30 @@
+# Classic — Agent Guide
+
+Classic is a Common Lisp abstract syndication system and imprint composer.
+See [README.md](README.md) for an overview of the architecture.
+
+## Documentation — Compass
+
+Project documentation follows **Compass** (Common Ontological Model for Prose
+Artifacts by Structural Standard). Use the `compass-*` skills rather than
+improvising documents:
+
+- `compass-author` — scaffold a new document (Survey/Eval/Plan/Log/Ref/Guide/
+  Spec/Arch/Glossary) with correct front-matter and per-genre section shape.
+- `compass-review` — judgment-level conformance review before accepting a doc.
+- `compass-lookup` — resolve identifiers, decisions, and cross-references.
+
+The skills carry the standard and its reference bundle. Load @Compass.md on
+demand only if you need the source text — do not preload it.
+
+Project-specific facts the skills cannot infer:
+
+- Compass namespace: CLASSIC
+- Docs directory: doc/                        <!-- grouping via front-matter; survey/ subdir is convenience only -->
+- Federation index (if any): none yet
+
+Essentials (full rules in Compass.md): every document opens with a §7 YAML
+front-matter block; genre and status use the controlled vocabularies; decision
+records are ADR-shaped (`D`-records); code references in Log/Plan are
+commit-pinned (`path:symbol@revision`), never bare line numbers; documents
+authored with LLM help carry `provenance:`.
