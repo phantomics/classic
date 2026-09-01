@@ -8,6 +8,22 @@ language:      en
 status:        Draft
 provenance:
   assistant:   opencode
+cites:
+  - title:   LOCKSS (Lots Of Copies Keep Stuff Safe)
+    locator: lockss.org — distributed digital preservation model
+    external: true
+  - title:   Internet Archive / Wayback Machine
+    locator: archive.org — web page preservation
+    external: true
+  - title:   ArchiveTeam / WARC web archiving
+    locator: ArchiveTeam wiki; WARC, ISO 28500
+    external: true
+  - title:   Git distributed version control
+    locator: git-scm.com — clone/replication model
+    external: true
+  - title:   Academic Torrents
+    locator: academictorrents.com — BitTorrent for durable datasets
+    external: true
 open-questions:
   - CLASSIC-O1
   - CLASSIC-O2
@@ -156,7 +172,10 @@ idea and belongs last.
 ## Ontology sketch
 
 Archiving needs little net-new schema; it is mostly configuration over existing
-federation and an affordance advertised on published content.
+federation and an affordance advertised on published content. The sketch below
+shows three proposed classes — `archive-offer`, `archive-mirror`, and
+`preservation-feed` — each with its superclass (in `<-` notation) and principal
+slots:
 
 ```
 archive-offer             (<- classic-resource)
@@ -332,8 +351,9 @@ open question CLASSIC-O6 records in both surveys.
 It depends on the persistence protocol and its flat-file backend
 ([Persistence.md](../persistence/Persistence.md)) and the federation and
 co-hosting model ([Federation.md](../federation/Federation.md)), and it shares the
-text/binary blob split with the pre-Compass music survey (Survey.MusicPublishing.md,
-which does not yet carry a Compass identifier).
+text/binary blob split with the pre-Compass music survey
+([Survey.MusicPublishing.md](Survey.MusicPublishing.md), which does not yet carry
+a Compass identifier).
 
 Externally, the model is comparable to LOCKSS (the cooperative many-copies library
 preservation model, its closest prior art), the Internet Archive and Wayback

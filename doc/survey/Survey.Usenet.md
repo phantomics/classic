@@ -8,6 +8,19 @@ language:      en
 status:        Draft
 provenance:
   assistant:   opencode
+cites:
+  - title:   Network News Transfer Protocol (NNTP)
+    locator: RFC 3977
+    external: true
+  - title:   Lemmy federated link aggregator
+    locator: join-lemmy.org project documentation
+    external: true
+  - title:   Matrix federated communication protocol
+    locator: matrix.org specification
+    external: true
+  - title:   ActivityPub
+    locator: W3C Recommendation, 2018
+    external: true
 open-questions:
   - CLASSIC-O1
   - CLASSIC-O2
@@ -136,7 +149,10 @@ is the participant's choice, not the platform's imposition.
 
 Following the imprint convention (bare-prefixed classes; the `classic-` prefix
 reserved for schema classes), a Usenet-analog needs little beyond the existing
-forum imprint. The additions are naming, discovery, and cross-posting.
+forum imprint. The additions are naming, discovery, and cross-posting. The
+sketch below shows three proposed classes — `forum-group`, the existing
+`forum-post` gaining multi-container membership, and `instance-directory` — each
+with its superclass (in `<-` notation) and principal slots:
 
 ```
 forum-group              (<- classic-container)
@@ -363,8 +379,7 @@ with different retention settings reconcile?
 
 What is the minimal set of forum-post model and transport constraints that keeps
 a future NNTP gateway reachable without building it now, and where exactly does
-the safe
-(unidirectional import) / risky (bidirectional) boundary fall?
+the safe (unidirectional import) / risky (bidirectional) boundary fall?
 
 ### CLASSIC-O5 — Relationship to the federated moderation model
 

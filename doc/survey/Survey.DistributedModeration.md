@@ -8,6 +8,22 @@ language:      en
 status:        Draft
 provenance:
   assistant:   opencode
+cites:
+  - title:   Bluesky stackable labeler moderation system
+    locator: AT Protocol moderation / labeler documentation
+    external: true
+  - title:   EasyList / uBlock Origin filter-list ecosystem
+    locator: subscription-based content-filter lists
+    external: true
+  - title:   Gnus scoring (Usenet)
+    locator: Gnus manual — scoring and adaptive scorefiles
+    external: true
+  - title:   Apache SpamAssassin collaborative spam filtering
+    locator: spamassassin.apache.org
+    external: true
+  - title:   PGP web of trust
+    locator: OpenPGP, RFC 4880 — trust model
+    external: true
 open-questions:
   - CLASSIC-O1
   - CLASSIC-O2
@@ -188,7 +204,10 @@ publishing a divergent ruleset can be caught by comparing the two.
 ## Ontology sketch
 
 Following the imprint convention (bare-prefixed classes; the `classic-` prefix
-reserved for schema classes):
+reserved for schema classes), the sketch below shows four proposed classes —
+`moderation-profile`, `moderation-feed`, `moderation-action`, and
+`moderation-set` — each with its superclass (in `<-` notation) and principal
+slots:
 
 ```
 moderation-profile        (<- classic-named-resource)
@@ -411,9 +430,10 @@ killfile on-ramp is the simplest case of the model surveyed here. It shares the
 planned archival survey (a preservation feed is a positive-curation feed pointed
 at an archival action rather than a display action); the two should share one
 underlying feed type where practical. It also relates to the two pre-Compass
-use-case surveys, Survey.MusicPublishing.md and Survey.TTRPGHost.md, which share
-its deployment-mode framing and grassroots adoption strategy. (Those documents
-predate the Compass format and do not yet carry Compass identifiers.)
+use-case surveys, [Survey.MusicPublishing.md](Survey.MusicPublishing.md) and
+[Survey.TTRPGHost.md](Survey.TTRPGHost.md), which share its deployment-mode
+framing and grassroots adoption strategy. (Those documents predate the Compass
+format and do not yet carry Compass identifiers.)
 
 Externally, the model draws on well-attested precedents: Bluesky's stackable
 labeler system (the closest existing analog — subscribable labelers whose effects
