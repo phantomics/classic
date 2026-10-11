@@ -34,8 +34,12 @@ Project-specific facts the skills cannot infer:
   (`../../chat/lexter`), as listed in `compass.sexp`
 - Migration: most documents in `doc/` predate Compass and have no
   front-matter yet; run checks with `compass check --skip-unmarked`. Four
-  migrated Surveys share the open-question numbers CLASSIC-O1 to O6, which
-  `compass check` reports under `register/unique` until they are renumbered
+  migrated Surveys share the open-question numbers CLASSIC-O1 to O6, which no
+  ledger allocated: `compass check` reports them under `register/unique` and
+  `ledger/coverage`, and `compass init --ledger` refuses to seed a ledger while
+  a number is defined twice. Give each Survey's questions provisional
+  identifiers formed from its own (`CLASSIC-DRAFT-archival-O1`, …); `compass
+  assign` numbers each Survey's questions when the Survey is accepted
 
 Essentials (full rules in Compass.md): every document opens with a §7 YAML
 front-matter block; genre and status use the controlled vocabularies; decision
