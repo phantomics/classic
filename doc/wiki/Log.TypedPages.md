@@ -1,3 +1,19 @@
+---
+id:            CLASSIC-DRAFT-typed-pages
+title:         Typed Page Classes Development Log
+genre:         Log
+scope:         component
+project:       Classic
+component:     wiki
+language:      en
+status:        Draft
+provenance:
+  assistant:   opencode
+relates-to:
+  - CLASSIC-DRAFT-wiki-demo
+  - CLASSIC-DRAFT-wiki
+---
+
 # Typed Page Classes: Development Log
 
 This document chronicles the addition of typed page subclasses and
@@ -11,8 +27,9 @@ at the rendering layer rather than the persistence layer.
 
 ## Problem
 
-The wiki demo established cross-reference tracking, broken-link
-healing, revision history, and an alist-based infobox sidebar. The
+The wiki demo ([CLASSIC-DRAFT-wiki-demo](Log.WikiDemo.md)) established
+cross-reference tracking, broken-link healing, revision history, and an
+alist-based infobox sidebar. The
 alist infobox proved that pages can carry structured metadata alongside
 prose. But it left the lens system untested at the model layer: no
 code had ever walked a lens spec's properties, read slot values via

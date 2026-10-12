@@ -37,10 +37,10 @@ threaded discussion groups that propagate between peers, with binary content
 held in a parallel, separately-scaling store, and with participants reading and
 posting through a variety of interfaces (web, TUI, desktop) running on their own
 Classic instances. It assumes the forum imprint
-([Forum.md](../forum/Forum.md)), the federation and co-hosting model
-([Federation.md](../federation/Federation.md)), the workflow engine
-([Workflow.md](../model/Workflow.md)), the persistence protocol
-([Persistence.md](../persistence/Persistence.md)), the composer pipeline, and
+([CLASSIC-DRAFT-forum](../forum/Guide.Forum.md)), the federation and co-hosting model
+([CLASSIC-DRAFT-federation-demo](../federation/Guide.FederationDemo.md)), the workflow engine
+([CLASSIC-DRAFT-workflow](../model/Ref.Workflow.md)), the persistence protocol
+([CLASSIC-DRAFT-persistence](../persistence/Ref.Persistence.md)), the composer pipeline, and
 the planned Seed authoring integration and TUI medium. It asks whether Classic
 should be positioned as a substrate for this deployment; it does not decide.
 
@@ -327,14 +327,14 @@ is worth.
 
 This survey sits alongside two sibling use-case surveys that share its
 substrate analysis, deployment-mode framing, and grassroots niche-community
-adoption strategy: [Survey.MusicPublishing.md](Survey.MusicPublishing.md) and
-[Survey.TTRPGHost.md](Survey.TTRPGHost.md). (Those documents predate the Compass
+adoption strategy: [CLASSIC-DRAFT-music-publishing](Survey.MusicPublishing.md) and
+[CLASSIC-DRAFT-ttrpg-host](Survey.TTRPGHost.md). (Those documents predate the Compass
 format adopted here and do not yet carry Compass identifiers.)
 
-It depends on the forum imprint ([Forum.md](../forum/Forum.md)), the federation
-model ([Federation.md](../federation/Federation.md)), the workflow engine
-([Workflow.md](../model/Workflow.md)), and the persistence protocol
-([Persistence.md](../persistence/Persistence.md)).
+It depends on the forum imprint ([CLASSIC-DRAFT-forum](../forum/Guide.Forum.md)), the federation
+model ([CLASSIC-DRAFT-federation-demo](../federation/Guide.FederationDemo.md)), the workflow engine
+([CLASSIC-DRAFT-workflow](../model/Ref.Workflow.md)), and the persistence protocol
+([CLASSIC-DRAFT-persistence](../persistence/Ref.Persistence.md)).
 
 The fine-grained, crowdsourced, subscription-based moderation model — where users
 publish and subscribe to federated moderation feeds that block, warn, promote, or

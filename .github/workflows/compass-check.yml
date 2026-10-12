@@ -6,9 +6,10 @@
 # required status check of the default branch, and require review from code
 # owners, so that .github/CODEOWNERS makes the steward approve every allocation.
 #
-# COMPASS_REV pins the toolchain revision (CLASSIC-DRAFT-compass-migration-O4).
-# --skip-unmarked is dropped when Phase 2 of the migration gives every document
-# front-matter.
+# COMPASS_REV pins the toolchain to a Compass release tag
+# (CLASSIC-DRAFT-compass-migration-D8); updating the toolchain is a change to
+# that line. Compass has published no tag yet, so it names the commit of
+# version 0.2.0 until the first tag exists.
 
 name: compass-check
 
@@ -22,7 +23,7 @@ permissions:
 
 env:
   COMPASS_REPO: phantomics/compass
-  COMPASS_REV: 9a6ab23fa4a7ab6425034ec795af766bca90ee61   # Compass 0.2.0
+  COMPASS_REV: 9a6ab23fa4a7ab6425034ec795af766bca90ee61   # Compass 0.2.0; replace with its first release tag
   QL_DIST: http://beta.quicklisp.org/dist/quicklisp/2023-06-18/distinfo.txt
 
 jobs:
@@ -66,7 +67,7 @@ jobs:
             base=""
           fi
           .compass/bin/compass version
-          .compass/bin/compass check --skip-unmarked ${base:+--base "$base"}
+          .compass/bin/compass check ${base:+--base "$base"}
 
       - name: Check the index
         run: .compass/bin/compass index --check

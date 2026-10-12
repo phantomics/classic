@@ -1,4 +1,22 @@
-# Theme Ontology
+---
+id:            CLASSIC-DRAFT-theme
+title:         Theme Ontology Reference
+genre:         Ref
+scope:         component
+project:       Classic
+component:     theme
+language:      en
+status:        Draft
+api-version:   "0.1.0"
+provenance:
+  assistant:   opencode
+relates-to:
+  - CLASSIC-DRAFT-theme-ontology
+  - CLASSIC-DRAFT-capability-exclusion
+  - CLASSIC-DRAFT-slot-fills
+---
+
+# Theme Ontology Reference
 
 Classic's theme system defines themes as first-class ontological
 resources stored through the persistence protocol. A theme declares

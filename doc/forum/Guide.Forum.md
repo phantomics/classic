@@ -1,4 +1,21 @@
-# The Forum Preset
+---
+id:            CLASSIC-DRAFT-forum
+title:         Forum Preset Guide
+genre:         Guide
+subtype:       tutorial
+scope:         component
+project:       Classic
+component:     forum
+language:      en
+status:        Draft
+api-version:   "0.1.0"
+provenance:
+  assistant:   opencode
+relates-to:
+  - CLASSIC-DRAFT-forum-demo
+---
+
+# Forum Preset Guide
 
 The forum preset is a phpBB-style discussion board built on Classic's
 common publication models. It demonstrates how a second content

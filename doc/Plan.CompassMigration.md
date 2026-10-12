@@ -21,6 +21,10 @@ decisions:
   - CLASSIC-DRAFT-compass-migration-D5
   - CLASSIC-DRAFT-compass-migration-D6
   - CLASSIC-DRAFT-compass-migration-D7
+  - CLASSIC-DRAFT-compass-migration-D8
+  - CLASSIC-DRAFT-compass-migration-D9
+  - CLASSIC-DRAFT-compass-migration-D10
+  - CLASSIC-DRAFT-compass-migration-D11
 open-questions:
   - CLASSIC-DRAFT-compass-migration-O1
   - CLASSIC-DRAFT-compass-migration-O2
@@ -281,11 +285,8 @@ ledger keeps numbers unique only if every change to it passes `compass check
 - `.github/workflows/compass-check.yml` builds the toolchain from the Compass
   repository and runs `compass check --base` against the branch a pull request
   merges into, and `compass index --check`, with the full history fetched for
-  Git-derived fields and code references. Which revision of the toolchain it
-  builds is CLASSIC-DRAFT-compass-migration-O4; until that is settled, the
-  workflow builds Compass commit `9a6ab23`, the committed form of the tree
-  the local executable was built from; the two differ from `ccb28e9` only in
-  `build.lisp`.
+  Git-derived fields and code references. It builds the toolchain at a pinned
+  Compass release tag (CLASSIC-DRAFT-compass-migration-D8).
 - `.github/CODEOWNERS` assigns `/doc/REGISTRY.sexp` to the steward.
 - `.mailmap` maps the `phantomics` identity to Andrew Sengul, so that derived
   authors, and the allocator of every ledger entry, name a person. It lands
@@ -327,6 +328,100 @@ stays `Draft` when the steward reviews statuses.
 - Refresh the content in the same effort. Rejected: it multiplies the size of
   the change and mixes structural edits, which are mechanical, with edits that
   need checking against the code.
+
+### CLASSIC-DRAFT-compass-migration-D8 — CI builds the toolchain at a pinned release tag
+
+**Status:** Proposed
+
+**Context:** CLASSIC-DRAFT-compass-migration-O4 asked which revision of the
+Compass toolchain CI builds. A pinned commit or tag is reproducible, but each
+toolchain update is a change to Classic. Following the latest release needs no
+change to Classic, but a new release can fail Classic's CI without any change
+in Classic. Compass plans to pin the toolchain version per repository
+(COMPASS-DRAFT-toolchain-D19 in
+[COMPASS-DRAFT-toolchain](../../compass/doc/Plan.Toolchain.md)). Compass has
+published no release tag yet.
+
+**Decision:** CI builds the toolchain at a pinned Compass release tag, named
+in one variable of the workflow; updating the toolchain is a change to that
+line. Until Compass publishes its first tag, the variable names commit
+`9a6ab23`, the committed form of the tree the local executable was built from
+(it differs from `ccb28e9` only in `build.lisp`).
+
+**Alternatives:**
+- Follow the latest release tag on each run. Rejected: a toolchain release
+  could fail Classic's CI unannounced, and a past run could not be reproduced.
+- Pin a commit permanently. Rejected: release tags name the versions Compass
+  supports, and a commit does not say which release it belongs to.
+
+### CLASSIC-DRAFT-compass-migration-D9 — Logs of several pieces of work take dated Update sections
+
+**Status:** Proposed
+
+**Context:** CLASSIC-DRAFT-compass-migration-O6 asked whether
+`Log.FederationConsistency.md`, `Log.SchemaMigration.md`, and
+`Log.ThemeOntology.md`, which each record work done over several commits in
+phases or addenda, should be split into one Log per piece of work. The Log
+template appends follow-up work as `## Update <date> — <title>` sections.
+
+**Decision:** Each stays one Log. Its first piece of work is the Log's body,
+and each later phase or addendum becomes a `## Update <date> — <title>`
+section, with its own decision records and Files table, pinned to its own
+commit (CLASSIC-DRAFT-compass-migration-D5).
+
+**Alternatives:**
+- Split each into one Log per piece of work. Rejected: the phases and addenda
+  continue one line of work and cite one another, and a split would multiply
+  identifiers and links without adding anything a reader needs.
+
+### CLASSIC-DRAFT-compass-migration-D10 — The schema contract is split into a Spec, a Guide, and a Survey
+
+**Status:** Proposed
+
+**Context:** CLASSIC-DRAFT-compass-migration-O1 found that `SchemaContract.md`
+combined a normative contract written with lowercase "must" and "should", a
+ten-step walkthrough, and an afterword exploring the limits of pluggability.
+
+**Decision:** The contract stays in
+[CLASSIC-DRAFT-schema-contract](Spec.SchemaContract.md) and adopts RFC 2119
+keywords. The walkthrough becomes
+[CLASSIC-DRAFT-new-schema](Guide.NewSchema.md), a how-to Guide, and the
+afterword becomes [CLASSIC-DRAFT-schema-pluggability](Survey.SchemaPluggability.md),
+with its trigger for the refactor as an open question and a note on what the
+dist factorization has since changed. Each "must" became MUST, except the
+requirement for `uri-namespace-prefix` methods, which became SHOULD: the
+contract itself says a default method provides a fallback, so an explicit
+method is recommended, not required. References to the afterword elsewhere
+now point to the Survey.
+
+**Alternatives:**
+- Keep one document, with the walkthrough and afterword as non-normative
+  appendices. Rejected: each part has a different genre, and a reader of the
+  contract cannot tell which statements bind.
+
+### CLASSIC-DRAFT-compass-migration-D11 — The planned persistence backends move into an Arch
+
+**Status:** Proposed
+
+**Context:** CLASSIC-DRAFT-compass-migration-O2 found that `Persistence.md`
+described the built memory backend beside a flat-file and a triplestore
+backend that are designed but not built. A Ref describes running software; an
+Arch records a design that does not yet exist (§4).
+
+**Decision:** The two planned backends move to
+[CLASSIC-DRAFT-persistence-backends](persistence/Arch.PersistenceBackends.md),
+whose decision records state the design choices the original text makes, with
+"None recorded" where it names no alternative (as
+CLASSIC-DRAFT-compass-migration-D4 does for Logs), and whose open questions
+name what the reference leaves to these backends without the design saying
+how. [CLASSIC-DRAFT-persistence](persistence/Ref.Persistence.md) keeps a short
+section pointing to it. The comparison of storage across backends in the
+reference's tables and diagram stays, since it explains the protocol.
+
+**Alternatives:**
+- Keep the planned backends in the Ref, marked as planned. Rejected: the Ref
+  would mix description of running code with design, which is the confusion
+  genres exist to prevent.
 
 ## Phase 1 — Clean baseline
 
@@ -383,6 +478,18 @@ stays `Draft` when the steward reviews statuses.
    | `doc/forum/Forum.md` | `doc/forum/Guide.Forum.md` | Guide (tutorial), Draft | forum |
    | `doc/wiki/Wiki.md` | `doc/wiki/Guide.Wiki.md` | Guide (tutorial), Draft | wiki |
 
+   Then, in the content change, the two documents split under
+   CLASSIC-DRAFT-compass-migration-D10 and CLASSIC-DRAFT-compass-migration-D11
+   give three new ones:
+
+   Table: Documents created by splitting the schema contract and the persistence reference.
+
+   | Split from | New path | Genre and status | Component |
+   |---|---|---|---|
+   | `doc/Spec.SchemaContract.md` | `doc/Guide.NewSchema.md` | Guide (howto), Draft | schema |
+   | `doc/Spec.SchemaContract.md` | `doc/Survey.SchemaPluggability.md` | Survey, Draft | schema |
+   | `doc/persistence/Ref.Persistence.md` | `doc/persistence/Arch.PersistenceBackends.md` | Architecture, Draft | persistence |
+
 2. **Add front-matter** to the twenty-six unmarked documents, following each
    genre's template: a provisional `id`, `title`, `genre`, `scope`,
    `project: Classic`, `component`, `language`, the status of
@@ -428,10 +535,8 @@ Committed in batches by component, each batch checked before the next.
      `Log.DeletionSupport.md`, `Log.SlotValidation.md`,
      `Log.WithPersistence.md`, and `Log.ThemeOntology.md` are among those
      affected.
-   - Addenda and phase sections are restructured as
-     CLASSIC-DRAFT-compass-migration-O6 settles: dated `## Update` sections in
-     one Log, or a Log per piece of work. Until it is settled, those Logs are
-     converted last.
+   - Addenda and phase sections become dated `## Update` sections
+     (CLASSIC-DRAFT-compass-migration-D9).
    - Two Logs give dates that disagree with their commits
      (`Log.GeneralModel.md` and `Log.SlotFills.md`); the disagreement is noted
      in the Log, not silently corrected.
@@ -461,7 +566,9 @@ Outside this plan, recorded so that it is not lost:
   built from Compass commit `ccb28e9` with uncommitted changes to `build.lisp`,
   which became the final 0.2 commit, `9a6ab23`, the revision CI builds. Its
   source is the same, but local and CI results can drift apart when either is
-  rebuilt from another revision (CLASSIC-DRAFT-compass-migration-O4).
+  rebuilt from another revision; when CI moves to a release tag
+  (CLASSIC-DRAFT-compass-migration-D8), the local build should be reinstalled
+  from the same tag.
 - **Accessibility is not checked yet.** Version 0.2 does not check captions,
   descriptions, heading levels, or link text, so Phase 3's accessibility work
   is verified by review, not by the toolchain.
@@ -489,12 +596,18 @@ Survey. Should the walkthrough become `Guide.NewSchema.md` and the afterword
 move out, and should the contract adopt RFC 2119 keywords? Each changes what
 the document says, so it is not done in this migration.
 
+**Resolution (2026-10-11):** Split as proposed, and the contract adopts RFC
+2119 keywords. Recorded as CLASSIC-DRAFT-compass-migration-D10.
+
 ### CLASSIC-DRAFT-compass-migration-O2 — Planned persistence backends
 
 `Persistence.md` describes the built memory backend and two backends that are
 designed but not built, flat-file and triplestore. Should the planned backends
 move into an Arch document, leaving `Ref.Persistence.md` to describe what
 exists?
+
+**Resolution (2026-10-11):** The planned backends move into an Arch. Recorded
+as CLASSIC-DRAFT-compass-migration-D11.
 
 ### CLASSIC-DRAFT-compass-migration-O3 — A compiled README
 
@@ -511,6 +624,9 @@ once Compass publishes one, or download a released executable. A pinned
 commit needs a change to Classic for every toolchain update; a moving branch
 lets a toolchain change break Classic's CI without a change to Classic.
 
+**Resolution (2026-10-11):** A pinned release tag; until Compass publishes
+one, commit `9a6ab23`. Recorded as CLASSIC-DRAFT-compass-migration-D8.
+
 ### CLASSIC-DRAFT-compass-migration-O5 — Which documents are numbered first
 
 Once the migration lands, every document and record has a provisional
@@ -525,6 +641,9 @@ order of acceptance?
 `Log.ThemeOntology.md` a main body and a lens addendum a day later. Should
 each become one Log with dated `## Update` sections, or be split into one Log
 per piece of work, each with its own identifier and decisions?
+
+**Resolution (2026-10-11):** One Log each, with dated `## Update` sections.
+Recorded as CLASSIC-DRAFT-compass-migration-D9.
 
 ## Prior Art
 

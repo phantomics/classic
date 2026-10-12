@@ -1,3 +1,20 @@
+---
+id:            CLASSIC-DRAFT-wiki-demo
+title:         Wiki Demo Development Log
+genre:         Log
+scope:         component
+project:       Classic
+component:     wiki
+language:      en
+status:        Draft
+provenance:
+  assistant:   opencode
+relates-to:
+  - CLASSIC-DRAFT-wiki
+  - CLASSIC-DRAFT-typed-pages
+  - CLASSIC-DRAFT-general-model
+---
+
 # Wiki Demo: Development Log
 
 This document chronicles the implementation of Classic's wiki preset:
@@ -266,7 +283,8 @@ across test files). The wiki suite covers:
 - **A second consumer of the editorial workflow.** The blog preset
   proved the editorial workflow works for blogs; the wiki proves it
   works for any editorially-managed content, validating that the
-  workflow shapes extracted during the General Model refactor are
+  workflow shapes extracted during the General Model refactor
+  ([CLASSIC-DRAFT-general-model](../model/Log.GeneralModel.md)) are
   genuinely reusable.
 
 - **Three presets, same substrate.** Blog, forum, and wiki are

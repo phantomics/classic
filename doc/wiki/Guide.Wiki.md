@@ -1,4 +1,22 @@
-# The Wiki Preset
+---
+id:            CLASSIC-DRAFT-wiki
+title:         Wiki Preset Guide
+genre:         Guide
+subtype:       tutorial
+scope:         component
+project:       Classic
+component:     wiki
+language:      en
+status:        Draft
+api-version:   "0.1.0"
+provenance:
+  assistant:   opencode
+relates-to:
+  - CLASSIC-DRAFT-wiki-demo
+  - CLASSIC-DRAFT-typed-pages
+---
+
+# Wiki Preset Guide
 
 The wiki preset is a cross-referencing knowledge base built on Classic's
 common publication models. It demonstrates how a third content profile

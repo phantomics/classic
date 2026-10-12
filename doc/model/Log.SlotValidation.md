@@ -1,3 +1,18 @@
+---
+id:            CLASSIC-DRAFT-slot-validation
+title:         Slot Type Validation Development Log
+genre:         Log
+scope:         component
+project:       Classic
+component:     model
+language:      en
+status:        Draft
+provenance:
+  assistant:   opencode
+relates-to:
+  - CLASSIC-DRAFT-model
+---
+
 # Slot Type Validation: Development Log
 
 This document chronicles the design decisions and implementation of

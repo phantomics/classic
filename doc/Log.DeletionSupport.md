@@ -1,3 +1,20 @@
+---
+id:            CLASSIC-DRAFT-deletion-support
+title:         Deletion Support Development Log
+genre:         Log
+scope:         project
+project:       Classic
+component:     model
+language:      en
+status:        Draft
+provenance:
+  assistant:   opencode
+relates-to:
+  - CLASSIC-DRAFT-model
+  - CLASSIC-DRAFT-workflow
+  - CLASSIC-DRAFT-persistence
+---
+
 # Deletion Support: Development Log
 
 This document chronicles the design decisions and implementation of

@@ -1,3 +1,21 @@
+---
+id:            CLASSIC-DRAFT-general-model
+title:         General Publication Models Development Log
+genre:         Log
+scope:         component
+project:       Classic
+component:     model
+language:      en
+status:        Draft
+provenance:
+  assistant:   opencode
+relates-to:
+  - CLASSIC-DRAFT-model
+  - CLASSIC-DRAFT-workflow
+  - CLASSIC-DRAFT-schema
+  - CLASSIC-DRAFT-dist-factorization
+---
+
 # General Publication Models: Development Log
 
 This document chronicles the generalization of Classic's common model
@@ -145,7 +163,8 @@ join it.
 
 ### 6. The `classic-blog` package nickname is dropped
 
-The nickname was introduced during the dist factorization to ease that
+The nickname was introduced during the dist factorization
+([CLASSIC-DRAFT-dist-factorization](../Log.DistFactorization.md)) to ease that
 transition. After this refactor it would misname a package that is no
 longer blog-specific. It was dropped in the same pass, and the one
 consumer that used it (`test/test-deletion.lisp`) was updated to the

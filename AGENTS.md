@@ -36,12 +36,17 @@ Project-specific facts the skills cannot infer:
 - Federated repositories: COMPASS (`../compass`), ORIGIN (`../origin`), LEXTER
   (`../../chat/lexter`), as listed in `compass.sexp`
 - Migration: the migration is planned in `doc/Plan.CompassMigration.md`
-  (CLASSIC-DRAFT-compass-migration). Until its Phase 2 lands, most documents
-  in `doc/` predate Compass and have no front-matter; run checks with
-  `compass check --skip-unmarked`. No document is numbered yet: every
-  document and record carries a provisional identifier
-  (`CLASSIC-DRAFT-<slug>`, `CLASSIC-DRAFT-<slug>-O1`, …), and the ledger is
-  empty until the steward asks for `compass assign`
+  (CLASSIC-DRAFT-compass-migration). Every document under `doc/` has
+  front-matter, so run `compass check` without `--skip-unmarked`. Logs are
+  still being converted (decision records, pinned code references, table
+  captions) in its Phase 3; leave a Log's Files-table paths and historical
+  file names as they were. No document is numbered yet: every document and
+  record carries a provisional identifier (`CLASSIC-DRAFT-<slug>`,
+  `CLASSIC-DRAFT-<slug>-O1`, …), and the ledger is empty until the steward
+  asks for `compass assign`
+- CI: `.github/workflows/compass-check.yml` builds the toolchain at the
+  Compass revision in `COMPASS_REV`, a pinned release tag once Compass
+  publishes one
 
 Essentials (full rules in Compass.md): every document opens with a §7 YAML
 front-matter block; genre and status use the controlled vocabularies; decision

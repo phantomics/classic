@@ -1,3 +1,19 @@
+---
+id:            CLASSIC-DRAFT-slot-fills
+title:         Template Slot Fills Development Log
+genre:         Log
+scope:         component
+project:       Classic
+component:     theme
+language:      en
+status:        Draft
+provenance:
+  assistant:   opencode
+relates-to:
+  - CLASSIC-DRAFT-theme
+  - CLASSIC-DRAFT-theme-ontology
+---
+
 # Template Slot Fills: Development Log
 
 This document chronicles the addition of template slot fills to

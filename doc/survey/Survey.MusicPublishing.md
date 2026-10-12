@@ -1,4 +1,45 @@
-# Concept: Music Publishing
+---
+id:            CLASSIC-DRAFT-music-publishing
+title:         Music Publishing Survey
+genre:         Survey
+scope:         project
+project:       Classic
+language:      en
+status:        Draft
+provenance:
+  assistant:   opencode
+relates-to:
+  - CLASSIC-DRAFT-model
+  - CLASSIC-DRAFT-persistence
+  - CLASSIC-DRAFT-federation-demo
+  - CLASSIC-DRAFT-workflow
+  - CLASSIC-DRAFT-ttrpg-host
+cites:
+  - title:   Bandcamp
+    locator: bandcamp.com
+    external: true
+  - title:   SoundCloud
+    locator: soundcloud.com
+    external: true
+  - title:   Spotify
+    locator: spotify.com
+    external: true
+  - title:   DistroKid
+    locator: distrokid.com
+    external: true
+  - title:   IPFS, the InterPlanetary File System
+    locator: ipfs.tech
+    external: true
+open-questions:
+  - CLASSIC-DRAFT-music-publishing-O1
+  - CLASSIC-DRAFT-music-publishing-O2
+  - CLASSIC-DRAFT-music-publishing-O3
+  - CLASSIC-DRAFT-music-publishing-O4
+  - CLASSIC-DRAFT-music-publishing-O5
+  - CLASSIC-DRAFT-music-publishing-O6
+---
+
+# Music Publishing: Survey
 
 This document records the idea of using Classic as the substrate for a
 musician's entire publishing lifecycle -- from local recording and
@@ -8,16 +49,14 @@ find the music. It is a conceptual sketch, not a build plan; it records
 why the idea is a natural fit for Classic's model, where music departs
 from the substrate's usual assumptions, and where the genuine limits
 lie. It assumes the ontological model
-([`../model/Model.md`](../model/Model.md)), the persistence protocol and
-its `:blob` strategy ([`../persistence/Persistence.md`](../persistence/Persistence.md)),
+([CLASSIC-DRAFT-model](../model/Ref.Model.md)), the persistence protocol and
+its `:blob` strategy ([CLASSIC-DRAFT-persistence](../persistence/Ref.Persistence.md)),
 the federation and co-hosting model
-([`../federation/Federation.md`](../federation/Federation.md)), the
-workflow engine ([`../model/Workflow.md`](../model/Workflow.md)), the
+([CLASSIC-DRAFT-federation-demo](../federation/Guide.FederationDemo.md)), the
+workflow engine ([CLASSIC-DRAFT-workflow](../model/Ref.Workflow.md)), the
 composer pipeline, and the planned Seed authoring integration.
 
 **Date:** 2026-07-04
-
-**Status:** Conceptual. No implementation has begun.
 
 
 ## Motivation
@@ -337,7 +376,31 @@ against data-model-underservice (favoring metadata-rich niches). Both
 are viable; both reward depth over width.
 
 
-## Honest limits
+## What would be new work
+
+Most of the use case falls out of existing machinery. Specifically new:
+
+1. A `classic.models.music` imprint -- the ontology sketched above.
+   Substantial but self-contained.
+2. A content-addressed blob backend extending the `:blob` persistence
+   strategy with hashing, chunked transfer, and metadata/blob
+   separation.
+3. A federated blob-transfer protocol (content-hash in the event; blob
+   fetched out-of-band).
+4. A Seed-rendered media player (`uim-web` deployment: HTML5 audio,
+   playlist as dx-composed UI, controls wired to Classic operations).
+5. An aggregator deployment-mode configuration (catalog syndication,
+   discovery indexes, listener accounts) atop the hosted-service mode.
+6. Payment federation (the genuinely open design question above).
+7. A DAW import path (watch-folder conventions; export presets).
+8. A streaming HTTP endpoint with range-request support for seeking.
+
+Not required: any change to the core protocol, the workflow engine, or
+the composer pipeline. Music sits on the existing substrate cleanly; it
+extends the blob and deployment-mode edges, not the core.
+
+
+## Honest Limits
 
 - **Blob economics.** Audio at scale is expensive to store and serve. A
   hosted aggregator faces real storage/bandwidth costs that a text-only
@@ -367,30 +430,6 @@ are viable; both reward depth over width.
   integration effort outside the substrate proper.
 
 
-## What would be new work
-
-Most of the use case falls out of existing machinery. Specifically new:
-
-1. A `classic.models.music` imprint -- the ontology sketched above.
-   Substantial but self-contained.
-2. A content-addressed blob backend extending the `:blob` persistence
-   strategy with hashing, chunked transfer, and metadata/blob
-   separation.
-3. A federated blob-transfer protocol (content-hash in the event; blob
-   fetched out-of-band).
-4. A Seed-rendered media player (`uim-web` deployment: HTML5 audio,
-   playlist as dx-composed UI, controls wired to Classic operations).
-5. An aggregator deployment-mode configuration (catalog syndication,
-   discovery indexes, listener accounts) atop the hosted-service mode.
-6. Payment federation (the genuinely open design question above).
-7. A DAW import path (watch-folder conventions; export presets).
-8. A streaming HTTP endpoint with range-request support for seeking.
-
-Not required: any change to the core protocol, the workflow engine, or
-the composer pipeline. Music sits on the existing substrate cleanly; it
-extends the blob and deployment-mode edges, not the core.
-
-
 ## The deeper claim
 
 Bandcamp emerged because SoundCloud's abstractions were wrong for
@@ -414,7 +453,7 @@ proposition no closed platform matches, because none of them was
 designed to hold music as anything but tracks with tags.
 
 
-## Relationship to other work
+## Relationship to Other Work
 
 - **Persistence:** the blob backend is the sharpest driver yet for a
   content-addressed `:blob` implementation and for separating metadata
@@ -435,22 +474,36 @@ designed to hold music as anything but tracks with tags.
   recording lineage mixins.
 
 
-## Open questions
+## Open Questions
 
-1. **Payment federation.** The central unsolved design question: how
-   value flows to artists across a federation of peer instances and
-   hosted aggregators.
-2. **Blob distribution protocol.** Whether to build a bespoke
-   content-addressed transfer, adopt IPFS, or lean on object storage --
-   and how federation events reference blobs across those choices.
-3. **Metadata authority across co-hosting.** When an artist co-hosts a
-   recording with a label and an aggregator, who is canonical for which
-   slots (the artist for credits, the label for catalog number, the
-   aggregator for play counts?), and how conflicts resolve.
-4. **Discovery model.** What cross-catalog queries a public aggregator
-   exposes, and how they are indexed for performance at scale.
-5. **DAW integration depth.** How far to go beyond watch-folder import
-   toward rich session-metadata extraction and per-DAW export presets.
-6. **Play-count and sales attestation.** The provenance/signing model
-   for figures that drive royalty computation, tying back to the
-   federation integrity primitives.
+### CLASSIC-DRAFT-music-publishing-O1 — Payment federation
+
+The central unsolved design question: how value flows to artists across a
+federation of peer instances and hosted aggregators.
+
+### CLASSIC-DRAFT-music-publishing-O2 — Blob distribution protocol
+
+Whether to build a bespoke content-addressed transfer, adopt IPFS, or lean on
+object storage --and how federation events reference blobs across those
+choices.
+
+### CLASSIC-DRAFT-music-publishing-O3 — Metadata authority across co-hosting
+
+When an artist co-hosts a recording with a label and an aggregator, who is
+canonical for which slots (the artist for credits, the label for catalog
+number, the aggregator for play counts?), and how conflicts resolve.
+
+### CLASSIC-DRAFT-music-publishing-O4 — Discovery model
+
+What cross-catalog queries a public aggregator exposes, and how they are
+indexed for performance at scale.
+
+### CLASSIC-DRAFT-music-publishing-O5 — DAW integration depth
+
+How far to go beyond watch-folder import toward rich session-metadata
+extraction and per-DAW export presets.
+
+### CLASSIC-DRAFT-music-publishing-O6 — Play-count and sales attestation
+
+The provenance/signing model for figures that drive royalty computation, tying
+back to the federation integrity primitives.

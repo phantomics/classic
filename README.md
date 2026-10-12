@@ -167,10 +167,10 @@ of other content models are popular besides these.
 
 Two additional worked examples are available as REPL walkthroughs:
 
-- **Forum** ([`doc/forum/Forum.md`](doc/forum/Forum.md)) — a
+- **Forum** ([CLASSIC-DRAFT-forum](doc/forum/Guide.Forum.md)) — a
   phpBB-style discussion board with members, threads, reaction
   stickers, quotes, and moderation.
-- **Wiki** ([`doc/wiki/Wiki.md`](doc/wiki/Wiki.md)) — a
+- **Wiki** ([CLASSIC-DRAFT-wiki](doc/wiki/Guide.Wiki.md)) — a
   cross-referencing knowledge base with `[[wiki-links]]`, broken-link
   healing, infobox sidebars, influence lineage, and revision history.
 
@@ -313,8 +313,9 @@ Introspection utilities query these annotations at runtime:
 
 Classic is factored into a core framework (the `classic` package)
 and an ontological schema (the `classic.schema.alpha` package). See
-`doc/Schema.md` for the rationale and `doc/SchemaContract.md` for
-the interface between them.
+[CLASSIC-DRAFT-schema](doc/Ref.Schema.md) for the rationale and
+[CLASSIC-DRAFT-schema-contract](doc/Spec.SchemaContract.md) for the interface
+between them. The documents are indexed in [doc/INDEX.md](doc/INDEX.md).
 
 ```
 classic/

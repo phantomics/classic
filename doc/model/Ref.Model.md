@@ -1,4 +1,24 @@
-# The Classic Ontological Model
+---
+id:            CLASSIC-DRAFT-model
+title:         Ontological Model Reference
+genre:         Ref
+scope:         component
+project:       Classic
+component:     model
+language:      en
+status:        Draft
+api-version:   "0.1.0"
+provenance:
+  assistant:   opencode
+relates-to:
+  - CLASSIC-DRAFT-schema
+  - CLASSIC-DRAFT-workflow
+  - CLASSIC-DRAFT-deletion-support
+  - CLASSIC-DRAFT-general-model
+  - CLASSIC-DRAFT-slot-validation
+---
+
+# Ontological Model Reference
 
 Classic's content types are CLOS classes whose slots carry semantic
 web metadata. An article is not just a data container; it declares
@@ -301,7 +321,7 @@ A mixin granting deletion metadata to any content type:
 - **`deletion-reason`** -- human-readable reason
 
 Works alongside `classic-stateful` for workflow-based deletion.
-See `doc/DevLog.DeletionSupport.md`.
+See [CLASSIC-DRAFT-deletion-support](../Log.DeletionSupport.md).
 
 
 ## Publication Layer
@@ -421,5 +441,5 @@ src/mop/
                              introspection utilities (core system)
 ```
 
-See `doc/Schema.md` for the full layered layout (core, schema,
+See [CLASSIC-DRAFT-schema](../Ref.Schema.md) for the full layered layout (core, schema,
 engine, distribution, and common models).

@@ -1,3 +1,19 @@
+---
+id:            CLASSIC-DRAFT-schema-migration
+title:         Schema Migration Development Log
+genre:         Log
+scope:         component
+project:       Classic
+component:     migration
+language:      en
+status:        Draft
+provenance:
+  assistant:   opencode
+relates-to:
+  - CLASSIC-DRAFT-migration
+  - CLASSIC-DRAFT-schema-factorization
+---
+
 # Schema Migration: Development Log
 
 This document chronicles the design decisions and implementation of
@@ -703,7 +719,7 @@ without entangling it with the `:create-class` enhancement.
 
 The schema migration system was the chief design pressure behind the
 schema/core factorization completed on 2026-05-29 (see
-`doc/DevLog.SchemaFactorization.md`). Factoring the migration classes
+[CLASSIC-DRAFT-schema-factorization](../Log.SchemaFactorization.md)). Factoring the migration classes
 out of the core `classic` package and into `classic.schema.alpha`
 confirmed that the migration system's design holds up under
 relocation: no protocol generics needed to change, no client code

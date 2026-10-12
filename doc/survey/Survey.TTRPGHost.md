@@ -1,4 +1,40 @@
-# Concept: Tabletop RPG Hosting (Play-by-Post)
+---
+id:            CLASSIC-DRAFT-ttrpg-host
+title:         Tabletop RPG Hosting (Play-by-Post) Survey
+genre:         Survey
+scope:         project
+project:       Classic
+language:      en
+status:        Draft
+provenance:
+  assistant:   opencode
+relates-to:
+  - CLASSIC-DRAFT-model
+  - CLASSIC-DRAFT-workflow
+  - CLASSIC-DRAFT-forum
+  - CLASSIC-DRAFT-federation-demo
+  - CLASSIC-DRAFT-persistence
+  - CLASSIC-DRAFT-music-publishing
+cites:
+  - title:   World of Darkness tabletop roleplaying games
+    locator: White Wolf Publishing
+    external: true
+  - title:   Dungeons & Dragons
+    locator: Wizards of the Coast
+    external: true
+  - title:   Discord
+    locator: discord.com
+    external: true
+open-questions:
+  - CLASSIC-DRAFT-ttrpg-host-O1
+  - CLASSIC-DRAFT-ttrpg-host-O2
+  - CLASSIC-DRAFT-ttrpg-host-O3
+  - CLASSIC-DRAFT-ttrpg-host-O4
+  - CLASSIC-DRAFT-ttrpg-host-O5
+  - CLASSIC-DRAFT-ttrpg-host-O6
+---
+
+# Tabletop RPG Hosting (Play-by-Post): Survey
 
 This document records the idea of using Classic to host tabletop
 roleplaying game campaigns -- principally in the play-by-post (PBP)
@@ -8,17 +44,15 @@ and point-pool expenditures. It is a conceptual sketch, not a build
 plan; it records why the idea is an unusually complete stress test of
 Classic's model, why the play-by-post mode fits the substrate's existing
 strengths, and where the genuine limits lie. It assumes the ontological
-model ([`../model/Model.md`](../model/Model.md)), the workflow engine
-([`../model/Workflow.md`](../model/Workflow.md)), the forum imprint
-([`../forum/Forum.md`](../forum/Forum.md)), the federation and
-co-hosting model ([`../federation/Federation.md`](../federation/Federation.md)),
+model ([CLASSIC-DRAFT-model](../model/Ref.Model.md)), the workflow engine
+([CLASSIC-DRAFT-workflow](../model/Ref.Workflow.md)), the forum imprint
+([CLASSIC-DRAFT-forum](../forum/Guide.Forum.md)), the federation and
+co-hosting model ([CLASSIC-DRAFT-federation-demo](../federation/Guide.FederationDemo.md)),
 the persistence protocol
-([`../persistence/Persistence.md`](../persistence/Persistence.md)), the
+([CLASSIC-DRAFT-persistence](../persistence/Ref.Persistence.md)), the
 composer pipeline, and the planned Seed authoring integration.
 
 **Date:** 2026-07-04
-
-**Status:** Conceptual. No implementation has begun.
 
 
 ## Motivation
@@ -346,7 +380,32 @@ dissolves -- a single trusted service RNG is the norm -- at the cost of
 trusting the service.
 
 
-## Honest limits
+## What would be new work
+
+Most of the use case falls out of existing machinery. Specifically new:
+
+1. A `classic.models.ttrpg` base imprint (chassis) plus at least one
+   game-system extension (`classic.models.ttrpg.wod` or a per-game
+   variant).
+2. Structured workflow-guard failure objects, so the UI can tell a
+   player *why* an action was refused (not your turn, not in scene,
+   insufficient pool) -- a small, generally useful extension.
+3. Computed dx slots as a first-class concept, for derived sheet values.
+4. A tight-federation mode (reduced flush threshold, WebSocket transport)
+   for semi-synchronous sessions -- shared with collaborative authoring.
+5. A commit-reveal RNG protocol built on signed federation events.
+6. A lens vocabulary for sheet-style content (pool gauges, read-only
+   derived fields, sectioned grouping) -- useful beyond TTRPG.
+7. Seed-rendered session and sheet UIs (dx-composed application state,
+   fx-style sheet editing).
+
+Not required: any change to the core protocol, the workflow engine's
+mechanism (only structured-failure enrichment), or the composer
+pipeline. TTRPG hosting sits on the existing substrate; it extends the
+real-time and integrity edges, not the core.
+
+
+## Honest Limits
 
 - **Synchronous play is out of scope.** Live sub-second VTT play needs
   presence, a shared dice tray, and usually voice/video; Classic should
@@ -373,31 +432,6 @@ trusting the service.
   better than social trust, not perfect.
 
 
-## What would be new work
-
-Most of the use case falls out of existing machinery. Specifically new:
-
-1. A `classic.models.ttrpg` base imprint (chassis) plus at least one
-   game-system extension (`classic.models.ttrpg.wod` or a per-game
-   variant).
-2. Structured workflow-guard failure objects, so the UI can tell a
-   player *why* an action was refused (not your turn, not in scene,
-   insufficient pool) -- a small, generally useful extension.
-3. Computed dx slots as a first-class concept, for derived sheet values.
-4. A tight-federation mode (reduced flush threshold, WebSocket transport)
-   for semi-synchronous sessions -- shared with collaborative authoring.
-5. A commit-reveal RNG protocol built on signed federation events.
-6. A lens vocabulary for sheet-style content (pool gauges, read-only
-   derived fields, sectioned grouping) -- useful beyond TTRPG.
-7. Seed-rendered session and sheet UIs (dx-composed application state,
-   fx-style sheet editing).
-
-Not required: any change to the core protocol, the workflow engine's
-mechanism (only structured-failure enrichment), or the composer
-pipeline. TTRPG hosting sits on the existing substrate; it extends the
-real-time and integrity edges, not the core.
-
-
 ## The deeper claim
 
 A traditional virtual tabletop bundles its file format, rendering, rules
@@ -419,7 +453,7 @@ The community whose forum host shut down and took their chronicle with it
 knows exactly what that is worth.
 
 
-## Relationship to other work
+## Relationship to Other Work
 
 - **Forum imprint:** the action thread on a play session is a direct use
   of thread-bearing content; the play session is the Forum-Bearing
@@ -435,27 +469,39 @@ knows exactly what that is worth.
 - **Seed integration:** character sheets are a strong test of fx-style
   structured editing; session and campaign views are strong tests of
   dx-composed application UIs.
-- **Concept.MusicPublishing:** a sibling domain sketch that shares the
+- **[CLASSIC-DRAFT-music-publishing](Survey.MusicPublishing.md):** a sibling domain sketch that shares the
   deployment-mode analysis and the grassroots niche-community adoption
   strategy.
 
 
-## Open questions
+## Open Questions
 
-1. **Commit-reveal RNG protocol.** The concrete event schema for
-   committing to and revealing rolls, and how it degrades gracefully to
-   trusted-service rolls in the hosted mode.
-2. **Tight-federation transport.** The design of the low-latency active-
-   session mode, shared with the collaborative-authoring case.
-3. **Sheet schema authorship.** How far game-system rules and sheet
-   schemas can be authored purely as fx content versus requiring code,
-   and where that boundary falls for a homebrewer.
-4. **Structured guard failures.** The shape of workflow-guard failure
-   objects that carry enough information for a helpful player-facing
-   message without leaking GM-only state.
-5. **Chronicle publication.** How a completed campaign is projected into
-   a readable, typeset chronicle artifact through the composer and Lexis
-   renderers.
-6. **System breadth strategy.** Whether to invest in one polished WoD
-   game deeply or a shallow base that many community-authored systems
-   extend.
+### CLASSIC-DRAFT-ttrpg-host-O1 — Commit-reveal RNG protocol
+
+The concrete event schema for committing to and revealing rolls, and how it
+degrades gracefully to trusted-service rolls in the hosted mode.
+
+### CLASSIC-DRAFT-ttrpg-host-O2 — Tight-federation transport
+
+The design of the low-latency active-session mode, shared with the
+collaborative-authoring case.
+
+### CLASSIC-DRAFT-ttrpg-host-O3 — Sheet schema authorship
+
+How far game-system rules and sheet schemas can be authored purely as fx
+content versus requiring code, and where that boundary falls for a homebrewer.
+
+### CLASSIC-DRAFT-ttrpg-host-O4 — Structured guard failures
+
+The shape of workflow-guard failure objects that carry enough information for a
+helpful player-facing message without leaking GM-only state.
+
+### CLASSIC-DRAFT-ttrpg-host-O5 — Chronicle publication
+
+How a completed campaign is projected into a readable, typeset chronicle
+artifact through the composer and Lexis renderers.
+
+### CLASSIC-DRAFT-ttrpg-host-O6 — System breadth strategy
+
+Whether to invest in one polished WoD game deeply or a shallow base that many
+community-authored systems extend.

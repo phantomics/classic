@@ -1,3 +1,18 @@
+---
+id:            CLASSIC-DRAFT-federation-consistency
+title:         Federation Consistency Development Log
+genre:         Log
+scope:         component
+project:       Classic
+component:     federation
+language:      en
+status:        Draft
+provenance:
+  assistant:   opencode
+relates-to:
+  - CLASSIC-DRAFT-federation-demo
+---
+
 # Federation Consistency: Development Log
 
 This document chronicles the design decisions and implementation of

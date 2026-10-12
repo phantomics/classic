@@ -1,4 +1,25 @@
-# Schema Architecture
+---
+id:            CLASSIC-DRAFT-schema
+title:         Schema Architecture Reference
+genre:         Ref
+scope:         project
+project:       Classic
+component:     schema
+language:      en
+status:        Draft
+api-version:   "0.1.0"
+provenance:
+  assistant:   opencode
+relates-to:
+  - CLASSIC-DRAFT-schema-contract
+  - CLASSIC-DRAFT-new-schema
+  - CLASSIC-DRAFT-schema-pluggability
+  - CLASSIC-DRAFT-schema-factorization
+  - CLASSIC-DRAFT-dist-factorization
+  - CLASSIC-DRAFT-migration
+---
+
+# Schema Architecture Reference
 
 Classic's ontological class hierarchy is factored out as a pluggable
 component, separate from the schema-agnostic core framework. The
@@ -198,7 +219,7 @@ The qualified class names make explicit which schema's classes the
 engine creates. If a different schema is loaded, these references
 would need to be updated (or the engine could be refactored to use
 configurable class names — see the future direction in
-`SchemaContract.md`).
+[CLASSIC-DRAFT-schema-pluggability](Survey.SchemaPluggability.md)).
 
 
 ## File Organization
@@ -335,7 +356,7 @@ To modify the reference schema:
 - **Add a slot to an existing class:** Edit the class's `defclass`
   form and bump the class's `:schema-version`. Define a corresponding
   `(:add-slot ...)` migration so existing persisted data updates
-  correctly. See `doc/migration/Migration.md` for the migration DSL.
+  correctly. See [CLASSIC-DRAFT-migration](migration/Ref.Migration.md) for the migration DSL.
 
 - **Rename a predicate:** Edit the slot's `:predicate` value and
   define a `(:rename-predicate ...)` migration.
@@ -402,6 +423,7 @@ reference engine. The engine source is unchanged across schema
 variants because all of its schema references go through the
 `classic.schema` nickname.
 
-See `doc/DevLog.DistFactorization.md` for the history of this
-extraction and `SchemaContract.md` for what an alternative schema must
-provide.
+See [CLASSIC-DRAFT-dist-factorization](Log.DistFactorization.md) for the
+history of this extraction and
+[CLASSIC-DRAFT-schema-contract](Spec.SchemaContract.md) for what an alternative
+schema must provide.

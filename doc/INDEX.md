@@ -11,11 +11,40 @@ Table: Documents in the CLASSIC namespace.
 | ID | Title | Genre | Scope | Status | Component |
 |---|---|---|---|---|---|
 | [CLASSIC-DRAFT-archival](survey/Survey.Archival.md) | Content Archival and Durability Survey | Survey | project | Draft | — |
+| [CLASSIC-DRAFT-capability-exclusion](theme/Log.CapabilityExclusion.md) | Capability Exclusion Development Log | Log | component | Draft | theme |
 | [CLASSIC-DRAFT-compass-integration](survey/Survey.CompassIntegration.md) | Compass Documentation on Classic Survey | Survey | project | Draft | — |
 | [CLASSIC-DRAFT-compass-migration](Plan.CompassMigration.md) | Compass Migration Plan | Plan | project | Draft | — |
+| [CLASSIC-DRAFT-deletion-support](Log.DeletionSupport.md) | Deletion Support Development Log | Log | project | Draft | model |
+| [CLASSIC-DRAFT-dist-factorization](Log.DistFactorization.md) | Dist Factorization Development Log | Log | project | Draft | — |
 | [CLASSIC-DRAFT-distributed-moderation](survey/Survey.DistributedModeration.md) | Distributed Content Moderation Survey | Survey | project | Draft | — |
+| [CLASSIC-DRAFT-federation-consistency](federation/Log.FederationConsistency.md) | Federation Consistency Development Log | Log | component | Draft | federation |
+| [CLASSIC-DRAFT-federation-demo](federation/Guide.FederationDemo.md) | Federation Demo Guide | Guide (tutorial) | component | Draft | federation |
+| [CLASSIC-DRAFT-forum](forum/Guide.Forum.md) | Forum Preset Guide | Guide (tutorial) | component | Draft | forum |
+| [CLASSIC-DRAFT-forum-demo](forum/Log.ForumDemo.md) | Forum Demo Development Log | Log | component | Draft | forum |
+| [CLASSIC-DRAFT-general-model](model/Log.GeneralModel.md) | General Publication Models Development Log | Log | component | Draft | model |
+| [CLASSIC-DRAFT-migration](migration/Ref.Migration.md) | Schema Migration Reference | Ref | component | Draft | migration |
+| [CLASSIC-DRAFT-model](model/Ref.Model.md) | Ontological Model Reference | Ref | component | Draft | model |
+| [CLASSIC-DRAFT-music-publishing](survey/Survey.MusicPublishing.md) | Music Publishing Survey | Survey | project | Draft | — |
+| [CLASSIC-DRAFT-new-schema](Guide.NewSchema.md) | Creating a New Schema Guide | Guide (howto) | project | Draft | schema |
+| [CLASSIC-DRAFT-persistence](persistence/Ref.Persistence.md) | Persistence Reference | Ref | component | Draft | persistence |
+| [CLASSIC-DRAFT-persistence-backends](persistence/Arch.PersistenceBackends.md) | The Persistence Backends Architecture | Architecture | component | Draft | persistence |
 | [CLASSIC-DRAFT-project-management](survey/Survey.ProjectManagement.md) | Project Management as Classic Imprint Survey | Survey | project | Draft | — |
+| [CLASSIC-DRAFT-schema](Ref.Schema.md) | Schema Architecture Reference | Ref | project | Draft | schema |
+| [CLASSIC-DRAFT-schema-contract](Spec.SchemaContract.md) | Schema Contract Specification | Spec | project | Draft | schema |
+| [CLASSIC-DRAFT-schema-factorization](Log.SchemaFactorization.md) | Schema Factorization Development Log | Log | project | Draft | schema |
+| [CLASSIC-DRAFT-schema-migration](migration/Log.SchemaMigration.md) | Schema Migration Development Log | Log | component | Draft | migration |
+| [CLASSIC-DRAFT-schema-pluggability](Survey.SchemaPluggability.md) | Schema Pluggability Survey | Survey | project | Draft | schema |
+| [CLASSIC-DRAFT-slot-fills](theme/Log.SlotFills.md) | Template Slot Fills Development Log | Log | component | Draft | theme |
+| [CLASSIC-DRAFT-slot-validation](model/Log.SlotValidation.md) | Slot Type Validation Development Log | Log | component | Draft | model |
+| [CLASSIC-DRAFT-theme](theme/Ref.Theme.md) | Theme Ontology Reference | Ref | component | Draft | theme |
+| [CLASSIC-DRAFT-theme-ontology](theme/Log.ThemeOntology.md) | Theme Ontology Development Log | Log | component | Draft | theme |
+| [CLASSIC-DRAFT-ttrpg-host](survey/Survey.TTRPGHost.md) | Tabletop RPG Hosting (Play-by-Post) Survey | Survey | project | Draft | — |
+| [CLASSIC-DRAFT-typed-pages](wiki/Log.TypedPages.md) | Typed Page Classes Development Log | Log | component | Draft | wiki |
 | [CLASSIC-DRAFT-usenet](survey/Survey.Usenet.md) | Usenet-Analog Discussion Hosting Survey | Survey | project | Draft | — |
+| [CLASSIC-DRAFT-wiki](wiki/Guide.Wiki.md) | Wiki Preset Guide | Guide (tutorial) | component | Draft | wiki |
+| [CLASSIC-DRAFT-wiki-demo](wiki/Log.WikiDemo.md) | Wiki Demo Development Log | Log | component | Draft | wiki |
+| [CLASSIC-DRAFT-with-persistence](persistence/Log.WithPersistence.md) | with-persistence Development Log | Log | component | Draft | persistence |
+| [CLASSIC-DRAFT-workflow](model/Ref.Workflow.md) | Workflow Reference | Ref | component | Draft | model |
 | [CLASSIC-DRAFT-x400](Eval.X400.md) | X.400 Prior-Art Evaluation | Eval (prior-art) | project | Draft | — |
 
 Table: Decision, open-question, and memo records in the CLASSIC namespace.
@@ -29,6 +58,14 @@ Table: Decision, open-question, and memo records in the CLASSIC namespace.
 | [CLASSIC-DRAFT-compass-migration-D5](Plan.CompassMigration.md#classic-draft-compass-migration-d5--log-code-references-pin-to-each-logs-work-commit) | Decision | Log code references pin to each Log's work commit | Proposed | CLASSIC-DRAFT-compass-migration |
 | [CLASSIC-DRAFT-compass-migration-D6](Plan.CompassMigration.md#classic-draft-compass-migration-d6--enforcement-by-ci-code-owners-and-a-mailmap) | Decision | Enforcement by CI, code owners, and a mailmap | Proposed | CLASSIC-DRAFT-compass-migration |
 | [CLASSIC-DRAFT-compass-migration-D7](Plan.CompassMigration.md#classic-draft-compass-migration-d7--links-are-fixed-stale-content-is-marked-not-refreshed) | Decision | Links are fixed; stale content is marked, not refreshed | Proposed | CLASSIC-DRAFT-compass-migration |
+| [CLASSIC-DRAFT-compass-migration-D8](Plan.CompassMigration.md#classic-draft-compass-migration-d8--ci-builds-the-toolchain-at-a-pinned-release-tag) | Decision | CI builds the toolchain at a pinned release tag | Proposed | CLASSIC-DRAFT-compass-migration |
+| [CLASSIC-DRAFT-compass-migration-D9](Plan.CompassMigration.md#classic-draft-compass-migration-d9--logs-of-several-pieces-of-work-take-dated-update-sections) | Decision | Logs of several pieces of work take dated Update sections | Proposed | CLASSIC-DRAFT-compass-migration |
+| [CLASSIC-DRAFT-compass-migration-D10](Plan.CompassMigration.md#classic-draft-compass-migration-d10--the-schema-contract-is-split-into-a-spec-a-guide-and-a-survey) | Decision | The schema contract is split into a Spec, a Guide, and a Survey | Proposed | CLASSIC-DRAFT-compass-migration |
+| [CLASSIC-DRAFT-compass-migration-D11](Plan.CompassMigration.md#classic-draft-compass-migration-d11--the-planned-persistence-backends-move-into-an-arch) | Decision | The planned persistence backends move into an Arch | Proposed | CLASSIC-DRAFT-compass-migration |
+| [CLASSIC-DRAFT-persistence-backends-D1](persistence/Arch.PersistenceBackends.md#classic-draft-persistence-backends-d1--flat-file-entities-split-metadata-from-body) | Decision | Flat-file entities split metadata from body | Proposed | CLASSIC-DRAFT-persistence-backends |
+| [CLASSIC-DRAFT-persistence-backends-D2](persistence/Arch.PersistenceBackends.md#classic-draft-persistence-backends-d2--flat-file-cross-entity-queries-use-materialized-index-files) | Decision | Flat-file cross-entity queries use materialized index files | Proposed | CLASSIC-DRAFT-persistence-backends |
+| [CLASSIC-DRAFT-persistence-backends-D3](persistence/Arch.PersistenceBackends.md#classic-draft-persistence-backends-d3--container-level-bundling-for-high-volume-small-items) | Decision | Container-level bundling for high-volume small items | Proposed | CLASSIC-DRAFT-persistence-backends |
+| [CLASSIC-DRAFT-persistence-backends-D4](persistence/Arch.PersistenceBackends.md#classic-draft-persistence-backends-d4--the-triplestore-splits-relations-from-content) | Decision | The triplestore splits relations from content | Proposed | CLASSIC-DRAFT-persistence-backends |
 | [CLASSIC-DRAFT-archival-O1](survey/Survey.Archival.md#classic-draft-archival-o1--the-deletiondurability-policy-dial) | Open question | The deletion/durability policy dial | — | CLASSIC-DRAFT-archival |
 | [CLASSIC-DRAFT-archival-O2](survey/Survey.Archival.md#classic-draft-archival-o2--license-to-mirror-semantics) | Open question | License-to-mirror semantics | — | CLASSIC-DRAFT-archival |
 | [CLASSIC-DRAFT-archival-O3](survey/Survey.Archival.md#classic-draft-archival-o3--integrity-via-signed-origin-entities) | Open question | Integrity via signed origin entities | — | CLASSIC-DRAFT-archival |
@@ -54,12 +91,27 @@ Table: Decision, open-question, and memo records in the CLASSIC namespace.
 | [CLASSIC-DRAFT-distributed-moderation-O5](survey/Survey.DistributedModeration.md#classic-draft-distributed-moderation-o5--meta-moderation) | Open question | Meta-moderation | — | CLASSIC-DRAFT-distributed-moderation |
 | [CLASSIC-DRAFT-distributed-moderation-O6](survey/Survey.DistributedModeration.md#classic-draft-distributed-moderation-o6--shared-curation-feed-primitive-with-archival) | Open question | Shared curation-feed primitive with archival | — | CLASSIC-DRAFT-distributed-moderation |
 | [CLASSIC-DRAFT-distributed-moderation-O7](survey/Survey.DistributedModeration.md#classic-draft-distributed-moderation-o7--ranking-gameability-and-reputation-inputs) | Open question | Ranking gameability and reputation inputs | — | CLASSIC-DRAFT-distributed-moderation |
+| [CLASSIC-DRAFT-music-publishing-O1](survey/Survey.MusicPublishing.md#classic-draft-music-publishing-o1--payment-federation) | Open question | Payment federation | — | CLASSIC-DRAFT-music-publishing |
+| [CLASSIC-DRAFT-music-publishing-O2](survey/Survey.MusicPublishing.md#classic-draft-music-publishing-o2--blob-distribution-protocol) | Open question | Blob distribution protocol | — | CLASSIC-DRAFT-music-publishing |
+| [CLASSIC-DRAFT-music-publishing-O3](survey/Survey.MusicPublishing.md#classic-draft-music-publishing-o3--metadata-authority-across-co-hosting) | Open question | Metadata authority across co-hosting | — | CLASSIC-DRAFT-music-publishing |
+| [CLASSIC-DRAFT-music-publishing-O4](survey/Survey.MusicPublishing.md#classic-draft-music-publishing-o4--discovery-model) | Open question | Discovery model | — | CLASSIC-DRAFT-music-publishing |
+| [CLASSIC-DRAFT-music-publishing-O5](survey/Survey.MusicPublishing.md#classic-draft-music-publishing-o5--daw-integration-depth) | Open question | DAW integration depth | — | CLASSIC-DRAFT-music-publishing |
+| [CLASSIC-DRAFT-music-publishing-O6](survey/Survey.MusicPublishing.md#classic-draft-music-publishing-o6--play-count-and-sales-attestation) | Open question | Play-count and sales attestation | — | CLASSIC-DRAFT-music-publishing |
+| [CLASSIC-DRAFT-persistence-backends-O1](persistence/Arch.PersistenceBackends.md#classic-draft-persistence-backends-o1--serialization-durability-and-thread-safety) | Open question | Serialization, durability, and thread safety | — | CLASSIC-DRAFT-persistence-backends |
+| [CLASSIC-DRAFT-persistence-backends-O2](persistence/Arch.PersistenceBackends.md#classic-draft-persistence-backends-o2--rebuilding-derived-artifacts) | Open question | Rebuilding derived artifacts | — | CLASSIC-DRAFT-persistence-backends |
 | [CLASSIC-DRAFT-project-management-O1](survey/Survey.ProjectManagement.md#classic-draft-project-management-o1--dependency-graph-query-model) | Open question | Dependency-graph query model | — | CLASSIC-DRAFT-project-management |
 | [CLASSIC-DRAFT-project-management-O2](survey/Survey.ProjectManagement.md#classic-draft-project-management-o2--real-time-board-updates) | Open question | Real-time board updates | — | CLASSIC-DRAFT-project-management |
 | [CLASSIC-DRAFT-project-management-O3](survey/Survey.ProjectManagement.md#classic-draft-project-management-o3--calendar-and-timeline-rendering) | Open question | Calendar and timeline rendering | — | CLASSIC-DRAFT-project-management |
 | [CLASSIC-DRAFT-project-management-O4](survey/Survey.ProjectManagement.md#classic-draft-project-management-o4--custom-fields-and-project-specific-task-slots) | Open question | Custom fields and project-specific task slots | — | CLASSIC-DRAFT-project-management |
 | [CLASSIC-DRAFT-project-management-O5](survey/Survey.ProjectManagement.md#classic-draft-project-management-o5--time-tracking-granularity-and-reporting) | Open question | Time-tracking granularity and reporting | — | CLASSIC-DRAFT-project-management |
 | [CLASSIC-DRAFT-project-management-O6](survey/Survey.ProjectManagement.md#classic-draft-project-management-o6--git-federation-adapter-protocol) | Open question | Git federation adapter protocol | — | CLASSIC-DRAFT-project-management |
+| [CLASSIC-DRAFT-schema-pluggability-O1](Survey.SchemaPluggability.md#classic-draft-schema-pluggability-o1--when-to-indirect-class-and-accessor-references) | Open question | When to indirect class and accessor references | — | CLASSIC-DRAFT-schema-pluggability |
+| [CLASSIC-DRAFT-ttrpg-host-O1](survey/Survey.TTRPGHost.md#classic-draft-ttrpg-host-o1--commit-reveal-rng-protocol) | Open question | Commit-reveal RNG protocol | — | CLASSIC-DRAFT-ttrpg-host |
+| [CLASSIC-DRAFT-ttrpg-host-O2](survey/Survey.TTRPGHost.md#classic-draft-ttrpg-host-o2--tight-federation-transport) | Open question | Tight-federation transport | — | CLASSIC-DRAFT-ttrpg-host |
+| [CLASSIC-DRAFT-ttrpg-host-O3](survey/Survey.TTRPGHost.md#classic-draft-ttrpg-host-o3--sheet-schema-authorship) | Open question | Sheet schema authorship | — | CLASSIC-DRAFT-ttrpg-host |
+| [CLASSIC-DRAFT-ttrpg-host-O4](survey/Survey.TTRPGHost.md#classic-draft-ttrpg-host-o4--structured-guard-failures) | Open question | Structured guard failures | — | CLASSIC-DRAFT-ttrpg-host |
+| [CLASSIC-DRAFT-ttrpg-host-O5](survey/Survey.TTRPGHost.md#classic-draft-ttrpg-host-o5--chronicle-publication) | Open question | Chronicle publication | — | CLASSIC-DRAFT-ttrpg-host |
+| [CLASSIC-DRAFT-ttrpg-host-O6](survey/Survey.TTRPGHost.md#classic-draft-ttrpg-host-o6--system-breadth-strategy) | Open question | System breadth strategy | — | CLASSIC-DRAFT-ttrpg-host |
 | [CLASSIC-DRAFT-usenet-O1](survey/Survey.Usenet.md#classic-draft-usenet-o1--forum-naming-convention-and-directory-federation) | Open question | Forum naming convention and directory federation | — | CLASSIC-DRAFT-usenet |
 | [CLASSIC-DRAFT-usenet-O2](survey/Survey.Usenet.md#classic-draft-usenet-o2--cross-posting-and-deduplication-semantics) | Open question | Cross-posting and deduplication semantics | — | CLASSIC-DRAFT-usenet |
 | [CLASSIC-DRAFT-usenet-O3](survey/Survey.Usenet.md#classic-draft-usenet-o3--retention-tiering-for-text-versus-binary) | Open question | Retention tiering for text versus binary | — | CLASSIC-DRAFT-usenet |

@@ -45,9 +45,9 @@ actions; subscribers compose one or more curators' feeds to shape their own view
 whether by hard-blocking content, flagging it, or ranking it for display. The
 model applies to any forum genre (phpBB, Reddit, imageboard, Hacker News), not
 only to the Usenet-analog it was first raised alongside. It assumes the forum
-imprint ([Forum.md](../forum/Forum.md)), the federation model
-([Federation.md](../federation/Federation.md)), the workflow engine
-([Workflow.md](../model/Workflow.md)), the composer's aggregate tier, and the
+imprint ([CLASSIC-DRAFT-forum](../forum/Guide.Forum.md)), the federation model
+([CLASSIC-DRAFT-federation-demo](../federation/Guide.FederationDemo.md)), the workflow engine
+([CLASSIC-DRAFT-workflow](../model/Ref.Workflow.md)), the composer's aggregate tier, and the
 planned lens system and signed-federation-events work. It asks whether Classic
 should offer this model; it does not decide.
 
@@ -314,7 +314,7 @@ Usenet-analog's three-layer structure.
 A discoverable **curator directory** — a directory-role deployment cataloging
 profiles by scope, activity, and subscriber count — lets newcomers find
 curators. This directory is the same primitive the Usenet-analog needs for group
-discovery ([Survey.Usenet.md](Survey.Usenet.md), CLASSIC-DRAFT-usenet-O1) and that the
+discovery ([CLASSIC-DRAFT-usenet](Survey.Usenet.md), CLASSIC-DRAFT-usenet-O1) and that the
 archival concept needs for preservation feeds; the three uses share one directory
 mechanism.
 
@@ -423,15 +423,15 @@ of a mandate.
 ## Relationship to Other Work
 
 This survey closes the open question left by
-[Survey.Usenet.md](Survey.Usenet.md) (CLASSIC-DRAFT-usenet-O5, the relationship of
+[CLASSIC-DRAFT-usenet](Survey.Usenet.md) (CLASSIC-DRAFT-usenet-O5, the relationship of
 client-side lens filtering to a federated moderation model): the Usenet-analog's
 killfile on-ramp is the simplest case of the model surveyed here. It shares the
 **curation-feed primitive** and the **curator/preservation directory** with the
 planned archival survey (a preservation feed is a positive-curation feed pointed
 at an archival action rather than a display action); the two should share one
 underlying feed type where practical. It also relates to the two pre-Compass
-use-case surveys, [Survey.MusicPublishing.md](Survey.MusicPublishing.md) and
-[Survey.TTRPGHost.md](Survey.TTRPGHost.md), which share its deployment-mode
+use-case surveys, [CLASSIC-DRAFT-music-publishing](Survey.MusicPublishing.md) and
+[CLASSIC-DRAFT-ttrpg-host](Survey.TTRPGHost.md), which share its deployment-mode
 framing and grassroots adoption strategy. (Those documents predate the Compass
 format and do not yet carry Compass identifiers.)
 

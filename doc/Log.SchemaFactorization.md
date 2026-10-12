@@ -1,3 +1,22 @@
+---
+id:            CLASSIC-DRAFT-schema-factorization
+title:         Schema Factorization Development Log
+genre:         Log
+scope:         project
+project:       Classic
+component:     schema
+language:      en
+status:        Draft
+provenance:
+  assistant:   opencode
+relates-to:
+  - CLASSIC-DRAFT-schema
+  - CLASSIC-DRAFT-schema-contract
+  - CLASSIC-DRAFT-schema-pluggability
+  - CLASSIC-DRAFT-schema-migration
+  - CLASSIC-DRAFT-dist-factorization
+---
+
 # Schema Factorization: Development Log
 
 This document chronicles the design decisions and implementation of
@@ -340,7 +359,8 @@ The schema/core split clears the path for several future capabilities:
 
 - **Drop-in alternative schemas.** A future `classic.schema.beta` or
   domain-specific schema can replace `classic.schema.alpha` by
-  satisfying the same contract (see `SchemaContract.md`).
+  satisfying the same contract (see
+  [CLASSIC-DRAFT-schema-contract](Spec.SchemaContract.md)).
 
 - **The `classic.dist.alpha` meta-system.** With the schema in its
   own directory and package, extracting it into a separate ASDF
@@ -397,7 +417,8 @@ work for full pluggability:
    and accessors the engines call by name. Lifting this restriction
    (so a `classic.schema.beta` could use its own class names)
    requires routing class lookups through a configurable mapping.
-   See `SchemaContract.md` Afterword for the upgrade path.
+   See [CLASSIC-DRAFT-schema-pluggability](Survey.SchemaPluggability.md),
+   formerly the afterword of the schema contract, for the upgrade path.
 
 These items are tracked but not scheduled. The current arrangement is
 architecturally sound for the reference distribution and for the

@@ -48,11 +48,11 @@ application domain that shaped Rails, on a substrate that makes ontological rath
 than web-framework commitments, is the cleanest available test of whether
 Classic's "general-purpose from the start" approach avoids the convention lock-in
 Rails accreted. It assumes the ontological model
-([Model.md](../model/Model.md)), the workflow engine
-([Workflow.md](../model/Workflow.md)), the forum imprint's thread-bearing pattern
-([Forum.md](../forum/Forum.md)), the federation and co-hosting model
-([Federation.md](../federation/Federation.md)), the persistence protocol
-([Persistence.md](../persistence/Persistence.md)), the composer's aggregate tier,
+([CLASSIC-DRAFT-model](../model/Ref.Model.md)), the workflow engine
+([CLASSIC-DRAFT-workflow](../model/Ref.Workflow.md)), the forum imprint's thread-bearing pattern
+([CLASSIC-DRAFT-forum](../forum/Guide.Forum.md)), the federation and co-hosting model
+([CLASSIC-DRAFT-federation-demo](../federation/Guide.FederationDemo.md)), the persistence protocol
+([CLASSIC-DRAFT-persistence](../persistence/Ref.Persistence.md)), the composer's aggregate tier,
 and the planned Seed authoring integration. It asks whether Classic should offer
 this imprint; it does not decide.
 
@@ -333,7 +333,7 @@ ticket–branch–merge relationships; they are substrate data kept current by e
 The strongest demonstration of federation and workflow composing is that the
 project's documentation writes itself. Every branch creation, commit notification,
 review approval, and merge is a signed event; a wiki imprint
-([Wiki.md](../wiki/Wiki.md)) consumes the event stream and generates a live page
+([CLASSIC-DRAFT-wiki](../wiki/Guide.Wiki.md)) consumes the event stream and generates a live page
 per task: who started it, from what branch, which commits landed, who reviewed it,
 when it merged, and which files changed. The page is a derived view of the event
 graph, not a document someone must remember to author. Because the wiki page is a
@@ -437,21 +437,21 @@ applications can match.
 ## Relationship to Other Work
 
 Structurally, the PM imprint is closest to the TTRPG hosting survey
-([Survey.TTRPGHost.md](Survey.TTRPGHost.md)): a project is a campaign, tasks are
+([CLASSIC-DRAFT-ttrpg-host](Survey.TTRPGHost.md)): a project is a campaign, tasks are
 game actions, milestones are sessions, the project lead is the GM, and both use the
 thread-bearing mixin and role-gated workflow in the same way. It composes with the
-forum imprint ([Forum.md](../forum/Forum.md)) for task discussions, and with the
-blog and wiki ([Wiki.md](../wiki/Wiki.md)) imprints for announcements and
+forum imprint ([CLASSIC-DRAFT-forum](../forum/Guide.Forum.md)) for task discussions, and with the
+blog and wiki ([CLASSIC-DRAFT-wiki](../wiki/Guide.Wiki.md)) imprints for announcements and
 documentation. It shares the
 deployment-mode framing and grassroots adoption strategy of the sibling surveys
-([Survey.MusicPublishing.md](Survey.MusicPublishing.md),
-[Survey.Usenet.md](Survey.Usenet.md),
-[Survey.DistributedModeration.md](Survey.DistributedModeration.md),
-[Survey.Archival.md](Survey.Archival.md)). It depends on the ontological model
-([Model.md](../model/Model.md)), the workflow engine
-([Workflow.md](../model/Workflow.md)), the federation model
-([Federation.md](../federation/Federation.md)), and the persistence protocol
-([Persistence.md](../persistence/Persistence.md)).
+([CLASSIC-DRAFT-music-publishing](Survey.MusicPublishing.md),
+[CLASSIC-DRAFT-usenet](Survey.Usenet.md),
+[CLASSIC-DRAFT-distributed-moderation](Survey.DistributedModeration.md),
+[CLASSIC-DRAFT-archival](Survey.Archival.md)). It depends on the ontological model
+([CLASSIC-DRAFT-model](../model/Ref.Model.md)), the workflow engine
+([CLASSIC-DRAFT-workflow](../model/Ref.Workflow.md)), the federation model
+([CLASSIC-DRAFT-federation-demo](../federation/Guide.FederationDemo.md)), and the persistence protocol
+([CLASSIC-DRAFT-persistence](../persistence/Ref.Persistence.md)).
 
 Externally, its principal comparison is Ruby on Rails and the Basecamp application
 Rails was extracted from — the framework-from-application lineage this survey

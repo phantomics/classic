@@ -1,4 +1,24 @@
-# Persistence
+---
+id:            CLASSIC-DRAFT-persistence
+title:         Persistence Reference
+genre:         Ref
+scope:         component
+project:       Classic
+component:     persistence
+language:      en
+status:        Draft
+api-version:   "0.1.0"
+provenance:
+  assistant:   opencode
+relates-to:
+  - CLASSIC-DRAFT-persistence-backends
+  - CLASSIC-DRAFT-with-persistence
+  - CLASSIC-DRAFT-deletion-support
+  - CLASSIC-DRAFT-migration
+  - CLASSIC-DRAFT-federation-consistency
+---
+
+# Persistence Reference
 
 Classic's persistence system decouples the ontological model from
 storage. Content types are CLOS classes with annotated slots; the
@@ -233,63 +253,9 @@ backends.
 
 ## Planned Backends
 
-### Flat-File Backend
-
-For personal blogs and small publications. Each entity maps to an
-s-expression file containing a metadata plist and content body:
-
-```lisp
-;; articles/2026/05/kf7x3m-lisp-is-great.sexp
-(:uri "classic:janedoe.net,2026:articles/2026/05/kf7x3m-lisp-is-great"
- :rdf-type "schema:Article"
- :author "classic:janedoe.net,2026:agents/h7nw2p-jane-doe"
- :date-created "2026-01-15T09:30:00Z"
- :keywords ("lisp" "programming")
- :title "Lisp Is Great"
- :body-format :markdown
- :body-file "lisp-is-great.md")
-```
-
-The body can be inline or referenced as a separate file. Metadata
-is processed frequently (index rebuilds, relationship resolution);
-the body is needed only for rendering.
-
-Relationships that require cross-entity queries (all posts by tag,
-all posts by author) are handled via **materialized index files**:
-
-```lisp
-;; indexes/tags/lisp.sexp
-(:tag "lisp"
- :posts ("classic:...:articles/.../kf7x3m-lisp-is-great"
-         "classic:...:articles/.../p4nw2h-clos-tutorial"))
-```
-
-These indexes are derived artifacts -- rebuilt when the entities
-they depend on change.
-
-**Container-level bundling** handles high-volume small items
-(comments, forum replies). The `storage-granularity` slot on
-`classic-container` controls whether contained items are stored
-individually (one file per item, appropriate for articles) or
-bundled (one file per container, appropriate for comment threads).
-The persistence strategy reads this annotation to determine layout.
-
-### Triplestore Backend
-
-For production clusters and social networks. Entity slots split
-into two storage concerns:
-
-- **Relationship slots** (`:persistence :relation`) become triples
-  in the store, queryable via SPARQL
-- **Content slots** (`:persistence :blob`) live in a
-  content-addressed blob store, referenced from the triplestore
-  by content hash URI
-
-The triplestore handles relationship queries natively, eliminating
-the need for materialized index files. Adding a new slot with a
-default value requires no store-level migration -- the absence of
-a triple is equivalent to "no value," and the CLOS slot's
-`:initform` provides the default when the entity is hydrated.
+Two further backends, flat-file and triplestore, are designed but not built.
+Their design is recorded in
+[CLASSIC-DRAFT-persistence-backends](Arch.PersistenceBackends.md).
 
 
 ## How the Pieces Connect
@@ -340,7 +306,7 @@ via two hooks:
 - **Lazy migration**: `retrieve-entity :around` detects version
   mismatches and transparently migrates entities on read
 
-See `doc/migration/Migration.md` for details.
+See [CLASSIC-DRAFT-migration](../migration/Ref.Migration.md) for details.
 
 ### Federation
 
@@ -350,7 +316,8 @@ federation protocol reads from and writes to persistence through the
 same generic functions used for content entities. There is no
 federation-specific global state.
 
-See `doc/federation/` for details.
+See [CLASSIC-DRAFT-federation-consistency](../federation/Log.FederationConsistency.md)
+for details.
 
 ### Deletion
 
@@ -361,7 +328,7 @@ from queries). Hard deletion (purge) removes entities from the
 store entirely via `delete-entity`, which also cleans all relation
 index entries.
 
-See `doc/DevLog.DeletionSupport.md` for details.
+See [CLASSIC-DRAFT-deletion-support](../Log.DeletionSupport.md) for details.
 
 
 ## Project Structure

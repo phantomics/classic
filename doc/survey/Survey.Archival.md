@@ -43,8 +43,8 @@ a personal endpoint**: a reader who values content can mirror it into their own
 instance, one-time or continuously, as a live and re-federatable copy; and for the
 reader without an instance, a publisher can offer a static flat-file archive as a
 download or torrent. It assumes the persistence protocol and its flat-file backend
-([Persistence.md](../persistence/Persistence.md)), the federation and co-hosting
-model ([Federation.md](../federation/Federation.md)), the planned blob adapters,
+([CLASSIC-DRAFT-persistence](../persistence/Ref.Persistence.md)), the federation and co-hosting
+model ([CLASSIC-DRAFT-federation-demo](../federation/Guide.FederationDemo.md)), the planned blob adapters,
 and the planned signed-federation-events work. It asks whether Classic should
 offer these mechanisms; it does not decide.
 
@@ -204,7 +204,7 @@ grant legible: a publisher offering an archive button is plausibly granting
 mirror-and-redistribute permission, and expressing the terms explicitly turns an
 implied grant into a stated one. Second, `preservation-feed` is structurally a
 *positive-curation* feed — the same primitive as a moderation promotion feed
-([Survey.DistributedModeration.md](Survey.DistributedModeration.md)), pointed at an
+([CLASSIC-DRAFT-distributed-moderation](Survey.DistributedModeration.md)), pointed at an
 archival action rather than a display action. Whether these are one parameterized
 type or two parallel types is an open question shared between the two surveys.
 
@@ -340,20 +340,20 @@ the strongest standing evidence that the substrate holds the right shape.
 ## Relationship to Other Work
 
 This survey shares the **curation-feed primitive** and the **directory mechanism**
-with [Survey.DistributedModeration.md](Survey.DistributedModeration.md): a
+with [CLASSIC-DRAFT-distributed-moderation](Survey.DistributedModeration.md): a
 preservation feed is a positive-curation feed pointed at an archival action, and
 the preservation aggregator is the same directory-role deployment as the moderation
 curator directory and the Usenet-analog group directory
-([Survey.Usenet.md](Survey.Usenet.md)). Whether the moderation feed and the
+([CLASSIC-DRAFT-usenet](Survey.Usenet.md)). Whether the moderation feed and the
 preservation feed are one parameterized type or two parallel types is the mutual
 open question recorded in both surveys, as CLASSIC-DRAFT-archival-O6 here and
 CLASSIC-DRAFT-distributed-moderation-O6 there.
 
 It depends on the persistence protocol and its flat-file backend
-([Persistence.md](../persistence/Persistence.md)) and the federation and
-co-hosting model ([Federation.md](../federation/Federation.md)), and it shares the
+([CLASSIC-DRAFT-persistence](../persistence/Ref.Persistence.md)) and the federation and
+co-hosting model ([CLASSIC-DRAFT-federation-demo](../federation/Guide.FederationDemo.md)), and it shares the
 text/binary blob split with the pre-Compass music survey
-([Survey.MusicPublishing.md](Survey.MusicPublishing.md), which does not yet carry
+([CLASSIC-DRAFT-music-publishing](Survey.MusicPublishing.md), which does not yet carry
 a Compass identifier).
 
 Externally, the model is comparable to LOCKSS (the cooperative many-copies library
@@ -406,4 +406,4 @@ confirmation).
 Whether the preservation feed and the moderation feed are one parameterized type
 or two parallel types, given that both are curated, subscribable feeds of actions
 pointed at content — the mutual open question with
-[Survey.DistributedModeration.md](Survey.DistributedModeration.md).
+[CLASSIC-DRAFT-distributed-moderation](Survey.DistributedModeration.md).

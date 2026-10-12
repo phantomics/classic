@@ -1,4 +1,21 @@
-# Workflow
+---
+id:            CLASSIC-DRAFT-workflow
+title:         Workflow Reference
+genre:         Ref
+scope:         component
+project:       Classic
+component:     model
+language:      en
+status:        Draft
+api-version:   "0.1.0"
+provenance:
+  assistant:   opencode
+relates-to:
+  - CLASSIC-DRAFT-model
+  - CLASSIC-DRAFT-deletion-support
+---
+
+# Workflow Reference
 
 Classic treats workflow state as a first-class ontological concept.
 A workflow definition is itself a Classic resource: states,
@@ -323,7 +340,7 @@ history. The `classic-deletable` mixin adds metadata slots
 (`deleted-at`, `deleted-by`, `deletion-reason`) that are populated
 by the `attempt-deletion` convenience function.
 
-See `doc/DevLog.DeletionSupport.md` for full details.
+See [CLASSIC-DRAFT-deletion-support](../Log.DeletionSupport.md) for full details.
 
 
 ## Lifecycle Hooks

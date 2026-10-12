@@ -1,3 +1,18 @@
+---
+id:            CLASSIC-DRAFT-theme-ontology
+title:         Theme Ontology Development Log
+genre:         Log
+scope:         component
+project:       Classic
+component:     theme
+language:      en
+status:        Draft
+provenance:
+  assistant:   opencode
+relates-to:
+  - CLASSIC-DRAFT-theme
+---
+
 # Theme Ontology: Development Log
 
 This document chronicles the design decisions and implementation of

@@ -1,10 +1,26 @@
+---
+id:            CLASSIC-DRAFT-forum-demo
+title:         Forum Demo Development Log
+genre:         Log
+scope:         component
+project:       Classic
+component:     forum
+language:      en
+status:        Draft
+provenance:
+  assistant:   opencode
+relates-to:
+  - CLASSIC-DRAFT-forum
+  - CLASSIC-DRAFT-general-model
+---
+
 # Forum Demo: Development Log
 
 This document chronicles the implementation of Classic's forum preset:
 a phpBB-style discussion board built on the common publication models.
 It is the second content profile (after the blog preset) and the first
 real test of the universals-plus-presets pattern established by the
-General Model refactor.
+General Model refactor ([CLASSIC-DRAFT-general-model](../model/Log.GeneralModel.md)).
 
 **Date:** 2026-06-20
 

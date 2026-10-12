@@ -1,4 +1,21 @@
-# Federation Demo
+---
+id:            CLASSIC-DRAFT-federation-demo
+title:         Federation Demo Guide
+genre:         Guide
+subtype:       tutorial
+scope:         component
+project:       Classic
+component:     federation
+language:      en
+status:        Draft
+api-version:   "0.1.0"
+provenance:
+  assistant:   opencode
+relates-to:
+  - CLASSIC-DRAFT-federation-consistency
+---
+
+# Federation Demo Guide
 
 Two Classic blog instances running in the same SBCL image, demonstrating
 instance discovery, content syndication on publish, and cross-instance

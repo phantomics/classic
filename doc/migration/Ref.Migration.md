@@ -1,4 +1,21 @@
-# Schema Migration
+---
+id:            CLASSIC-DRAFT-migration
+title:         Schema Migration Reference
+genre:         Ref
+scope:         component
+project:       Classic
+component:     migration
+language:      en
+status:        Draft
+api-version:   "0.1.0"
+provenance:
+  assistant:   opencode
+relates-to:
+  - CLASSIC-DRAFT-schema-migration
+  - CLASSIC-DRAFT-persistence
+---
+
+# Schema Migration Reference
 
 Classic's schema migration system enables the CLOS class hierarchy to
 evolve over time. Classes are versioned individually, migrations are

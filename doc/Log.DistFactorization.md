@@ -1,3 +1,20 @@
+---
+id:            CLASSIC-DRAFT-dist-factorization
+title:         Dist Factorization Development Log
+genre:         Log
+scope:         project
+project:       Classic
+language:      en
+status:        Draft
+provenance:
+  assistant:   opencode
+relates-to:
+  - CLASSIC-DRAFT-schema-factorization
+  - CLASSIC-DRAFT-schema
+  - CLASSIC-DRAFT-schema-contract
+  - CLASSIC-DRAFT-general-model
+---
+
 # Dist Factorization: Development Log
 
 This document chronicles the design decisions and implementation of
@@ -12,7 +29,8 @@ engine and foundation through thin distribution shims.
 
 ## Problem
 
-The schema factorization completed in May 2026 successfully separated
+The schema factorization completed in May 2026
+([CLASSIC-DRAFT-schema-factorization](Log.SchemaFactorization.md)) successfully separated
 the ontological vocabulary (`classic.schema.alpha`) from the framework
 core (`classic`) at the package level. That refactor was the necessary
 first step. But several capabilities it pointed toward were still
@@ -476,8 +494,8 @@ Both properties hold today, confirming the boundary is real.
   `classic.dist.beta` shim. The engine source is unchanged across
   variants because all schema references go through the
   `classic.schema` nickname.
-- **A clear contract for what a schema must provide.** `SchemaContract.md`
-  now enumerates the required exports (class names, slot accessors,
+- **A clear contract for what a schema must provide.**
+  [CLASSIC-DRAFT-schema-contract](Spec.SchemaContract.md) now enumerates the required exports (class names, slot accessors,
   workflow primitives, federation classes, migration classes) plus
   the requirement that the schema declare itself nicknamed
   `classic.schema`. Schema authors have a complete checklist.

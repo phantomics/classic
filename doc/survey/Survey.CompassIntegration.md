@@ -13,6 +13,8 @@ relates-to:
   - COMPASS-DRAFT-semantic-binding
   - COMPASS-DRAFT-toolchain
   - CLASSIC-DRAFT-project-management
+  - CLASSIC-DRAFT-persistence
+  - CLASSIC-DRAFT-persistence-backends
 cites:
   - title:   Schema.org TechArticle and APIReference
     locator: schema.org/TechArticle; schema.org/APIReference
@@ -125,7 +127,7 @@ would bolt on, are native to Classic's model.
   `dcterms:created`). Compass's `created` and `updated` are authorial.
 - **Generated files are derived artifacts.** Classic treats indexes and
   rendered pages as derived, with invalidation rules
-  (`doc/persistence/Persistence.md`); Compass requires its `INDEX.md` to be
+  ([CLASSIC-DRAFT-persistence](../persistence/Ref.Persistence.md)); Compass requires its `INDEX.md` to be
   generated and verified, never hand-edited.
 - **Typed rendering is a lens.** The wiki preset already renders typed pages
   with an infobox lens and cites them elsewhere with a compact label sublens
@@ -134,7 +136,7 @@ would bolt on, are native to Classic's model.
   shown as its identifier, title, and status.
 - **The flat-file model resembles a Compass file.** Classic's flat-file design
   stores a metadata s-expression beside a Markdown body
-  (`doc/persistence/Persistence.md`); a Compass document is YAML front-matter
+  ([CLASSIC-DRAFT-persistence-backends](../persistence/Arch.PersistenceBackends.md)); a Compass document is YAML front-matter
   beside a Markdown body. A Tier 1 importer is a translation of one into the
   other.
 - **Federation has the right roles.** Each project repository is a Publisher,

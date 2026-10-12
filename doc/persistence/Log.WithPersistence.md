@@ -1,3 +1,18 @@
+---
+id:            CLASSIC-DRAFT-with-persistence
+title:         with-persistence Development Log
+genre:         Log
+scope:         component
+project:       Classic
+component:     persistence
+language:      en
+status:        Draft
+provenance:
+  assistant:   opencode
+relates-to:
+  - CLASSIC-DRAFT-persistence
+---
+
 # `with-persistence`: Development Log
 
 This document chronicles the design decisions and implementation of
