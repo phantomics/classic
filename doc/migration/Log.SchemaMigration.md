@@ -12,6 +12,18 @@ provenance:
 relates-to:
   - CLASSIC-DRAFT-migration
   - CLASSIC-DRAFT-schema-factorization
+decisions:
+  - CLASSIC-DRAFT-schema-migration-D1
+  - CLASSIC-DRAFT-schema-migration-D2
+  - CLASSIC-DRAFT-schema-migration-D3
+  - CLASSIC-DRAFT-schema-migration-D4
+  - CLASSIC-DRAFT-schema-migration-D5
+  - CLASSIC-DRAFT-schema-migration-D6
+  - CLASSIC-DRAFT-schema-migration-D7
+  - CLASSIC-DRAFT-schema-migration-D8
+  - CLASSIC-DRAFT-schema-migration-D9
+  - CLASSIC-DRAFT-schema-migration-D10
+  - CLASSIC-DRAFT-schema-migration-D11
 ---
 
 # Schema Migration: Development Log
@@ -51,12 +63,15 @@ persisted data. This gets harder to fix the longer it's deferred.
 
 ## Design Decisions
 
-Four questions were settled through analysis and discussion before
-implementation began:
+### CLASSIC-DRAFT-schema-migration-D1 — Where to store migration metadata
 
-### 1. Where to store migration metadata
+**Status:** Proposed
 
-**Decision: triplestore metadata + CL code in ASDF systems.**
+**Context:** One of four questions settled through analysis and discussion
+before implementation (see [Problem](#problem)): where to store migration
+metadata.
+
+**Decision:** Triplestore metadata + CL code in ASDF systems.
 
 Migration metadata (which versions exist, what changed between them,
 compatibility declarations, dependency links) is stored as Classic
@@ -70,24 +85,31 @@ lives in client libraries. The metadata is queryable, exportable as
 RDF, and follows entities through persistence backends. The code is
 testable, versionable in Git, and loadable through ASDF.
 
-### 2. Per-class versioning with system-wide manifests
+**Alternatives:** None recorded.
 
-**Decision: per-class version tracking with system-wide snapshots.**
+### CLASSIC-DRAFT-schema-migration-D2 — Per-class versioning with system-wide manifests
+
+**Status:** Proposed
+
+**Context:** One of four questions settled through analysis and discussion
+before implementation (see [Problem](#problem)): how to version classes: per
+class, system-wide, or both.
+
+**Decision:** Per-class version tracking with system-wide snapshots.
 
 Each class has its own version lineage (`:schema-version` class
 option on the metaclass). A schema manifest records the current
 version of every class, forming a coherent snapshot. Federation
 exchanges manifests, not individual class versions.
 
-This was chosen over pure system-wide versioning (which would force
-all classes to version together even when only one changed) and over
-pure per-class versioning (which creates a combinatorial explosion
-in federation negotiation). The hybrid approach provides the
+The hybrid approach provides the
 traceability of per-class versioning ("which version added the new
 post slot?") without the combinatorial explosion.
 
 The design was informed by analysis of how established systems handle
 schema evolution:
+
+Table: How established systems version their schemas.
 
 | System | Granularity | Approach |
 |--------|-------------|----------|
@@ -111,9 +133,20 @@ All three are addressed by the manifest system (limits federation
 negotiation to linear version comparison) and the migration dependency
 DAG (ensures correct ordering).
 
-### 3. Data migrations via extensible stubs
+**Alternatives:**
+- Pure system-wide versioning. Rejected: it would force all classes to version
+  together even when only one changed.
+- Pure per-class versioning. Rejected: it creates a combinatorial explosion in
+  federation negotiation.
 
-**Decision: generic functions with no-op defaults.**
+### CLASSIC-DRAFT-schema-migration-D3 — Data migrations via extensible stubs
+
+**Status:** Proposed
+
+**Context:** One of four questions settled through analysis and discussion
+before implementation (see [Problem](#problem)): how to handle data migrations.
+
+**Decision:** Generic functions with no-op defaults.
 
 `apply-data-migration`, `estimate-data-migration`, and
 `validate-data-migration` are generic functions with default methods
@@ -126,9 +159,16 @@ Data migrations run as a separate phase after schema migrations,
 with different error handling (the runner records failures and
 continues rather than aborting).
 
-### 4. Trigger-based migration timing
+**Alternatives:** None recorded.
 
-**Decision: configurable trigger function on each migration.**
+### CLASSIC-DRAFT-schema-migration-D4 — Trigger-based migration timing
+
+**Status:** Proposed
+
+**Context:** One of four questions settled through analysis and discussion
+before implementation (see [Problem](#problem)): when migrations execute.
+
+**Decision:** Configurable trigger function on each migration.
 
 Each migration carries a `trigger` slot containing a function
 `(strategy migration) -> :eager | :lazy | :deferred` that determines
@@ -146,13 +186,15 @@ adds with defaults) and `:deferred` for migrations involving data
 transforms or removals. Custom triggers can inspect the persistence
 strategy to assess scale before deciding.
 
+**Alternatives:** None recorded.
+
 
 ## Implementation
 
 ### MOP Extension: `:schema-version` class option
 
-The `classic-class` metaclass was extended with a `schema-version`
-slot (default `"1"`). A `shared-initialize :after` method on the
+The `classic-class` metaclass (`src/mop/metaclass.lisp:classic-class@58452c7`)
+was extended with a `schema-version` slot (default `"1"`). A `shared-initialize :after` method on the
 metaclass accepts `:schema-version` as a class option in `defclass`
 forms. SBCL wraps class option values in a list, which the method
 unwraps transparently.
@@ -169,7 +211,7 @@ symbols and returns the version string.
 
 ### Migration Model Classes
 
-Three new Classic resource classes in `src/migration/model.lisp`:
+Three new Classic resource classes in `src/migration/model.lisp@58452c7`:
 
 **`classic-migration-operation`** -- a single atomic schema change.
 Operation types: `:rename-slot`, `:add-slot`, `:remove-slot`,
@@ -192,7 +234,7 @@ classic-class classes), `manifest-class-version` (lookup),
 
 ### Migration Registry and DSL
 
-`src/migration/registry.lisp` provides:
+`src/migration/registry.lisp@58452c7` provides:
 
 **Migration registry** -- a global hash table mapping
 `(class-name . from-version)` to migration instances.
@@ -227,7 +269,7 @@ adds are marked reversible; those with removes or transforms are not.
 
 ### Migration Runner
 
-`src/migration/runner.lisp` provides:
+`src/migration/runner.lisp@58452c7` provides:
 
 **`apply-operation`** -- applies a single operation to a live CLOS
 instance. Handles each operation type: `:add-slot` sets a default
@@ -251,7 +293,7 @@ finds the migration path, evaluates the trigger, and applies or defers.
 
 ### Persistence Integration
 
-`src/migration/persistence.lisp` provides:
+`src/migration/persistence.lisp@58452c7` provides:
 
 **Entity version stamping** -- a `persist-entity :after` method
 records the entity's class schema version alongside the entity.
@@ -268,7 +310,7 @@ the entity as-is.
 
 ### Data Migration Stubs
 
-`src/migration/data-migration.lisp` provides three generic functions
+`src/migration/data-migration.lisp@58452c7` provides three generic functions
 with no-op defaults:
 
 - `apply-data-migration` -- bulk data transforms
@@ -281,7 +323,7 @@ sequentially, recording completion and failure counts.
 
 ### Federation Integration
 
-`src/migration/federation.lisp` provides:
+`src/migration/federation.lisp@58452c7` provides:
 
 **`assess-federation-compatibility`** -- compares two manifests and
 produces a structured report categorizing each class as compatible
@@ -295,9 +337,9 @@ translate an entity to a peer's schema version before sending.
 translate an incoming entity to the local schema version.
 
 
-## Tests
+## Verification
 
-`test/test-migration.lisp` contains 39 tests across 10 groups:
+`test/test-migration.lisp@58452c7` contains 39 tests across 10 groups:
 
 - MOP version tracking (4 tests)
 - Migration model instantiation (5 tests)
@@ -312,8 +354,18 @@ translate an incoming entity to the local schema version.
 - Predicate registry (2 tests)
 - Data migration stubs (2 tests)
 
+*Migration note (2026-10-11):* this section was titled Tests. The Log does not
+name the command that ran the suite; [Metrics](#metrics) gives 74 checks added and no regressions. Today it is run with
+`(progn (ql:quickload "classic/tests") (classic-tests::run-all-tests))`, the
+`:test` command of `compass.sexp`.
+
 
 ## Files
+
+*Migration note (2026-10-11):* commit `58452c7` also added federation support,
+whose files this table does not list.
+
+Table: Files added or changed in commit `58452c7` for the migration system.
 
 | File | Action | Description |
 |------|--------|-------------|
@@ -337,12 +389,15 @@ translate an incoming entity to the local schema version.
 - New test file: 1 (380 lines)
 
 
----
+## Outstanding Work
+
+None recorded.
 
 
-## Addendum: Bulk Namespace Rename
+## Update 2026-05-27 — Bulk Namespace Rename
 
-**Date:** 2026-05-27
+*Migration note (2026-10-11):* this section and the two after it were addenda,
+each with its own Date line; their Tests sections are now Verification.
 
 ### Context
 
@@ -379,11 +434,16 @@ would require 5 migration definitions containing 15 individual
 predicate strings that must match exactly. Manual authoring is a
 significant source of transcription errors.
 
-### Design Decisions
+### CLASSIC-DRAFT-schema-migration-D5 — Explicit class list with auto-discover helper
 
-**Explicit class list with auto-discover helper.** The macro takes
-an explicit list of classes to migrate rather than auto-discovering
-them, for predictability and auditability. A separate
+**Status:** Proposed
+
+**Context:** See the Problem of this update: a namespace rename needs one
+`:rename-predicate` operation per slot, across every class using the namespace.
+The classes to migrate must be identified.
+
+**Decision:** The macro takes an explicit list of classes to migrate rather
+than auto-discovering them, for predictability and auditability. A separate
 `classes-using-namespace` function is provided for REPL discovery:
 
 ```lisp
@@ -396,16 +456,24 @@ pastes the result into the `define-namespace-migration` call. This
 keeps the migration definition self-contained and inspectable
 without relying on runtime class scanning.
 
-Auto-discovery was rejected as the primary mechanism because it runs
-at macroexpansion time, making it sensitive to class load order and
-potentially capturing classes defined after the migration module was
-intended to be finalized.
+**Alternatives:**
+- Auto-discovery of the classes as the primary mechanism. Rejected: it runs at
+  macroexpansion time, making it sensitive to class load order and potentially
+  capturing classes defined after the migration module was intended to be
+  finalized.
 
-**Uniform target version with auto-detected from-version.** All
-listed classes are bumped to the same target version (`:version-bump`
-parameter). The from-version for each class is auto-detected from
-its current `:schema-version` at macroexpansion time. This handles
-the common case where all classes in a namespace are bumped together.
+### CLASSIC-DRAFT-schema-migration-D6 — Uniform target version with auto-detected from-version
+
+**Status:** Proposed
+
+**Context:** See the Problem of this update: a namespace rename needs one
+`:rename-predicate` operation per slot, across every class using the namespace.
+The listed classes may be at different versions.
+
+**Decision:** All listed classes are bumped to the same target version
+(`:version-bump` parameter). The from-version for each class is auto-detected
+from its current `:schema-version` at macroexpansion time. This handles the
+common case where all classes in a namespace are bumped together.
 
 For cases where classes are at different version levels and need
 different version increments, the developer writes multiple
@@ -414,15 +482,20 @@ This makes the version history self-documenting: reading the
 migration file top to bottom shows exactly which classes changed at
 which version step, with no hidden per-class version differences.
 
-This design was chosen over a per-class version override alist
-because it prioritizes readability of the migration specification
-over conciseness. Schema migrations are written once and read many
-times; clarity of the version incrementation matters more than
-keystroke savings.
+**Alternatives:**
+- A per-class version override alist. Rejected: readability of the migration
+  specification is prioritized over conciseness. Schema migrations are written
+  once and read many times; clarity of the version incrementation matters more
+  than keystroke savings.
 
-**No `->` arrow in syntax.** The old and new prefixes are positional
-string arguments rather than using a `->` arrow symbol, keeping the
-syntax clean:
+### CLASSIC-DRAFT-schema-migration-D7 — No -> arrow in syntax
+
+**Status:** Proposed
+
+**Context:** The macro takes an old and a new namespace prefix.
+
+**Decision:** The old and new prefixes are positional string arguments rather
+than using a `->` arrow symbol, keeping the syntax clean:
 
 ```lisp
 (define-namespace-migration ("syndication:" "classic.syndication:"
@@ -433,7 +506,13 @@ syntax clean:
   classic-federation-event)
 ```
 
+**Alternatives:**
+- A `->` arrow symbol between the prefixes. Not adopted, to keep the syntax
+  clean.
+
 ### Implementation
+
+All in `src/migration/registry.lisp@0e4c5bb`:
 
 **`classes-using-namespace (prefix)`** -- scans all classic-class
 classes (via `all-classic-classes`) and returns those with at least
@@ -464,9 +543,9 @@ time. In practice this is always the case because namespace
 migrations are defined in migration ASDF systems that depend on
 Classic's core.
 
-### Tests
+### Verification
 
-6 new tests added to `test/test-migration.lisp`:
+6 new tests added to `test/test-migration.lisp@0e4c5bb`:
 
 Namespace discovery (3 tests):
 - `classes-using-namespace` finds classes with matching predicates
@@ -484,6 +563,8 @@ Bulk namespace migration (3 tests):
 
 ### Files
 
+Table: Files added or changed in commit `0e4c5bb`.
+
 | File | Action | Description |
 |------|--------|-------------|
 | `src/migration/registry.lisp` | Modified | Added `classes-using-namespace`, `%slots-with-namespace`, `define-namespace-migration` (~85 lines) |
@@ -498,9 +579,7 @@ Bulk namespace migration (3 tests):
 - Total Classic test checks: 589
 
 
-## Addendum: The `:create-class` Operation
-
-**Date:** 2026-05-29
+## Update 2026-05-29 — The `:create-class` Operation
 
 ### Context
 
@@ -531,27 +610,35 @@ contents need to be describable as a sequence of migrations from
 `"0"`, so future schemas inherit a clean model for what their
 predecessors introduced.
 
-### Design Decisions
+### CLASSIC-DRAFT-schema-migration-D8 — Sentinel version for "class did not exist"
 
-Four questions were settled before implementation:
+**Status:** Proposed
 
-**1. Sentinel version for "class did not exist".**
+**Context:** One of four questions settled before implementation of the
+`:create-class` operation, introduced in the Context of this update: what
+version string means that a class did not exist.
 
-**Decision: the string `"0"`.**
+**Decision:** The string `"0"`.
 
 Strings are consistent with the existing version format. `"0"` is
 the natural "before `"1"`," and the existing `find-migration-path`
 function already handles arbitrary version strings as keys without
 special-casing.
 
-A symbol like `:undefined` was considered but rejected -- it would
-require special-casing throughout the migration system, breaking
-the uniformity of version handling.
+**Alternatives:**
+- A symbol like `:undefined`. Rejected: it would require special-casing
+  throughout the migration system, breaking the uniformity of version handling.
 
-**2. Federation translation for missing classes.**
+### CLASSIC-DRAFT-schema-migration-D9 — Federation translation for missing classes
 
-**Decision: report incompatibility; let the application layer
-decide how to handle it.**
+**Status:** Proposed
+
+**Context:** One of four questions settled before implementation of the
+`:create-class` operation, introduced in the Context of this update: how
+federation translates entities of a class a peer does not have.
+
+**Decision:** Report incompatibility; let the application layer decide how to
+handle it.
 
 When Instance A has a class that Instance B does not (because B is
 at an older schema version that predates the class's introduction),
@@ -569,9 +656,20 @@ should be sent in a generic form, or whether the federation should
 be aborted. The `:local-only` marker in the compatibility report
 makes the situation explicit.
 
-**3. URI namespace prefix in the migration declaration.**
+**Alternatives:**
+- (a) Drop the entity entirely, and (b) translate to the nearest common
+  ancestor class, the two options of the three listed above that were not
+  chosen.
 
-**Decision: not included.**
+### CLASSIC-DRAFT-schema-migration-D10 — URI namespace prefix in the migration declaration
+
+**Status:** Proposed
+
+**Context:** One of four questions settled before implementation of the
+`:create-class` operation, introduced in the Context of this update: whether
+the migration declaration captures the class's intended `uri-namespace-prefix`.
+
+**Decision:** Not included.
 
 The migration declaration could capture the class's intended
 `uri-namespace-prefix`, but this information is already in the
@@ -581,9 +679,19 @@ migration declaration is kept focused on what the migration system
 specifically needs (slot specs for compatibility checking,
 superclasses for dependency reasoning, metaclass for documentation).
 
-**4. Migration of `classic-migration-operation` itself.**
+**Alternatives:**
+- Including the prefix. Rejected: it is already in the class definition, and
+  duplicating it risks drift.
 
-**Decision: no version bump for now.**
+### CLASSIC-DRAFT-schema-migration-D11 — Migration of classic-migration-operation itself
+
+**Status:** Proposed
+
+**Context:** One of four questions settled before implementation of the
+`:create-class` operation, introduced in the Context of this update: whether
+adding three slots to `classic-migration-operation` needs its own migration.
+
+**Decision:** No version bump for now.
 
 Adding three new slots to `classic-migration-operation`
 (`superclasses`, `class-metaclass`, `slot-specs`) is itself a
@@ -594,6 +702,10 @@ classes as outside the migration regime is acceptable. A version
 bump and migration for the migration operation class can be added
 in a future release.
 
+**Alternatives:**
+- A version bump and migration now, as a production system would require.
+  Deferred to a future release.
+
 ### Implementation
 
 The change is structurally minimal because the migration system was
@@ -601,7 +713,8 @@ designed with extensibility in mind. The operation-type discriminator
 on `classic-migration-operation` already supports adding new keywords;
 the DSL parser dispatches via `case`; the runner dispatches via `case`.
 
-**`classic-migration-operation`** (model.lisp) gains three slots:
+**`classic-migration-operation`** (`src/migration/model.lisp:classic-migration-operation@88a920b`)
+gains three slots:
 
 - `superclasses` — list of superclass symbols (`:persistence :triple`)
 - `class-metaclass` — metaclass symbol (`:persistence :triple`)
@@ -611,7 +724,8 @@ These are NIL for non-`:create-class` operations, consistent with
 how other operation-specific slots work (e.g., `transform-fn-name`
 is NIL for non-transform operations).
 
-**The DSL parser** (`%parse-migration-operation` in registry.lisp)
+**The DSL parser**
+(`src/migration/registry.lisp:%parse-migration-operation@88a920b`)
 gains a `:create-class` case that destructures the keyword arguments
 into the three new slots:
 
@@ -634,7 +748,8 @@ class cannot receive entities of it. Applications that want to
 translate to a generic type for older peers handle this above
 the migration layer.
 
-**The runner's `apply-operation`** gains a `:create-class` case
+**The runner's `apply-operation`**
+(`src/migration/runner.lisp:apply-operation@88a920b`) gains a `:create-class` case
 that is a no-op. Class introduction is a schema-level declaration,
 not an entity-level operation. The class is defined when the
 schema package loads; the migration operation exists for dependency
@@ -649,7 +764,9 @@ allows `:create-class` migrations registered with from-version `"0"`
 to be found and applied (as a no-op for entities, but with correct
 reporting and side effects).
 
-**`assess-federation-compatibility`** gains two new cases in its
+**`assess-federation-compatibility`**
+(`src/migration/federation.lisp:assess-federation-compatibility@88a920b`)
+gains two new cases in its
 `cond`:
 
 - Class exists locally, missing on remote → `:local-only` marker
@@ -661,9 +778,9 @@ reporting and side effects).
 This gives the federation layer accurate reporting for the
 asymmetric case introduced by `:create-class` migrations.
 
-### Tests
+### Verification
 
-10 new tests added to `test/test-migration.lisp`:
+10 new tests added to `test/test-migration.lisp@88a920b`:
 
 - `:create-class` DSL parsing: superclasses, metaclass, slot-specs
   all captured correctly
@@ -682,6 +799,8 @@ asymmetric case introduced by `:create-class` migrations.
   incompatible
 
 ### Files
+
+Table: Files added or changed in commit `88a920b`.
 
 | File | Action | Description |
 |------|--------|-------------|
@@ -714,8 +833,12 @@ migration instances directly, leaving the macro-level fix for a
 separate change that addresses the existing DSL implementation
 without entangling it with the `:create-class` enhancement.
 
+*Migration note (2026-10-11):* the fix was made the same evening, in commit
+`88af7f2`, which changed `(rest clause)` to `(second clause)` in
+`src/migration/registry.lisp:define-schema-migration@88af7f2` and added tests.
 
-## Addendum: Factorization Confirmation (2026-05-29)
+
+## Update 2026-05-29 — Factorization Confirmation
 
 The schema migration system was the chief design pressure behind the
 schema/core factorization completed on 2026-05-29 (see
@@ -737,7 +860,17 @@ The `:create-class` operation, the pre-existing `:depends-on` DSL
 bug, and the refined federation reporting carried through the
 factorization without modification.
 
+*Migration note (2026-10-11):* the `:depends-on` bug had been fixed before the
+factorization began, in `88af7f2`, the parent of its first commit, `e9f2af1`;
+see the migration note under
+[Note: Pre-existing DSL Bug](#note-pre-existing-dsl-bug).
+
 **Total Classic test checks after factorization: 692** (the seven
 additional checks beyond the 685 above came from the multi-dependency
 ordering test for `:create-class`, written after this DevLog's main
 body was complete).
+
+*Migration note (2026-10-11):* the factorization's code is in commits
+`e9f2af1` to `e725ef0`, recorded in
+[CLASSIC-DRAFT-schema-factorization](../Log.SchemaFactorization.md); this
+update's text was added with its documentation, in `e0c3b72`.

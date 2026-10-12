@@ -11,6 +11,20 @@ provenance:
   assistant:   opencode
 relates-to:
   - CLASSIC-DRAFT-federation-demo
+decisions:
+  - CLASSIC-DRAFT-federation-consistency-D1
+  - CLASSIC-DRAFT-federation-consistency-D2
+  - CLASSIC-DRAFT-federation-consistency-D3
+  - CLASSIC-DRAFT-federation-consistency-D4
+  - CLASSIC-DRAFT-federation-consistency-D5
+  - CLASSIC-DRAFT-federation-consistency-D6
+  - CLASSIC-DRAFT-federation-consistency-D7
+  - CLASSIC-DRAFT-federation-consistency-D8
+  - CLASSIC-DRAFT-federation-consistency-D9
+  - CLASSIC-DRAFT-federation-consistency-D10
+  - CLASSIC-DRAFT-federation-consistency-D11
+  - CLASSIC-DRAFT-federation-consistency-D12
+  - CLASSIC-DRAFT-federation-consistency-D13
 ---
 
 # Federation Consistency: Development Log
@@ -28,12 +42,17 @@ restart, there was no delivery confirmation, no update propagation, no
 ordering guarantees, and no event audit trail. This work addresses
 those weaknesses systematically.
 
-
-## Phase A: Persisted Provenance and Event Log
+The Log records three phases, all dated 2026-05-26. Phase A, Persisted
+Provenance and Event Log, is the body of the Log, pinned to commit `8d5cc1b`;
+Phases B and C follow as dated `## Update` sections, pinned to `fb49791` and
+`99d050d`. *Migration note (2026-10-11):* each phase was a top-level section
+with its own Date line, and its tests were under Tests; the phases are now the
+body and two Update sections, and Tests is Verification throughout.
 
 **Date:** 2026-05-26
 
-### Problem
+
+## Problem
 
 The federation system's state management had five specific defects:
 
@@ -59,58 +78,109 @@ The federation system's state management had five specific defects:
    retraction was received, the provenance entry was not updated to
    reflect that the content had been withdrawn.
 
-### Design Decisions
 
-**Provenance as Classic resources.** Rather than replacing one hash
-table with another, provenance records became first-class Classic
-resources (`classic-federation-provenance`) stored through the standard
-persistence protocol. This means provenance automatically benefits
-from whatever persistence backend is active: in-memory for development,
-flat files for personal blogs, triplestore for production clusters.
-The provenance data is queryable, exportable as RDF, and carries the
+## Design Decisions
+
+### CLASSIC-DRAFT-federation-consistency-D1 — Provenance as Classic resources
+
+**Status:** Proposed
+
+**Context:** `*federation-provenance*` was a global hash table: not persisted,
+not thread-safe, not scoped per publication, and not itself federated (defect 1
+under [Problem](#problem)).
+
+**Decision:** Rather than replacing one hash table with another, provenance
+records became first-class Classic resources (`classic-federation-provenance`)
+stored through the standard persistence protocol. This means provenance
+automatically benefits from whatever persistence backend is active: in-memory
+for development, flat files for personal blogs, triplestore for production
+clusters. The provenance data is queryable, exportable as RDF, and carries the
 same URI-based identity as all other Classic entities.
 
-**Per-publication scoping.** Each provenance record carries a
-`publication-uri` relation slot that ties it to a specific publication.
-This eliminates the shared-global-namespace problem: two publications
-in the same image have completely independent provenance records,
-queryable through the standard persistence protocol with a publication
-filter.
+**Alternatives:**
+- Replacing one hash table with another. Not adopted, for the reasons the
+  Decision gives.
 
-**Event log as Classic resources.** Federation events
-(`classic-federation-event`) record every publish, retract, receive,
-and (future) update operation with delivery status tracking. Like
-provenance, these are persisted through the standard protocol. The
-event log serves three purposes: audit trail, delivery confirmation
+### CLASSIC-DRAFT-federation-consistency-D2 — Per-publication scoping
+
+**Status:** Proposed
+
+**Context:** Provenance lived in a shared global namespace (defect 1).
+
+**Decision:** Each provenance record carries a `publication-uri` relation slot
+that ties it to a specific publication. This eliminates the
+shared-global-namespace problem: two publications in the same image have
+completely independent provenance records, queryable through the standard
+persistence protocol with a publication filter.
+
+**Alternatives:** None recorded.
+
+### CLASSIC-DRAFT-federation-consistency-D3 — Event log as Classic resources
+
+**Status:** Proposed
+
+**Context:** Federation operations left no audit trail (defect 2).
+
+**Decision:** Federation events (`classic-federation-event`) record every
+publish, retract, receive, and (future) update operation with delivery status
+tracking. Like provenance, these are persisted through the standard protocol.
+The event log serves three purposes: audit trail, delivery confirmation
 foundation (Phase B), and retry queue foundation (Phase B).
 
-**Configurable retention policy.** The `classic-retention-policy` class
-holds an alist mapping delivery statuses to retention rules. Each rule
-specifies `:max-age` (seconds, NIL for indefinite) and `:max-count`
-(oldest-first eviction, NIL for unlimited). The default policy keeps
-delivered events for 24 hours or 1000 entries, and retains failed and
-pending events indefinitely. The `apply-retention-policy` function
-prunes expired events via `delete-entity`. This starts simple and
-scales: adding per-event-type rules or more status categories requires
-only extending the rules alist.
+**Alternatives:** None recorded.
 
-**Sync status on provenance.** Each provenance record has a
-`sync-status` slot with values `:current`, `:stale`, or `:retracted`.
-When a retraction is received from a peer, the provenance record is
-updated to `:retracted`, which causes `list-federated-content` to
-exclude the entity. This provides a clean separation between "the
-entity exists in our store" (for audit) and "the entity should be
-shown to users" (for content listing).
+### CLASSIC-DRAFT-federation-consistency-D4 — Configurable retention policy
 
-**Transport extensibility.** The `ecase` in `federation-receive` was
-replaced with `case` and an `otherwise` clause that returns a
-structured error response instead of signaling. This allows protocol
-extensions (new message types) without breaking older instances that
-don't understand them.
+**Status:** Proposed
 
-### Implementation
+**Context:** There was no mechanism for managing the growth of federation
+metadata over time (defect 4).
 
-**New file: `src/federation/provenance.lisp`** (310 lines)
+**Decision:** The `classic-retention-policy` class holds an alist mapping
+delivery statuses to retention rules. Each rule specifies `:max-age` (seconds,
+NIL for indefinite) and `:max-count` (oldest-first eviction, NIL for
+unlimited). The default policy keeps delivered events for 24 hours or 1000
+entries, and retains failed and pending events indefinitely. The
+`apply-retention-policy` function prunes expired events via `delete-entity`.
+This starts simple and scales: adding per-event-type rules or more status
+categories requires only extending the rules alist.
+
+**Alternatives:** None recorded.
+
+### CLASSIC-DRAFT-federation-consistency-D5 — Sync status on provenance
+
+**Status:** Proposed
+
+**Context:** Provenance records did not track synchronization status, so a
+received retraction left them unchanged (defect 5).
+
+**Decision:** Each provenance record has a `sync-status` slot with values
+`:current`, `:stale`, or `:retracted`. When a retraction is received from a
+peer, the provenance record is updated to `:retracted`, which causes
+`list-federated-content` to exclude the entity. This provides a clean
+separation between "the entity exists in our store" (for audit) and "the entity
+should be shown to users" (for content listing).
+
+**Alternatives:** None recorded.
+
+### CLASSIC-DRAFT-federation-consistency-D6 — Transport extensibility
+
+**Status:** Proposed
+
+**Context:** The `ecase` dispatch in `federation-receive` signalled an error on
+any unknown message type, making protocol extension fragile (defect 3).
+
+**Decision:** The `ecase` in `federation-receive` was replaced with `case` and
+an `otherwise` clause that returns a structured error response instead of
+signaling. This allows protocol extensions (new message types) without breaking
+older instances that don't understand them.
+
+**Alternatives:** None recorded.
+
+
+## Implementation
+
+### New file: `src/federation/provenance.lisp@8d5cc1b` (310 lines)
 
 Three new Classic resource classes:
 
@@ -147,10 +217,11 @@ Helper functions:
 - `make-default-retention-policy` -- creates a policy with sensible
   defaults.
 
-**Modified: `src/federation/protocol.lisp`**
+### Modified: `src/federation/protocol.lisp@8d5cc1b`
 
 - Removed `*federation-provenance*` global variable and all five
-  functions that operated on it (`ensure-provenance-table`,
+  functions that operated on it, as they stood in
+  `src/federation/protocol.lisp@137cf8a` (`ensure-provenance-table`,
   `record-provenance`, the old `entity-source-instance`,
   `entity-federated-p`, and the hash-table-based
   `list-federated-content`).
@@ -171,14 +242,15 @@ Helper functions:
   out `:retracted` entries, and checks `entity-visible-p` (from the
   deletion system) on each entity.
 
-**Modified: `src/federation/transport.lisp`**
+### Modified: `src/federation/transport.lisp@8d5cc1b`
 
 - `federation-receive` on `direct-transport`: `ecase` replaced with
   `case` + `otherwise` returning `(:type :error :message ...)`.
 
-### Tests
 
-**New: `test/test-federation-consistency.lisp`** -- 16 tests in the
+## Verification
+
+New: `test/test-federation-consistency.lisp@8d5cc1b` -- 16 tests in the
 `federation-consistency` suite:
 
 Provenance persistence (7 tests):
@@ -207,14 +279,33 @@ Transport extensibility (1 test):
 All 18 original federation tests continue to pass unmodified against
 the new persisted provenance system.
 
-### Metrics
+*Migration note (2026-10-11):* this section was titled Tests. The Log does not
+name the command that ran the suite. Today it is run with
+`(progn (ql:quickload "classic/tests") (classic-tests::run-all-tests))`, the
+`:test` command of `compass.sexp`.
 
-- Total test checks after Phase A: 456 (all passing)
-- New checks added: 32
-- Regressions: 0
-- Global mutable state removed: `*federation-provenance*`
 
-### What Phase A Enables
+## Files
+
+*Migration note (2026-10-11):* the Log had no Files table; this one was built
+from `git show --stat 8d5cc1b`, with descriptions taken from the Log's own
+account of the work.
+
+Table: Files added or changed in commit `8d5cc1b`.
+
+| File | Action | Description |
+|------|--------|-------------|
+| `src/federation/provenance.lisp` | **New** | Provenance, event, and retention-policy classes and their helper functions |
+| `src/federation/protocol.lisp` | Modified | Global provenance table removed; provenance recorded and events logged on publish, retract, and receive |
+| `src/federation/transport.lisp` | Modified | `ecase` replaced with `case` and an error response |
+| `src/packages.lisp` | Modified | Exports |
+| `classic.asd` | Modified | Load order |
+| `test/test-federation-consistency.lisp` | **New** | The `federation-consistency` suite, 16 tests |
+| `test/helpers.lisp` | Modified | Suite definition |
+| `test/test-federation.lisp` | Modified | Not described in the Log |
+
+
+## What Phase A Enables
 
 With provenance and events persisted through the standard protocol,
 the remaining phases can build on a stable foundation:
@@ -232,9 +323,23 @@ the remaining phases can build on a stable foundation:
   flush timer sharing infrastructure with the retry loop.
 
 
-## Phase B: Delivery Confirmation and Retry
+## Metrics
 
-**Date:** 2026-05-26
+- Total test checks after Phase A: 456 (all passing)
+- New checks added: 32
+- Regressions: 0
+- Global mutable state removed: `*federation-provenance*`
+
+
+## Outstanding Work
+
+Phases B and C, as [What Phase A Enables](#what-phase-a-enables) describes.
+*Migration note (2026-10-11):* both were completed the same day, and are
+recorded in the Update sections below; the work outstanding after Phase C is
+listed at the end of the last of them.
+
+
+## Update 2026-05-26 — Phase B: Delivery Confirmation and Retry
 
 ### Problem
 
@@ -255,24 +360,38 @@ delivery. Three specific gaps remained:
    status `:failed` or `:pending` accumulated in the log with no path
    to resolution.
 
-### Design Decisions
+### CLASSIC-DRAFT-federation-consistency-D7 — Acknowledgment abstraction
 
-**Acknowledgment abstraction.** Rather than coupling the federation
-protocol to a specific ack format, a `delivery-acknowledged-p`
-function inspects transport responses and returns T for any response
-type that constitutes a successful acknowledgment. The direct-transport
-returns `(:type :ack)` for publishes and `(:type :retract-response)`
-for retractions; both are recognized. Future HTTP transports can return
-different response structures and the function can be extended without
-changing the protocol layer.
+**Status:** Proposed
+
+**Context:** A peer returning a non-ack response was logged as `:delivered`
+(gap 1 above).
+
+**Decision:** Rather than coupling the federation protocol to a specific ack
+format, a `delivery-acknowledged-p` function inspects transport responses and
+returns T for any response type that constitutes a successful acknowledgment.
+The direct-transport returns `(:type :ack)` for publishes and `(:type
+:retract-response)` for retractions; both are recognized. Future HTTP
+transports can return different response structures and the function can be
+extended without changing the protocol layer.
 
 `publish-to-peers` and `retract-from-peers` now check
 `delivery-acknowledged-p` on every response and log `:delivered` only
 on positive acknowledgment, `:failed` otherwise.
 
-**Idempotent receive via timestamp comparison.** The
-`idempotent-receive` generic function provides a check-before-store
-path. Before accepting an incoming entity, it checks:
+**Alternatives:**
+- Coupling the federation protocol to a specific ack format. Not adopted, for
+  the reasons the Decision gives.
+
+### CLASSIC-DRAFT-federation-consistency-D8 — Idempotent receive via timestamp comparison
+
+**Status:** Proposed
+
+**Context:** Receiving the same entity twice could overwrite a newer local
+version with a stale copy (gap 2).
+
+**Decision:** The `idempotent-receive` generic function provides a
+check-before-store path. Before accepting an incoming entity, it checks:
 
 1. If the entity is not present locally: accept unconditionally (this
    is a new entity from a peer).
@@ -296,12 +415,22 @@ remains as the unconditional receive path (used by the transport
 dispatch), while `idempotent-receive` is available for application code
 and the retry system to use when staleness checking is needed.
 
-**Synchronous single-pass retry with expansion stubs.** The
-`run-federation-retry` generic function scans the event log for
-`:pending` and `:failed` events and attempts redelivery. The current
-implementation is synchronous: it queries all retryable events, sends
-each one, and updates the event status. It returns a summary plist
-with `:retried`, `:succeeded`, and `:exhausted` counts.
+**Alternatives:**
+- Replacing `receive-from-peer` directly. Not adopted, for the reasons the
+  Decision gives.
+
+### CLASSIC-DRAFT-federation-consistency-D9 — Synchronous single-pass retry with expansion stubs
+
+**Status:** Proposed
+
+**Context:** Failed and pending deliveries accumulated in the event log with no
+path to resolution (gap 3).
+
+**Decision:** The `run-federation-retry` generic function scans the event log
+for `:pending` and `:failed` events and attempts redelivery. The current
+implementation is synchronous: it queries all retryable events, sends each one,
+and updates the event status. It returns a summary plist with `:retried`,
+`:succeeded`, and `:exhausted` counts.
 
 The retry function respects `*retry-max-attempts*` (default 5). Events
 that have been retried this many times are left as `:failed` and
@@ -321,9 +450,12 @@ was current when the original send failed. This is intentional: if
 the entity has been updated since the failed send, the peer should
 receive the latest version.
 
+**Alternatives:** None recorded. Background execution, exponential backoff, and
+concurrent retry are deferred to a production implementation, not rejected.
+
 ### Implementation
 
-**New file: `src/federation/delivery.lisp`** (175 lines)
+#### New file: `src/federation/delivery.lisp@fb49791` (175 lines)
 
 Functions and generics:
 
@@ -339,7 +471,7 @@ Configuration:
 - `*retry-backoff-base*` -- default 2, for future background retry
   timing
 
-**Modified: `src/federation/protocol.lisp`**
+#### Modified: `src/federation/protocol.lisp@fb49791`
 
 - `publish-to-peers` now captures the transport response and checks
   `delivery-acknowledged-p` before logging `:delivered`. Non-ack
@@ -349,9 +481,9 @@ Configuration:
 - `retract-from-peers` receives the same treatment: ack checking
   before logging delivery status.
 
-### Tests
+### Verification
 
-Added to `test/test-federation-consistency.lisp` -- 7 new tests:
+Added to `test/test-federation-consistency.lisp@fb49791` -- 7 new tests:
 
 Delivery confirmation (2 tests):
 - `delivery-acknowledged-p` correctly identifies ack and non-ack
@@ -370,6 +502,23 @@ Retry (2 tests):
 Timestamp comparison (1 test):
 - `entity-newer-p` correctly compares modified-at timestamps in both
   directions, and returns false for equal timestamps
+
+### Files
+
+*Migration note (2026-10-11):* the Log had no Files table; this one was built
+from `git show --stat fb49791`, with descriptions taken from the Log's own
+account of the work.
+
+Table: Files added or changed in commit `fb49791`.
+
+| File | Action | Description |
+|------|--------|-------------|
+| `src/federation/delivery.lisp` | **New** | Acknowledgment checking, idempotent receive, and retry |
+| `src/federation/protocol.lisp` | Modified | Acknowledgment checked before logging delivery |
+| `src/packages.lisp` | Modified | Exports |
+| `classic.asd` | Modified | Load order |
+| `test/test-federation-consistency.lisp` | Modified | 7 new tests |
+| `doc/federation/DevLog.FederationConsistency.md` | Modified | The Phase B section of this Log |
 
 ### Metrics
 
@@ -396,9 +545,7 @@ Phase C will build on this by adding:
   timer infrastructure with the retry loop
 
 
-## Phase C: Update Propagation and Ordering
-
-**Date:** 2026-05-26
+## Update 2026-05-26 — Phase C: Update Propagation and Ordering
 
 ### Problem
 
@@ -420,14 +567,19 @@ delivery confirmation, and retry. Three gaps remained:
    (forums, social feeds) this creates excessive message overhead.
    There is no debounce or accumulation mechanism.
 
-### Design Decisions
+### CLASSIC-DRAFT-federation-consistency-D10 — Logical clock on classic-resource
 
-**Logical clock on classic-resource.** Rather than introducing a
-mixin, the logical clock is a slot directly on `classic-resource`,
-making it available to every entity in the system. This is the right
-placement because causal ordering is a universal concern -- any entity
-that participates in federation needs it, and future persistence
-backends (flat files, triplestores) need to store it alongside the
+**Status:** Proposed
+
+**Context:** Wall-clock timestamps are fragile for ordering: clocks skew
+between instances, timestamps can be absent, and simultaneous edits have no
+defined ordering (gap 1 above).
+
+**Decision:** Rather than introducing a mixin, the logical clock is a slot
+directly on `classic-resource`, making it available to every entity in the
+system. This is the right placement because causal ordering is a universal
+concern -- any entity that participates in federation needs it, and future
+persistence backends (flat files, triplestores) need to store it alongside the
 entity's other metadata.
 
 The clock initializes to 0 and is incremented by
@@ -446,8 +598,17 @@ verifies that a high-clock entity with an older timestamp is accepted
 over a low-clock entity with a newer timestamp, proving the clock
 takes precedence.
 
-**`:update` message type and `receive-update`.** The update flow is
-structurally parallel to publish:
+**Alternatives:**
+- A mixin carrying the clock. Not adopted, for the reasons the Decision gives.
+
+### CLASSIC-DRAFT-federation-consistency-D11 — :update message type and receive-update
+
+**Status:** Proposed
+
+**Context:** Edits after federation did not reach peers; only initial publish
+and retraction were federated (gap 2).
+
+**Decision:** The update flow is structurally parallel to publish:
 
 - `propagate-update` sends `:update` messages to all subscribers of
   matching feeds (same feed-matching logic as `publish-to-peers`)
@@ -462,9 +623,17 @@ general-purpose check-before-store utility; `receive-update` is the
 federation protocol handler that also updates provenance records and
 logs events.
 
-**Per-peer outbox with threshold and interval flushing.** The
-`classic-federation-outbox` class accumulates operations (publish,
-retract, update) for a specific peer. Two flush triggers:
+**Alternatives:** None recorded.
+
+### CLASSIC-DRAFT-federation-consistency-D12 — Per-peer outbox with threshold and interval flushing
+
+**Status:** Proposed
+
+**Context:** Every operation sent an individual message to each peer, with no
+debounce or accumulation (gap 3).
+
+**Decision:** The `classic-federation-outbox` class accumulates operations
+(publish, retract, update) for a specific peer. Two flush triggers:
 
 - **Threshold:** when N operations accumulate (configurable via
   `flush-threshold`; default 1 = immediate send, preserving current
@@ -489,30 +658,40 @@ immediate send. Users enable batching by increasing the threshold.
 This means the outbox infrastructure exists and is tested without
 changing the behavior of existing code.
 
-**Blog `edit-post` with update propagation.** The blog model gains
-an `edit-post` function that modifies specified fields (title, text,
-categories -- only non-NIL arguments are applied), increments the
-logical clock, re-persists, and calls `propagate-update` if the post
-is published and federation is configured. This completes the
-federation lifecycle: create -> publish -> federate -> edit -> propagate
-update -> retract.
+**Alternatives:** None recorded.
+
+### CLASSIC-DRAFT-federation-consistency-D13 — Blog edit-post with update propagation
+
+**Status:** Proposed
+
+**Context:** The blog model had no way to edit a published post and propagate
+the edit.
+
+**Decision:** The blog model gains an `edit-post` function that modifies
+specified fields (title, text, categories -- only non-NIL arguments are
+applied), increments the logical clock, re-persists, and calls
+`propagate-update` if the post is published and federation is configured. This
+completes the federation lifecycle: create -> publish -> federate -> edit ->
+propagate update -> retract.
+
+**Alternatives:** None recorded.
 
 ### Implementation
 
-**Modified: `src/model/resource.lisp`**
+#### Modified: `src/model/resource.lisp@99d050d`
 
 - Added `logical-clock` slot to `classic-resource`: `:persistence
   :triple`, `:predicate "classic:logicalClock"`, `:initform 0`.
 - Added `increment-logical-clock` function: increments clock, sets
   `modified-at` to now, returns new value.
 
-**Modified: `src/federation/delivery.lisp`**
+#### Modified: `src/federation/delivery.lisp@99d050d`
 
 - `entity-newer-p` updated to prefer logical clock comparison when
   both entities have non-zero clocks, falling back to timestamp
   comparison otherwise.
 
-**New file: `src/federation/updates.lisp`** (115 lines)
+#### New file: `src/federation/updates.lisp@99d050d` (115 lines)
 
 - `propagate-update` -- sends `:update` messages to feed subscribers,
   with ack checking and event logging (mirrors `publish-to-peers`
@@ -520,7 +699,7 @@ update -> retract.
 - `receive-update` -- accepts updates by logical clock comparison,
   updates provenance on accept, rejects stale updates
 
-**New file: `src/federation/outbox.lisp`** (165 lines)
+#### New file: `src/federation/outbox.lisp@99d050d` (165 lines)
 
 - `classic-federation-outbox` class with peer-authority, pending
   operations list, flush-threshold, flush-interval, and last-flush-at
@@ -531,21 +710,21 @@ update -> retract.
 - `flush-outbox` -- sends `:batch` message, logs events, clears queue
 - `outbox-pending-count`, `clear-outbox` -- inspection and management
 
-**Modified: `src/federation/protocol.lisp`**
+#### Modified: `src/federation/protocol.lisp@99d050d`
 
 - Transport `:around` method extended to handle `:update` (dispatches
   to `receive-update`) and `:batch` (processes each operation
   sequentially via existing handlers)
 
-**Modified: `src/models/blog.lisp`**
+#### Modified: `src/models/blog.lisp@99d050d`
 
 - Added `edit-post` function: updates specified fields, increments
   logical clock, re-persists, propagates update to peers if published
   and federation configured
 
-### Tests
+### Verification
 
-Added to `test/test-federation-consistency.lisp` -- 14 new tests:
+Added to `test/test-federation-consistency.lisp@99d050d` -- 14 new tests:
 
 Logical clock (3 tests):
 - Default clock value is 0
@@ -572,6 +751,29 @@ Blog integration (2 tests):
 Updated existing tests (2 tests):
 - MOP slot count updated from 12 to 13 (logical-clock on resource)
 - Model slot count updated from 12 to 13
+
+### Files
+
+*Migration note (2026-10-11):* the Log had no Files table; this one was built
+from `git show --stat 99d050d`, with descriptions taken from the Log's own
+account of the work.
+
+Table: Files added or changed in commit `99d050d`.
+
+| File | Action | Description |
+|------|--------|-------------|
+| `src/model/resource.lisp` | Modified | `logical-clock` slot and `increment-logical-clock` |
+| `src/federation/delivery.lisp` | Modified | `entity-newer-p` prefers logical clocks |
+| `src/federation/updates.lisp` | **New** | Update propagation and receipt |
+| `src/federation/outbox.lisp` | **New** | Per-peer outbox |
+| `src/federation/protocol.lisp` | Modified | Transport dispatch for `:update` and `:batch` |
+| `src/models/blog.lisp` | Modified | `edit-post` |
+| `src/packages.lisp` | Modified | Exports |
+| `classic.asd` | Modified | Load order |
+| `test/test-federation-consistency.lisp` | Modified | 14 new tests |
+| `test/test-model.lisp` | Modified | Slot count updated from 12 to 13 |
+| `test/test-mop.lisp` | Modified | Slot count updated from 12 to 13 |
+| `doc/federation/DevLog.FederationConsistency.md` | Modified | The Phase C section of this Log |
 
 ### Metrics
 
@@ -604,7 +806,10 @@ for a publishing system -- stronger than eventual consistency (peers
 cannot accept stale updates) but weaker than linearizability (which
 is neither achievable nor necessary over unreliable networks).
 
-### Future Work Beyond Federation Consistency
+### Outstanding Work
+
+*Migration note (2026-10-11):* this section was titled Future Work Beyond
+Federation Consistency.
 
 The federation system's remaining open items fall outside the
 consistency scope and belong to separate development efforts:

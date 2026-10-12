@@ -436,3 +436,51 @@ revision. One symbol was pinned by its file rather than as `path:symbol`:
 `compute-effective-slot-definition`, whose method is defined with the
 `c2mop:` prefix, which the toolchain's symbol pattern does not match.
 
+## Update 2026-10-11 — Phase 3, batch 3: federation and migration
+
+The third batch converted the two Logs that record several pieces of work,
+following CLASSIC-DRAFT-compass-migration-D9. It began with a migration note,
+requested by the steward after batch 2, recording that the Files table of
+[CLASSIC-DRAFT-deletion-support](Log.DeletionSupport.md) omits
+`test/helpers.lisp`.
+
+- **[CLASSIC-DRAFT-federation-consistency](federation/Log.FederationConsistency.md).**
+  Phase A became the body, and Phases B and C two `## Update 2026-05-26`
+  sections. Its 13 bold-lead decisions became
+  CLASSIC-DRAFT-federation-consistency-D1 to
+  CLASSIC-DRAFT-federation-consistency-D13, numbered across the body and both
+  updates; the four whose text names what was not done ("rather than…")
+  carry that as their alternative, and the rest record none. Each phase is
+  pinned to its own commit (`8d5cc1b`, `fb49791`, `99d050d`), with the
+  functions Phase A removed at `137cf8a`. The Log had no Files table; each
+  phase gained one built from its commit, with a migration note saying so.
+  The bold "New file" and "Modified" lines became Implementation
+  subsections, and Future Work Beyond Federation Consistency became the last
+  update's Outstanding Work.
+- **[CLASSIC-DRAFT-schema-migration](migration/Log.SchemaMigration.md).** The
+  body became CLASSIC-DRAFT-schema-migration-D1 to
+  CLASSIC-DRAFT-schema-migration-D4, pinned to `58452c7`; the bulk namespace
+  rename addendum became an update with CLASSIC-DRAFT-schema-migration-D5 to
+  CLASSIC-DRAFT-schema-migration-D7, pinned to `0e4c5bb`; the `:create-class`
+  addendum an update with CLASSIC-DRAFT-schema-migration-D8 to
+  CLASSIC-DRAFT-schema-migration-D11, pinned to `88a920b`; and the
+  factorization confirmation an update of its own.
+- **Two factual discrepancies found.** The `:create-class` addendum says the
+  `:depends-on` DSL bug was left for a separate change, and the factorization
+  confirmation says it "carried through the factorization without
+  modification". History shows it was fixed in `88af7f2`, the parent of the
+  factorization's first commit. Migration notes in the Log record this; no
+  code is affected. The Log's Files table for `58452c7` also lists only the
+  migration files of a commit that added federation support too, which a
+  migration note records.
+- **References.** `Ref.Migration.md` and `Guide.FederationDemo.md` have no
+  tables or diagrams, so need no captions or descriptions.
+
+Verification: `compass check --federation` reports 0 errors and 0 warnings
+over 37 documents with both builds, and `compass index --check` passes. A
+scratch copy with a reference pinned before its file existed, and a misspelt
+symbol, produced the expected error and warning. A word-frequency comparison
+of each Log before and after found no claim dropped: the words that no longer
+appear are retired headings (Addendum, Tests, Date, Design Decisions) and the
+"chosen over" phrasing of alternatives now stated as records.
+

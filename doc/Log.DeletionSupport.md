@@ -341,6 +341,10 @@ Table: Files added or changed in commit `137cf8a`.
 | `classic.asd` | Modified | Added `deletion.lisp` to model module |
 | `test/test-deletion.lisp` | **New** | 24 tests across 7 groups |
 
+*Migration note (2026-10-11):* commit `137cf8a` also modified
+`test/helpers.lisp`, adding the `deletion` test suite, which this table does
+not list.
+
 
 ## Metrics
 
