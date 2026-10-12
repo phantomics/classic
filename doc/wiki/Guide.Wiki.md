@@ -41,6 +41,8 @@ introduces two content classes, a link mechanism, and a set of views.
 
 ### Content classes
 
+Table: The wiki's content classes, what each extends, and what it adds.
+
 | Class | Extends | Adds |
 |---|---|---|
 | `wiki-page` | `classic-article` + `classic-stateful` + `classic-deletable` | `page-anchor`, `page-links-to`, `page-linked-from`, `page-broken-links`, `page-infobox`, `page-influenced-by` |
@@ -291,6 +293,8 @@ exercise of the theme → lens → render pipeline in a model context.
 
 ### The typed classes
 
+Table: The typed page classes, what each extends, and its typed slots.
+
 | Class | Extends | Typed slots |
 |---|---|---|
 | `wiki-computer` | `wiki-page` | `computer-manufacturer`, `computer-released`, `computer-designer`, `computer-cpu`, `computer-price` |
@@ -342,6 +346,8 @@ coexist: a typed page can also carry alist entries for ad-hoc fields.
 ### Link indicators
 
 All wiki links render with indicators in REPL output:
+
+Table: Link indicators in rendered page text and what each means.
 
 | Indicator | Meaning |
 |---|---|

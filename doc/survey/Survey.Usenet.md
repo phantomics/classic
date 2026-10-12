@@ -85,8 +85,7 @@ right shape.
 The overlap between Usenet's design vocabulary and Classic's is close enough to
 be tabulated element by element.
 
-*Table: mapping of Usenet concepts onto Classic mechanisms and their current
-status.*
+Table: Mapping of Usenet concepts onto Classic mechanisms and their current status.
 
 | Usenet concept | Classic equivalent | Status |
 |----------------|--------------------|--------|
@@ -218,7 +217,7 @@ The home-instance / hosted-service distinction (developed in the sibling
 surveys) applies here too, and is again primarily about where trust and cost
 live.
 
-*Table: deployment-mode contrast for a Usenet-analog Classic instance.*
+Table: Deployment-mode contrast for a Usenet-analog Classic instance.
 
 | Concern | Home / peer (flat-file) | Hosted service (triplestore) |
 |---------|-------------------------|------------------------------|

@@ -78,7 +78,7 @@ Archiving is not a new capability; it is a recomposition of machinery Classic
 already has or already plans. The three mechanisms differ sharply in architecture
 and maturity, but each maps onto existing pieces.
 
-*Table: archival mechanisms and the Classic machinery that realizes them.*
+Table: Archival mechanisms and the Classic machinery that realizes them.
 
 | Mechanism | Classic machinery | Maturity |
 |-----------|-------------------|----------|
@@ -213,7 +213,7 @@ type or two parallel types is an open question shared between the two surveys.
 Archiving distributes across the same home/hosted/static tiers the sibling surveys
 describe, here differentiated by who holds the durable copy.
 
-*Table: archival deployment tiers and their durability characteristics.*
+Table: Archival deployment tiers and their durability characteristics.
 
 | Tier | Who holds the copy | Durability character |
 |------|--------------------|----------------------|

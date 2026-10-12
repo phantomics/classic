@@ -90,7 +90,7 @@ identity, integrity, and provenance across the federation.
 Nine criteria, each representing a design concern Classic's federation must
 address:
 
-*Table: evaluation rubric criteria.*
+Table: Evaluation rubric criteria.
 
 | Criterion | Concern |
 |-----------|---------|

@@ -12,6 +12,14 @@ provenance:
 relates-to:
   - CLASSIC-DRAFT-forum
   - CLASSIC-DRAFT-general-model
+decisions:
+  - CLASSIC-DRAFT-forum-demo-D1
+  - CLASSIC-DRAFT-forum-demo-D2
+  - CLASSIC-DRAFT-forum-demo-D3
+  - CLASSIC-DRAFT-forum-demo-D4
+  - CLASSIC-DRAFT-forum-demo-D5
+  - CLASSIC-DRAFT-forum-demo-D6
+  - CLASSIC-DRAFT-forum-demo-D7
 ---
 
 # Forum Demo: Development Log
@@ -56,15 +64,20 @@ scope.
 The shape of the forum was settled through discussion before
 implementation. The decisions:
 
-### 1. `forum-post` descends from `classic-post`, not `classic-article`
+### CLASSIC-DRAFT-forum-demo-D1 — forum-post descends from classic-post, not classic-article
 
-The schema distinguishes `classic-article` and `classic-post` precisely
-because posts are threaded — they carry `has-container`, `reply-of`,
-and `has-reply`. A forum post is the canonical example of why
-`classic-post` exists. So `forum-post` is composed as
-`(classic-post classic-stateful classic-deletable)` — a parallel
-composition to `publication-article`, sharing the workflow and deletion
-mixins but on the threaded base rather than the article base.
+**Status:** Proposed
+
+**Context:** A forum post needs a base class in the schema, which distinguishes
+`classic-article` from `classic-post`.
+
+**Decision:** The schema distinguishes `classic-article` and `classic-post`
+precisely because posts are threaded — they carry `has-container`, `reply-of`,
+and `has-reply`. A forum post is the canonical example of why `classic-post`
+exists. So `forum-post` is composed as `(classic-post classic-stateful
+classic-deletable)` — a parallel composition to `publication-article`, sharing
+the workflow and deletion mixins but on the threaded base rather than the
+article base.
 
 A consequence: the universal article operations (`write-article` etc.)
 do not work on forum posts, and the forum supplies its own
@@ -73,85 +86,122 @@ genuinely different content shapes — and it confirms that the
 universals worth sharing are the *infrastructure* (accounts, roles,
 workflow, persistence), not the content-specific operations.
 
-### 2. Reactions are a multiset of strings
+**Alternatives:**
+- `classic-article` as the base, which the heading names. Not adopted: posts
+  are threaded, and `classic-post` exists for exactly that.
 
-`post-stickers` is a list of strings like `("heart" "heart" "star")`;
-counts are list multiplicities. This is the simplest model that shows
-the feature. A production forum would constrain each member to one
-reaction per post, which requires per-member attribution — a small
-`forum-reaction` class. The demo defers that. Free-form strings also
-mean the sticker set is open; the preset ships a default set
-(`*default-stickers*`) and a glyph table for display, but the slot
-itself is unconstrained.
+### CLASSIC-DRAFT-forum-demo-D2 — Reactions are a multiset of strings
 
-### 3. Quote = link plus duplicated text
+**Status:** Proposed
 
-`quote-post` records two things: the explicit semantic link
-(`post-quotes` on the quoting post, `post-quoted-by` on the quoted one)
-and the duplicated quoted text (a Markdown blockquote lifted into the
-new post's body). The link is data; the blockquote is presentation.
-They can drift — editing the original does not rewrite quotes of it —
-which matches how forum quoting actually behaves: a quote captures
-intent at quote time. A more sophisticated forum would, as in BBCode,
-embed a reference to the quoted post's id alongside the lifted text;
-the `post-quotes` relation is exactly that reference.
+**Context:** Members react to posts with stickers.
 
-### 4. Three roles, gated at the operation layer
+**Decision:** `post-stickers` is a list of strings like `("heart" "heart"
+"star")`; counts are list multiplicities. This is the simplest model that shows
+the feature. A production forum would constrain each member to one reaction per
+post, which requires per-member attribution — a small `forum-reaction` class.
+The demo defers that. Free-form strings also mean the sticker set is open; the
+preset ships a default set (`*default-stickers*`) and a glyph table for
+display, but the slot itself is unconstrained.
 
-The discussion workflow has three roles (member, moderator, admin),
-but the workflow engine's transitions carry a single `required-role`.
-Gating the `hide`/`delete` transitions to `"moderator"` would have
-locked out admins (whose role label is not `"moderator"`). So the
-discussion transitions carry *no* required-role — they enforce only
-state-machine validity — and moderation is gated at the operation layer
-via `account-has-permission-p`, checking permission keywords
-(`:hide`, `:delete`, `:pin`, `:lock`) that both moderators and admins
-hold. This mirrors how the blog's `write-article` checks `:write` in
-the operation rather than in a workflow transition.
+**Alternatives:**
+- A `forum-reaction` class with per-member attribution, enforcing one reaction
+  per member per post. Deferred: a production forum would need it; the demo
+  does not.
 
-### 5. Pinning and locking are slot updates, not workflow states
+### CLASSIC-DRAFT-forum-demo-D3 — Quote = link plus duplicated text
 
-Pin and lock are booleans on the thread, toggled by operations that
-check `:pin`/`:lock` permission. The workflow engine is for content
-state machines (visible → hidden → deleted), not for every boolean.
-This matches phpBB, where pin and lock are thread attributes.
+**Status:** Proposed
 
-### 6. Atomic thread creation; whole-post quoting
+**Context:** A post may quote another.
 
-`start-thread` creates the thread and its originating post in one call
-— the abstraction that fits the usual forum action ("start a thread
-with this first post"). `quote-post` quotes the whole parent post;
-fragment quoting is a production refinement.
+**Decision:** `quote-post` records two things: the explicit semantic link
+(`post-quotes` on the quoting post, `post-quoted-by` on the quoted one) and the
+duplicated quoted text (a Markdown blockquote lifted into the new post's body).
+The link is data; the blockquote is presentation. They can drift — editing the
+original does not rewrite quotes of it — which matches how forum quoting
+actually behaves: a quote captures intent at quote time. A more sophisticated
+forum would, as in BBCode, embed a reference to the quoted post's id alongside
+the lifted text; the `post-quotes` relation is exactly that reference.
 
-### 7. Stable post indices via placeholders
+**Alternatives:** None recorded.
 
-Posts are indexed over the full chronological list (every non-purged
-post, in every state), so post `#N` is always the Nth post regardless
-of moderation. The posts view renders hidden and deleted posts as
-placeholders (`[post hidden by moderator]`) rather than omitting them,
-keeping indices stable and matching the phpBB experience of seeing that
-a post was removed. `:include-hidden` / `:include-deleted` reveal the
-full content.
+### CLASSIC-DRAFT-forum-demo-D4 — Three roles, gated at the operation layer
+
+**Status:** Proposed
+
+**Context:** The discussion workflow has three roles (member, moderator,
+admin), but the workflow engine's transitions carry a single `required-role`.
+
+**Decision:** The discussion workflow has three roles (member, moderator,
+admin), but the workflow engine's transitions carry a single `required-role`.
+Gating the `hide`/`delete` transitions to `"moderator"` would have locked out
+admins (whose role label is not `"moderator"`). So the discussion transitions
+carry *no* required-role — they enforce only state-machine validity — and
+moderation is gated at the operation layer via `account-has-permission-p`,
+checking permission keywords (`:hide`, `:delete`, `:pin`, `:lock`) that both
+moderators and admins hold. This mirrors how the blog's `write-article` checks
+`:write` in the operation rather than in a workflow transition.
+
+**Alternatives:**
+- Gating the `hide`/`delete` transitions to `"moderator"`. Rejected: it would
+  have locked out admins, whose role label is not `"moderator"`.
+
+### CLASSIC-DRAFT-forum-demo-D5 — Pinning and locking are slot updates, not workflow states
+
+**Status:** Proposed
+
+**Context:** Threads can be pinned and locked.
+
+**Decision:** Pin and lock are booleans on the thread, toggled by operations
+that check `:pin`/`:lock` permission. The workflow engine is for content state
+machines (visible → hidden → deleted), not for every boolean. This matches
+phpBB, where pin and lock are thread attributes.
+
+**Alternatives:**
+- Pin and lock as workflow states. Not adopted: the workflow engine is for
+  content state machines, not for every boolean.
+
+### CLASSIC-DRAFT-forum-demo-D6 — Atomic thread creation; whole-post quoting
+
+**Status:** Proposed
+
+**Context:** Starting a thread and quoting a post each needed a granularity.
+
+**Decision:** `start-thread` creates the thread and its originating post in one
+call — the abstraction that fits the usual forum action ("start a thread with
+this first post"). `quote-post` quotes the whole parent post; fragment quoting
+is a production refinement.
+
+**Alternatives:**
+- Fragment quoting. Deferred as a production refinement.
+
+### CLASSIC-DRAFT-forum-demo-D7 — Stable post indices via placeholders
+
+**Status:** Proposed
+
+**Context:** Moderation hides and deletes posts, which would shift post numbers
+if they were omitted from views.
+
+**Decision:** Posts are indexed over the full chronological list (every
+non-purged post, in every state), so post `#N` is always the Nth post
+regardless of moderation. The posts view renders hidden and deleted posts as
+placeholders (`[post hidden by moderator]`) rather than omitting them, keeping
+indices stable and matching the phpBB experience of seeing that a post was
+removed. `:include-hidden` / `:include-deleted` reveal the full content.
+
+**Alternatives:**
+- Omitting hidden and deleted posts from the posts view. Not adopted: post
+  indices would no longer be stable.
 
 
 ## Implementation
 
-The forum preset is self-contained in `forum.lisp` (classes,
-operations, and the `make-forum` constructor), with the workflow shape
-in `workflows.lisp` alongside the editorial workflow.
-
-### Files
-
-| File | Change |
-|---|---|
-| `mod/classic.models.common/forum.lisp` | New: `forum-account`, `forum-thread`, `forum-post`; all forum operations; `make-forum` |
-| `mod/classic.models.common/workflows.lisp` | Added `make-discussion-roles`, `make-discussion-workflow` |
-| `mod/classic.models.common/package.lisp` | Exported the forum classes, accessors, and operations |
-| `mod/classic.models.common/classic.models.common.asd` | Added `forum` to the component list |
-| `test/helpers.lisp` | Added the `forum` suite and `make-test-forum` / `make-test-members` fixtures |
-| `test/test-forum.lisp` | New: 45-check integration suite |
-| `classic.asd` | Added `test-forum` to the test components |
-| `doc/forum/Forum.md` | New: REPL walkthrough with captured output |
+The forum preset is self-contained in `forum.lisp`
+(`mod/classic.models.common/forum.lisp@c1df12c`: classes, operations, and the
+`make-forum` constructor), with the workflow shape in `workflows.lisp`
+(`mod/classic.models.common/workflows.lisp:make-discussion-workflow@c1df12c`)
+alongside the editorial workflow.
 
 ### What the forum reuses unchanged
 
@@ -175,12 +225,13 @@ universals-plus-presets pattern delivering its intended payoff: a
 second content profile that adds mostly vocabulary.
 
 
-## Latent Bugs Found and Fixed
+### Latent bugs found and fixed
 
 Building a second consumer of the universals surfaced three latent
 issues in code the existing tests did not exercise:
 
-1. **`get-posts` typo in `articles.lisp`.** `list-articles` called
+1. **`get-posts` typo in `articles.lisp`.** `list-articles`
+   (`mod/classic.models.common/articles.lisp:list-articles@c1df12c`) called
    `get-posts`, a name removed in the General Model rename (it is now
    `get-articles`). No existing test called `list-articles`, so the
    dangling reference never fired. Fixed.
@@ -193,7 +244,8 @@ issues in code the existing tests did not exercise:
    Tests had passed only because the `imprint-` accessors from
    `context.lisp` survived the redefinition.
 
-3. **A `format` directive bug in `show-thread`.** The thread header used
+3. **A `format` directive bug in `show-thread`**
+   (`mod/classic.models.common/forum.lisp:show-thread@c1df12c`). The thread header used
    `~@[...PINNED~]~@[...LOCKED~]` to print flags. `~@[` does *not*
    consume its argument, so both conditionals tested the same
    `pinned-p` value and the trailing `~A` then printed it as a stray
@@ -219,6 +271,36 @@ and the two views' return values and view-count increment.
 
 The three latent-bug fixes were confirmed non-breaking by the full
 suite run.
+
+*Migration note (2026-10-11):* the Log does not name the command that ran the
+suite. Today it is run with
+`(progn (ql:quickload "classic/tests") (classic-tests::run-all-tests))`, the
+`:test` command of `compass.sexp`.
+
+
+## Files
+
+*Migration note (2026-10-11):* this table was a subsection of Implementation,
+with the columns File and Change. The last three rows were added from
+`git show --stat c1df12c`: the Log describes the first two changes under
+Latent bugs found and fixed, and does not describe the third, a one-word
+change.
+
+Table: Files added or changed in commit `c1df12c`.
+
+| File | Action | Description |
+|------|--------|-------------|
+| `mod/classic.models.common/forum.lisp` | **New** | `forum-account`, `forum-thread`, `forum-post`; all forum operations; `make-forum` |
+| `mod/classic.models.common/workflows.lisp` | Modified | Added `make-discussion-roles`, `make-discussion-workflow` |
+| `mod/classic.models.common/package.lisp` | Modified | Exported the forum classes, accessors, and operations |
+| `mod/classic.models.common/classic.models.common.asd` | Modified | Added `forum` to the component list |
+| `test/helpers.lisp` | Modified | Added the `forum` suite and `make-test-forum` / `make-test-members` fixtures |
+| `test/test-forum.lisp` | **New** | 45-check integration suite |
+| `classic.asd` | Modified | Added `test-forum` to the test components |
+| `doc/forum/Forum.md` | **New** | REPL walkthrough with captured output |
+| `mod/classic.models.common/articles.lisp` | Modified | `get-posts` corrected to `get-articles` (latent bug 1) |
+| `mod/classic.models.common/blog.lisp` | Modified | Duplicate `publication-imprint` struct removed (latent bug 2) |
+| `mod/classic.models.common/context.lisp` | Modified | Not described in the Log; the imprint's printed form says "items" rather than "posts" |
 
 
 ## What This Demonstrates
@@ -259,3 +341,6 @@ Deferred from the demo, available as future refinements:
   HTML rendering (out of reach in a REPL).
 - **A wiki preset.** The next content profile, to further validate the
   pattern with an edit-published workflow and revision history.
+
+*Migration note (2026-10-11):* the wiki preset was built the next day,
+recorded in [CLASSIC-DRAFT-wiki-demo](../wiki/Log.WikiDemo.md).

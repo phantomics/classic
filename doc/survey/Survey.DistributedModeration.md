@@ -89,8 +89,7 @@ Every element of the model maps onto existing or already-planned Classic
 machinery, which is the recurring evidence that the substrate holds the right
 shape.
 
-*Table: distributed-moderation elements and the Classic mechanisms that realize
-them.*
+Table: Distributed-moderation elements and the Classic mechanisms that realize them.
 
 | Moderation element | Classic mechanism | Status |
 |--------------------|-------------------|--------|
@@ -250,7 +249,7 @@ The subscriber's `moderation-set` names the active feeds and how they combine.
 The composition policy is the key user-facing decision, and several models are
 defensible.
 
-*Table: composition policies for combining multiple subscribed feeds.*
+Table: Composition policies for combining multiple subscribed feeds.
 
 | Policy | Behavior | Character |
 |--------|----------|-----------|
@@ -303,7 +302,7 @@ the operator's.
 The model distributes across three roles that scale independently, echoing the
 Usenet-analog's three-layer structure.
 
-*Table: participant roles in the distributed-moderation model.*
+Table: Participant roles in the distributed-moderation model.
 
 | Role | Responsibility | Trust position |
 |------|----------------|----------------|

@@ -37,10 +37,11 @@ Project-specific facts the skills cannot infer:
   (`../../chat/lexter`), as listed in `compass.sexp`
 - Migration: the migration is planned in `doc/Plan.CompassMigration.md`
   (CLASSIC-DRAFT-compass-migration). Every document under `doc/` has
-  front-matter, so run `compass check` without `--skip-unmarked`. Logs are
-  still being converted (decision records, pinned code references, table
-  captions) in its Phase 3; leave a Log's Files-table paths and historical
-  file names as they were. No document is numbered yet: every document and
+  front-matter, so run `compass check` without `--skip-unmarked`. Its three
+  phases are complete; the steward's review of statuses and numbering
+  remains. In a Log, leave Files-table paths and historical file names as
+  they were, and mark any statement added to a historical Log as
+  `*Migration note (<date>):*`. No document is numbered yet: every document and
   record carries a provisional identifier (`CLASSIC-DRAFT-<slug>`,
   `CLASSIC-DRAFT-<slug>-O1`, …), and the ledger is empty until the steward
   asks for `compass assign`

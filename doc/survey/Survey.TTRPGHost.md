@@ -346,6 +346,8 @@ convention.
 The home-instance / hosted-service distinction is about where trust
 lives, and the two modes suit different groups.
 
+Table: The home-instance and hosted-service deployment modes compared for play-by-post campaigns.
+
 | Concern         | Home / networked (flat-file)          | Hosted service (triplestore)     |
 |-----------------|---------------------------------------|----------------------------------|
 | Canonical role  | GM hosts campaign; players host chars | Service hosts all                |

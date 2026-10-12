@@ -39,6 +39,8 @@ operations.
 
 ### Content classes
 
+Table: The forum's content classes, what each extends, and what it adds.
+
 | Class | Extends | Adds |
 |---|---|---|
 | `forum-account` | `publication-account` | `member-nickname`, `member-title`, `member-joined-at`, `member-post-count`, `member-signature` |
@@ -67,6 +69,8 @@ three roles, moderation is gated at the operation layer via
 The transitions enforce only state-machine validity.
 
 Permissions by role:
+
+Table: Permissions held by each forum role.
 
 | Permission | member | moderator | admin |
 |---|:---:|:---:|:---:|
@@ -244,6 +248,8 @@ is passed:
 ```
 
 Other moderation operations follow the same shape:
+
+Table: Moderation operations, the permission each requires, and its effect.
 
 | Operation | Permission | Effect |
 |---|---|---|

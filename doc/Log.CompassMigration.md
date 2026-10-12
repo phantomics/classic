@@ -523,3 +523,80 @@ scratch copy with a misspelt pinned symbol produced the expected
 `ref/code-exists` warning. Every symbol named in the converted Logs'
 implementation sections was checked to be defined at its pinned revision.
 
+## Update 2026-10-11 — Phase 3, batch 5: forum and wiki, and the closing sweep
+
+The fifth batch converted the forum and wiki Logs, captioned their Guides,
+and swept the whole corpus for the accessibility markup of §12. With it,
+Phase 3 is complete. *Outstanding Work* in the body of this Log was written
+before Phase 3; its Phase 3 and date-disagreement items are done, recorded
+in these updates.
+
+- **[CLASSIC-DRAFT-forum-demo](forum/Log.ForumDemo.md).** Seven numbered
+  decisions became CLASSIC-DRAFT-forum-demo-D1 to CLASSIC-DRAFT-forum-demo-D7,
+  pinned to `c1df12c`. Latent Bugs Found and Fixed became a subsection of
+  Implementation, and the Files table, a subsection with File and Change
+  columns, became the Log's Files section. A migration note records three
+  files the commit changed and the table omitted, two of them the latent-bug
+  fixes the Log describes, and another that the wiki preset its Outstanding
+  Work anticipates was built the next day.
+- **[CLASSIC-DRAFT-wiki-demo](wiki/Log.WikiDemo.md).** Ten numbered decisions
+  became CLASSIC-DRAFT-wiki-demo-D1 to CLASSIC-DRAFT-wiki-demo-D10, pinned to
+  `ea32b9c`. Its Files subsection became the Files section, with `README.md`
+  and the Log itself added from the commit, and Future Work: Typed Page
+  Subclasses became Outstanding Work, with a note that
+  [CLASSIC-DRAFT-typed-pages](wiki/Log.TypedPages.md) built it.
+- **[CLASSIC-DRAFT-typed-pages](wiki/Log.TypedPages.md).** Six decisions became
+  CLASSIC-DRAFT-typed-pages-D1 to CLASSIC-DRAFT-typed-pages-D6, pinned to
+  `6e6a6a2`, with a note on the same-day follow-up `2e6e88c` and on the
+  `doc/wiki/Wiki.md` change the Files table omits.
+- **Guides.** `Guide.Forum.md` and `Guide.Wiki.md` gained captions for their
+  three tables each.
+- **Closing sweep.** Every table in the corpus now has a `Table:` caption
+  paragraph. Ten captions in four Surveys and the Eval, written before
+  Compass fixed the form, were italic (`*Table: …*`) and are now plain
+  paragraphs; three tables in Surveys and two in `README.md` gained captions.
+  Each of the five ASCII diagrams has a `Description:` paragraph. No heading
+  skips a level, and no link uses a bare URL; the one bare URL in
+  `Ref.Model.md` is an example inside a code block.
+- **Plan and agent guide.** The plan's Roadmap records milestones 1 to 4 as
+  complete, and `AGENTS.md` says the migration's phases are done and how
+  migration notes are written.
+
+Verification: `compass check --federation` reports 0 errors and 0 warnings
+over 37 documents with both builds, and `compass index --check` passes.
+Every symbol named in the three converted Logs' implementation sections was
+checked to be defined at its pinned revision. The caption, description,
+heading, and link checks of the sweep were made by script, since the
+toolchain does not check §12 yet.
+
+### Phase 3 in sum
+
+Table: Decision records created in Phase 3, by Log.
+
+| Log | Records | Pinned to |
+|---|---|---|
+| CLASSIC-DRAFT-schema-factorization | 4 | `e9f2af1`, `7ad1602`, `e725ef0` |
+| CLASSIC-DRAFT-dist-factorization | 5 | `a461f4e`, `d59df1b`, `e0c3b72` |
+| CLASSIC-DRAFT-deletion-support | 3 | `137cf8a` |
+| CLASSIC-DRAFT-general-model | 7 | `2bf61ce`, `c099e7d` |
+| CLASSIC-DRAFT-slot-validation | 1 | `9ee593a` |
+| CLASSIC-DRAFT-with-persistence | 6 | `31ee385` |
+| CLASSIC-DRAFT-federation-consistency | 13 | `8d5cc1b`, `fb49791`, `99d050d` |
+| CLASSIC-DRAFT-schema-migration | 11 | `58452c7`, `0e4c5bb`, `88a920b`, `88af7f2` |
+| CLASSIC-DRAFT-theme-ontology | 14 | `d20ec8c`, `8aea5f4` |
+| CLASSIC-DRAFT-capability-exclusion | 5 | `9626df5` |
+| CLASSIC-DRAFT-slot-fills | 5 | `72b638c` |
+| CLASSIC-DRAFT-forum-demo | 7 | `c1df12c` |
+| CLASSIC-DRAFT-wiki-demo | 10 | `ea32b9c` |
+| CLASSIC-DRAFT-typed-pages | 6 | `6e6a6a2` |
+
+97 decision records in all, beside the four in
+[CLASSIC-DRAFT-persistence-backends](persistence/Arch.PersistenceBackends.md)
+from Phase 2. The steward has accepted the nine of the first batch; the rest
+are `Proposed`. What remains is the steward's: accepting the other records,
+setting `Implemented` on the Logs, promoting the accurate Refs and Guides to
+`Current`, settling CLASSIC-DRAFT-compass-migration-O3 and
+CLASSIC-DRAFT-compass-migration-O5, and numbering with `compass assign`; and,
+after the migration, the stray workflow definitions listed in Outstanding
+Work.
+

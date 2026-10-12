@@ -13,6 +13,17 @@ relates-to:
   - CLASSIC-DRAFT-wiki
   - CLASSIC-DRAFT-typed-pages
   - CLASSIC-DRAFT-general-model
+decisions:
+  - CLASSIC-DRAFT-wiki-demo-D1
+  - CLASSIC-DRAFT-wiki-demo-D2
+  - CLASSIC-DRAFT-wiki-demo-D3
+  - CLASSIC-DRAFT-wiki-demo-D4
+  - CLASSIC-DRAFT-wiki-demo-D5
+  - CLASSIC-DRAFT-wiki-demo-D6
+  - CLASSIC-DRAFT-wiki-demo-D7
+  - CLASSIC-DRAFT-wiki-demo-D8
+  - CLASSIC-DRAFT-wiki-demo-D9
+  - CLASSIC-DRAFT-wiki-demo-D10
 ---
 
 # Wiki Demo: Development Log
@@ -60,36 +71,62 @@ substrate.
 
 ## Design Decisions
 
-### 1. Dedicated `wiki-page` class
+### CLASSIC-DRAFT-wiki-demo-D1 — Dedicated wiki-page class
 
-`wiki-page` composes `(classic-article classic-stateful
-classic-deletable)` — the same mixin triple as `publication-article`
-and `forum-post`. It adds page-specific slots for anchors, links,
-infobox, and lineage. The dedicated class (rather than reusing
-`publication-article`) gives the link graph and infobox slots a
-natural home and enables future subclassing for typed page classes.
+**Status:** Proposed
 
-### 2. Standard `[[Page Name]]` link convention
+**Context:** Wiki pages need a content class with homes for anchors, links,
+infobox, and lineage.
 
-The double-bracket syntax is instantly recognizable, distinct from
-Markdown link syntax, and unambiguous to parse. Aliased links
-(`[[Anchor|Display Text]]`) are supported. The parser extracts
-`(anchor . display)` pairs; resolution is anchor-based and
-case-insensitive.
+**Decision:** `wiki-page` composes `(classic-article classic-stateful
+classic-deletable)` — the same mixin triple as `publication-article` and
+`forum-post`. It adds page-specific slots for anchors, links, infobox, and
+lineage. The dedicated class (rather than reusing `publication-article`) gives
+the link graph and infobox slots a natural home and enables future subclassing
+for typed page classes.
 
-### 3. Independent `page-anchor` slot, defaulting to title
+**Alternatives:**
+- Reusing `publication-article`. Not adopted: the dedicated class gives the
+  link graph and infobox slots a natural home and enables future subclassing.
 
-Each page's canonical reference name lives in `page-anchor`, which
-defaults to the title when not explicitly provided. This decouples
-the reference target from the display title: renaming a page's title
-doesn't break incoming links. Lookup is case-insensitive; the anchor
-stores the author's original casing for display.
+### CLASSIC-DRAFT-wiki-demo-D2 — Standard [[Page Name]] link convention
 
-### 4. Parse-at-write-time resolution
+**Status:** Proposed
 
-Link resolution happens when a page is created or edited, not at
-display time. The body is parsed for `[[refs]]`, each is resolved
-against existing pages, and the results are stored:
+**Context:** Pages reference one another from their body text.
+
+**Decision:** The double-bracket syntax is instantly recognizable, distinct
+from Markdown link syntax, and unambiguous to parse. Aliased links
+(`[[Anchor|Display Text]]`) are supported. The parser extracts `(anchor .
+display)` pairs; resolution is anchor-based and case-insensitive.
+
+**Alternatives:** None recorded.
+
+### CLASSIC-DRAFT-wiki-demo-D3 — Independent page-anchor slot, defaulting to title
+
+**Status:** Proposed
+
+**Context:** A reference needs a target name, which a page's title could serve
+as but a rename would then break.
+
+**Decision:** Each page's canonical reference name lives in `page-anchor`,
+which defaults to the title when not explicitly provided. This decouples the
+reference target from the display title: renaming a page's title doesn't break
+incoming links. Lookup is case-insensitive; the anchor stores the author's
+original casing for display.
+
+**Alternatives:** None recorded.
+
+### CLASSIC-DRAFT-wiki-demo-D4 — Parse-at-write-time resolution
+
+**Status:** Proposed
+
+**Context:** Inline references must be resolved to pages, and the link graph
+kept for backlinks, orphans, and broken-link reports.
+
+**Decision:** Link resolution happens when a page is created or edited, not at
+display time. The body is parsed for `[[refs]]`, each is resolved against
+existing pages, and the results are stored:
 
 - `page-links-to` (relation list of resolved URIs)
 - `page-broken-links` (string list of unresolved anchors)
@@ -102,17 +139,34 @@ When a page is edited, the old backlinks are removed and the link
 graph is rebuilt from the new body. This is a "rebuild from scratch"
 approach — simpler than diffing, acceptable at demo scale.
 
-### 5. Broken links displayed as `[?Anchor]`
+**Alternatives:**
+- Resolving links at display time. Not adopted: storing the results makes the
+  link graph first-class data, queryable without re-parsing.
+- Diffing old and new links on edit. Not adopted: rebuilding from scratch is
+  simpler, and acceptable at demo scale.
 
-The REPL equivalent of Wikipedia's red links. Resolved links render
-as bare text (the content reads naturally); broken links stand out
-with the `[?...]` marker. Both markers are applied at display time
-from the stored `links-to` and `broken-links` data, by re-parsing
-and looking up each anchor.
+### CLASSIC-DRAFT-wiki-demo-D5 — Broken links displayed as [?Anchor]
 
-### 6. Automatic self-link and cross-reference healing
+**Status:** Proposed
 
-Two healing scenarios:
+**Context:** A reader must be able to tell resolved links from broken ones in
+REPL output.
+
+**Decision:** The REPL equivalent of Wikipedia's red links. Resolved links
+render as bare text (the content reads naturally); broken links stand out with
+the `[?...]` marker. Both markers are applied at display time from the stored
+`links-to` and `broken-links` data, by re-parsing and looking up each anchor.
+
+**Alternatives:** None recorded.
+
+### CLASSIC-DRAFT-wiki-demo-D6 — Automatic self-link and cross-reference healing
+
+**Status:** Proposed
+
+**Context:** A reference may name a page that does not exist yet, including the
+page itself.
+
+**Decision:** Two healing scenarios:
 
 - **Self-links.** A page's body may reference its own anchor. At
   parse time the page doesn't exist yet, so the reference is initially
@@ -123,46 +177,84 @@ Two healing scenarios:
   the broken entry moves to `links-to`, and the source page's URI
   is added to the new page's `linked-from`.
 
-### 7. Edit-log revision history without body snapshots
+**Alternatives:** None recorded.
 
-Each edit produces a `wiki-revision` record with author, timestamp,
-comment, and version number (the page's `logical-clock` value). No
-body snapshot is stored — this is an edit log, not a versioned
-content store. Full snapshots (enabling diff display and rollback)
-are deferred as a production concern.
+### CLASSIC-DRAFT-wiki-demo-D7 — Edit-log revision history without body snapshots
 
-### 8. Alist infobox, not typed page subclasses
+**Status:** Proposed
 
-The `page-infobox` slot holds an alist of `(label . value)` pairs
-rendered as a sidebar table. This demonstrates "structured metadata
-alongside prose" at minimum cost. The intended expansion — typed page
-subclasses with MOP-annotated slots and lens-driven rendering — is
-noted below as future work.
+**Context:** Edits should leave a history.
 
-### 9. `influenced-by` stored, `influences` computed on demand
+**Decision:** Each edit produces a `wiki-revision` record with author,
+timestamp, comment, and version number (the page's `logical-clock` value). No
+body snapshot is stored — this is an edit log, not a versioned content store.
+Full snapshots (enabling diff display and rollback) are deferred as a
+production concern.
 
-Each page can declare its design influences as a list of anchor
-strings (`page-influenced-by`). The inverse — "what this page
-influenced" — is computed at display time by scanning all pages whose
-`influenced-by` includes the current page's anchor. This avoids the
-maintenance complexity of a stored inverse while the demo has small
-page counts. For production scale, the inverse would be stored and
-maintained alongside backlinks.
+**Alternatives:**
+- Full body snapshots, enabling diff display and rollback. Deferred as a
+  production concern.
 
-### 10. Alphabetical `list-pages` and separate `recent-changes`
+### CLASSIC-DRAFT-wiki-demo-D8 — Alist infobox, not typed page subclasses
 
-Two views for the page index: `list-pages` sorts alphabetically by
-anchor (the wiki's "all pages" view); `recent-changes` sorts by last-
-modified timestamp, newest first (the wiki's activity view). Both
-coexist rather than being modes of a single function.
+**Status:** Proposed
+
+**Context:** The wiki should demonstrate structured metadata alongside prose.
+
+**Decision:** The `page-infobox` slot holds an alist of `(label . value)` pairs
+rendered as a sidebar table. This demonstrates "structured metadata alongside
+prose" at minimum cost. The intended expansion — typed page subclasses with
+MOP-annotated slots and lens-driven rendering — is noted below as future work.
+
+**Alternatives:**
+- Typed page subclasses with MOP-annotated slots and lens-driven rendering.
+  Deferred as future work.
+
+### CLASSIC-DRAFT-wiki-demo-D9 — influenced-by stored, influences computed on demand
+
+**Status:** Proposed
+
+**Context:** Pages can declare their design influences, and readers want to see
+the inverse.
+
+**Decision:** Each page can declare its design influences as a list of anchor
+strings (`page-influenced-by`). The inverse — "what this page influenced" — is
+computed at display time by scanning all pages whose `influenced-by` includes
+the current page's anchor. This avoids the maintenance complexity of a stored
+inverse while the demo has small page counts. For production scale, the inverse
+would be stored and maintained alongside backlinks.
+
+**Alternatives:**
+- A stored, maintained inverse. Deferred: it avoids the maintenance complexity
+  while page counts are small; production scale would store it alongside
+  backlinks.
+
+### CLASSIC-DRAFT-wiki-demo-D10 — Alphabetical list-pages and separate recent-changes
+
+**Status:** Proposed
+
+**Context:** The page index needs both an alphabetical view and an activity
+view.
+
+**Decision:** Two views for the page index: `list-pages` sorts alphabetically
+by anchor (the wiki's "all pages" view); `recent-changes` sorts by last-
+modified timestamp, newest first (the wiki's activity view). Both coexist
+rather than being modes of a single function.
+
+**Alternatives:**
+- Two modes of a single function. Not adopted: the two views coexist as
+  separate functions.
 
 
 ## Implementation
 
 ### Classes
 
-`wiki-page` carries seven wiki-specific slots on top of the inherited
-article, workflow, and deletion slots:
+`wiki-page` (`mod/classic.models.common/wiki.lisp:wiki-page@ea32b9c`) carries
+seven wiki-specific slots on top of the inherited article, workflow, and
+deletion slots:
+
+Table: The wiki-specific slots of `wiki-page`, their types, and their purposes.
 
 | Slot | Type | Purpose |
 |---|---|---|
@@ -173,13 +265,15 @@ article, workflow, and deletion slots:
 | `page-infobox` | alist (blob, sexp) | Optional sidebar metadata |
 | `page-influenced-by` | string list | Design lineage anchors |
 
-`wiki-revision` carries five slots: `revision-of` (page URI),
+`wiki-revision` (`mod/classic.models.common/wiki.lisp:wiki-revision@ea32b9c`)
+carries five slots: `revision-of` (page URI),
 `revision-author` (person URI), `revision-comment`, `revision-version`
 (integer), and `revision-timestamp`.
 
 ### The link pipeline
 
-Four internal functions implement the link mechanism:
+Four internal functions in `mod/classic.models.common/wiki.lisp@ea32b9c`
+implement the link mechanism:
 
 1. **`parse-wiki-links`** — extracts `(anchor . display)` pairs from
    body text. Handles both `[[X]]` and `[[X|Y]]` forms. Deduplicates
@@ -198,6 +292,10 @@ state.
 
 ### Operations
 
+All in `mod/classic.models.common/wiki.lisp@ea32b9c`:
+
+Table: The wiki's operations and their purposes.
+
 | Operation | Purpose |
 |---|---|
 | `make-wiki` | Preset constructor — editorial workflow + in-memory persistence |
@@ -214,18 +312,6 @@ state.
 | `show-backlinks` | "What links here" for one page |
 | `orphan-pages` | Pages with no incoming links |
 | `broken-link-report` | All broken refs across the wiki, grouped by target anchor |
-
-### Files
-
-| File | Change |
-|---|---|
-| `mod/classic.models.common/wiki.lisp` | New: `wiki-page`, `wiki-revision`; the link pipeline; all wiki operations; `make-wiki` |
-| `mod/classic.models.common/package.lisp` | Exported wiki classes, accessors, and operations |
-| `mod/classic.models.common/classic.models.common.asd` | Added `wiki` to the component list |
-| `test/helpers.lisp` | Added `wiki` suite and `make-test-wiki` / `make-test-wiki-accounts` fixtures |
-| `test/test-wiki.lisp` | New: 51-check integration suite |
-| `classic.asd` | Added `test-wiki` to the test components |
-| `doc/wiki/Wiki.md` | New: REPL walkthrough with captured output |
 
 ### What the wiki reuses unchanged
 
@@ -263,6 +349,32 @@ across test files). The wiki suite covers:
 - Backlink, orphan, and broken-link-report views
 - Influenced-by display resolution and computed-inverse display
 
+*Migration note (2026-10-11):* the Log does not name the command that ran the
+suite. Today it is run with
+`(progn (ql:quickload "classic/tests") (classic-tests::run-all-tests))`, the
+`:test` command of `compass.sexp`.
+
+
+## Files
+
+*Migration note (2026-10-11):* this table was a subsection of Implementation,
+with the columns File and Change. The last two rows were added from
+`git show --stat ea32b9c`.
+
+Table: Files added or changed in commit `ea32b9c`.
+
+| File | Action | Description |
+|------|--------|-------------|
+| `mod/classic.models.common/wiki.lisp` | **New** | `wiki-page`, `wiki-revision`; the link pipeline; all wiki operations; `make-wiki` |
+| `mod/classic.models.common/package.lisp` | Modified | Exported wiki classes, accessors, and operations |
+| `mod/classic.models.common/classic.models.common.asd` | Modified | Added `wiki` to the component list |
+| `test/helpers.lisp` | Modified | Added `wiki` suite and `make-test-wiki` / `make-test-wiki-accounts` fixtures |
+| `test/test-wiki.lisp` | **New** | 51-check integration suite |
+| `classic.asd` | Modified | Added `test-wiki` to the test components |
+| `doc/wiki/Wiki.md` | **New** | REPL walkthrough with captured output |
+| `README.md` | Modified | Not described in the Log; links the forum and wiki walkthroughs |
+| `doc/wiki/DevLog.WikiDemo.md` | **New** | This file |
+
 
 ## What This Demonstrates
 
@@ -295,7 +407,11 @@ across test files). The wiki suite covers:
   layers. The universals-plus-presets pattern holds at three.
 
 
-## Future Work: Typed Page Subclasses
+## Outstanding Work
+
+*Migration note (2026-10-11):* this section was titled Future Work: Typed Page
+Subclasses. The typed subclasses were built the next day, recorded in
+[CLASSIC-DRAFT-typed-pages](Log.TypedPages.md).
 
 The infobox demonstrates structured metadata via a generic alist. The
 natural expansion is typed page subclasses — for example,

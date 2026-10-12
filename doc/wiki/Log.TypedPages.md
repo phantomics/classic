@@ -12,6 +12,13 @@ provenance:
 relates-to:
   - CLASSIC-DRAFT-wiki-demo
   - CLASSIC-DRAFT-wiki
+decisions:
+  - CLASSIC-DRAFT-typed-pages-D1
+  - CLASSIC-DRAFT-typed-pages-D2
+  - CLASSIC-DRAFT-typed-pages-D3
+  - CLASSIC-DRAFT-typed-pages-D4
+  - CLASSIC-DRAFT-typed-pages-D5
+  - CLASSIC-DRAFT-typed-pages-D6
 ---
 
 # Typed Page Classes: Development Log
@@ -48,14 +55,30 @@ birth year and nationality).
 
 ## Design Decisions
 
-### 1. Three typed subclasses: computer, CPU, person
+### CLASSIC-DRAFT-typed-pages-D1 — Three typed subclasses: computer, CPU, person
 
-Three classes give the richest sublens story: a computer's `designer`
-field links to a person page; its `cpu` field renders via the CPU's
-`:label` lens. Two classes would have demonstrated typed slots and
-lens resolution; three add the cross-class sublens chain.
+**Status:** Proposed
 
-### 2. Lens specs at two purposes per class
+**Context:** The typed subclasses should exercise the lens system, including
+sublens references from one class to another.
+
+**Decision:** Three classes give the richest sublens story: a computer's
+`designer` field links to a person page; its `cpu` field renders via the CPU's
+`:label` lens. Two classes would have demonstrated typed slots and lens
+resolution; three add the cross-class sublens chain.
+
+**Alternatives:**
+- Two classes. Not adopted: they would have demonstrated typed slots and lens
+  resolution, but not the cross-class sublens chain.
+
+### CLASSIC-DRAFT-typed-pages-D2 — Lens specs at two purposes per class
+
+**Status:** Proposed
+
+**Context:** A typed page is rendered both as a full infobox and, when another
+page refers to it through a sublens, in compact form.
+
+**Decision:**
 
 - **`:infobox`** — the full sidebar rendering (all typed fields, with
   display modes and sublens references).
@@ -66,11 +89,18 @@ The `:label` purpose is what sublens references consume. Separating
 it from `:infobox` means the compact form can differ from the full
 sidebar without special-casing the renderer.
 
-### 3. Link indicators for REPL output
+**Alternatives:** None recorded.
 
-The original wiki rendered resolved links as bare text (invisible in
-REPL output — you couldn't tell them from normal words). Three
-indicators now distinguish link states:
+### CLASSIC-DRAFT-typed-pages-D3 — Link indicators for REPL output
+
+**Status:** Proposed
+
+**Context:** The original wiki rendered resolved links as bare text, invisible
+in REPL output.
+
+**Decision:** The original wiki rendered resolved links as bare text (invisible
+in REPL output — you couldn't tell them from normal words). Three indicators
+now distinguish link states:
 
 - `[>Page Name]` — resolved, target is a generic wiki-page
 - `[:>Jay Miner]` — resolved, target is a typed page (the `:`
@@ -82,31 +112,59 @@ reader that the target carries structured data, not just prose. In
 HTML rendering, this distinction could drive different hover-card
 treatments.
 
-### 4. Slot value access via `funcall` on the accessor symbol
+**Alternatives:**
+- Bare text for resolved links, as the original wiki rendered them. Replaced:
+  resolved links could not be told from normal words.
 
-The lens renderer reads each property's value by calling `(funcall
-accessor-symbol entity)` rather than `(slot-value entity name)`. This
-is more CLOS-idiomatic: accessors can be computed or have `:before`
-/:after` methods, and the call goes through the standard generic
-function protocol. The slot accessor symbols are exported from
-`classic.models.common` and accessible in the rendering context.
+### CLASSIC-DRAFT-typed-pages-D4 — Slot value access via funcall on the accessor symbol
 
-### 5. Anchor-based sublens resolution
+**Status:** Proposed
 
-Typed slots that reference other pages (like `computer-cpu`) store
-anchor strings, not URIs. The sublens renderer resolves the anchor
-to a page via `find-page-by-anchor`, then renders the target via its
-`:label` lens. This matches the wiki convention where everything is
-referenced by name, and reuses the same resolution mechanism as
-`[[wiki-links]]` in body text.
+**Context:** The lens renderer must read each property's value from the entity.
 
-### 6. Alist infobox coexists with typed slots
+**Decision:** The lens renderer reads each property's value by calling
+`(funcall accessor-symbol entity)` rather than `(slot-value entity name)`. This
+is more CLOS-idiomatic: accessors can be computed or have `:before` /:after`
+methods, and the call goes through the standard generic function protocol. The
+slot accessor symbols are exported from `classic.models.common` and accessible
+in the rendering context.
 
-A typed page can carry both lens-rendered typed slots AND alist
-entries for ad-hoc metadata. `show-page` renders the lens first
-(if a matching lens is found), then appends any alist entries
-below. This lets a `wiki-computer` page carry a "Notes" ad-hoc
-field alongside its typed manufacturer/CPU/price fields.
+**Alternatives:**
+- `(slot-value entity name)`. Not adopted: the accessor call is more
+  CLOS-idiomatic, since accessors can be computed or have `:before`/`:after`
+  methods.
+
+### CLASSIC-DRAFT-typed-pages-D5 — Anchor-based sublens resolution
+
+**Status:** Proposed
+
+**Context:** Typed slots that reference other pages, like `computer-cpu`, must
+be rendered through the target's lens.
+
+**Decision:** Typed slots that reference other pages (like `computer-cpu`)
+store anchor strings, not URIs. The sublens renderer resolves the anchor to a
+page via `find-page-by-anchor`, then renders the target via its `:label` lens.
+This matches the wiki convention where everything is referenced by name, and
+reuses the same resolution mechanism as `[[wiki-links]]` in body text.
+
+**Alternatives:**
+- URIs in typed slots. Not adopted: anchor strings match the wiki convention
+  where everything is referenced by name.
+
+### CLASSIC-DRAFT-typed-pages-D6 — Alist infobox coexists with typed slots
+
+**Status:** Proposed
+
+**Context:** Typed pages may still want ad-hoc metadata beyond their typed
+slots.
+
+**Decision:** A typed page can carry both lens-rendered typed slots AND alist
+entries for ad-hoc metadata. `show-page` renders the lens first (if a matching
+lens is found), then appends any alist entries below. This lets a
+`wiki-computer` page carry a "Notes" ad-hoc field alongside its typed
+manufacturer/CPU/price fields.
+
+**Alternatives:** None recorded.
 
 
 ## Implementation
@@ -114,13 +172,18 @@ field alongside its typed manufacturer/CPU/price fields.
 All changes are contained within the existing wiki.lisp and
 test-wiki.lisp files — this is an extension, not a restructuring.
 
+*Migration note (2026-10-11):* code references are pinned to the work commit,
+`6e6a6a2`. The same commit also changed `package.lisp`,
+as the Files table records, and a follow-up the same day, `2e6e88c`,
+changed `wiki.lisp` and this Log.
+
 ### New classes (~110 lines)
 
-- `wiki-computer`: 5 typed slots (manufacturer, released, designer,
+- `mod/classic.models.common/wiki.lisp:wiki-computer@6e6a6a2`: 5 typed slots (manufacturer, released, designer,
   cpu, price)
-- `wiki-cpu`: 5 typed slots (manufacturer, released, designer,
+- `mod/classic.models.common/wiki.lisp:wiki-cpu@6e6a6a2`: 5 typed slots (manufacturer, released, designer,
   clock-speed, word-size)
-- `wiki-person`: 3 typed slots (born, nationality, known-for)
+- `mod/classic.models.common/wiki.lisp:wiki-person@6e6a6a2`: 3 typed slots (born, nationality, known-for)
 
 Each inherits from `wiki-page` (and thus all its wiki-link,
 influenced-by, infobox, and workflow machinery). Each gets a
@@ -128,7 +191,7 @@ influenced-by, infobox, and workflow machinery). Each gets a
 
 ### Lens spec factory (`wiki-default-lenses`, ~30 lines)
 
-Returns the list of lens plists for the three classes at both
+`mod/classic.models.common/wiki.lisp:wiki-default-lenses@6e6a6a2` returns the list of lens plists for the three classes at both
 `:infobox` and `:label` purposes. Called by `make-wiki` when
 constructing the default theme.
 
@@ -140,7 +203,7 @@ time any preset creates and wires a theme at runtime.
 
 ### The lens renderer (~100 lines)
 
-Three functions:
+Three functions, in `mod/classic.models.common/wiki.lisp@6e6a6a2`:
 
 - **`render-via-lens`** — walks a lens's properties via
   `lens-properties`, reads each slot value, dispatches on `:display`
@@ -191,7 +254,14 @@ The full test suite passes: **831 checks, 100%** — 817 baseline +
 were updated to expect the new link indicators (`[>X]` instead of
 bare text).
 
+*Migration note (2026-10-11):* the Log does not name the command that ran the
+suite. Today it is run with
+`(progn (ql:quickload "classic/tests") (classic-tests::run-all-tests))`, the
+`:test` command of `compass.sexp`.
+
 ### New tests
+
+Table: The seven new tests and what each verifies.
 
 | Test | What it verifies |
 |---|---|
@@ -226,12 +296,17 @@ bare text).
 
 ## Files
 
-| Action | File |
-|---|---|
-| Modified | `mod/classic.models.common/wiki.lisp` — added typed subclasses, lens factory, lens renderer, theme creation in `make-wiki`, `create-page` `:class` parameter, link indicators |
-| Modified | `mod/classic.models.common/package.lisp` — exported typed-class accessors |
-| Modified | `test/test-wiki.lisp` — 7 new tests; 2 existing tests updated for link indicators |
-| Created | this file |
+*Migration note (2026-10-11):* commit `6e6a6a2` also modified
+`doc/wiki/Wiki.md`, which this table does not list.
+
+Table: Files added or changed in commit `6e6a6a2`.
+
+| File | Action | Description |
+|------|--------|-------------|
+| `mod/classic.models.common/wiki.lisp` | Modified | Added typed subclasses, lens factory, lens renderer, theme creation in `make-wiki`, `create-page` `:class` parameter, link indicators |
+| `mod/classic.models.common/package.lisp` | Modified | Exported typed-class accessors |
+| `test/test-wiki.lisp` | Modified | 7 new tests; 2 existing tests updated for link indicators |
+| This file | **New** | |
 
 
 ## Outstanding Work

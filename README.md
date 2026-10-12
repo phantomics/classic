@@ -199,6 +199,8 @@ The `:persistence` and `:predicate` options are custom MOP slot annotations, not
 
 Classic's class hierarchy mirrors established semantic web vocabularies:
 
+Table: The layers of the class hierarchy, their classes, and the vocabularies they draw on.
+
 | Layer | Classes | Vocabulary |
 |-------|---------|------------|
 | Foundation | `classic-resource`, `classic-named-resource` | RDF/RDFS |
@@ -290,6 +292,8 @@ to the workflow engine via normal CLOS dispatch.
 ### MOP Slot Annotations
 
 The `classic-class` metaclass extends CLOS slot definitions with:
+
+Table: The custom slot options, their values, and their purposes.
 
 | Option | Values | Purpose |
 |--------|--------|---------|

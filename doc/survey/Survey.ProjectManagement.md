@@ -87,8 +87,7 @@ domain with no famous framework lineage could.
 Project management maps onto Classic's primitives with little that is new, and
 the mapping is most legible when set beside the Rails/Basecamp equivalents.
 
-*Table: project-management concepts mapped onto Classic mechanisms and their
-Rails/Basecamp counterparts.*
+Table: Project-management concepts mapped onto Classic mechanisms and their Rails/Basecamp counterparts.
 
 | PM concept | Classic equivalent | Rails / Basecamp equivalent |
 |------------|--------------------|-----------------------------|
@@ -289,7 +288,7 @@ co-hosting scenario.
   assigned tasks and project-level milestones, not the other side's internal
   planning.
 
-*Table: project-management deployment tiers.*
+Table: Project-management deployment tiers.
 
 | Tier | Persistence | Best for |
 |------|-------------|----------|
