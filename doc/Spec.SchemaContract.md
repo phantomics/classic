@@ -85,6 +85,8 @@ classes that other schema classes inherit from.
 
 The root identity class. It MUST define these slots:
 
+Table: Slots `classic-resource` MUST define.
+
 | Slot | Initarg | Persistence | Predicate |
 |------|---------|-------------|-----------|
 | `uri` | `:uri` | `:identity` | `"rdf:about"` |
@@ -102,6 +104,8 @@ have these slots.
 ### `classic-named-resource`
 
 Inherits from `classic-resource`. Adds:
+
+Table: Slots `classic-named-resource` adds.
 
 | Slot | Initarg | Persistence | Predicate |
 |------|---------|-------------|-----------|
@@ -123,6 +127,8 @@ MUST be external symbols of the schema package.
 
 The publication and federation systems iterate over containers via:
 
+Table: Container accessors the core engines call.
+
 | Accessor | Defined on | Used by |
 |----------|------------|---------|
 | `parent-space` | container class | federation, persistence |
@@ -132,6 +138,8 @@ The publication and federation systems iterate over containers via:
 ### Publication accessors
 
 The federation and migration engines query publication state via:
+
+Table: Publication accessors the core engines call.
 
 | Accessor | Defined on | Used by |
 |----------|------------|---------|
@@ -150,6 +158,8 @@ to provide these classes and accessors.
 
 A workflow definition with these slots:
 
+Table: Slots of `classic-workflow`.
+
 | Slot | Initarg | Persistence | Predicate |
 |------|---------|-------------|-----------|
 | `workflow-states` | `:workflow-states` | `:relation` | `"workflow:hasState"` |
@@ -161,6 +171,8 @@ The engine's `find-workflow-state` and `find-transition` helpers call
 
 ### `classic-workflow-state`
 
+Table: Slots of `classic-workflow-state`.
+
 | Slot | Initarg | Persistence | Predicate |
 |------|---------|-------------|-----------|
 | `permitted-roles` | `:permitted-roles` | `:triple` | `"workflow:permittedRole"` |
@@ -170,6 +182,8 @@ Inherits `label` from `classic-named-resource`. The engine identifies
 states by their label string.
 
 ### `classic-workflow-transition`
+
+Table: Slots of `classic-workflow-transition`.
 
 | Slot | Initarg | Persistence | Predicate |
 |------|---------|-------------|-----------|
@@ -185,6 +199,8 @@ state changes.
 
 A mixin (no superclass requirement other than `standard-object`) with:
 
+Table: Slots of the `classic-stateful` mixin.
+
 | Slot | Initarg | Persistence | Predicate |
 |------|---------|-------------|-----------|
 | `current-state` | `:current-state` | `:triple` | `"workflow:currentState"` |
@@ -196,6 +212,8 @@ mixin. The `attempt-transition` default method specializes on this
 class.
 
 ### `classic-state-history-entry`
+
+Table: Slots of `classic-state-history-entry`.
 
 | Slot | Initarg | Persistence | Predicate |
 |------|---------|-------------|-----------|
@@ -229,6 +247,8 @@ federation translator both reference these classes by qualified name.
 
 A federation descriptor advertising what an instance supports:
 
+Table: Slots of `classic-instance-descriptor`.
+
 | Slot | Initarg | Persistence |
 |------|---------|-------------|
 | `instance-uri` | `:instance-uri` | `:triple` |
@@ -242,6 +262,8 @@ Inherits from `classic-named-resource`.
 
 Per-peer state:
 
+Table: Slots of `classic-federation-peer`.
+
 | Slot | Initarg | Persistence |
 |------|---------|-------------|
 | `peer-uri` | `:peer-uri` | `:triple` |
@@ -253,6 +275,8 @@ Per-peer state:
 ### `classic-syndication-feed`
 
 Subscribable content stream:
+
+Table: Slots of `classic-syndication-feed`.
 
 | Slot | Initarg | Persistence |
 |------|---------|-------------|

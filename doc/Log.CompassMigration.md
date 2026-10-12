@@ -334,3 +334,47 @@ Table: Files added or changed in commits `55c2390`, `dfeb862`, `fdad517`, and `5
 - **Local toolchain.** `compass` is not on the `PATH`; `make install` in the
   Compass repository at the revision CI builds would make local and CI checks
   use the same executable.
+
+## Update 2026-10-11 — Phase 3, batch 1: schema and dist
+
+The first Phase 3 batch converted the two schema-layer Logs and captioned the
+schema references.
+
+- **[CLASSIC-DRAFT-schema-factorization](Log.SchemaFactorization.md).** Its
+  four numbered decisions became CLASSIC-DRAFT-schema-factorization-D1 to
+  CLASSIC-DRAFT-schema-factorization-D4. The alternatives come from the Log's
+  own text, including the rejected re-export and the abandoned core `:use` of
+  the schema that its Pitfalls section describes;
+  CLASSIC-DRAFT-schema-factorization-D1 records none. Its seven
+  phases are pinned to the commits that hold them: `e9f2af1` for phases 1–3,
+  `7ad1602` for phases 4–7, and `88af7f2` for the files as they were before.
+  The Pitfalls section became a subsection of Implementation, and the Files
+  table took the File, Action, and Description columns.
+- **[CLASSIC-DRAFT-dist-factorization](Log.DistFactorization.md).** Five
+  decisions became CLASSIC-DRAFT-dist-factorization-D1 to
+  CLASSIC-DRAFT-dist-factorization-D5; CLASSIC-DRAFT-dist-factorization-D2 and
+  CLASSIC-DRAFT-dist-factorization-D4 carry the alternatives the Log names. References are pinned to `a461f4e`, with the state before the work at
+  `e0c3b72`, and the stray engine code its Pitfalls section describes at
+  `d59df1b`, a commit during the work that still held it. Pitfalls became a
+  subsection of Implementation, and The Principle That Emerged moved after
+  Verification, where the Log spine places a section on what the work means.
+- **References.** `Spec.SchemaContract.md` gained captions for its 12 tables,
+  and `Ref.Schema.md` a caption for its table and a description of its package
+  diagram.
+- **Plan.** Two conventions met in this batch were added to the plan:
+  CLASSIC-DRAFT-compass-migration-D5 now pins a reference to an intermediate
+  state to the commit holding it, and Phase 3 step 2 says how a path with a
+  list of symbols, and a Files table, are pinned.
+- **Migration notes.** Where a converted Log needed a statement the original
+  does not make, it is marked `*Migration note (2026-10-11):*`: neither Log
+  names the command that ran its tests, and two of
+  CLASSIC-DRAFT-schema-factorization's decisions were later carried out by the
+  dist factorization.
+
+Verification: `compass check --federation` reports 0 errors and 0 warnings
+over 37 documents, and `compass index --check` passes. Every pinned
+reference was confirmed by the toolchain; a scratch copy with a misspelt
+directory and symbol produced the expected `ref/code-exists` error and
+warning. Every symbol in the lists of symbols left unpinned was checked to be
+defined at the revision of its file.
+

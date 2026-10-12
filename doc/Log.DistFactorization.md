@@ -5,7 +5,11 @@ genre:         Log
 scope:         project
 project:       Classic
 language:      en
-status:        Draft
+status:        Accepted
+authors:
+  - Andrew Sengul
+approved-by:   Andrew Sengul
+reviewed:      2026-10-11
 provenance:
   assistant:   opencode
 relates-to:
@@ -13,6 +17,12 @@ relates-to:
   - CLASSIC-DRAFT-schema
   - CLASSIC-DRAFT-schema-contract
   - CLASSIC-DRAFT-general-model
+decisions:
+  - CLASSIC-DRAFT-dist-factorization-D1
+  - CLASSIC-DRAFT-dist-factorization-D2
+  - CLASSIC-DRAFT-dist-factorization-D3
+  - CLASSIC-DRAFT-dist-factorization-D4
+  - CLASSIC-DRAFT-dist-factorization-D5
 ---
 
 # Dist Factorization: Development Log
@@ -80,9 +90,16 @@ A series of design questions had to be settled before implementation
 could begin. Each was discussed at length; the outcomes are recorded
 here.
 
-### 1. Four-layer architecture with a thin dist shim
+### CLASSIC-DRAFT-dist-factorization-D1 — Four-layer architecture with a thin dist shim
 
-The final layout settles on four conceptual layers:
+**Status:** Accepted
+
+**Context:** The four problems described under [Problem](#problem): both
+packages in one ASDF system and repository, core source naming the alpha
+schema, runtime engines in the same files as schema-agnostic primitives, and
+no meta-system for end users.
+
+**Decision:** The final layout settles on four conceptual layers:
 
 - **Foundation (`classic`):** MOP machinery, URI scheme, slot
   annotations, protocol generics, conditions, transport primitives,
@@ -106,17 +123,23 @@ and provides the standard content-type vocabulary (blog, and in the
 future forum, wiki, comment, etc.) for end users who want to build on
 familiar media types.
 
+**Alternatives:** None recorded.
+
 This four-layer arrangement separates concerns cleanly: foundation
 declares what's possible (protocols); schema declares what exists
 (classes); engine declares what happens (methods); dist composes
 everything; models supply ready-made content vocabulary.
 
-### 2. Nickname-based schema indirection
+### CLASSIC-DRAFT-dist-factorization-D2 — Nickname-based schema indirection
 
-The mechanism that lets the same engine source code be used against
-different schemas without modification: the schema package declares
-a well-known nickname, and engine code references symbols through
-that nickname.
+**Status:** Accepted
+
+**Context:** Core source referenced the alpha schema by name, in roughly 270
+explicit `classic.schema.alpha:` qualifications. The same engine source code
+must be usable against different schemas without modification.
+
+**Decision:** The schema package declares a well-known nickname, and engine
+code references symbols through that nickname.
 
 ```lisp
 (defpackage #:classic.schema.alpha
@@ -128,10 +151,12 @@ that nickname.
 Engine code references symbols as `classic.schema:classic-publication`,
 `classic.schema:uri`, etc. A future `classic.schema.beta` will declare
 the same nickname; loaded against the same engine source, all those
-qualified references resolve to beta's symbols instead of alpha's.
+qualified references resolve to beta's symbols instead of alpha's. The
+canonical name `classic.schema.alpha` preserves version identity for
+introspection (`(package-name (find-package '#:classic.schema))` returns the
+variant name); the nickname preserves readability in engine source.
 
-Three approaches were considered:
-
+**Alternatives:**
 - **Rename the package to `classic.schema`.** Rejected because it
   breaks the Common Lisp convention that ASDF system name equals
   package name. A maintainer running `(asdf:load-system
@@ -140,11 +165,6 @@ Three approaches were considered:
   package; the rename would have surprised them with `NIL`.
 - **Use a short nickname like `c-schema`.** Rejected for being less
   self-documenting than the spelled-out `classic.schema`.
-- **Use `classic.schema` as a nickname on the alpha package.**
-  Selected. The canonical name `classic.schema.alpha` preserves
-  version identity for introspection (`(package-name (find-package
-  '#:classic.schema))` returns the variant name); the nickname
-  preserves readability in engine source.
 
 This is build-time pluggability rather than runtime pluggability.
 Only one schema can be loaded per image because the nickname would
@@ -152,74 +172,90 @@ collide. This matches the design goal: the engine is wired to a
 specific schema at distribution time, and switching requires
 rebuilding the image.
 
-### 3. Engine named `classic.engine.ref` (reference implementation)
+### CLASSIC-DRAFT-dist-factorization-D3 — The engine is named classic.engine.ref
 
-The naming axis here differs from the schema's: schemas are
+**Status:** Accepted
+
+**Context:** The naming axis here differs from the schema's: schemas are
 version-numbered along an alpha/beta progression (alphabetic suffixes
-denote successive vocabularies), while engines are role-named ("ref"
-denotes the reference baseline). Future engines might be
+denote successive vocabularies). Future engines might be
 `classic.engine.streaming` or `classic.engine.distributed` — feature
 distinguished, not version-distinguished.
 
-The reference engine is bundled with the framework repository. It
-implements the protocol generics from foundation against the classes
-provided by whatever schema satisfies the contract. The same engine
-source serves any schema that exports the expected symbol names.
+**Decision:** Engines are role-named; the reference engine is
+`classic.engine.ref` ("ref" denotes the reference baseline). It is bundled
+with the framework repository. It implements the protocol generics from
+foundation against the classes provided by whatever schema satisfies the
+contract. The same engine source serves any schema that exports the expected
+symbol names.
 
-### 4. `classic.models.common` for content-type vocabulary
+**Alternatives:** None recorded.
 
-The fifth ASDF system addresses Classic's commitment to comingled
-content types. Rather than discrete `classic.models.blog`,
-`classic.models.forum`, `classic.models.wiki` systems that would force
-users into per-content-type silos, the reference distribution bundles
-all common content models into one system in one package.
+### CLASSIC-DRAFT-dist-factorization-D4 — One classic.models.common system for content-type vocabulary
 
-The single-package decision reflects Classic's central thesis: a
-class can usefully inherit from both `blog-article` and
-`forum-thread`. Forcing such a hybrid to `:use` two separately-managed
-packages, with the conflict risks that entails, would work against the
-thesis at the structural level. Bundling says, instead, "here is the
-common content-type vocabulary; mix freely."
+**Status:** Accepted
 
-Within the unified package, files organize by content type
-(`blog.lisp`, `forum.lisp`, `wiki.lisp` once they exist) and symbols
-follow a naming-prefix convention (`blog-*`, `forum-*`, `wiki-*`).
+**Context:** The fifth ASDF system addresses Classic's commitment to
+comingled content types. Classic's central thesis is that a class can usefully
+inherit from both `blog-article` and `forum-thread`.
+
+**Decision:** The reference distribution bundles all common content models
+into one system in one package. Within the unified package, files organize by
+content type (`blog.lisp`, `forum.lisp`, `wiki.lisp` once they exist) and
+symbols follow a naming-prefix convention (`blog-*`, `forum-*`, `wiki-*`).
 This gives conceptual organization without splitting the namespace.
+Bundling says "here is the common content-type vocabulary; mix freely."
 
-### 5. `mod/` directory for modules above the foundation
+**Alternatives:**
+- Discrete `classic.models.blog`, `classic.models.forum`,
+  `classic.models.wiki` systems. Rejected: they would force users into
+  per-content-type silos, and forcing a hybrid class to `:use` two
+  separately-managed packages, with the conflict risks that entails, would
+  work against the thesis at the structural level.
 
-The repository's toplevel is split into `src/` (foundation) and
-`mod/` (modules: schema, engine, dist, models). The convention
-mirrors patterns from the broader systems-programming world —
-kernel modules, Emacs packages, plugin loaders — where a core layer
-hosts modules above it. The visual hierarchy at the file tree level
-makes the layering immediately apparent to anyone exploring the
-repository.
+### CLASSIC-DRAFT-dist-factorization-D5 — A mod/ directory for modules above the foundation
+
+**Status:** Accepted
+
+**Context:** The layers above the foundation (schema, engine, dist, models)
+needed a home in the repository.
+
+**Decision:** The repository's toplevel is split into `src/` (foundation) and
+`mod/` (modules: schema, engine, dist, models). The convention mirrors
+patterns from the broader systems-programming world — kernel modules, Emacs
+packages, plugin loaders — where a core layer hosts modules above it. The
+visual hierarchy at the file tree level makes the layering immediately
+apparent to anyone exploring the repository.
+
+**Alternatives:** None recorded.
 
 
-## Implementation: Six Phases
+## Implementation
+
+The work proceeded in six phases, from commit `c8c755e` to `a461f4e`.
+References to the state before the work are pinned to `e0c3b72`.
 
 ### Phase 1: ASDF system structure
 
 Four new `.asd` files created in `mod/`:
 
-- `mod/classic.schema.alpha/classic.schema.alpha.asd` — depends on
+- `mod/classic.schema.alpha/classic.schema.alpha.asd@a461f4e` — depends on
   `:classic`.
-- `mod/classic.engine.ref/classic.engine.ref.asd` — depends on
+- `mod/classic.engine.ref/classic.engine.ref.asd@a461f4e` — depends on
   `:classic` and `:classic.schema.alpha`.
-- `mod/classic.dist.alpha/classic.dist.alpha.asd` — depends on
+- `mod/classic.dist.alpha/classic.dist.alpha.asd@a461f4e` — depends on
   `:classic`, `:classic.schema.alpha`, and `:classic.engine.ref`.
-- `mod/classic.models.common/classic.models.common.asd` — depends on
+- `mod/classic.models.common/classic.models.common.asd@a461f4e` — depends on
   `:classic.dist.alpha` transitively.
 
-The existing `classic.asd` was trimmed to define only the foundation
+The existing `classic.asd@a461f4e` was trimmed to define only the foundation
 system, with its component list reduced to the schema-agnostic files.
 
 ### Phase 2: Package definitions
 
 Each module gained its own `package.lisp`:
 
-- **Foundation** retained `src/packages.lisp` with `classic` package
+- **Foundation** retained `src/packages.lisp@a461f4e` with `classic` package
   exports narrowed to: MOP and slot annotations; URI machinery;
   protocol generics (persistence, workflow, federation,
   migration); conditions and validation primitives; transport
@@ -228,7 +264,8 @@ Each module gained its own `package.lisp`:
   re-exports.
 - **Schema** added `(:nicknames #:classic.schema)` to its package
   definition. The export list and `:use` list otherwise stayed as
-  they were after the May factorization.
+  they were after the May factorization
+  ([CLASSIC-DRAFT-schema-factorization](Log.SchemaFactorization.md)).
 - **Engine** declared `(:use #:cl #:classic)` — notably not
   `:use #:classic.schema.alpha`. The decision to fully qualify schema
   references throughout engine source (rather than `:use` the schema)
@@ -246,8 +283,8 @@ Each module gained its own `package.lisp`:
 
 ### Phase 3: File relocations
 
-- **Schema files** moved from `src/schema/alpha/` to
-  `mod/classic.schema.alpha/`. Thirteen files: resource, agent,
+- **Schema files** moved from `src/schema/alpha/@e0c3b72` to
+  `mod/classic.schema.alpha/@a461f4e`. Thirteen files: resource, agent,
   content, community, identity, workflow-classes,
   federation-classes, deletion, theme, publication,
   provenance-classes, outbox-class, migration-classes. Each retained
@@ -257,8 +294,8 @@ Each module gained its own `package.lisp`:
   `workflow-engine.lisp`, the `federation/` subdirectory, the
   `migration/` subdirectory — moved wholesale. New files were
   created for the hybrid splits (see phase 5).
-- **Models** received `blog.lisp` from `src/imprint/blog.lisp`,
-  relocated under `mod/classic.models.common/`.
+- **Models** received `blog.lisp` from `src/imprint/blog.lisp@e0c3b72`,
+  relocated as `mod/classic.models.common/blog.lisp@a461f4e`.
 
 ### Phase 4: Mechanical prefix rewrite
 
@@ -267,27 +304,28 @@ from `classic.schema.alpha:` to `classic.schema:` — a textual
 substitution that takes advantage of the new nickname. The blog
 imprint and test files received the same treatment.
 
-In retrospect, this was the most error-prone phase. The pitfalls
-section below catalogs the bugs introduced and resolved.
+In retrospect, this was the most error-prone phase.
+[Pitfalls encountered](#pitfalls-encountered) catalogs the bugs introduced
+and resolved.
 
 ### Phase 5: Hybrid file splits
 
 Three files in the foundation had a small number of schema
 references that needed extraction:
 
-- **`src/protocol.lisp`** kept its defgeneric forms (persistence
+- **`src/protocol.lisp@a461f4e`** kept its defgeneric forms (persistence
   protocol, lifecycle hooks, validation, transactions) in foundation,
   while the few defmethods that specialized on schema classes moved
-  to `mod/classic.engine.ref/protocol-methods.lisp`.
-- **`src/persistence/memory.lisp`** kept the
-  `memory-persistence-strategy` class and the storage data structures
+  to `mod/classic.engine.ref/protocol-methods.lisp@a461f4e`.
+- **`src/persistence/memory.lisp@a461f4e`** kept the
+  `src/persistence/memory.lisp:memory-persistence-strategy@a461f4e` class and the storage data structures
   in foundation, while the methods that operate on schema entities
   (`persist-entity`, `retrieve-entity`, and similar specializers)
-  moved to `mod/classic.engine.ref/persistence-methods.lisp`.
-- **`src/federation/transport.lisp`** stayed entirely in foundation
+  moved to `mod/classic.engine.ref/persistence-methods.lisp@a461f4e`.
+- **`src/federation/transport.lisp@a461f4e`** stayed entirely in foundation
   after its single schema reference was eliminated — the transport
   abstraction is genuinely schema-agnostic. The transport-related
-  defmethods went to `mod/classic.engine.ref/transport-methods.lisp`.
+  defmethods went to `mod/classic.engine.ref/transport-methods.lisp@a461f4e`.
 
 ### Phase 6: Documentation and verification
 
@@ -303,7 +341,7 @@ were necessarily in flux). The full test suite was held to a clean
 state from phase 5 onward.
 
 
-## Pitfalls Encountered
+### Pitfalls encountered
 
 This refactor surfaced a class of bugs that required several
 debugging rounds to fully characterize and resolve. They share a
@@ -315,11 +353,14 @@ another, even though the printed names match. The package
 factorization multiplied the surface area on which this kind of bug
 could arise.
 
-### Stray engine code left in schema files
+#### Stray engine code left in schema files
 
-When the May factorization moved engines out of schema files, some
+When the May factorization
+([CLASSIC-DRAFT-schema-factorization](Log.SchemaFactorization.md)) moved engines out of schema files, some
 engine-side definitions were inadvertently duplicated rather than
-moved. `mod/classic.schema.alpha/workflow-classes.lisp` retained:
+moved. `mod/classic.schema.alpha/workflow-classes.lisp`, as it stood
+during the work (`mod/classic.schema.alpha/workflow-classes.lisp@d59df1b`),
+retained:
 
 - A `defgeneric actor-role-label`
 - Defun copies of `find-workflow-state` and `find-transition`
@@ -340,7 +381,7 @@ schema-internal generics like `remove-from-container`. Anything that
 dispatches against schema classes via an engine-owned protocol
 belongs in the engine, not the schema.
 
-### The mechanical rewrite trap, revisited
+#### The mechanical rewrite trap, revisited
 
 The textual substitution from `classic.schema.alpha:` to
 `classic.schema:` was correct in spirit but went wrong in two
@@ -365,7 +406,7 @@ unqualified some that should have been qualified. Together they
 created the symbol-identity collisions that the next several
 debugging rounds chased down.
 
-### Protocol generics in the wrong layer
+#### Protocol generics in the wrong layer
 
 The single most consequential bug pattern: protocol generics like
 `retrieve-entity`, `persist-entity`, `attempt-transition`, and
@@ -379,7 +420,7 @@ phantom internal symbols with no fdefinition.
 Three different symbols ended up existing for `retrieve-entity`:
 
 - `classic::retrieve-entity` — created by the `defgeneric` form in
-  `src/protocol.lisp`, internal because the foundation's export was
+  `src/protocol.lisp` (`src/protocol.lisp:retrieve-entity@a461f4e`), internal because the foundation's export was
   commented out during the move.
 - `classic.engine.ref:retrieve-entity` — created by the engine's
   `(:export #:retrieve-entity)`. Since the engine's `:use #:classic`
@@ -397,7 +438,7 @@ foundation, their exports stay uncommented, and the engine inherits
 them via `:use #:classic` then re-exports the inherited symbol — same
 identity, multiple access paths.**
 
-### The diagnostic distinction: zero methods vs. undefined function
+#### The diagnostic distinction: zero methods vs. undefined function
 
 Two error messages, two different diagnoses:
 
@@ -415,6 +456,40 @@ identity divergence — but the distinction guides the diagnostic.
 The first means "two symbols, one with the defgeneric, the other
 with the methods." The second means "the symbol is a phantom; nobody
 attached anything to it."
+
+
+## Verification
+
+The test suite passes in full after each completed phase. No
+existing tests were modified to accommodate the refactor; the
+factorization is structural and does not change behavior. The
+dispatch paths exercised by the test suite cover the symbol-identity
+question from multiple angles: protocol generics called from schema
+helpers, defmethod registrations from the engine, defmethods from
+the blog imprint, and direct calls from test code. A failure on any
+of these paths is diagnostic of a remaining symbol-identity issue.
+
+Two additional verification properties are now testable that were
+not before:
+
+1. **Pure foundation load.** `(asdf:load-system :classic)` in a
+   fresh image loads only the foundation. After the load,
+   `(find-package '#:classic.schema.alpha)` returns `NIL` and
+   `(find-package '#:classic.schema)` returns `NIL`. The foundation
+   is auditable as having no schema dependency at the package level.
+2. **Independent schema load.** `(asdf:load-system
+   :classic.schema.alpha)` loads foundation and schema, but not
+   engine. The schema package is loaded and its nickname
+   `classic.schema` is established. Methods on engine-owned protocols
+   are absent. This state is mostly useful for tooling and inspection;
+   the engine is required for runtime behavior.
+
+Both properties hold today, confirming the boundary is real.
+
+*Migration note (2026-10-11):* the Log does not record the command used or
+the number of checks. Today the suite is run with
+`(progn (ql:quickload "classic/tests") (classic-tests::run-all-tests))`, the
+`:test` command of `compass.sexp`.
 
 
 ## The Principle That Emerged
@@ -457,35 +532,6 @@ out to be the former; only a few federation-internal helpers turn
 out to be the latter.
 
 
-## Verification
-
-The test suite passes in full after each completed phase. No
-existing tests were modified to accommodate the refactor; the
-factorization is structural and does not change behavior. The
-dispatch paths exercised by the test suite cover the symbol-identity
-question from multiple angles: protocol generics called from schema
-helpers, defmethod registrations from the engine, defmethods from
-the blog imprint, and direct calls from test code. A failure on any
-of these paths is diagnostic of a remaining symbol-identity issue.
-
-Two additional verification properties are now testable that were
-not before:
-
-1. **Pure foundation load.** `(asdf:load-system :classic)` in a
-   fresh image loads only the foundation. After the load,
-   `(find-package '#:classic.schema.alpha)` returns `NIL` and
-   `(find-package '#:classic.schema)` returns `NIL`. The foundation
-   is auditable as having no schema dependency at the package level.
-2. **Independent schema load.** `(asdf:load-system
-   :classic.schema.alpha)` loads foundation and schema, but not
-   engine. The schema package is loaded and its nickname
-   `classic.schema` is established. Methods on engine-owned protocols
-   are absent. This state is mostly useful for tooling and inspection;
-   the engine is required for runtime behavior.
-
-Both properties hold today, confirming the boundary is real.
-
-
 ## What This Enables
 
 - **Schema variants in separate repositories.** A future
@@ -522,18 +568,23 @@ Both properties hold today, confirming the boundary is real.
 
 ## Files
 
-| Action | Files |
-|---|---|
-| Created (ASDF systems) | `mod/classic.schema.alpha/classic.schema.alpha.asd`, `mod/classic.engine.ref/classic.engine.ref.asd`, `mod/classic.dist.alpha/classic.dist.alpha.asd`, `mod/classic.models.common/classic.models.common.asd` |
-| Created (package defs) | `mod/classic.schema.alpha/package.lisp`, `mod/classic.engine.ref/package.lisp`, `mod/classic.dist.alpha/package.lisp`, `mod/classic.models.common/package.lisp` |
-| Created (engine hybrid splits) | `mod/classic.engine.ref/protocol-methods.lisp`, `mod/classic.engine.ref/persistence-methods.lisp`, `mod/classic.engine.ref/transport-methods.lisp` |
-| Created (documentation) | this file |
-| Relocated (schema) | 13 files from `src/schema/alpha/` to `mod/classic.schema.alpha/` |
-| Relocated (engine) | `src/workflow-engine.lisp`, `src/federation/*`, `src/migration/*` to `mod/classic.engine.ref/` |
-| Relocated (models) | `src/imprint/blog.lisp` to `mod/classic.models.common/blog.lisp` |
-| Modified (foundation) | `src/packages.lisp` (export list), `src/protocol.lisp` (schema-specializing methods removed), `src/persistence/memory.lisp` (specializing methods removed), `src/workflow-engine.lisp` (now hosts the `attempt-transition` defgeneric and similar protocols) |
-| Modified (ASDF) | `classic.asd` trimmed to foundation only |
-| Modified (documentation) | `README.md`, `doc/Schema.md`, `doc/SchemaContract.md`, `doc/migration/Migration.md` |
+Table: Files added or changed in commits `c8c755e` to `a461f4e`.
+
+| File | Action | Description |
+|------|--------|-------------|
+| `mod/classic.schema.alpha/classic.schema.alpha.asd`, `mod/classic.engine.ref/classic.engine.ref.asd`, `mod/classic.dist.alpha/classic.dist.alpha.asd`, `mod/classic.models.common/classic.models.common.asd` | **New** | ASDF systems |
+| `mod/classic.schema.alpha/package.lisp`, `mod/classic.engine.ref/package.lisp`, `mod/classic.dist.alpha/package.lisp`, `mod/classic.models.common/package.lisp` | **New** | Package definitions |
+| `mod/classic.engine.ref/protocol-methods.lisp`, `mod/classic.engine.ref/persistence-methods.lisp`, `mod/classic.engine.ref/transport-methods.lisp` | **New** | Engine hybrid splits |
+| This file | **New** | Documentation |
+| 13 files from `src/schema/alpha/` | Relocated | To `mod/classic.schema.alpha/` (schema) |
+| `src/workflow-engine.lisp`, `src/federation/*`, `src/migration/*` | Relocated | To `mod/classic.engine.ref/` (engine) |
+| `src/imprint/blog.lisp` | Relocated | To `mod/classic.models.common/blog.lisp` (models) |
+| `src/packages.lisp` | Modified | Foundation: export list |
+| `src/protocol.lisp` | Modified | Foundation: schema-specializing methods removed |
+| `src/persistence/memory.lisp` | Modified | Foundation: specializing methods removed |
+| `src/workflow-engine.lisp` | Modified | Foundation: now hosts the `attempt-transition` defgeneric and similar protocols |
+| `classic.asd` | Modified | ASDF: trimmed to foundation only |
+| `README.md`, `doc/Schema.md`, `doc/SchemaContract.md`, `doc/migration/Migration.md` | Modified | Documentation |
 
 
 ## Outstanding Work

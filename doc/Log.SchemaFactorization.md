@@ -6,7 +6,11 @@ scope:         project
 project:       Classic
 component:     schema
 language:      en
-status:        Draft
+status:        Accepted
+authors:
+  - Andrew Sengul
+approved-by:   Andrew Sengul
+reviewed:      2026-10-11
 provenance:
   assistant:   opencode
 relates-to:
@@ -15,6 +19,11 @@ relates-to:
   - CLASSIC-DRAFT-schema-pluggability
   - CLASSIC-DRAFT-schema-migration
   - CLASSIC-DRAFT-dist-factorization
+decisions:
+  - CLASSIC-DRAFT-schema-factorization-D1
+  - CLASSIC-DRAFT-schema-factorization-D2
+  - CLASSIC-DRAFT-schema-factorization-D3
+  - CLASSIC-DRAFT-schema-factorization-D4
 ---
 
 # Schema Factorization: Development Log
@@ -80,19 +89,19 @@ framework that operates on it.
 The following questions were settled through discussion before
 implementation began.
 
-### 1. Federation infrastructure: protocol in core, classes in schema
+### CLASSIC-DRAFT-schema-factorization-D1 — Federation protocol in core, federation classes in the schema
 
-The federation system contains both a protocol (transport
+**Status:** Accepted
+
+**Context:** The federation system contains both a protocol (transport
 abstraction, peer discovery, syndication operations, content
 resolution) and several ontological classes
 (`classic-instance-descriptor`, `classic-federation-peer`,
 `classic-syndication-feed`, plus provenance, event log, outbox, and
 retention classes introduced later).
 
-**Decision: federation protocol stays in core; federation classes
-move to the schema.**
-
-The rationale: the protocol is genuinely schema-agnostic — it
+**Decision:** The federation protocol stays in core; the federation classes
+move to the schema. The protocol is genuinely schema-agnostic — it
 operates on whatever classes the schema provides via slot accessor
 calls and generic function dispatch. The classes carry semantic
 predicates (`"federation:source"`, `"federation:hasSubscriber"`) that
@@ -101,95 +110,118 @@ principle applies to the migration system's classes
 (`classic-migration-operation`, etc.) — those are vocabulary about
 schema changes, not framework infrastructure.
 
+**Alternatives:** None recorded.
+
 The boundary cleanly extends to: any class with `:metaclass
 classic-class` and `:persistence` slot annotations is schema; any
 function or generic that operates on such classes via accessors is
 core.
 
-### 2. Schema package uses core; core does not use schema
+### CLASSIC-DRAFT-schema-factorization-D2 — The schema package uses core; core does not use the schema
 
-Two packages with mutual `:use` relationships are legal but
+**Status:** Accepted
+
+**Context:** Two packages with mutual `:use` relationships are legal but
 operationally confusing. The schema needs the `classic-class`
 metaclass, `mint-uri`, and similar core symbols — so the schema
 package `:use`s core.
 
-**Decision: schema `:use`s core. Core does not `:use` schema. Core
+**Decision:** The schema `:use`s core. Core does not `:use` the schema. Core
 files reference schema classes with explicit `classic.schema.alpha:`
-qualification.**
-
-This makes the cross-package boundary visible in core code. Every
-reference to a schema class or slot accessor in core files is
+qualification. This makes the cross-package boundary visible in core code.
+Every reference to a schema class or slot accessor in core files is
 qualified, signaling "this is a dependency on the active schema."
 Tooling (grep, IDE references) can identify all such dependencies
 trivially.
 
-The alternative — re-exporting schema symbols through core for
-backward compatibility — would have hidden the boundary and made
-future schemas confusingly bidirectional.
+**Alternatives:**
+- Mutual `:use` between the two packages. Legal, but operationally
+  confusing.
+- Re-exporting schema symbols through core for backward compatibility.
+  Rejected: it would have hidden the boundary and made future schemas
+  confusingly bidirectional.
+- Having core `:use` the schema after it loads, so that core engine files
+  could keep using bare schema symbols. Tried and abandoned when SBCL
+  signalled name conflicts (see
+  [Name conflicts on `:use`](#name-conflicts-on-use)).
 
-### 3. Reference schema in the same repository
+### CLASSIC-DRAFT-schema-factorization-D3 — The reference schema stays in the Classic repository
 
-A fully separated schema would live in its own Git repository as
-`classic-schema-alpha`. For the current refactor, the reference
-schema stays in the Classic repository.
+**Status:** Accepted
 
-**Decision: keep `classic.schema.alpha` in the Classic repository as
-a directory under `src/schema/alpha/`.**
+**Context:** A fully separated schema would live in its own Git repository as
+`classic-schema-alpha`. The reference schema demonstrates the framework's
+intended use, and demos, tests, and documentation depend on it.
 
-The reasoning: the reference schema demonstrates the framework's
-intended use. Bundling it with the framework keeps demos, tests, and
-documentation working without external dependencies. Future
-alternative schemas will be separate projects; the alpha schema is
+**Decision:** Keep `classic.schema.alpha` in the Classic repository as a
+directory under `src/schema/alpha/`. Bundling it with the framework keeps
+demos, tests, and documentation working without external dependencies.
+Future alternative schemas will be separate projects; the alpha schema is
 the reference and lives with the reference framework.
 
-### 4. classic.dist.alpha deferred
+**Alternatives:**
+- A separate repository, `classic-schema-alpha`. Not adopted for the
+  reference schema, for the reasons above; alternative schemas are expected
+  to take this form.
 
-The original plan included a `classic.dist.alpha` meta-system that
+*Migration note (2026-10-11):* the dist factorization,
+[CLASSIC-DRAFT-dist-factorization](Log.DistFactorization.md), later moved the
+directory to `mod/classic.schema.alpha/`, still in this repository.
+
+### CLASSIC-DRAFT-schema-factorization-D4 — The classic.dist.alpha meta-system is deferred
+
+**Status:** Accepted
+
+**Context:** The original plan included a `classic.dist.alpha` meta-system that
 would compose `classic`, `classic.schema.alpha`, and a basic imprint
 into a single loadable artifact. The meta-system is the natural
 endpoint of the factorization: it gives end-users one ASDF system to
-quickload.
-
-**Decision: defer `classic.dist.alpha` to a later refactor.**
-
-Today, `classic.schema.alpha` is a package but not a separate ASDF
+quickload. Today, `classic.schema.alpha` is a package but not a separate ASDF
 system. The schema, the engines, and the imprint all load together
-under the `classic` system. This works because the package boundary
-captures the architectural separation; the ASDF packaging is a
-mechanical concern that can be split later. Pushing through to the
-ASDF split would have meant moving files between directories and
-creating multiple ASDF files in one session, doubling the surface
-area of changes to verify.
+under the `classic` system.
+
+**Decision:** Defer `classic.dist.alpha` to a later refactor. This works
+because the package boundary captures the architectural separation; the ASDF
+packaging is a mechanical concern that can be split later.
+
+**Alternatives:**
+- Push through to the ASDF split in this refactor. Rejected: it would have
+  meant moving files between directories and creating multiple ASDF files in
+  one session, doubling the surface area of changes to verify.
+
+*Migration note (2026-10-11):* the deferred meta-system was created by
+[CLASSIC-DRAFT-dist-factorization](Log.DistFactorization.md).
 
 
-## Implementation: Seven Phases
+## Implementation
 
 The refactor proceeded in seven phases, with verification at each
-step. The phases formed two groups: preparation (phases 1–3) and the
-factorization itself (phases 4–7).
+step. The phases formed two groups: preparation (phases 1–3, commit
+`e9f2af1`) and the factorization itself (phases 4–7, commit `7ad1602`,
+with fixes in `e725ef0`).
 
 ### Phase 1: Workflow engine split
 
-Split `src/model/workflow.lisp` into:
-- `src/workflow-engine.lisp` (core): conditions, `actor-role-label`,
+Split `src/model/workflow.lisp@88af7f2` into:
+- `src/workflow-engine.lisp@e9f2af1` (core): conditions, `actor-role-label`,
   `find-workflow-state`, `find-transition`, `attempt-transition`
   generic
-- `src/model/workflow.lisp` (schema, still in old location): the
+- `src/model/workflow.lisp@e9f2af1` (schema, still in old location): the
   classes plus the default `attempt-transition` method
 
 The default method had to stay with the classes because it
-specializes on `classic-stateful`, which CLOS requires to exist at
-method compile time.
+specializes on `src/model/workflow.lisp:classic-stateful@e9f2af1`, which CLOS
+requires to exist at method compile time.
 
 After phase 1: 692 tests still passing.
 
 ### Phase 2: Federation provenance split
 
-Split `src/federation/provenance.lisp` into:
-- `src/federation/provenance.lisp` (still in old location): the
+Split `src/federation/provenance.lisp@88af7f2` into:
+- `src/federation/provenance.lisp@e9f2af1` (still in old location): the
   three classes (`classic-federation-provenance`,
   `classic-federation-event`, `classic-retention-policy`)
-- `src/federation/provenance-engine.lisp` (new core file): the
+- `src/federation/provenance-engine.lisp@e9f2af1` (new core file): the
   helper functions (`record-federation-provenance`, `find-provenance`,
   `log-federation-event`, `apply-retention-policy`, etc.) and the
   `entity-source-instance`/`entity-federated-p` generics
@@ -198,9 +230,9 @@ After phase 2: tests still passing.
 
 ### Phase 3: Migration model split
 
-Split `src/migration/model.lisp` similarly:
-- `src/migration/model.lisp` keeps the three migration classes
-- `src/migration/manifest-helpers.lisp` (new): the helpers
+Split `src/migration/model.lisp@88af7f2` similarly:
+- `src/migration/model.lisp@e9f2af1` keeps the three migration classes
+- `src/migration/manifest-helpers.lisp@e9f2af1` (new): the helpers
   (`build-current-manifest`, `all-classic-classes`,
   `manifest-class-version`, `manifests-differ-p`)
 
@@ -213,7 +245,7 @@ reorganization without simultaneously refactoring engine logic.
 
 ### Phase 4: Package definitions
 
-Updated `src/packages.lisp` to define two packages instead of one:
+Updated `src/packages.lisp@7ad1602` to define two packages instead of one:
 
 - `classic` package: only core symbols (MOP, protocols, URI,
   workflow engine generics and conditions, persistence backend,
@@ -229,24 +261,24 @@ imprint code could reference schema classes without qualification.
 Used `git mv` to move 12 schema class files into
 `src/schema/alpha/`, plus split out two additional schema files:
 
-- `src/schema/alpha/resource.lisp`
-- `src/schema/alpha/agent.lisp`
-- `src/schema/alpha/content.lisp`
-- `src/schema/alpha/community.lisp`
-- `src/schema/alpha/identity.lisp`
-- `src/schema/alpha/workflow-classes.lisp` (renamed from workflow.lisp)
-- `src/schema/alpha/federation-classes.lisp` (renamed from federation.lisp)
-- `src/schema/alpha/deletion.lisp`
-- `src/schema/alpha/theme.lisp`
-- `src/schema/alpha/publication.lisp`
-- `src/schema/alpha/provenance-classes.lisp` (from federation/provenance.lisp)
-- `src/schema/alpha/outbox-class.lisp` (split from federation/outbox.lisp)
-- `src/schema/alpha/migration-classes.lisp` (renamed from migration/model.lisp)
+- `src/schema/alpha/resource.lisp@7ad1602`
+- `src/schema/alpha/agent.lisp@7ad1602`
+- `src/schema/alpha/content.lisp@7ad1602`
+- `src/schema/alpha/community.lisp@7ad1602`
+- `src/schema/alpha/identity.lisp@7ad1602`
+- `src/schema/alpha/workflow-classes.lisp@7ad1602` (renamed from workflow.lisp)
+- `src/schema/alpha/federation-classes.lisp@7ad1602` (renamed from federation.lisp)
+- `src/schema/alpha/deletion.lisp@7ad1602`
+- `src/schema/alpha/theme.lisp@7ad1602`
+- `src/schema/alpha/publication.lisp@7ad1602`
+- `src/schema/alpha/provenance-classes.lisp@7ad1602` (from federation/provenance.lisp)
+- `src/schema/alpha/outbox-class.lisp@7ad1602` (split from federation/outbox.lisp)
+- `src/schema/alpha/migration-classes.lisp@7ad1602` (renamed from migration/model.lisp)
 
 All files changed their `(in-package #:classic)` to `(in-package
 #:classic.schema.alpha)`.
 
-Updated `classic.asd` to load the schema module after persistence
+Updated `classic.asd@7ad1602` to load the schema module after persistence
 and before the migration and federation engines (which reference
 schema classes).
 
@@ -254,7 +286,7 @@ schema classes).
 
 Updated every core engine file to use `classic.schema.alpha:`
 qualified references for schema class names and slot accessors.
-Affected files:
+Affected files, all at `7ad1602`:
 
 - `src/protocol.lisp`
 - `src/workflow-engine.lisp`
@@ -271,12 +303,13 @@ Affected files:
 - `src/migration/federation.lisp`
 
 The qualifications were applied via mechanical sed-based prefixing
-of identified symbols. This caused one notable defect (see Pitfalls
-below) but otherwise went smoothly.
+of identified symbols. This caused one notable defect (see
+[Mechanical prefixing over-applied](#mechanical-prefixing-over-applied))
+but otherwise went smoothly.
 
 ### Phase 7: Test and imprint updates
 
-Updated `test/package.lisp` to `:use` both `classic` and
+Updated `test/package.lisp@7ad1602` to `:use` both `classic` and
 `classic.schema.alpha`, so test files could reference schema symbols
 without explicit qualification.
 
@@ -284,14 +317,13 @@ Several test files had explicit `classic:` qualifications on what
 were now schema symbols; these were updated to
 `classic.schema.alpha:`.
 
-The `classic-blog` imprint code in `src/imprint/blog.lisp` had its
+The `classic-blog` imprint code in `src/imprint/blog.lisp@7ad1602` had its
 package definition updated to `:use` both packages, allowing the
 existing blog code to continue working without per-symbol changes.
 
+### Pitfalls encountered
 
-## Pitfalls Encountered
-
-### Mechanical prefixing over-applied
+#### Mechanical prefixing over-applied
 
 The sed-based prefix of schema class and accessor names was applied
 to every occurrence in core files matching the regex. In several
@@ -304,13 +336,13 @@ another package, and at runtime SBCL signaled `UNBOUND-VARIABLE
 WORKFLOW`.
 
 The fix was straightforward (manual revert of the offending
-bindings), but the lesson was familiar: mechanical refactoring of
-CLOS code requires careful distinction between symbol references
-in function-call position and symbol references in binding position.
-A more careful version of the refactor would have parsed the source
-rather than pattern-matching.
+bindings, in `e725ef0`), but the lesson was familiar: mechanical
+refactoring of CLOS code requires careful distinction between symbol
+references in function-call position and symbol references in binding
+position. A more careful version of the refactor would have parsed the
+source rather than pattern-matching.
 
-### Name conflicts on `:use`
+#### Name conflicts on `:use`
 
 An initial attempt added `(use-package '#:classic.schema.alpha)
 '#:classic)` at the end of the schema load, hoping core engine
@@ -320,10 +352,11 @@ conflicted with internal `uri` argument names in core functions
 that had been interned in the `classic` package.
 
 This was the trigger to commit fully to explicit qualification in
-core. Once the conflict was avoided by not `:use`ing the schema
-from core, the loading proceeded cleanly.
+core (CLASSIC-DRAFT-schema-factorization-D2). Once the conflict was
+avoided by not `:use`ing the schema from core, the loading proceeded
+cleanly.
 
-### Schema files referencing each other
+#### Schema files referencing each other
 
 Schema files load in order, and some refer to classes defined in
 earlier files (e.g., `classic-article` inherits from
@@ -351,6 +384,11 @@ The test count is unchanged from before the refactor: the
 factorization is architectural, not functional. No new tests were
 added; no existing tests broke; the system behaves identically from
 the user's perspective.
+
+*Migration note (2026-10-11):* the Log does not name the command used to
+run the suite. Today it is run with
+`(progn (ql:quickload "classic/tests") (classic-tests::run-all-tests))`, the
+`:test` command of `compass.sexp`.
 
 
 ## What This Enables
@@ -380,16 +418,18 @@ The schema/core split clears the path for several future capabilities:
 
 ## Files
 
-| Action | Files |
-|--------|-------|
-| Created (core) | `src/workflow-engine.lisp`, `src/federation/provenance-engine.lisp`, `src/migration/manifest-helpers.lisp` |
-| Created (schema) | `src/schema/alpha/outbox-class.lisp` |
-| Renamed/moved (schema) | 12 schema class files relocated to `src/schema/alpha/` |
-| Modified (core) | All federation engine files, all migration engine files, `src/protocol.lisp`, `src/persistence/memory.lisp` |
-| Modified (packages) | `src/packages.lisp`, `test/package.lisp`, `src/imprint/blog.lisp` package definition |
-| Modified (ASDF) | `classic.asd` |
-| Created (documentation) | `doc/Schema.md`, `doc/SchemaContract.md`, this file |
-| Modified (documentation) | `README.md` project structure section, `doc/migration/Migration.md` project structure section, `doc/migration/DevLog.SchemaMigration.md` addendum |
+Table: Files added or changed in commits `e9f2af1`, `7ad1602`, and `e725ef0` (code) and `e0c3b72` (documentation).
+
+| File | Action | Description |
+|------|--------|-------------|
+| `src/workflow-engine.lisp`, `src/federation/provenance-engine.lisp`, `src/migration/manifest-helpers.lisp` | **New** | Core |
+| `src/schema/alpha/outbox-class.lisp` | **New** | Schema |
+| 12 schema class files | Renamed | Relocated to `src/schema/alpha/` |
+| All federation engine files, all migration engine files, `src/protocol.lisp`, `src/persistence/memory.lisp` | Modified | Core |
+| `src/packages.lisp`, `test/package.lisp`, `src/imprint/blog.lisp` package definition | Modified | Packages |
+| `classic.asd` | Modified | ASDF |
+| `doc/Schema.md`, `doc/SchemaContract.md`, this file | **New** | Documentation |
+| `README.md` project structure section, `doc/migration/Migration.md` project structure section, `doc/migration/DevLog.SchemaMigration.md` addendum | Modified | Documentation |
 
 
 ## Outstanding Work

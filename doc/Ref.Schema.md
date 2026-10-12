@@ -137,6 +137,11 @@ them).
             +-------------------+
 ```
 
+Description: a box-and-arrow diagram of three packages. An arrow labelled
+`:use` runs from `classic.schema.alpha`, the schema package, to `classic`, the
+core package. Lines from `classic-blog`, the imprint package, rise to both of
+the other packages, labelled "imprint code uses both packages".
+
 - The schema package `:use`s the core package. This gives schema
   files access to `classic-class`, `mint-uri`, `slot-persistence`,
   and other core symbols without qualification.
@@ -304,6 +309,8 @@ The pattern is the same in each case: classes (with their slot
 definitions, RDF predicates, persistence annotations) live in the
 schema; engine code that creates, queries, and operates on them lives
 in the engine.
+
+Table: Engine files and the schema class files that hold their classes.
 
 | Engine file | Schema class file |
 |-------------|-------------------|

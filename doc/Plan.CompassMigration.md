@@ -262,7 +262,10 @@ Table: The commits each Log's code references are pinned to: the work, and the s
 A parent is written in a reference as its own abbreviated hash, since the
 reference form has no syntax for "parent of". `ref/code-exists` verifies each
 reference against its commit. A reference the toolchain cannot resolve at
-either commit is corrected against the history, not dropped.
+either commit is corrected against the history, not dropped. Where a Log's
+work spans several commits and the Log describes an intermediate state, such
+as a file "still in its old location" between two phases, the reference is
+pinned to the commit that holds that state.
 
 **Alternatives:**
 - Pin to the current `HEAD` and update the paths. Rejected: it rewrites
@@ -520,7 +523,11 @@ Committed in batches by component, each batch checked before the next.
 
 1. **Decision records in the Logs** (CLASSIC-DRAFT-compass-migration-D4).
 2. **Pinned code references in the Logs** (CLASSIC-DRAFT-compass-migration-D5).
-   Backticked path-and-symbol pairs become `path:symbol@revision`.
+   A path that names one symbol becomes `path:symbol@revision`; a path
+   followed by a list of several of its symbols is pinned as
+   `path@revision`, and the symbols stay as written, after each has been
+   checked to exist at that revision. Paths in Files tables are not pinned:
+   the table's caption names the commits it describes.
 3. **The Log spine** (§14: Problem, Design Decisions, Implementation,
    Verification, Files, Outstanding Work, in that order).
    - Files tables take the columns File, Action, and Description, and a
