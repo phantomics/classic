@@ -331,6 +331,18 @@ Table: Files added or changed in commits `55c2390`, `dfeb862`, `fdad517`, and `5
   the Logs, and `Current` on the accurate Refs and Guides; acceptance of the
   decision records; and CLASSIC-DRAFT-compass-migration-O3 and
   CLASSIC-DRAFT-compass-migration-O5 before any `compass assign`.
+- **Stray workflow definitions in the schema.**
+  [CLASSIC-DRAFT-dist-factorization](Log.DistFactorization.md#stray-engine-code-left-in-schema-files)
+  says each stray engine definition was deleted from the schema, but `defun`
+  copies of `find-workflow-state` and `find-transition` remain in
+  `mod/classic.schema.alpha/workflow-classes.lisp`
+  (`mod/classic.schema.alpha/workflow-classes.lisp:find-workflow-state@6aa9023`,
+  `mod/classic.schema.alpha/workflow-classes.lisp:find-transition@6aa9023`),
+  duplicating the engine's
+  (`mod/classic.engine.ref/workflow-engine.lisp:find-workflow-state@6aa9023`).
+  This is the symbol-identity divergence that Log's Pitfalls section warns of.
+  Found in the review of Phase 3, batch 1, and noted in the Log; the steward
+  has directed that it be addressed once the migration is complete.
 - **Local toolchain.** `compass` is not on the `PATH`; `make install` in the
   Compass repository at the revision CI builds would make local and CI checks
   use the same executable.
@@ -377,4 +389,50 @@ reference was confirmed by the toolchain; a scratch copy with a misspelt
 directory and symbol produced the expected `ref/code-exists` error and
 warning. Every symbol in the lists of symbols left unpinned was checked to be
 defined at the revision of its file.
+
+## Update 2026-10-11 — Phase 3, batch 2: model and persistence
+
+The second batch converted the four model and persistence Logs and captioned
+the model and persistence references. Before it began, the steward set
+[CLASSIC-DRAFT-dist-factorization](Log.DistFactorization.md) to `Accepted`;
+the index, which that change left stale, was regenerated with this batch.
+
+- **Stray workflow definitions.** The batch 1 review found that
+  CLASSIC-DRAFT-dist-factorization's account of deleting stray engine code
+  from the schema is not accurate for `find-workflow-state` and
+  `find-transition`. A migration note in that Log records the discrepancy,
+  and [Outstanding Work](#outstanding-work) above lists it for after the
+  migration, as the steward directed.
+- **[CLASSIC-DRAFT-deletion-support](Log.DeletionSupport.md).** Three
+  bold-lead decisions became CLASSIC-DRAFT-deletion-support-D1 to
+  CLASSIC-DRAFT-deletion-support-D3, pinned to `137cf8a`. The workflow
+  diagram gained a description, Tests became Verification, and an Outstanding
+  Work section says that none was recorded.
+- **[CLASSIC-DRAFT-general-model](model/Log.GeneralModel.md).** Seven
+  decisions became CLASSIC-DRAFT-general-model-D1 to
+  CLASSIC-DRAFT-general-model-D7, five with alternatives the Log rejects by
+  name (`imprint-article`, `editorial-imprint`, `published-article`, no
+  preset, and keeping the nickname). References are pinned to `2bf61ce`, the
+  original `blog.lisp` to `c099e7d`, and a migration note records that the
+  Log's date, 2026-06-05, precedes its commits of 2026-06-16 and 2026-06-17.
+- **[CLASSIC-DRAFT-slot-validation](model/Log.SlotValidation.md).** Its single
+  Rejected/Adopted pair became CLASSIC-DRAFT-slot-validation-D1, with both
+  sets of four reasons kept. Pinned to `9ee593a`. A migration note records that
+  the Log counts 13 annotated slots in one place and 12 in others; its lists
+  name 12.
+- **[CLASSIC-DRAFT-with-persistence](persistence/Log.WithPersistence.md).** The
+  three options considered became CLASSIC-DRAFT-with-persistence-D1, with the
+  two not adopted as its alternatives, and the five design decisions became
+  CLASSIC-DRAFT-with-persistence-D2 to CLASSIC-DRAFT-with-persistence-D6.
+  Pinned to `31ee385`.
+- **References.** Captions for the tables of `Ref.Model.md` (2),
+  `Ref.Workflow.md` (5), and `Ref.Persistence.md` (2), and descriptions of the
+  diagrams in `Ref.Workflow.md` (1) and `Ref.Persistence.md` (2).
+
+Verification: `compass check --federation` reports 0 errors and 0 warnings
+over 37 documents with both builds, and `compass index --check` passes. Each
+symbol in the lists left unpinned was checked to be defined at its file's
+revision. One symbol was pinned by its file rather than as `path:symbol`:
+`compute-effective-slot-definition`, whose method is defined with the
+`c2mop:` prefix, which the toolchain's symbol pattern does not match.
 

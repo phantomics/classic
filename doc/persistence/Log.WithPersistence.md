@@ -11,6 +11,13 @@ provenance:
   assistant:   opencode
 relates-to:
   - CLASSIC-DRAFT-persistence
+decisions:
+  - CLASSIC-DRAFT-with-persistence-D1
+  - CLASSIC-DRAFT-with-persistence-D2
+  - CLASSIC-DRAFT-with-persistence-D3
+  - CLASSIC-DRAFT-with-persistence-D4
+  - CLASSIC-DRAFT-with-persistence-D5
+  - CLASSIC-DRAFT-with-persistence-D6
 ---
 
 # `with-persistence`: Development Log
@@ -52,36 +59,18 @@ This means the error is invisible during development and testing
 the worst possible failure mode.
 
 
-## Options Considered
+## Design Decisions
 
-### Option 1: Auto-Persist Inside `attempt-transition`
+### CLASSIC-DRAFT-with-persistence-D1 — A with-persistence macro
 
-Add a `persist-entity` call at the end of `attempt-transition` itself.
+**Status:** Proposed
 
-**Rejected.** This couples the workflow engine to the persistence
-layer. `attempt-transition` would need access to a persistence
-strategy, which it currently does not have (and should not -- it
-operates on bare CLOS instances). It also prevents batching multiple
-mutations before a single persist, and breaks transaction control
-where the caller needs to decide when persistence happens.
+**Context:** Every caller of `attempt-transition`, and of other mutations,
+must remember to call `persist-entity` afterward, and forgetting is silent
+until a serializing backend is used (see [Problem](#problem)). Three options
+were considered.
 
-### Option 2: Optional `:strategy` Keyword on `attempt-transition`
-
-Extend `attempt-transition` with an optional `:strategy` parameter.
-When provided, the entity is persisted after transition. When
-omitted, behavior is unchanged.
-
-This mirrors the pattern used for `mint-uri` with collision
-detection. It's clean and backward-compatible.
-
-**Considered viable but superseded** by a better idea. The `:strategy`
-keyword solves the workflow transition case but doesn't help with
-other mutation patterns (`edit-post` modifies slots directly, not via
-`attempt-transition`). A more general solution was preferred.
-
-### Option 3: `with-persistence` Macro (Adopted)
-
-A `with-open-file`-style macro that wraps a body of mutations and
+**Decision:** A `with-open-file`-style macro that wraps a body of mutations and
 automatically persists the entity when the body exits normally:
 
 ```lisp
@@ -97,17 +86,41 @@ automatically closes streams; `with-persistence` automatically
 persists entities. CL programmers already understand this pattern
 and expect it.
 
-**Adopted** because it solves the general case (any mutation, not
+Adopted because it solves the general case (any mutation, not
 just workflow transitions), follows CL idiom, is backward-compatible
 (existing code still works), and composes naturally with the
 validation system.
 
+**Alternatives:**
+- **Auto-persist inside `attempt-transition`.** Add a `persist-entity` call at
+  the end of `attempt-transition` itself.
+  **Rejected.** This couples the workflow engine to the persistence
+  layer. `attempt-transition` would need access to a persistence
+  strategy, which it currently does not have (and should not -- it
+  operates on bare CLOS instances). It also prevents batching multiple
+  mutations before a single persist, and breaks transaction control
+  where the caller needs to decide when persistence happens.
+- **An optional `:strategy` keyword on `attempt-transition`.**
+  Extend `attempt-transition` with an optional `:strategy` parameter.
+  When provided, the entity is persisted after transition. When
+  omitted, behavior is unchanged.
 
-## Design Decisions
+  This mirrors the pattern used for `mint-uri` with collision
+  detection. It's clean and backward-compatible.
 
-### Normal Exit Only
+  **Considered viable but superseded** by a better idea. The `:strategy`
+  keyword solves the workflow transition case but doesn't help with
+  other mutation patterns (`edit-post` modifies slots directly, not via
+  `attempt-transition`). A more general solution was preferred.
 
-The entity is persisted only on normal exit from the body. If the
+### CLASSIC-DRAFT-with-persistence-D2 — Persist on normal exit only
+
+**Status:** Proposed
+
+**Context:** A body of mutations may exit normally or by signalling an error,
+such as `permission-denied` from a failed workflow transition.
+
+**Decision:** The entity is persisted only on normal exit from the body. If the
 body signals an error -- for example, `permission-denied` from a
 failed workflow transition -- no persistence occurs. This is the
 correct default:
@@ -118,15 +131,24 @@ correct default:
 - Application-specific errors mid-mutation should leave the store
   in its pre-mutation state
 
-This differs from `with-open-file`, which uses `unwind-protect` to
-close the stream on both normal and error exit. Stream closure is
-cleanup (preventing resource leaks); persistence is commitment
-(recording completed work). The semantics are different, and
-`progn` rather than `unwind-protect` is the right choice.
+**Alternatives:**
+- Persist on both normal and error exit, with `unwind-protect`, as
+  `with-open-file` closes its stream. Rejected.
+  This differs from `with-open-file`, which uses `unwind-protect` to
+  close the stream on both normal and error exit. Stream closure is
+  cleanup (preventing resource leaks); persistence is commitment
+  (recording completed work). The semantics are different, and
+  `progn` rather than `unwind-protect` is the right choice.
 
-### Multiple Entity Support
+### CLASSIC-DRAFT-with-persistence-D3 — One macro for one entity or several
 
-The macro accepts either a single entity or a list of entities:
+**Status:** Proposed
+
+**Context:** Some mutations touch more than one entity, such as creating a post
+and updating its container's `contains` list, where both need to be persisted
+together.
+
+**Decision:** The macro accepts either a single entity or a list of entities:
 
 ```lisp
 ;; Single entity (common case)
@@ -143,14 +165,20 @@ completes. This handles cases like creating a post and updating its
 container's `contains` list, where both need to be persisted
 together.
 
-The syntax was chosen over a separate `with-persistence*` macro to
-keep the API surface minimal. The macro distinguishes the two cases
-by checking whether the entity argument is a list (and not a quoted
-form).
+**Alternatives:**
+- A separate `with-persistence*` macro. Rejected.
+  The syntax was chosen over a separate `with-persistence*` macro to
+  keep the API surface minimal. The macro distinguishes the two cases
+  by checking whether the entity argument is a list (and not a quoted
+  form).
 
-### Return Value Preservation
+### CLASSIC-DRAFT-with-persistence-D4 — The body's return values are preserved
 
-The macro returns the value(s) of the last form in the body, via
+**Status:** Proposed
+
+**Context:** Callers may want the macro's value in an expression.
+
+**Decision:** The macro returns the value(s) of the last form in the body, via
 `multiple-value-prog1`. This allows natural use in expressions:
 
 ```lisp
@@ -160,28 +188,47 @@ The macro returns the value(s) of the last form in the body, via
   ...)
 ```
 
-### No Automatic Clock Increment
+**Alternatives:** None recorded.
 
-The macro does not automatically call `increment-logical-clock`.
+### CLASSIC-DRAFT-with-persistence-D5 — No automatic clock increment
+
+**Status:** Proposed
+
+**Context:** The macro knows the entity is being mutated, which is why
+persistence is needed.
+
+**Decision:** The macro does not automatically call `increment-logical-clock`.
 While it knows the entity is being mutated (that's why persistence
 is needed), auto-incrementing would be surprising for cases where
 the clock was already set (e.g., receiving a federation update where
 the sender's clock value should be preserved). Clock management
 remains explicit.
 
-### Composition with Validation
+**Alternatives:**
+- Auto-incrementing the logical clock. Rejected, as above: it would be
+  surprising where the clock was already set.
 
-`with-persistence` calls `persist-entity` through the normal path,
+### CLASSIC-DRAFT-with-persistence-D6 — Composition with validation through the normal path
+
+**Status:** Proposed
+
+**Context:** The validation system's `*validate-on-persist*` hook fires on
+`persist-entity`.
+
+**Decision:** `with-persistence` calls `persist-entity` through the normal path,
 which means the `*validate-on-persist*` hook fires if enabled. No
 special handling is needed -- the validation system and the
 convenience macro compose transparently.
+
+**Alternatives:** None recorded.
 
 
 ## Implementation
 
 ### The Macro
 
-Added to `src/protocol.lisp` (~35 lines):
+Added to `src/protocol.lisp` (~35 lines;
+`src/protocol.lisp:with-persistence@31ee385`):
 
 ```lisp
 (defmacro with-persistence ((strategy entity-or-entities) &body body)
@@ -194,8 +241,8 @@ execute the body, then call `persist-entity` for each entity.
 
 ### Blog Model Updates
 
-All five mutation functions in the blog imprint (`src/imprint/blog.lisp`)
-were updated. The pattern in each case was the same:
+All five mutation functions in the blog imprint
+(`src/imprint/blog.lisp@31ee385`) were updated. The pattern in each case was the same:
 
 Before:
 ```lisp
@@ -224,9 +271,9 @@ Functions updated:
 - `restore-post` -- transition to published + clear deletion metadata
 
 
-## Tests
+## Verification
 
-`test/test-with-persistence.lisp` contains 7 tests:
+`test/test-with-persistence.lisp@31ee385` contains 7 tests:
 
 - **Normal exit**: entity is persisted after body completes
 - **Return value**: body's return value is preserved
@@ -237,8 +284,16 @@ Functions updated:
 - **Validation integration**: `*validate-on-persist*` fires through
   the macro's `persist-entity` call
 
+*Migration note (2026-10-11):* this section was titled Tests. The Log does not
+name the command that ran the suite; [Metrics](#metrics) gives 14 checks
+added, 561 in total, and no regressions. Today the suite is run with
+`(progn (ql:quickload "classic/tests") (classic-tests::run-all-tests))`, the
+`:test` command of `compass.sexp`.
+
 
 ## Files
+
+Table: Files added or changed in commit `31ee385`.
 
 | File | Action | Description |
 |------|--------|-------------|
@@ -256,3 +311,8 @@ Functions updated:
 - Regressions: 0
 - Blog functions simplified: 5 (each lost one explicit `persist-entity` call)
 - Total test checks in Classic: 561
+
+
+## Outstanding Work
+
+None recorded.

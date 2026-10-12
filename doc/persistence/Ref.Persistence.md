@@ -39,6 +39,11 @@ personal blog                      social network
   (s-expr)                       (RDF + content-addressed)
 ```
 
+Description: a horizontal spectrum, labelled "personal blog" at the left end
+and "social network" at the right. Beneath it, flat files (s-expressions) at
+the left, a hybrid in the middle, and a triplestore with a content-addressed
+blob store at the right.
+
 A personal blog can store articles as s-expression files in a
 directory tree. A social network needs a graph database for
 relationship queries and a blob store for media. The ontology must
@@ -80,6 +85,8 @@ CLOS slot definitions with persistence metadata via the MOP:
 
 ### Persistence Types
 
+Table: Persistence types, their meanings, and how the flat-file and triplestore designs store each.
+
 | Type | Meaning | Flat-File Storage | Triplestore Storage |
 |------|---------|-------------------|---------------------|
 | `:identity` | The entity's URI (primary key) | Filename/path | Subject node |
@@ -89,6 +96,8 @@ CLOS slot definitions with persistence metadata via the MOP:
 | `:derived` | Computed from other data | Materialized index file | SPARQL query result |
 
 ### Additional Slot Options
+
+Table: Further slot options and their purposes.
 
 | Option | Values | Purpose |
 |--------|--------|---------|
@@ -282,6 +291,13 @@ Their design is recorded in
         │             │  │           │  │  blob store) │
         └─────────────┘  └───────────┘  └─────────────┘
 ```
+
+Description: a layered diagram. The ontology (CLOS and the MOP) sits at the
+top and connects, through slot annotations (`:persistence`, `:predicate`), to
+the protocol of generic functions. The protocol branches to three backends:
+memory (a hash table), flat-file (s-expressions), and triplestore (SPARQL and
+a blob store). Only the memory backend is built; the other two are designed in
+[CLASSIC-DRAFT-persistence-backends](Arch.PersistenceBackends.md).
 
 The ontology defines what exists and how things relate. The
 persistence strategy defines how that existence is recorded and

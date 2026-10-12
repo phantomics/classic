@@ -11,6 +11,8 @@ provenance:
   assistant:   opencode
 relates-to:
   - CLASSIC-DRAFT-model
+decisions:
+  - CLASSIC-DRAFT-slot-validation-D1
 ---
 
 # Slot Type Validation: Development Log
@@ -47,40 +49,19 @@ surface as mysterious rendering failures or corrupt data rather than
 as clear errors at the point of mutation.
 
 
-## Design Decision: `validate-entity` vs. `(setf slot-value-using-class)`
+## Design Decisions
 
-Two approaches were considered:
+### CLASSIC-DRAFT-slot-validation-D1 — validate-entity, not (setf slot-value-using-class)
 
-### `(setf slot-value-using-class)` -- Rejected
+**Status:** Proposed
 
-A MOP method intercepting every slot write to check the value against
-declared constraints. Rejected for four reasons:
+**Context:** Classic's MOP annotations are metadata, not contracts, and CLOS
+slot `:type` declarations are advisory, so invalid values reach persistence,
+federation, and rendering (see [Problem](#problem)). Two approaches were
+considered.
 
-1. **Performance.** Every `setf` on every slot goes through MOP
-   dispatch. For slots written frequently during entity construction
-   or batch processing, this is non-trivial overhead on every write,
-   not just at persistence boundaries.
-
-2. **MOP portability.** `slot-value-using-class` is one of the less
-   consistently implemented MOP functions. SBCL in particular has
-   optimization paths that bypass it for known slot accesses.
-   closer-mop helps but this is where implementation quirks bite
-   hardest.
-
-3. **Construction ergonomics.** During `make-instance`, slots are set
-   via `initialize-instance` and `shared-initialize`. Intercepting
-   writes at this point triggers type checks on partially-initialized
-   objects, where some slots are legitimately NIL or unbound before
-   being filled in.
-
-4. **No opt-in.** Either all slot writes are checked or none are.
-   No way to disable validation during migration, batch import, or
-   other contexts where intermediate invalid states are expected.
-
-### `validate-entity` -- Adopted
-
-A function that inspects an entity's slots against declared
-constraints before persistence. Adopted for four reasons:
+**Decision:** `validate-entity`, a function that inspects an entity's slots
+against declared constraints before persistence. Adopted for four reasons:
 
 1. **Checked at the right boundary.** The meaningful guarantee is
    "nothing invalid enters the persistence store," not "no slot ever
@@ -100,14 +81,40 @@ constraints before persistence. Adopted for four reasons:
    `slot-value` -- standard, well-supported MOP introspection that
    Classic already relies on.
 
+**Alternatives:**
+- `(setf slot-value-using-class)`, a MOP method intercepting every slot write
+  to check the value against declared constraints. Rejected for four reasons:
+
+  1. **Performance.** Every `setf` on every slot goes through MOP
+     dispatch. For slots written frequently during entity construction
+     or batch processing, this is non-trivial overhead on every write,
+     not just at persistence boundaries.
+
+  2. **MOP portability.** `slot-value-using-class` is one of the less
+     consistently implemented MOP functions. SBCL in particular has
+     optimization paths that bypass it for known slot accesses.
+     closer-mop helps but this is where implementation quirks bite
+     hardest.
+
+  3. **Construction ergonomics.** During `make-instance`, slots are set
+     via `initialize-instance` and `shared-initialize`. Intercepting
+     writes at this point triggers type checks on partially-initialized
+     objects, where some slots are legitimately NIL or unbound before
+     being filled in.
+
+  4. **No opt-in.** Either all slot writes are checked or none are.
+     No way to disable validation during migration, batch import, or
+     other contexts where intermediate invalid states are expected.
+
 
 ## Implementation
 
 ### MOP Extension: `:slot-type`
 
-A new slot option added to both `classic-direct-slot-definition` and
-`classic-effective-slot-definition`, propagated through
-`compute-effective-slot-definition` with the same most-specific-wins
+A new slot option added to both
+`src/mop/metaclass.lisp:classic-direct-slot-definition@9ee593a` and
+`src/mop/metaclass.lisp:classic-effective-slot-definition@9ee593a`, propagated
+through `compute-effective-slot-definition` (in `src/mop/metaclass.lisp@9ee593a`) with the same most-specific-wins
 logic as the other four custom options (`:persistence`, `:predicate`,
 `:format`, `:derives-from`).
 
@@ -126,6 +133,8 @@ The option accepts any CL type specifier:
 
 Common patterns:
 
+Table: Common slot kinds and the type specifiers that express them.
+
 | Slot Kind | Type Specifier | Meaning |
 |-----------|---------------|---------|
 | Optional string | `(or null string)` | String or NIL |
@@ -137,7 +146,8 @@ Common patterns:
 
 ### `validate-entity`
 
-A generic function with a default method that:
+A generic function (`src/protocol.lisp:validate-entity@9ee593a`) with a
+default method that:
 
 1. Iterates over `(class-persistent-slots (class-of entity))`
 2. For each slot with a non-NIL `:slot-type`:
@@ -154,14 +164,16 @@ and `:message` keys.
 
 ### `validation-failed` Condition
 
-A condition class carrying the entity and the error list. The report
+A condition class (`src/protocol.lisp:validation-failed@9ee593a`) carrying the
+entity and the error list. The report
 function prints the entity URI and all violation messages. Signaled
 by `validate-entity` when `:on-error :signal` is specified.
 
 ### Opt-In Persist Hook
 
 A `*validate-on-persist*` dynamic variable (default NIL) and a
-`persist-entity :before` method on `classic-persistence-strategy`.
+`persist-entity :before` method on `classic-persistence-strategy`, both in
+`src/protocol.lisp@9ee593a`.
 When the variable is T, every `persist-entity` call validates the
 entity first, signaling `validation-failed` if constraints are
 violated.
@@ -177,7 +189,8 @@ allowing applications to opt in globally:
 ### Core Model Annotations
 
 `:slot-type` annotations were added to 13 slots across the
-foundation and content layers as a representative sample:
+foundation and content layers (`src/model/resource.lisp@9ee593a`,
+`src/model/content.lisp@9ee593a`) as a representative sample:
 
 **`classic-resource`** (5 slots):
 - `uri` -- `(or classic-uri string)`
@@ -210,9 +223,9 @@ The remaining model files (`agent.lisp`, `community.lisp`,
 incrementally.
 
 
-## Tests
+## Verification
 
-`test/test-validation.lisp` contains 12 tests in a `validation`
+`test/test-validation.lisp@9ee593a` contains 12 tests in a `validation`
 suite:
 
 MOP annotation (2 tests):
@@ -236,8 +249,16 @@ Persist integration (3 tests):
 - `*validate-on-persist*` T: invalid entity signals before persisting
 - `*validate-on-persist*` T: valid entity persists normally
 
+*Migration note (2026-10-11):* this section was titled Tests. The Log does not
+name the command that ran the suite; [Metrics](#metrics) gives 23 checks
+added, 547 in total, and no regressions. Today the suite is run with
+`(progn (ql:quickload "classic/tests") (classic-tests::run-all-tests))`, the
+`:test` command of `compass.sexp`.
+
 
 ## Files
+
+Table: Files added or changed in commit `9ee593a`.
 
 | File | Action | Description |
 |------|--------|-------------|
@@ -258,3 +279,13 @@ Persist integration (3 tests):
 - Core model slots annotated: 12 (of ~50 total; remainder left for
   incremental annotation)
 - Total test checks in Classic: 547
+
+*Migration note (2026-10-11):* the Log counts 13 annotated slots under
+Implementation and 12 here; its slot lists name 12.
+
+
+## Outstanding Work
+
+None recorded beyond the remaining model files, which
+[Core Model Annotations](#core-model-annotations) says can be annotated
+incrementally.

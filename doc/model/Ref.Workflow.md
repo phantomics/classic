@@ -105,6 +105,8 @@ compliance requirements.
 
 A named state in a workflow. Inherits from `classic-named-resource`.
 
+Table: Slots of `classic-workflow-state`, their predicates, and their meanings.
+
 | Slot | Predicate | Description |
 |------|-----------|-------------|
 | `permitted-roles` | `workflow:permittedRole` | List of role label strings that can operate on content in this state |
@@ -119,6 +121,8 @@ States are identified by their `label` slot (inherited from
 A directed edge between two states. Inherits from
 `classic-named-resource`.
 
+Table: Slots of `classic-workflow-transition`, their predicates, and their meanings.
+
 | Slot | Predicate | Description |
 |------|-----------|-------------|
 | `from-state` | `workflow:fromState` | Label string of the source state |
@@ -129,6 +133,8 @@ A directed edge between two states. Inherits from
 ### `classic-workflow`
 
 The state machine definition. Inherits from `classic-named-resource`.
+
+Table: Slots of `classic-workflow`, their predicates, and their meanings.
 
 | Slot | Predicate | Description |
 |------|-----------|-------------|
@@ -143,6 +149,8 @@ Uses `(:metaclass classic-class)` but does not inherit from
 `classic-resource` -- it is designed to be mixed in alongside
 content classes.
 
+Table: Slots of `classic-stateful`, their predicates, and their meanings.
+
 | Slot | Predicate | Description |
 |------|-----------|-------------|
 | `current-state` | `workflow:currentState` | Label string of the current state |
@@ -153,6 +161,8 @@ content classes.
 
 An immutable audit record of a state transition. Inherits from
 `classic-resource`.
+
+Table: Slots of `classic-state-history-entry`, their predicates, and their meanings.
 
 | Slot | Predicate | Description |
 |------|-----------|-------------|
@@ -333,6 +343,10 @@ draft -----> published -----> archived -----> deleted
   |                              v
   +--------> deleted      published (restore)
 ```
+
+Description: a state graph. `draft` transitions to `published` or directly to
+`deleted`; `published` transitions to `archived`; `archived` transitions to
+`deleted`, or back to `published` by a restore.
 
 Deletion goes through the same `attempt-transition` mechanism as
 publishing, with the same role checks, guard predicates, and audit

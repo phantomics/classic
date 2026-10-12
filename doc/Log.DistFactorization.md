@@ -381,6 +381,21 @@ schema-internal generics like `remove-from-container`. Anything that
 dispatches against schema classes via an engine-owned protocol
 belongs in the engine, not the schema.
 
+*Migration note (2026-10-11):* the fix was not applied in every case. The
+`defgeneric actor-role-label` and the default `attempt-transition` method
+were removed from the schema by the end of the work, but the `defun` copies
+of `find-workflow-state` and `find-transition` remain in
+`mod/classic.schema.alpha/workflow-classes.lisp`
+(`mod/classic.schema.alpha/workflow-classes.lisp:find-workflow-state@a461f4e`,
+`mod/classic.schema.alpha/workflow-classes.lisp:find-transition@a461f4e`),
+beside the engine's own definitions
+(`mod/classic.engine.ref/workflow-engine.lisp:find-workflow-state@a461f4e`,
+`mod/classic.engine.ref/workflow-engine.lisp:find-transition@a461f4e`). They
+survived the cleanup commit `2d99cf8` and are still present at `6aa9023`. The
+discrepancy is recorded as outstanding work in
+[CLASSIC-DRAFT-compass-migration-log](Log.CompassMigration.md#outstanding-work),
+to be addressed once the migration is complete.
+
 #### The mechanical rewrite trap, revisited
 
 The textual substitution from `classic.schema.alpha:` to

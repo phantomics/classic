@@ -38,6 +38,8 @@ make it work, and the vocabulary grounding that gives it meaning.
 Classic's model spans four established semantic web vocabularies plus
 two custom vocabularies for workflow and federation:
 
+Table: The layers of the class hierarchy, their classes, and the vocabularies they draw on.
+
 | Layer | Classes | Vocabulary |
 |-------|---------|------------|
 | Foundation | `classic-resource`, `classic-named-resource` | RDF/RDFS |
@@ -86,6 +88,8 @@ Two custom slot definition classes carry the extra metadata:
 
 **`classic-direct-slot-definition`** -- extends
 `standard-direct-slot-definition` with four slots:
+
+Table: The custom slot options, their values, and their purposes.
 
 | Option | Values | Purpose |
 |--------|--------|---------|

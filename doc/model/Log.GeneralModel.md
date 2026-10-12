@@ -14,6 +14,14 @@ relates-to:
   - CLASSIC-DRAFT-workflow
   - CLASSIC-DRAFT-schema
   - CLASSIC-DRAFT-dist-factorization
+decisions:
+  - CLASSIC-DRAFT-general-model-D1
+  - CLASSIC-DRAFT-general-model-D2
+  - CLASSIC-DRAFT-general-model-D3
+  - CLASSIC-DRAFT-general-model-D4
+  - CLASSIC-DRAFT-general-model-D5
+  - CLASSIC-DRAFT-general-model-D6
+  - CLASSIC-DRAFT-general-model-D7
 ---
 
 # General Publication Models: Development Log
@@ -25,6 +33,10 @@ vocabulary, with "blog" demoted from the framework's apparent default
 to one preset among several future ones.
 
 **Date:** 2026-06-05
+
+*Migration note (2026-10-11):* the work commits are dated 2026-06-16 and
+2026-06-17 (`dbde70e` to `2bf61ce`, with cleanup in `7d04b2c`), later than the
+date above. The date is kept as written.
 
 
 ## Problem
@@ -75,10 +87,15 @@ built toward. This refactor takes it.
 
 ## Design Decisions
 
-### 1. Two-prefix vocabulary: `publication-` and `imprint-`
+### CLASSIC-DRAFT-general-model-D1 — Two-prefix vocabulary: publication- and imprint-
 
-The single most important decision, because it determines what every
-symbol is named. Two prefixes track a real layer boundary in the code:
+**Status:** Proposed
+
+**Context:** The single most important decision, because it determines what
+every symbol is named. The old `blog-*` vocabulary named runtime apparatus
+and persisted content alike.
+
+**Decision:** Two prefixes track a real layer boundary in the code:
 
 - **`imprint-`** names the *runtime operating context*. A
   `publication-imprint` is a struct (not a persisted entity) that
@@ -96,14 +113,13 @@ symbol is named. Two prefixes track a real layer boundary in the code:
   resources. They are content that flows *through* an imprint, not
   part of the imprint's apparatus.
 
-The distinction is worth stating precisely because it answers the
-question "why not `imprint-article`?": an article is not part of the
-imprint. It is a free-standing resource an imprint handles. Two
-imprints (e.g., federated mirrors) could handle the same article; the
-article belongs to no single one. Naming it `imprint-article` would
-both imply false ownership and read like a struct accessor on the
-imprint, colliding with the genuine accessors `imprint-publication`
-et al.
+**Alternatives:**
+- `imprint-article`. Rejected: an article is not part of the imprint. It is a
+  free-standing resource an imprint handles. Two imprints (e.g., federated
+  mirrors) could handle the same article; the article belongs to no single
+  one. Naming it `imprint-article` would both imply false ownership and read
+  like a struct accessor on the imprint, colliding with the genuine accessors
+  `imprint-publication` et al.
 
 The borderline case is `publication-account` — identity, not quite
 "publishable content." But it is a persisted ontological resource
@@ -111,19 +127,24 @@ The borderline case is `publication-account` — identity, not quite
 takes the schema-side prefix and pairs symmetrically with
 `publication-article`.
 
+Table: The vocabulary's prefixes, the concern each names, and whether what it names is persisted.
+
 | Concern | Prefix | Persisted? |
 |---|---|---|
 | Runtime operating context | `imprint-` | No (a handle struct) |
 | Publishable content / identity classes | `publication-` | Yes (ontological) |
 | Workflow shape / preset configuration | `editorial-`, future `discussion-` | (names a stance) |
 
-### 2. `publication-imprint`, not `editorial-imprint`
+### CLASSIC-DRAFT-general-model-D2 — publication-imprint, not editorial-imprint
 
-An early proposal used `editorial-imprint`. Rejected: "editorial"
-names the draft → published → archived stance, which forums do not
-share. "Publication" is the correct neutral parent. "Editorial" then
-names the specific blog/magazine *workflow shape* — which is exactly
-where it survives, in `make-editorial-workflow` and
+**Status:** Proposed
+
+**Context:** The runtime context needed a name. "Editorial" names the
+draft → published → archived stance, which forums do not share.
+
+**Decision:** `publication-imprint`. "Publication" is the correct neutral
+parent. "Editorial" then names the specific blog/magazine *workflow shape* —
+which is exactly where it survives, in `make-editorial-workflow` and
 `make-editorial-roles`.
 
 The word "imprint" was previously avoided as a name for the model
@@ -133,56 +154,96 @@ operating apparatus — distinct from the `classic-publication`
 resource it wraps. In publishing, an imprint is the operating
 arrangement under which a publisher releases work; the analogy holds.
 
-### 3. `publication-article`, not `published-article`
+**Alternatives:**
+- `editorial-imprint`, an early proposal. Rejected: "editorial" names a
+  stance forums do not share.
 
-`published-article` was considered and rejected: "published" carries a
-stateful implication that is actively misleading, since a
-`publication-article` is frequently in the `draft` state, never
-having been published. The class names what the article *is* (a
-workflow-bearing, deletable article in a publication), not what state
-it is in.
+### CLASSIC-DRAFT-general-model-D3 — publication-article, not published-article
 
-### 4. `publication-account`, with `editorial-account` reserved
+**Status:** Proposed
 
-`publication-account` is the universal role-bearing account (a
-`classic-user-account` plus a role binding). A future
-`editorial-account` can subclass it with blog/magazine-specific
-features (bylines, contributor tiers, editor bios) without disturbing
-the universal base. Forum-style accounts could subclass differently.
-The base carries only the role binding.
+**Context:** The article class needed a name under the `publication-` prefix.
 
-### 5. Presets are kept as the user-facing surface
+**Decision:** `publication-article`. The class names what the article *is* (a
+workflow-bearing, deletable article in a publication), not what state it is
+in.
 
-`make-blog` is retained — not as a primitive, but as a preset: a thin
-constructor that assembles the universals into the conventional blog
-shape. A user who wants "a blog" should not have to name the four
-primitives that compose one. The preset is the documentation of what
-"a blog" means in Classic's terms, and the friendly entry point at the
-outer edge of the model. Future presets (`make-forum`, `make-wiki`)
-join it.
+**Alternatives:**
+- `published-article`. Rejected: "published" carries a stateful implication
+  that is actively misleading, since a `publication-article` is frequently in
+  the `draft` state, never having been published.
 
-### 6. The `classic-blog` package nickname is dropped
+### CLASSIC-DRAFT-general-model-D4 — publication-account, with editorial-account reserved
 
-The nickname was introduced during the dist factorization
+**Status:** Proposed
+
+**Context:** Blog and magazine accounts may need features (bylines,
+contributor tiers, editor bios) that forum-style accounts do not.
+
+**Decision:** `publication-account` is the universal role-bearing account (a
+`classic-user-account` plus a role binding). A future `editorial-account` can
+subclass it with blog/magazine-specific features without disturbing the
+universal base. Forum-style accounts could subclass differently. The base
+carries only the role binding.
+
+**Alternatives:** None recorded.
+
+### CLASSIC-DRAFT-general-model-D5 — Presets are kept as the user-facing surface
+
+**Status:** Proposed
+
+**Context:** With the universals extracted, `make-blog` was no longer a
+primitive.
+
+**Decision:** `make-blog` is retained — not as a primitive, but as a preset: a
+thin constructor that assembles the universals into the conventional blog
+shape. The preset is the documentation of what "a blog" means in Classic's
+terms, and the friendly entry point at the outer edge of the model. Future
+presets (`make-forum`, `make-wiki`) join it.
+
+**Alternatives:**
+- No preset, with users composing the universals. Rejected: a user who wants
+  "a blog" should not have to name the four primitives that compose one.
+
+### CLASSIC-DRAFT-general-model-D6 — The classic-blog package nickname is dropped
+
+**Status:** Proposed
+
+**Context:** The nickname was introduced during the dist factorization
 ([CLASSIC-DRAFT-dist-factorization](../Log.DistFactorization.md)) to ease that
-transition. After this refactor it would misname a package that is no
-longer blog-specific. It was dropped in the same pass, and the one
-consumer that used it (`test/test-deletion.lisp`) was updated to the
-canonical `classic.models.common` qualifier.
+transition.
 
-### 7. Combined data+display retained; `on-state-change` no-op kept
+**Decision:** It was dropped in the same pass, and the one consumer that used
+it (`test/test-deletion.lisp`) was updated to the canonical
+`classic.models.common` qualifier.
 
-`list-articles` and `show-article` continue to both print and return
-(matching the REPL-friendly character of the preset layer); a pure
-programmatic accessor, `get-articles`, already exists for callers that
-want data only. The `on-state-change` no-op method on
+**Alternatives:**
+- Keep the nickname. Rejected: after this refactor it would misname a package
+  that is no longer blog-specific.
+
+### CLASSIC-DRAFT-general-model-D7 — Combined data and display retained; on-state-change no-op kept
+
+**Status:** Proposed
+
+**Context:** The preset layer's operations print as well as return, matching
+its REPL-friendly character.
+
+**Decision:** `list-articles` and `show-article` continue to both print and
+return; a pure programmatic accessor, `get-articles`, already exists for
+callers that want data only. The `on-state-change` no-op method on
 `classic-publication` is preserved as an extension point.
+
+**Alternatives:** None recorded. Splitting data from display is left open in
+[Outstanding Work](#outstanding-work).
 
 
 ## Implementation
 
-The work split `blog.lisp` into a universal layer plus a thin preset,
-across six files in `mod/classic.models.common/`:
+The work split `mod/classic.models.common/blog.lisp@c099e7d` into a universal
+layer plus a thin preset, across six files in `mod/classic.models.common/`, all
+at commit `2bf61ce`:
+
+Table: The six files of the models layer after the split, what each holds, and where it came from.
 
 | File | Contents | Origin |
 |---|---|---|
@@ -201,6 +262,8 @@ build the workflow, mint the publication and container, assemble a
 
 ### The canonical renames
 
+Table: Symbols renamed by the refactor, old and new.
+
 | Old | New |
 |---|---|
 | `blog` (struct) | `publication-imprint` |
@@ -214,10 +277,10 @@ build the workflow, mint the publication and container, assemble a
 
 ### Package and system
 
-`package.lisp` was rewritten to the new export list, grouped by layer
+`mod/classic.models.common/package.lisp@2bf61ce` was rewritten to the new export list, grouped by layer
 (publication context, workflows, accounts, articles, federation,
 preset), and the `classic-blog` nickname removed.
-`classic.models.common.asd` gained the new load order:
+`mod/classic.models.common/classic.models.common.asd@2bf61ce` gained the new load order:
 `package → context → workflows → accounts → articles → federation →
 blog`.
 
@@ -230,8 +293,9 @@ over-prefixing class of bug that bit earlier sed-driven passes.
 `test/test-deletion.lisp` required both a qualifier swap (from the
 dropped `classic-blog` nickname to `classic.models.common`) and the
 symbol renames; the other test files needed only the symbol renames.
-`test/helpers.lisp` needed no symbol changes — its `make-test-blog`
-and `make-test-accounts` fixtures call `make-blog` and
+`test/helpers.lisp` needed no symbol changes — its
+`test/helpers.lisp:make-test-blog@2bf61ce` and
+`test/helpers.lisp:make-test-accounts@2bf61ce` fixtures call `make-blog` and
 `create-account`, both unchanged.
 
 `README.md` was updated to the new vocabulary, with a new paragraph
@@ -250,11 +314,18 @@ The final module layout was confirmed to match the plan: `context`,
 `blog` under `mod/classic.models.common/`, plus the rewritten
 `package.lisp` and `.asd`.
 
+*Migration note (2026-10-11):* the Log does not name the command that ran the
+suite. Today it is run with
+`(progn (ql:quickload "classic/tests") (classic-tests::run-all-tests))`, the
+`:test` command of `compass.sexp`.
+
 
 ## The Principle That Emerged
 
 This refactor instantiates, at the models layer, the same pattern the
 prior factorizations established at lower layers:
+
+Table: The universal substrate and its specialization at each layer.
 
 | Layer | Universal substrate | Specialization |
 |---|---|---|
@@ -300,15 +371,17 @@ what they are, not by the application domain they happen to serve.
 
 ## Files
 
-| Action | File |
-|---|---|
-| Created (universal) | `mod/classic.models.common/context.lisp`, `workflows.lisp`, `accounts.lisp`, `articles.lisp`, `federation.lisp` |
-| Slimmed (preset) | `mod/classic.models.common/blog.lisp` |
-| Rewritten | `mod/classic.models.common/package.lisp` (new exports, nickname dropped) |
-| Updated | `mod/classic.models.common/classic.models.common.asd` (load order) |
-| Updated (tests) | `test/test-blog.lisp`, `test/test-deletion.lisp`, `test/test-federation-consistency.lisp`, `test/test-federation.lisp`, `test/test-with-persistence.lisp` |
-| Updated (docs) | `README.md`; `doc/model/Model.md`, `doc/model/Workflow.md`, `doc/Schema.md` (vocabulary and stale directory trees) |
-| Created (this file) | `doc/model/DevLog.GeneralModel.md` |
+Table: Files added or changed in commits `dbde70e` to `2bf61ce`.
+
+| File | Action | Description |
+|------|--------|-------------|
+| `mod/classic.models.common/context.lisp`, `workflows.lisp`, `accounts.lisp`, `articles.lisp`, `federation.lisp` | **New** | Universal layer |
+| `mod/classic.models.common/blog.lisp` | Modified | Slimmed to the preset |
+| `mod/classic.models.common/package.lisp` | Modified | Rewritten: new exports, nickname dropped |
+| `mod/classic.models.common/classic.models.common.asd` | Modified | Load order |
+| `test/test-blog.lisp`, `test/test-deletion.lisp`, `test/test-federation-consistency.lisp`, `test/test-federation.lisp`, `test/test-with-persistence.lisp` | Modified | Tests |
+| `README.md`; `doc/model/Model.md`, `doc/model/Workflow.md`, `doc/Schema.md` | Modified | Documentation: vocabulary and stale directory trees |
+| `doc/model/DevLog.GeneralModel.md` | **New** | This file |
 
 
 ## Outstanding Work

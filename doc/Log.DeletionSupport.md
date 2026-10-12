@@ -13,6 +13,10 @@ relates-to:
   - CLASSIC-DRAFT-model
   - CLASSIC-DRAFT-workflow
   - CLASSIC-DRAFT-persistence
+decisions:
+  - CLASSIC-DRAFT-deletion-support-D1
+  - CLASSIC-DRAFT-deletion-support-D2
+  - CLASSIC-DRAFT-deletion-support-D3
 ---
 
 # Deletion Support: Development Log
@@ -66,27 +70,57 @@ a half-index that made relationship cleanup impossible.
 
 ## Design Decisions
 
-Three questions were settled before implementation began:
+Three questions were settled before implementation began.
 
-**Soft vs. hard delete.** Both are supported. Soft deletion marks an
-entity as deleted via workflow state, retains it in the persistence
-store for audit and federation purposes, and hides it from normal
-queries. Hard deletion (purge) removes the entity from the store
-entirely. Soft delete is the normal path; hard delete is an admin
-escape hatch.
+### CLASSIC-DRAFT-deletion-support-D1 — Both soft and hard deletion
 
-**Federation tombstones.** When a post is deleted locally, a
-`:retract` message is sent to all peers that received the content via
-syndication. Peers mark the federated copy as deleted and update its
-provenance sync-status to `:retracted`. The retracted entity is
-retained on the peer for audit but hidden from content listings.
+**Status:** Proposed
 
-**Deletion as workflow state.** Deletion is modeled as a workflow
-concern, not a separate operation. Entities transition through
-"archived" and "deleted" states via the standard workflow engine, with
-role requirements and immutable audit history. This provides the same
-access control and audit trail for deletion as for publishing. A
-separate `purge-entity` function bypasses the workflow for admin use.
+**Context:** No `delete-entity` or `remove-relation` generics existed, and the
+memory backend accumulated entities indefinitely (see [Problem](#problem)).
+Deleted content may still be needed for audit and federation purposes.
+
+**Decision:** Both are supported. Soft deletion marks an entity as deleted via
+workflow state, retains it in the persistence store for audit and federation
+purposes, and hides it from normal queries. Hard deletion (purge) removes the
+entity from the store entirely. Soft delete is the normal path; hard delete is
+an admin escape hatch.
+
+**Alternatives:** None recorded.
+
+### CLASSIC-DRAFT-deletion-support-D2 — Federation tombstones
+
+**Status:** Proposed
+
+**Context:** If content was federated and then deleted locally, there was no
+tombstone or retraction protocol. Federated copies remained on peers
+indefinitely.
+
+**Decision:** When a post is deleted locally, a `:retract` message is sent to
+all peers that received the content via syndication. Peers mark the federated
+copy as deleted and update its provenance sync-status to `:retracted`. The
+retracted entity is retained on the peer for audit but hidden from content
+listings.
+
+**Alternatives:** None recorded.
+
+### CLASSIC-DRAFT-deletion-support-D3 — Deletion as workflow state
+
+**Status:** Proposed
+
+**Context:** There was no "deleted" or "archived" state. The blog workflow had
+only `draft -> published`; once published, a post had no forward state to
+move to.
+
+**Decision:** Deletion is modeled as a workflow concern. Entities transition
+through "archived" and "deleted" states via the standard workflow engine, with
+role requirements and immutable audit history. This provides the same access
+control and audit trail for deletion as for publishing. A separate
+`purge-entity` function bypasses the workflow for admin use.
+
+**Alternatives:**
+- Deletion as a separate operation, outside the workflow. Not adopted: it
+  would not share the access control and audit trail that publishing has.
 
 The resulting workflow graph:
 
@@ -100,12 +134,17 @@ draft -----> published -----> archived -----> deleted
                            bypasses workflow)
 ```
 
+Description: a state graph. `draft` transitions to `published` or directly to
+`deleted`; `published` transitions to `archived`; `archived` transitions to
+`deleted`, or back to `published` by a restore. Purge, a hard delete, is
+shown apart from the graph because it bypasses the workflow.
+
 
 ## Implementation
 
 ### Persistence Protocol Extensions
 
-Three new generics were added to `src/protocol.lisp`:
+Three new generics were added to `src/protocol.lisp@137cf8a`:
 
 - `delete-entity (strategy uri)` -- removes an entity and all its
   relation index entries from the backing store
@@ -123,7 +162,7 @@ A new lifecycle hook was also added:
 
 ### Memory Backend
 
-`src/persistence/memory.lisp` received implementations for all three
+`src/persistence/memory.lisp@137cf8a` received implementations for all three
 new generics:
 
 `delete-entity` removes the entity from the primary hash table, cleans
@@ -142,15 +181,16 @@ the codebase analysis.
 
 ### Container Cleanup
 
-A `remove-from-container` generic function was added to
-`src/model/community.lisp`. It removes a URI from a container's
+A generic function was added to
+`src/model/community.lisp`
+(`src/model/community.lisp:remove-from-container@137cf8a`). It removes a URI from a container's
 `contains` list using `remove` and re-persists the container. Both
 `purge-entity` and the blog's `delete-post` call this to maintain
 container integrity.
 
 ### Deletion Model
 
-A new file `src/model/deletion.lisp` provides the deletion
+A new file `src/model/deletion.lisp@137cf8a` provides the deletion
 infrastructure:
 
 **`classic-deletable` mixin.** A CLOS mixin class (like
@@ -185,7 +225,7 @@ listings.
 
 ### Federation Tombstones
 
-The federation protocol (`src/federation/protocol.lisp`) received
+The federation protocol (`src/federation/protocol.lisp@137cf8a`) received
 several additions:
 
 - `retract-from-peers` sends a `:retract` message to all subscribers
@@ -205,7 +245,7 @@ the pre-existing unextensibility weakness.
 
 ### Blog Integration
 
-The blog model (`src/models/blog.lisp`) received several changes:
+The blog model (`src/models/blog.lisp@137cf8a`) received several changes:
 
 - `blog-article` now inherits from `classic-deletable` in addition to
   `classic-article` and `classic-stateful`
@@ -219,9 +259,9 @@ The blog model (`src/models/blog.lisp`) received several changes:
   metadata), `purge-post` (hard delete from store and container)
 
 
-## Tests
+## Verification
 
-A new `test/test-deletion.lisp` file contains 24 tests in a
+A new `test/test-deletion.lisp@137cf8a` file contains 24 tests in a
 `deletion` suite:
 
 Persistence protocol (5 tests):
@@ -261,6 +301,12 @@ State predicates (2 tests):
 - `entity-deleted-p` returns T for deleted entities
 - `entity-archived-p` returns T for archived entities
 
+*Migration note (2026-10-11):* this section was titled Tests. The Log does not
+name the command that ran the suite or its total; [Metrics](#metrics) gives
+48 checks added and no regressions. Today the suite is run with
+`(progn (ql:quickload "classic/tests") (classic-tests::run-all-tests))`, the
+`:test` command of `compass.sexp`.
+
 
 ## Weaknesses Addressed
 
@@ -281,6 +327,8 @@ analysis:
 
 ## Files
 
+Table: Files added or changed in commit `137cf8a`.
+
 | File | Action | Description |
 |------|--------|-------------|
 | `src/protocol.lisp` | Modified | Added `delete-entity`, `remove-relation`, `query-relation-subjects`, `on-entity-delete` |
@@ -300,3 +348,8 @@ analysis:
 - Regressions: 0
 - New source file: 1 (`deletion.lisp`, 196 lines)
 - New test file: 1 (`test-deletion.lisp`, 305 lines)
+
+
+## Outstanding Work
+
+None recorded.
