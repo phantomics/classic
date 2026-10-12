@@ -83,6 +83,8 @@ metadata is informational, not prescriptive.
 
 The primary theme resource. Inherits from `classic-named-resource`.
 
+Table: Slots of `classic-theme`, with their persistence, predicates, and meanings.
+
 | Slot | Persistence | Predicate | Description |
 |------|-------------|-----------|-------------|
 | `parent-theme` | `:relation` | `theme:parentTheme` | URI of the parent theme (NIL for root themes) |
@@ -100,6 +102,8 @@ The primary theme resource. Inherits from `classic-named-resource`.
 
 A targeted modification to a specific tier of a base theme.
 
+Table: Slots of `classic-theme-override`, with their persistence, predicates, and meanings.
+
 | Slot | Persistence | Predicate | Description |
 |------|-------------|-----------|-------------|
 | `base-theme` | `:relation` | `theme:baseTheme` | URI of the theme being overridden |
@@ -110,6 +114,8 @@ A targeted modification to a specific tier of a base theme.
 ### `classic-theme-bindings`
 
 A configuration overlay holding multiple key-value settings.
+
+Table: Slots of `classic-theme-bindings`, with their persistence, predicates, and meanings.
 
 | Slot | Persistence | Predicate | Description |
 |------|-------------|-----------|-------------|
@@ -178,6 +184,8 @@ Each entry in `:properties` is one of:
 - **A list `(slot-name &key display sublens purpose)`** -- the slot
   name with optional overrides.
 
+Table: Keys of a property spec, their types, and their meanings.
+
 | Key | Type | Meaning |
 |-----|------|---------|
 | `:display` | keyword | Override the slot's default rendering. See display vocabulary below. Omitted means "use the slot's MOP `:format` annotation." |
@@ -193,6 +201,8 @@ so callers don't need to handle both representations.
 Display modes are a small, fixed set of primitive renderers. Each
 mode tells the Composer how to convert a slot value into a Lexis
 node. Capabilities can then transform the resulting node further.
+
+Table: Display modes, what each produces, and when to use it.
 
 | Mode | Produces | Use case |
 |------|----------|----------|
@@ -426,6 +436,8 @@ unfilled.
 ### Slot Fills vs. `classic-theme-override`
 
 The two mechanisms address different scales:
+
+Table: Slot fills and overrides compared by scope and use.
 
 | Mechanism | Scope | When to use |
 |---|---|---|

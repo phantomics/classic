@@ -484,3 +484,42 @@ of each Log before and after found no claim dropped: the words that no longer
 appear are retired headings (Addendum, Tests, Date, Design Decisions) and the
 "chosen over" phrasing of alternatives now stated as records.
 
+## Update 2026-10-11 — Phase 3, batch 4: theme
+
+The fourth batch converted the three theme Logs and captioned the theme
+reference. It began with migration notes, requested by the steward after
+batch 3, giving the actual line counts of the four new files whose
+approximate counts [CLASSIC-DRAFT-federation-consistency](federation/Log.FederationConsistency.md)
+states.
+
+- **[CLASSIC-DRAFT-theme-ontology](theme/Log.ThemeOntology.md).** Its
+  Design Decisions Chronology of four question headings became
+  CLASSIC-DRAFT-theme-ontology-D1 to CLASSIC-DRAFT-theme-ontology-D4, with
+  the options not chosen as alternatives, pinned to `d20ec8c`. The lens
+  addendum became `## Update 2026-05-29 — Lens Integration` (as
+  CLASSIC-DRAFT-compass-migration-D9 provides), pinned to `8aea5f4`, and its
+  ten H4 decisions became CLASSIC-DRAFT-theme-ontology-D5 to
+  CLASSIC-DRAFT-theme-ontology-D14, ten rather than the nine the plan
+  counted. Its What This Does Not Include became the update's Outstanding
+  Work. Migration notes record that the work commit is dated just after
+  midnight on 2026-05-28, and that `d20ec8c` also added `securityPoints.md`.
+- **[CLASSIC-DRAFT-capability-exclusion](theme/Log.CapabilityExclusion.md).**
+  Five numbered decisions became CLASSIC-DRAFT-capability-exclusion-D1 to
+  CLASSIC-DRAFT-capability-exclusion-D5, each with the alternative its text
+  names. Pinned to `9626df5`; the Files table took the File, Action, and
+  Description columns.
+- **[CLASSIC-DRAFT-slot-fills](theme/Log.SlotFills.md).** Five decisions became
+  CLASSIC-DRAFT-slot-fills-D1 to CLASSIC-DRAFT-slot-fills-D5, pinned to
+  `72b638c`. Migration notes record the date mismatch (the Log says
+  2026-06-04; the commit is 2026-06-16), a commit with the same tree,
+  `9b20974`, merged in `c099e7d`, and the `:slot-type` annotations across
+  ten other schema files that the same commit added and the Log does not
+  describe.
+- **References.** `Ref.Theme.md` gained captions for its six tables.
+
+Verification: `compass check --federation` reports 0 errors and 0 warnings
+over 37 documents with both builds, and `compass index --check` passes. A
+scratch copy with a misspelt pinned symbol produced the expected
+`ref/code-exists` warning. Every symbol named in the converted Logs'
+implementation sections was checked to be defined at its pinned revision.
+

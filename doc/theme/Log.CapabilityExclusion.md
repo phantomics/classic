@@ -12,6 +12,12 @@ provenance:
 relates-to:
   - CLASSIC-DRAFT-theme
   - CLASSIC-DRAFT-theme-ontology
+decisions:
+  - CLASSIC-DRAFT-capability-exclusion-D1
+  - CLASSIC-DRAFT-capability-exclusion-D2
+  - CLASSIC-DRAFT-capability-exclusion-D3
+  - CLASSIC-DRAFT-capability-exclusion-D4
+  - CLASSIC-DRAFT-capability-exclusion-D5
 ---
 
 # Capability Exclusion: Development Log
@@ -64,29 +70,34 @@ set as before, unchanged.
 
 The following questions were settled before implementation.
 
-### 1. Slot name: `excluded-capabilities`
+### CLASSIC-DRAFT-capability-exclusion-D1 — Slot name: excluded-capabilities
 
-The initial sketch proposed `removed-capabilities`. The accepted name
-`excluded-capabilities` is more precise: "removed" suggests an
-imperative mutation applied to an existing set, while "excluded"
-describes the theme's declarative stance — "these are not part of
-the set this theme contributes downstream." The slot describes the
-theme's identity, not a transformation of someone else's data.
+**Status:** Proposed
 
-### 2. Scope: ancestor contributions only
+**Context:** The slot needed a name. The initial sketch proposed
+`removed-capabilities`.
 
-Three semantic options were considered for where exclusion applies:
+**Decision:** The accepted name `excluded-capabilities` is more precise:
+"removed" suggests an imperative mutation applied to an existing set, while
+"excluded" describes the theme's declarative stance — "these are not part of
+the set this theme contributes downstream." The slot describes the theme's
+identity, not a transformation of someone else's data.
 
-- **Ancestor-only.** A theme's `excluded-capabilities` subtracts only
-  from what its ancestors contribute. The theme's own declared
-  `capabilities` are always present in the resolved set.
-- **Whole cumulative set.** The exclusion is applied as a final filter
-  over the entire resolved set, including the theme's own additions.
-- **At each level.** Exclusion takes effect immediately at the theme's
-  level in the chain but does not affect what later descendants see
-  (descendants inherit the unfiltered ancestor capabilities).
+**Alternatives:**
+- `removed-capabilities`, the initial sketch. Rejected for the reason above.
 
-**Ancestor-only was selected.** Two reasons:
+### CLASSIC-DRAFT-capability-exclusion-D2 — Scope: ancestor contributions only
+
+**Status:** Proposed
+
+**Context:** Three semantic options were considered for where exclusion
+applies.
+
+**Decision:** Ancestor-only: A theme's `excluded-capabilities` subtracts only
+from what its ancestors contribute. The theme's own declared `capabilities` are
+always present in the resolved set.
+
+Ancestor-only was selected, for two reasons:
 
 1. It makes `capabilities` and `excluded-capabilities` independent
    declarations within a single theme. A theme that lists the same
@@ -100,14 +111,25 @@ Three semantic options were considered for where exclusion applies:
    at all." The former is what a child-theme author actually wants to
    express.
 
-The at-each-level option was rejected because it makes the exclusion
-invisible to descendants, which is surprising — if a theme excludes a
-capability, that exclusion should propagate downstream like any other
-contribution to the resolved set.
+**Alternatives:**
+- Whole cumulative set: The exclusion is applied as a final filter over the
+  entire resolved set, including the theme's own additions. Rejected: it would
+  make listing a capability in both `capabilities` and `excluded-capabilities`
+  a logical contradiction within a single theme.
+- At each level: Exclusion takes effect immediately at the theme's level in the
+  chain but does not affect what later descendants see (descendants inherit the
+  unfiltered ancestor capabilities). The at-each-level option was rejected
+  because it makes the exclusion invisible to descendants, which is surprising
+  — if a theme excludes a capability, that exclusion should propagate
+  downstream like any other contribution to the resolved set.
 
-### 3. Exclusion of uninherited capabilities is a silent no-op
+### CLASSIC-DRAFT-capability-exclusion-D3 — Exclusion of uninherited capabilities is a silent no-op
 
-If a theme excludes a capability that no ancestor declared, the
+**Status:** Proposed
+
+**Context:** A theme may exclude a capability that no ancestor declared.
+
+**Decision:** If a theme excludes a capability that no ancestor declared, the
 resolver does nothing. Two reasons:
 
 - The theme is declaring an intent ("if my ancestors had this, I'd
@@ -119,23 +141,35 @@ resolver does nothing. Two reasons:
   in a future version should not break unrelated child themes that
   happened to exclude it.
 
-### 4. `classic-theme-override` does not gain a symmetric field
+**Alternatives:**
+- Erroring on this case. Rejected: it would couple the child theme tightly to
+  its ancestors' declarations, as the second reason above says.
 
-The override class has `additional-capabilities`. Symmetric pairing
-would suggest adding `excluded-capabilities` there too.
+### CLASSIC-DRAFT-capability-exclusion-D4 — classic-theme-override does not gain a symmetric field
 
-Deferred. Overrides target a specific tier, and capability
-declarations on an override are scoped to that tier's contribution.
-The use case for tier-scoped capability exclusion has not yet been
-articulated, and adding the field speculatively would introduce
-ontological vocabulary without a concrete need. Easy to add later if
-a use case emerges.
+**Status:** Proposed
 
-### 5. No schema migration registered
+**Context:** The override class has `additional-capabilities`. Symmetric
+pairing would suggest adding `excluded-capabilities` there too.
 
-Adding a slot to a `classic-class` is normally an `:add-slot`
-operation that warrants a migration registration and class-version
-bump. For this change, no migration was registered.
+**Decision:** Deferred. Overrides target a specific tier, and capability
+declarations on an override are scoped to that tier's contribution. The use
+case for tier-scoped capability exclusion has not yet been articulated, and
+adding the field speculatively would introduce ontological vocabulary without a
+concrete need. Easy to add later if a use case emerges.
+
+**Alternatives:**
+- Adding the field now. Deferred: it would introduce ontological vocabulary
+  without a concrete need.
+
+### CLASSIC-DRAFT-capability-exclusion-D5 — No schema migration registered
+
+**Status:** Proposed
+
+**Context:** Adding a slot to a `classic-class` is normally an `:add-slot`
+operation that warrants a migration registration and class-version bump.
+
+**Decision:** For this change, no migration was registered.
 
 The theme classes are pre-production. No deployed instances exist
 whose persistence representation needs to be migrated forward. The
@@ -145,6 +179,10 @@ preventing real failures. If theme classes enter production use, this
 slot addition (and any others made before that point) can be folded
 into the initial production migration baseline.
 
+**Alternatives:**
+- Registering an `:add-slot` migration and bumping the class version. Not
+  adopted while the theme classes are pre-production.
+
 
 ## Implementation
 
@@ -153,7 +191,8 @@ documentation, and tests. Five files modified, none created.
 
 ### `mod/classic.schema.alpha/theme.lisp`
 
-Added the `excluded-capabilities` slot to `classic-theme` between
+Added the `excluded-capabilities` slot to `classic-theme`
+(`mod/classic.schema.alpha/theme.lisp:classic-theme@9626df5`) between
 `capabilities` and `required-capabilities`:
 
 ```lisp
@@ -167,7 +206,8 @@ Added the `excluded-capabilities` slot to `classic-theme` between
  :documentation "...")
 ```
 
-Modified `resolve-theme-capabilities` to apply each theme's exclusions
+Modified `mod/classic.schema.alpha/theme.lisp:resolve-theme-capabilities@9626df5`
+to apply each theme's exclusions
 to the inherited accumulator before merging its own additions:
 
 ```lisp
@@ -215,11 +255,14 @@ Updated three sections:
 
 ### `test/test-theme.lisp`
 
-The `make-test-theme` helper gained an `:excluded-capabilities`
+The `test/test-theme.lisp:make-test-theme@9626df5` helper gained an
+`:excluded-capabilities`
 keyword parameter (additive; existing callers unaffected).
 
 Five new tests were added under the existing capabilities-merging
 section, each exercising a distinct semantic property:
+
+Table: The five tests of exclusion semantics, and the property each verifies.
 
 | Test name | Property verified |
 |---|---|
@@ -239,6 +282,11 @@ identity-vs-cardinality would be caught.
 The full test suite passes: 706 checks, 100%. The 17 new checks
 (across the five new tests) account for the increase from the
 previous 689 baseline.
+
+*Migration note (2026-10-11):* the Log does not name the command that ran the
+suite. Today it is run with
+`(progn (ql:quickload "classic/tests") (classic-tests::run-all-tests))`, the
+`:test` command of `compass.sexp`.
 
 Two existing tests — `capabilities-child-extends-parent` and
 `capabilities-deduplication` — continue to pass without modification.
@@ -306,14 +354,16 @@ input to that baseline rather than as a migration script in itself.
 
 ## Files
 
-| Action | File | Description |
-|---|---|---|
-| Modified | `mod/classic.schema.alpha/theme.lisp` | Added `excluded-capabilities` slot; rewrote `resolve-theme-capabilities` to apply exclusions |
-| Modified | `mod/classic.schema.alpha/package.lisp` | Exported `#:excluded-capabilities` |
-| Modified | `mod/classic.dist.alpha/package.lisp` | Re-exported `#:excluded-capabilities` |
-| Modified | `doc/theme/Theme.md` | Documented the new slot, the merging semantics, and a worked example |
-| Modified | `test/test-theme.lisp` | Extended `make-test-theme` helper; added five tests for exclusion semantics |
-| Created | this file | |
+Table: Files added or changed in commit `9626df5`.
+
+| File | Action | Description |
+|------|--------|-------------|
+| `mod/classic.schema.alpha/theme.lisp` | Modified | Added `excluded-capabilities` slot; rewrote `resolve-theme-capabilities` to apply exclusions |
+| `mod/classic.schema.alpha/package.lisp` | Modified | Exported `#:excluded-capabilities` |
+| `mod/classic.dist.alpha/package.lisp` | Modified | Re-exported `#:excluded-capabilities` |
+| `doc/theme/Theme.md` | Modified | Documented the new slot, the merging semantics, and a worked example |
+| `test/test-theme.lisp` | Modified | Extended `make-test-theme` helper; added five tests for exclusion semantics |
+| This file | **New** | |
 
 
 ## Outstanding Work

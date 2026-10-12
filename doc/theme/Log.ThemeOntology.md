@@ -11,6 +11,21 @@ provenance:
   assistant:   opencode
 relates-to:
   - CLASSIC-DRAFT-theme
+decisions:
+  - CLASSIC-DRAFT-theme-ontology-D1
+  - CLASSIC-DRAFT-theme-ontology-D2
+  - CLASSIC-DRAFT-theme-ontology-D3
+  - CLASSIC-DRAFT-theme-ontology-D4
+  - CLASSIC-DRAFT-theme-ontology-D5
+  - CLASSIC-DRAFT-theme-ontology-D6
+  - CLASSIC-DRAFT-theme-ontology-D7
+  - CLASSIC-DRAFT-theme-ontology-D8
+  - CLASSIC-DRAFT-theme-ontology-D9
+  - CLASSIC-DRAFT-theme-ontology-D10
+  - CLASSIC-DRAFT-theme-ontology-D11
+  - CLASSIC-DRAFT-theme-ontology-D12
+  - CLASSIC-DRAFT-theme-ontology-D13
+  - CLASSIC-DRAFT-theme-ontology-D14
 ---
 
 # Theme Ontology: Development Log
@@ -21,6 +36,9 @@ composable theming with child theme inheritance, per-tier overrides,
 and federation-aware metadata.
 
 **Date:** 2026-05-27
+
+*Migration note (2026-10-11):* the work commit, `d20ec8c`, is dated
+2026-05-28 01:22 (UTC−6), shortly after midnight; the date above is kept.
 
 
 ## Problem
@@ -50,99 +68,106 @@ opaque string identifier. This created four problems:
    content expectations and theme capabilities were undetectable.
 
 
-## Design Decisions Chronology
+## Design Decisions
 
-### Where Should Theming Live?
+*Migration note (2026-10-11):* this section was titled Design Decisions
+Chronology; its four question headings became the records below, with the
+options not chosen as their alternatives.
 
-Three options were considered:
+### CLASSIC-DRAFT-theme-ontology-D1 — Where should theming live? Theme ontology in core, rendering in the Composer
 
-**Option A: Themes entirely in the Composer.** Themes would be a
-Composer-level concept -- bundles of frame templates, capability
-configurations, and CSS references. The core ontology would know
-nothing about themes beyond the opaque string in `ui-theme`.
+**Status:** Proposed
 
-**Option B: Theme ontology in Classic core, rendering in the
-Composer.** Classic's core defines what a theme *is* (a resource
-with structured metadata). The Composer consumes these resources for
-rendering. This mirrors how workflows are core ontological concepts
-that the blog imprint consumes.
+**Context:** Three options were considered for where theming should live.
 
-**Option C: Hybrid.** Minimal theme identity in the core (enough
-for federation and persistence), full compositional machinery in the
-Composer.
+**Decision:** Option B: Theme ontology in Classic core, rendering in the
+Composer. Classic's core defines what a theme *is* (a resource with structured
+metadata). The Composer consumes these resources for rendering. This mirrors
+how workflows are core ontological concepts that the blog imprint consumes. The
+classes are small (three classes, ~15 slots), they fit naturally into the
+existing model pattern, and they solve problems that a Composer-only approach
+cannot: persistence across backend changes, federation awareness, child theme
+relationships as typed semantic relations, and capability negotiation as
+queryable metadata.
 
-**Decision: Option B.** The classes are small (three classes, ~15
-slots), they fit naturally into the existing model pattern, and they
-solve problems that a Composer-only approach cannot: persistence
-across backend changes, federation awareness, child theme
-relationships as typed semantic relations, and capability negotiation
-as queryable metadata.
+**Alternatives:**
+- Option A: Themes entirely in the Composer. Themes would be a Composer-level
+  concept -- bundles of frame templates, capability configurations, and CSS
+  references. The core ontology would know nothing about themes beyond the
+  opaque string in `ui-theme`.
+- Option C: Hybrid. Minimal theme identity in the core (enough for federation
+  and persistence), full compositional machinery in the Composer.
 
-### Asset Storage
+### CLASSIC-DRAFT-theme-ontology-D2 — Asset storage: external references
 
-**Question:** Should theme assets (CSS, images, JS) be stored as
-Classic resources (blobs in the persistence layer) or as external
-filesystem references?
+**Status:** Proposed
 
-**Decision: External references.** The `asset-base-uri` slot holds
-a filesystem path or URL prefix. The `asset-manifest` slot describes
-individual files as an s-expression. This keeps Classic's persistence
-layer focused on structured data (where it adds value) and allows
-themes to use whatever asset pipeline the deployment requires (CDN,
-build tools, SCSS compilation, etc.). Storing binary assets as
-persistence blobs would add complexity without proportional benefit.
+**Context:** Should theme assets (CSS, images, JS) be stored as Classic
+resources (blobs in the persistence layer) or as external filesystem
+references?
 
-### Federation Behavior
+**Decision:** External references. The `asset-base-uri` slot holds a filesystem
+path or URL prefix. The `asset-manifest` slot describes individual files as an
+s-expression. This keeps Classic's persistence layer focused on structured data
+(where it adds value) and allows themes to use whatever asset pipeline the
+deployment requires (CDN, build tools, SCSS compilation, etc.).
 
-**Question:** Should themes be federatable? Could a publisher's theme
-be shared so federated content renders in the publisher's visual
-style?
+**Alternatives:**
+- Storing binary assets as persistence blobs, as Classic resources. Rejected:
+  it would add complexity without proportional benefit.
 
-**Decision: Federatable but non-obligatory.** Theme metadata is
-stored as Classic resources and participates in federation like any
-other entity. A federated peer can see what theme a publication uses,
-inspect its capabilities, and read its configuration bindings. But
-peers have no obligation to render content in the publisher's theme.
-A federated post arriving at an aggregator renders in the
-aggregator's theme. This respects each instance's editorial
-independence while making theme information available for instances
-that want to use it.
+### CLASSIC-DRAFT-theme-ontology-D3 — Federation behavior: federatable but non-obligatory
 
-### Configuration Bindings Model
+**Status:** Proposed
 
-Three representations were considered for theme configuration (colors,
-fonts, layout flags, feature toggles):
+**Context:** Should themes be federatable? Could a publisher's theme be shared
+so federated content renders in the publisher's visual style?
 
-1. **Individual resources.** Each key-value pair is a separate
-   `classic-theme-binding` resource with its own URI. Maximally
-   ontological -- each binding is independently queryable,
-   addressable, and federatable.
+**Decision:** Federatable but non-obligatory. Theme metadata is stored as
+Classic resources and participates in federation like any other entity. A
+federated peer can see what theme a publication uses, inspect its capabilities,
+and read its configuration bindings. But peers have no obligation to render
+content in the publisher's theme. A federated post arriving at an aggregator
+renders in the aggregator's theme. This respects each instance's editorial
+independence while making theme information available for instances that want
+to use it.
 
-2. **Single alist blob on the theme.** A `:blob` slot on
-   `classic-theme` containing all configuration as one alist.
-   Simplest, but theme configuration cannot be modularized (e.g.,
-   separate color bindings from layout bindings).
+**Alternatives:**
+- Obliging peers to render federated content in the publisher's theme. Not
+  adopted: it would not respect each instance's editorial independence.
 
-3. **Plural bindings resources.** A `classic-theme-bindings` class
-   (plural) holding an alist of multiple key-value pairs. A theme
-   can have several bindings resources (one for colors, one for
-   layout, one for feature flags). Each resource represents a
-   coherent configuration overlay that can be independently managed
-   and federated.
+### CLASSIC-DRAFT-theme-ontology-D4 — Configuration bindings: plural bindings resources
 
-**Decision: Plural bindings resources (option 3).** This balances
-ontological cleanliness with practical utility. A bindings resource
-represents a meaningful configuration unit ("dark mode colors") rather
-than an individual setting. Federation sends coherent configuration
-sets rather than dozens of individual key-value entities. Multiple
-bindings resources on the same theme merge at resolution time.
+**Status:** Proposed
+
+**Context:** Three representations were considered for theme configuration
+(colors, fonts, layout flags, feature toggles).
+
+**Decision:** Plural bindings resources (option 3). A `classic-theme-bindings`
+class (plural) holding an alist of multiple key-value pairs. A theme can have
+several bindings resources (one for colors, one for layout, one for feature
+flags). Each resource represents a coherent configuration overlay that can be
+independently managed and federated. This balances ontological cleanliness with
+practical utility. A bindings resource represents a meaningful configuration
+unit ("dark mode colors") rather than an individual setting. Federation sends
+coherent configuration sets rather than dozens of individual key-value
+entities. Multiple bindings resources on the same theme merge at resolution
+time.
+
+**Alternatives:**
+- Option 1, individual resources: Each key-value pair is a separate
+  `classic-theme-binding` resource with its own URI. Maximally ontological --
+  each binding is independently queryable, addressable, and federatable.
+- Option 2, a single alist blob on the theme: A `:blob` slot on `classic-theme`
+  containing all configuration as one alist. Simplest, but theme configuration
+  cannot be modularized (e.g., separate color bindings from layout bindings).
 
 
 ## Implementation
 
 ### Theme Classes
 
-Three new Classic resource classes in `src/model/theme.lisp`:
+Three new Classic resource classes in `src/model/theme.lisp@d20ec8c`:
 
 **`classic-theme`** -- the primary theme resource. Declares
 capabilities, provides tier templates (Lexis fragments), references
@@ -165,7 +190,8 @@ time.
 
 ### Resolution Helpers
 
-Five helper functions for theme chain processing:
+Five helper functions for theme chain processing, in
+`src/model/theme.lisp@d20ec8c`:
 
 - `resolve-theme-chain` -- walks `parent-theme` from a theme to the
   root, returning an ordered list (most specific first). Includes
@@ -192,7 +218,8 @@ being loaded.
 
 ### Publication Update
 
-The `ui-theme` slot on `classic-publication` was changed from
+The `ui-theme` slot on `classic-publication`
+(`src/model/publication.lisp:classic-publication@d20ec8c`) was changed from
 `:persistence :triple` (opaque string) to `:persistence :relation`
 (URI reference to a `classic-theme` resource). The class's
 `:schema-version` was bumped to `"2"`. Existing string values are
@@ -224,9 +251,9 @@ theme failures:
    compatibility management.
 
 
-## Tests
+## Verification
 
-`test/test-theme.lisp` contains 15 tests in a `theme` suite:
+`test/test-theme.lisp@d20ec8c` contains 15 tests in a `theme` suite:
 
 Model instantiation (3 tests):
 - Theme instantiates with all slots
@@ -255,8 +282,18 @@ Publication integration (2 tests):
 - Publication holds theme URI
 - Theme retrievable from persistence via publication
 
+*Migration note (2026-10-11):* this section was titled Tests. The Log does not
+name the command that ran the suite; [Metrics](#metrics) gives 35 checks added, 624 in total, and no regressions. Today it is run with
+`(progn (ql:quickload "classic/tests") (classic-tests::run-all-tests))`, the
+`:test` command of `compass.sexp`.
+
 
 ## Files
+
+*Migration note (2026-10-11):* commit `d20ec8c` also added `securityPoints.md`
+at the repository root, which this table does not list.
+
+Table: Files added or changed in commit `d20ec8c`.
 
 | File | Action | Description |
 |------|--------|-------------|
@@ -277,14 +314,23 @@ Publication integration (2 tests):
 - Total Classic test checks: 624
 
 
-## Addendum: Lens Integration (2026-05-29)
+## Outstanding Work
+
+None recorded for the initial ontology; the lens addendum below lists what
+it deferred.
+
+
+## Update 2026-05-29 — Lens Integration
+
+*Migration note (2026-10-11):* this section was an addendum; its Design
+Decisions Chronology became the records below, and its Tests section is now
+Verification.
 
 This addendum chronicles the addition of Fresnel-style lenses to
 the theme ontology. Lenses provide property-level selection: which
 slots of an entity class to display, in what order, with what
 display modes, and how relation slots reference sublenses for
 related entities.
-
 
 ### Problem
 
@@ -317,6 +363,8 @@ two foundational concepts:
 
 Fresnel maps cleanly onto Classic's existing architecture:
 
+Table: Fresnel concepts and their counterparts in Classic before this addendum.
+
 | Fresnel | Classic |
 |---------|---------|
 | Lenses (property selection) | *Missing* before this addendum |
@@ -332,21 +380,41 @@ contribution: declarative property-level selection with display
 hints and sublens references.
 
 
-### Design Decisions Chronology
+### CLASSIC-DRAFT-theme-ontology-D5 — Lens scope: class-level only initially
 
-#### Lens scope: class-level only initially
+**Status:** Proposed
 
-Fresnel supports both class-level (`fresnel:classLensDomain`) and
-instance-level (`fresnel:instanceLensDomain`) targeting. Classic's
-lenses target classes only for now. Instance-level targeting (a
-lens applying to a single specific URI) is deferred -- the use
-cases are uncommon in publishing scenarios, and the class-level
-mechanism with superclass fallback covers most needs.
+**Context:** Fresnel supports both class-level (`fresnel:classLensDomain`) and
+instance-level (`fresnel:instanceLensDomain`) targeting.
 
-#### Display modes belong in the lens, not the capability system
+**Decision:** Classic's lenses target classes only for now.
 
-The most consequential design decision was where display modes
-should live. Two coherent positions emerged:
+**Alternatives:**
+- Instance-level targeting (a lens applying to a single specific URI).
+  Deferred: the use cases are uncommon in publishing scenarios, and the
+  class-level mechanism with superclass fallback covers most needs.
+
+### CLASSIC-DRAFT-theme-ontology-D6 — Display modes belong in the lens, not the capability system
+
+**Status:** Proposed
+
+**Context:** The most consequential design decision was where display modes
+should live. Two coherent positions emerged.
+
+**Decision:** Position B was adopted. Display modes are a per-property
+primitive renderer hint, lens-scoped and theme-owned. Capabilities remain
+tier-scoped and registered globally.
+
+**Position B: Display modes in lens, capabilities for richer
+transformations.** Display modes are a small, fixed vocabulary
+(`:text`, `:image`, `:link`, `:uri`, `:html`, `:markdown`,
+`:date`, `:list`) producing well-formed Lexis nodes. Capabilities
+operate on those nodes for compound presentation (figures, hero
+banners, sidebars). The two compose cleanly: display modes
+determine the *kind* of node; capabilities determine the *shape*
+of the resulting subtree.
+
+**Alternatives:**
 
 **Position A: Capabilities can do everything.** The Composer's
 feature tier produces some default Lexis node per slot, and a
@@ -363,22 +431,13 @@ capability rewrites it. This was rejected for two reasons:
    universal default and let capabilities override it -- which is
    exactly the problem Fresnel's `fresnel:value` solves.
 
-**Position B: Display modes in lens, capabilities for richer
-transformations.** Display modes are a small, fixed vocabulary
-(`:text`, `:image`, `:link`, `:uri`, `:html`, `:markdown`,
-`:date`, `:list`) producing well-formed Lexis nodes. Capabilities
-operate on those nodes for compound presentation (figures, hero
-banners, sidebars). The two compose cleanly: display modes
-determine the *kind* of node; capabilities determine the *shape*
-of the resulting subtree.
+### CLASSIC-DRAFT-theme-ontology-D7 — Display mode default cascade
 
-Position B was adopted. Display modes are a per-property primitive
-renderer hint, lens-scoped and theme-owned. Capabilities remain
-tier-scoped and registered globally.
+**Status:** Proposed
 
-#### Display mode default cascade
+**Context:** A lens need not say how each of its properties is displayed.
 
-Lenses can omit `:display`, in which case the Composer falls back
+**Decision:** Lenses can omit `:display`, in which case the Composer falls back
 through:
 
 1. Slot's MOP `:format` annotation (`:markdown`, `:html`)
@@ -393,13 +452,19 @@ need to declare display modes when the theme wants something
 different from the slot's natural rendering -- the common case
 needs no lens annotations at all.
 
-#### Sublens references included from the start
+**Alternatives:** None recorded.
 
-Fresnel's `fresnel:sublens` is a powerful idea: a property spec
-for a relation slot can declare which lens to use when rendering
-the related entity inline. The article author byline, for example,
-is naturally rendered as the person `:label` lens applied to the
-author entity.
+### CLASSIC-DRAFT-theme-ontology-D8 — Sublens references included from the start
+
+**Status:** Proposed
+
+**Context:** Fresnel's `fresnel:sublens` lets a property spec for a relation
+slot declare which lens to use when rendering the related entity inline.
+
+**Decision:** Fresnel's `fresnel:sublens` is a powerful idea: a property spec
+for a relation slot can declare which lens to use when rendering the related
+entity inline. The article author byline, for example, is naturally rendered as
+the person `:label` lens applied to the author entity.
 
 Classic's sublens references are class-and-purpose-typed:
 `(author :sublens classic-person :purpose :label)`. The Composer
@@ -408,14 +473,18 @@ resolves the sublens at composition time by looking up
 exact match → `:label` purpose for the relation's actual class →
 built-in label representation (entity's `label` slot).
 
-Fresnel's `fresnel:depth` parameter for bounding recursive
-sublensing is deferred. Cycles in lens declarations are uncommon;
-if they appear, depth limiting can be added without changing the
-lens structure.
+**Alternatives:**
+- Fresnel's `fresnel:depth` parameter for bounding recursive sublensing.
+  Deferred: cycles in lens declarations are uncommon; if they appear, depth
+  limiting can be added without changing the lens structure.
 
-#### Lens purposes: `:default` and `:label`
+### CLASSIC-DRAFT-theme-ontology-D9 — Lens purposes: :default and :label
 
-Two purposes are pre-defined as conventions but not enforced:
+**Status:** Proposed
+
+**Context:** A class may have more than one lens, distinguished by purpose.
+
+**Decision:** Two purposes are pre-defined as conventions but not enforced:
 
 - `:default` is the standard view of an entity (used by the
   Composer's feature tier for primary entities)
@@ -426,59 +495,96 @@ Themes may define custom purposes (`:summary`, `:card`,
 `:thumbnail`). The core treats purposes as opaque keywords used to
 disambiguate multiple lenses per class.
 
-#### Property spec dual form
+**Alternatives:** None recorded.
 
-Each entry in a lens's `:properties` list is either a bare symbol
-(slot name with no overrides) or a list `(slot-name &key display
-sublens purpose)`. The bare-symbol form is for the common case of
-"display this slot using its natural rendering"; the list form is
-for explicit overrides.
+### CLASSIC-DRAFT-theme-ontology-D10 — Property spec dual form
+
+**Status:** Proposed
+
+**Context:** Each entry in a lens's `:properties` list names a slot, with or
+without overrides.
+
+**Decision:** Each entry in a lens's `:properties` list is either a bare symbol
+(slot name with no overrides) or a list `(slot-name &key display sublens
+purpose)`. The bare-symbol form is for the common case of "display this slot
+using its natural rendering"; the list form is for explicit overrides.
 
 The `lens-properties` helper normalizes both forms to a uniform
 plist `(:slot SLOT-NAME &key display sublens purpose)`, so callers
 in the Composer never have to handle both representations.
 
-#### Inheritance is wholesale per (class, purpose) pair
+**Alternatives:** None recorded.
 
-When resolving lenses across a theme chain, child lenses override
-parent lenses entirely on matching `(class, purpose)` pairs.
-There is no per-property merging. This matches the existing
-override behavior of `classic-theme-override` (per-tier wholesale
-replacement) and avoids the considerable complexity of
-property-by-property reconciliation between parent and child
-property lists. Parent lenses for pairs not covered by the child
-are preserved.
+### CLASSIC-DRAFT-theme-ontology-D11 — Inheritance is wholesale per (class, purpose) pair
 
-#### Storage: a flat list, not an alist keyed by class
+**Status:** Proposed
 
-The `lenses` slot stores a flat list of lens spec plists, not an
-alist keyed by class. This allows multiple lenses per class with
-different purposes -- a theme typically defines both a
-`:default` lens and a `:label` lens for primary entity classes.
-The `(class . purpose)` pair becomes the natural key only at
-resolution time, in `resolve-theme-lenses`.
+**Context:** Lenses are resolved across a theme chain.
 
-#### Class symbols, not strings
+**Decision:** When resolving lenses across a theme chain, child lenses override
+parent lenses entirely on matching `(class, purpose)` pairs. There is no
+per-property merging. This matches the existing override behavior of
+`classic-theme-override` (per-tier wholesale replacement) and avoids the
+considerable complexity of property-by-property reconciliation between parent
+and child property lists. Parent lenses for pairs not covered by the child are
+preserved.
 
-Lens specs reference target classes as Lisp symbols (e.g.,
-`classic-article`). Symbols are package-qualified when serialized
-via the `:sexp` format. This ties themes to a specific package
-layout, which is already true of the rest of the theme system
-(tier templates use the same convention).
+**Alternatives:**
+- Per-property merging. Not adopted: it would bring the considerable complexity
+  of property-by-property reconciliation between parent and child property
+  lists.
 
-#### Superclass fallback in `find-lens`
+### CLASSIC-DRAFT-theme-ontology-D12 — Storage: a flat list, not an alist keyed by class
 
-`find-lens` walks the class precedence list when no lens matches
-the requested class directly. A lens defined on
-`classic-creative-work` automatically applies to
-`classic-article`, `classic-comment`, and `classic-media-object`
-unless those classes have their own lenses. This mirrors CLOS
-dispatch semantics and Fresnel's classLensDomain behavior.
+**Status:** Proposed
 
+**Context:** The `lenses` slot must hold several lenses per class, with
+different purposes.
+
+**Decision:** The `lenses` slot stores a flat list of lens spec plists, not an
+alist keyed by class. This allows multiple lenses per class with different
+purposes -- a theme typically defines both a `:default` lens and a `:label`
+lens for primary entity classes. The `(class . purpose)` pair becomes the
+natural key only at resolution time, in `resolve-theme-lenses`.
+
+**Alternatives:**
+- An alist keyed by class. Not adopted: it would not allow multiple lenses per
+  class with different purposes.
+
+### CLASSIC-DRAFT-theme-ontology-D13 — Class symbols, not strings
+
+**Status:** Proposed
+
+**Context:** Lens specs must reference their target classes.
+
+**Decision:** Lens specs reference target classes as Lisp symbols (e.g.,
+`classic-article`). Symbols are package-qualified when serialized via the
+`:sexp` format. This ties themes to a specific package layout, which is already
+true of the rest of the theme system (tier templates use the same convention).
+
+**Alternatives:**
+- Strings, which the heading names as the alternative. The Log gives its
+  reasons for symbols and none for rejecting strings.
+
+### CLASSIC-DRAFT-theme-ontology-D14 — Superclass fallback in find-lens
+
+**Status:** Proposed
+
+**Context:** A class may have no lens of its own.
+
+**Decision:** `find-lens` walks the class precedence list when no lens matches
+the requested class directly. A lens defined on `classic-creative-work`
+automatically applies to `classic-article`, `classic-comment`, and
+`classic-media-object` unless those classes have their own lenses. This mirrors
+CLOS dispatch semantics and Fresnel's classLensDomain behavior.
+
+**Alternatives:** None recorded.
 
 ### Implementation
 
 #### New slot on `classic-theme`
+
+In `src/model/theme.lisp:classic-theme@8aea5f4`:
 
 ```lisp
 (lenses
@@ -497,7 +603,7 @@ phase, no schema version bump was applied.
 
 #### New helpers
 
-Three new functions in `src/model/theme.lisp`:
+Three new functions in `src/model/theme.lisp@8aea5f4`:
 
 - **`lens-properties`** normalizes property specs (bare symbol or
   list form) to a uniform plist
@@ -512,9 +618,9 @@ Two small accessors -- `lens-class` and `lens-purpose` -- handle
 the optional `:purpose` default.
 
 
-### Tests
+### Verification
 
-`test/test-theme.lisp` gained 10 tests in the existing `theme`
+`test/test-theme.lisp@8aea5f4` gained 10 tests in the existing `theme`
 suite, contributing 35 new checks:
 
 Lens model (3 tests):
@@ -538,6 +644,8 @@ Lens resolution (3 tests):
 
 ### Files
 
+Table: Files added or changed in commit `8aea5f4`.
+
 | File | Action | Description |
 |------|--------|-------------|
 | `src/model/theme.lisp` | Modified | Added `lenses` slot to `classic-theme`; added `lens-class`, `lens-purpose`, `lens-properties`, `resolve-theme-lenses`, `find-lens` (~95 new lines) |
@@ -557,7 +665,10 @@ Lens resolution (3 tests):
 - Lines added to `test-theme.lisp`: ~150
 
 
-### What This Does Not Include
+### Outstanding Work
+
+*Migration note (2026-10-11):* this section was titled What This Does Not
+Include.
 
 Deferred to future work:
 

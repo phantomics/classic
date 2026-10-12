@@ -12,6 +12,12 @@ provenance:
 relates-to:
   - CLASSIC-DRAFT-theme
   - CLASSIC-DRAFT-theme-ontology
+decisions:
+  - CLASSIC-DRAFT-slot-fills-D1
+  - CLASSIC-DRAFT-slot-fills-D2
+  - CLASSIC-DRAFT-slot-fills-D3
+  - CLASSIC-DRAFT-slot-fills-D4
+  - CLASSIC-DRAFT-slot-fills-D5
 ---
 
 # Template Slot Fills: Development Log
@@ -22,6 +28,11 @@ Lexis subtrees to designated extension points within a parent's tier
 template — without overriding the entire template.
 
 **Date:** 2026-06-04
+
+*Migration note (2026-10-11):* the work commit, `72b638c`, is dated
+2026-06-16, later than the date above; the date is kept as written. A commit
+with the same changes, `9b20974`, on a parallel line of history was merged in
+`c099e7d`.
 
 
 ## Problem
@@ -70,43 +81,42 @@ was selected for the reasons recorded below.
 
 ## Design Decisions
 
-### 1. A dedicated CLOS slot on `classic-theme`
+### CLASSIC-DRAFT-slot-fills-D1 — A dedicated CLOS slot on classic-theme
 
-Three implementation shapes were considered:
+**Status:** Proposed
 
-- **A dedicated `slot-fills` field on `classic-theme`.** Selected.
-  Follows the established pattern of dedicated typed slots with
-  predicate-named persistence (alongside `capabilities`,
-  `excluded-capabilities`, `tier-templates`, etc.).
-- **Extending `classic-theme-bindings` to allow Lexis-subtree values.**
-  Rejected. The bindings storage is already `:format :sexp` so the
-  data could technically live there, but conflating scalar
-  configuration with structural Lexis contributions would force
-  every consumer to type-discriminate on values and would muddle
-  what bindings declare.
-- **A new `classic-theme-slot-fills` resource.** Rejected. Would
-  introduce a class for what is naturally one slot's worth of data,
-  with no compensating benefit. The bindings resource exists as a
-  separate class because it allows multiple bindings sets to attach
-  to one theme (color set, layout set, typography set); slot fills
-  do not have an analogous multi-set use case.
+**Context:** Three implementation shapes were considered for holding slot
+fills.
 
-### 2. Slot names are strings, global across tiers
+**Decision:** A dedicated `slot-fills` field on `classic-theme`. Selected.
+Follows the established pattern of dedicated typed slots with predicate-named
+persistence (alongside `capabilities`, `excluded-capabilities`,
+`tier-templates`, etc.).
 
-Slot names are strings (matching the convention for Lexis
-`template.slot` `:name` attribute values). The keys are global: a
-fill keyed `"theme.brand"` applies to any `(template.slot (@ :name
-"theme.brand"))` node found in any resolved tier template, regardless
-of whether the placeholder appears in the frame, adjunct, aggregate,
-or operative tier.
+**Alternatives:**
+- Extending `classic-theme-bindings` to allow Lexis-subtree values. Rejected.
+  The bindings storage is already `:format :sexp` so the data could technically
+  live there, but conflating scalar configuration with structural Lexis
+  contributions would force every consumer to type-discriminate on values and
+  would muddle what bindings declare.
+- A new `classic-theme-slot-fills` resource. Rejected. Would introduce a class
+  for what is naturally one slot's worth of data, with no compensating benefit.
+  The bindings resource exists as a separate class because it allows multiple
+  bindings sets to attach to one theme (color set, layout set, typography set);
+  slot fills do not have an analogous multi-set use case.
 
-The alternative — tier-scoped keys, with the slot value structured as
-an alist of `(tier . fills)` pairs — would let a single slot name
-have different fills in different tiers. It was rejected as
-premature: the composer's draft and the source design discussion both
-use bare slot-name keys, and naming-prefix conventions
-(`theme.brand`, `theme.footer-extras`, or namespaced equivalents) act
-as informal disambiguation if collision becomes a real concern.
+### CLASSIC-DRAFT-slot-fills-D2 — Slot names are strings, global across tiers
+
+**Status:** Proposed
+
+**Context:** A fill must name the template slot it fills, and the same slot
+name may appear in more than one tier.
+
+**Decision:** Slot names are strings (matching the convention for Lexis
+`template.slot` `:name` attribute values). The keys are global: a fill keyed
+`"theme.brand"` applies to any `(template.slot (@ :name "theme.brand"))` node
+found in any resolved tier template, regardless of whether the placeholder
+appears in the frame, adjunct, aggregate, or operative tier.
 
 If tier scoping turns out to be needed later, the bare-name shape
 can be extended without breaking compatibility: the value of a
@@ -114,14 +124,26 @@ global-name fill could become an alist of `(tier . subtree)` pairs
 when authors want tier discrimination, with the existing direct
 subtree continuing to mean "apply in every tier."
 
-### 3. Inheritance follows the bindings precedent
+**Alternatives:**
+- Tier-scoped keys, with the slot value structured as an alist of `(tier .
+  fills)` pairs, which would let a single slot name have different fills in
+  different tiers. Rejected as premature: the composer's draft and the source
+  design discussion both use bare slot-name keys, and naming-prefix conventions
+  (`theme.brand`, `theme.footer-extras`, or namespaced equivalents) act as
+  informal disambiguation if collision becomes a real concern.
 
-Slot fills are inherited via per-key override. Walking the chain
-root-to-child, child entries override parent entries on matching
-slot-name; unmatched parent entries pass through unchanged. This
-mirrors `resolve-theme-bindings` exactly, simplified by the fact that
-slot fills live directly on the theme rather than on a separate
-resource (so no strategy scan is needed).
+### CLASSIC-DRAFT-slot-fills-D3 — Inheritance follows the bindings precedent
+
+**Status:** Proposed
+
+**Context:** Slot fills must be resolved across a theme chain.
+
+**Decision:** Slot fills are inherited via per-key override. Walking the chain
+root-to-child, child entries override parent entries on matching slot-name;
+unmatched parent entries pass through unchanged. This mirrors
+`resolve-theme-bindings` exactly, simplified by the fact that slot fills live
+directly on the theme rather than on a separate resource (so no strategy scan
+is needed).
 
 A child that wants to suppress a parent's fill without contributing
 its own can bind the slot name to `nil`. The composer is expected to
@@ -130,34 +152,52 @@ template slot remaining unfilled. This is recorded in the doc string
 and the documentation but is a composer-side semantic, not a
 schema-enforced rule.
 
-### 4. Naming: `slot-fills`
+**Alternatives:** None recorded.
 
-Three names were considered during the planning round:
+### CLASSIC-DRAFT-slot-fills-D4 — Naming: slot-fills
 
-- **`slot-fills`** — short, intuitive ("fill" describes what the
-  subtree does at the template-slot extension point). Initially
-  proposed in the source design.
-- **`overrides`** — proposed for parallel naming with
-  `classic-theme-override` to convey the "smaller-scale override"
-  intuition. Rejected because the bare accessor `(overrides theme)`
-  would clash semantically with the existing `resolve-theme-overrides`
-  function, which returns `classic-theme-override` resources.
-- **`slot-overrides`** — compromise preserving the override
-  terminology without the bare-name collision. Considered, then set
-  aside in favor of the more concise `slot-fills`.
+**Status:** Proposed
+
+**Context:** Three names were considered during the planning round.
+
+**Decision:** `slot-fills` — short, intuitive ("fill" describes what the
+subtree does at the template-slot extension point). Initially proposed in the
+source design.
 
 The final choice is `slot-fills` for brevity, with documentation
 explicitly defining the term against the two senses of "slot" (CLOS
 slot vs. Lexis template slot) up front.
 
-### 5. `classic-theme-override` symmetry and migration registration
+**Alternatives:**
+- `overrides` — proposed for parallel naming with `classic-theme-override` to
+  convey the "smaller-scale override" intuition. Rejected because the bare
+  accessor `(overrides theme)` would clash semantically with the existing
+  `resolve-theme-overrides` function, which returns `classic-theme-override`
+  resources.
+- `slot-overrides` — compromise preserving the override terminology without the
+  bare-name collision. Considered, then set aside in favor of the more concise
+  `slot-fills`.
 
-Deferred and skipped, respectively. `classic-theme-override` does not
-gain a tier-scoped slot-fills field; tier-scoped fill contributions
-can be added later if a use case emerges. No schema migration is
-registered, matching the policy established for prior pre-production
-theme additions: cumulative pre-production baseline will be captured
-when theme classes enter production deployment.
+### CLASSIC-DRAFT-slot-fills-D5 — classic-theme-override symmetry and migration registration
+
+**Status:** Proposed
+
+**Context:** As with capability exclusion, the change raised whether
+`classic-theme-override` should gain a matching field and whether the slot
+addition needs a schema migration.
+
+**Decision:** Deferred and skipped, respectively. `classic-theme-override` does
+not gain a tier-scoped slot-fills field; tier-scoped fill contributions can be
+added later if a use case emerges. No schema migration is registered, matching
+the policy established for prior pre-production theme additions: cumulative
+pre-production baseline will be captured when theme classes enter production
+deployment.
+
+**Alternatives:**
+- A tier-scoped slot-fills field on `classic-theme-override`. Deferred until a
+  use case emerges.
+- Registering a schema migration. Skipped while the theme classes are
+  pre-production.
 
 
 ## Implementation
@@ -168,7 +208,8 @@ DevLog).
 
 ### `mod/classic.schema.alpha/theme.lisp`
 
-Added the `slot-fills` slot to `classic-theme` between
+Added the `slot-fills` slot to `classic-theme`
+(`mod/classic.schema.alpha/theme.lisp:classic-theme@72b638c`) between
 `tier-templates` and `asset-base-uri`:
 
 ```lisp
@@ -182,8 +223,11 @@ Added the `slot-fills` slot to `classic-theme` between
  :documentation "...")
 ```
 
-Added two resolution functions in a new "Slot-fill resolution"
-section between bindings resolution and lens resolution:
+Added two resolution functions,
+`mod/classic.schema.alpha/theme.lisp:resolve-theme-slot-fills@72b638c` and
+`mod/classic.schema.alpha/theme.lisp:theme-slot-fill@72b638c`, in a new
+"Slot-fill resolution" section between bindings resolution and lens
+resolution:
 
 ```lisp
 (defun resolve-theme-slot-fills (theme-chain)
@@ -243,6 +287,8 @@ The `make-test-theme` helper gained a `:slot-fills` keyword
 parameter. Six new tests were added in a new "Slot-fill resolution"
 section between the bindings tests and the override tests:
 
+Table: The six tests of slot-fill semantics, and the property each verifies.
+
 | Test | Property |
 |---|---|
 | `slot-fills-instantiation` | A theme with slot-fills persists and round-trips through the storage layer correctly |
@@ -258,6 +304,11 @@ section between the bindings tests and the override tests:
 The full test suite passes: 722 checks, 100%. The 16 new checks
 (across the six new tests) account for the increase from the
 previous 706 baseline.
+
+*Migration note (2026-10-11):* the Log does not name the command that ran the
+suite. Today it is run with
+`(progn (ql:quickload "classic/tests") (classic-tests::run-all-tests))`, the
+`:test` command of `compass.sexp`.
 
 The persistence round-trip is exercised by the instantiation test:
 the slot-fills alist (containing Lexis subtrees) is written through
@@ -335,14 +386,22 @@ migration rather than triggering per-change registration.
 
 ## Files
 
-| Action | File | Description |
-|---|---|---|
-| Modified | `mod/classic.schema.alpha/theme.lisp` | Added `slot-fills` slot; added `resolve-theme-slot-fills` and `theme-slot-fill` functions |
-| Modified | `mod/classic.schema.alpha/package.lisp` | Exported `#:slot-fills`, `#:resolve-theme-slot-fills`, `#:theme-slot-fill` |
-| Modified | `mod/classic.dist.alpha/package.lisp` | Re-exported the same three symbols |
-| Modified | `doc/theme/Theme.md` | Added slot-table row; added "Template Slot Fills" major section; added child-theme example; added merging example in resolution section |
-| Modified | `test/test-theme.lisp` | Extended `make-test-theme` helper; added six tests for slot-fill semantics |
-| Created | this file | |
+*Migration note (2026-10-11):* commit `72b638c` also added `:slot-type`
+annotations across ten other files of `mod/classic.schema.alpha/` (agent,
+community, content, deletion, federation, identity, migration, outbox,
+provenance, and workflow classes), which this table and the Log do not
+describe.
+
+Table: Files added or changed in commit `72b638c` for slot fills.
+
+| File | Action | Description |
+|------|--------|-------------|
+| `mod/classic.schema.alpha/theme.lisp` | Modified | Added `slot-fills` slot; added `resolve-theme-slot-fills` and `theme-slot-fill` functions |
+| `mod/classic.schema.alpha/package.lisp` | Modified | Exported `#:slot-fills`, `#:resolve-theme-slot-fills`, `#:theme-slot-fill` |
+| `mod/classic.dist.alpha/package.lisp` | Modified | Re-exported the same three symbols |
+| `doc/theme/Theme.md` | Modified | Added slot-table row; added "Template Slot Fills" major section; added child-theme example; added merging example in resolution section |
+| `test/test-theme.lisp` | Modified | Extended `make-test-theme` helper; added six tests for slot-fill semantics |
+| This file | **New** | |
 
 
 ## Outstanding Work

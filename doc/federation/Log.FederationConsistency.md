@@ -182,6 +182,9 @@ older instances that don't understand them.
 
 ### New file: `src/federation/provenance.lisp@8d5cc1b` (310 lines)
 
+*Migration note (2026-10-11):* the file has 380 lines at `8d5cc1b`; the count in
+the heading is the Log's own.
+
 Three new Classic resource classes:
 
 - `classic-federation-provenance` -- per-entity provenance record with
@@ -457,6 +460,9 @@ concurrent retry are deferred to a production implementation, not rejected.
 
 #### New file: `src/federation/delivery.lisp@fb49791` (175 lines)
 
+*Migration note (2026-10-11):* the file has 194 lines at `fb49791`; the count in
+the heading is the Log's own.
+
 Functions and generics:
 
 - `delivery-acknowledged-p` -- response inspection for ack detection
@@ -693,6 +699,9 @@ propagate update -> retract.
 
 #### New file: `src/federation/updates.lisp@99d050d` (115 lines)
 
+*Migration note (2026-10-11):* the file has 112 lines at `99d050d`; the count in
+the heading is the Log's own.
+
 - `propagate-update` -- sends `:update` messages to feed subscribers,
   with ack checking and event logging (mirrors `publish-to-peers`
   structure)
@@ -700,6 +709,9 @@ propagate update -> retract.
   updates provenance on accept, rejects stale updates
 
 #### New file: `src/federation/outbox.lisp@99d050d` (165 lines)
+
+*Migration note (2026-10-11):* the file has 177 lines at `99d050d`; the count in
+the heading is the Log's own.
 
 - `classic-federation-outbox` class with peer-authority, pending
   operations list, flush-threshold, flush-interval, and last-flush-at
