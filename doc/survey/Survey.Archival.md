@@ -25,12 +25,12 @@ cites:
     locator: academictorrents.com — BitTorrent for durable datasets
     external: true
 open-questions:
-  - CLASSIC-O1
-  - CLASSIC-O2
-  - CLASSIC-O3
-  - CLASSIC-O4
-  - CLASSIC-O5
-  - CLASSIC-O6
+  - CLASSIC-DRAFT-archival-O1
+  - CLASSIC-DRAFT-archival-O2
+  - CLASSIC-DRAFT-archival-O3
+  - CLASSIC-DRAFT-archival-O4
+  - CLASSIC-DRAFT-archival-O5
+  - CLASSIC-DRAFT-archival-O6
 ---
 
 # Content Archival and Durability: Survey
@@ -346,7 +346,8 @@ the preservation aggregator is the same directory-role deployment as the moderat
 curator directory and the Usenet-analog group directory
 ([Survey.Usenet.md](Survey.Usenet.md)). Whether the moderation feed and the
 preservation feed are one parameterized type or two parallel types is the mutual
-open question CLASSIC-O6 records in both surveys.
+open question recorded in both surveys, as CLASSIC-DRAFT-archival-O6 here and
+CLASSIC-DRAFT-distributed-moderation-O6 there.
 
 It depends on the persistence protocol and its flat-file backend
 ([Persistence.md](../persistence/Persistence.md)) and the federation and
@@ -369,38 +370,38 @@ cold-content problem this survey inherits).
 Identifiers below are provisional; canonical `CLASSIC-O<n>` numbers are assigned
 from the namespace registry at acceptance.
 
-### CLASSIC-O1 — The deletion/durability policy dial
+### CLASSIC-DRAFT-archival-O1 — The deletion/durability policy dial
 
 What settings the dial exposes, how a mirror advertises its policy before it is
 established, and how peers with conflicting policies (an erasure-favoring origin,
 a preservation-favoring mirror) reconcile — including the collision with
 right-to-be-forgotten regimes.
 
-### CLASSIC-O2 — License-to-mirror semantics
+### CLASSIC-DRAFT-archival-O2 — License-to-mirror semantics
 
 Whether and how an `archive-offer` carries an explicit grant to mirror and
 redistribute, how those terms are expressed and enforced, and how silent
 federation backups without an explicit offer are treated.
 
-### CLASSIC-O3 — Integrity via signed origin entities
+### CLASSIC-DRAFT-archival-O3 — Integrity via signed origin entities
 
 The signing scheme that makes a mirror verifiable — such that any consumer of a
 mirror can confirm the content is authentic and unmodified from the origin —
 shared with the Usenet-analog and moderation security work.
 
-### CLASSIC-O4 — Static-tier cold content
+### CLASSIC-DRAFT-archival-O4 — Static-tier cold content
 
 The seed-of-last-resort design behind a BitTorrent tier (CDN baseline, origin
 instance, or hosted service), and the hybrid that uses torrents to accelerate
 popular archives without relying on them for the long tail.
 
-### CLASSIC-O5 — Browser-plugin handshake and security model
+### CLASSIC-DRAFT-archival-O5 — Browser-plugin handshake and security model
 
 The autodiscovery advertisement on rendered pages, the plugin-to-local-instance
 channel, and its security model (origin checks, capability tokens, explicit user
 confirmation).
 
-### CLASSIC-O6 — Shared curation-feed primitive with moderation
+### CLASSIC-DRAFT-archival-O6 — Shared curation-feed primitive with moderation
 
 Whether the preservation feed and the moderation feed are one parameterized type
 or two parallel types, given that both are curated, subscribable feeds of actions

@@ -283,7 +283,9 @@ ledger keeps numbers unique only if every change to it passes `compass check
   merges into, and `compass index --check`, with the full history fetched for
   Git-derived fields and code references. Which revision of the toolchain it
   builds is CLASSIC-DRAFT-compass-migration-O4; until that is settled, the
-  workflow builds the commit the local executable was built from.
+  workflow builds Compass commit `9a6ab23`, the committed form of the tree
+  the local executable was built from; the two differ from `ccb28e9` only in
+  `build.lisp`.
 - `.github/CODEOWNERS` assigns `/doc/REGISTRY.sexp` to the steward.
 - `.mailmap` maps the `phantomics` identity to Andrew Sengul, so that derived
   authors, and the allocator of every ledger entry, name a person. It lands
@@ -351,10 +353,8 @@ stays `Draft` when the steward reviews statuses.
 2. **Add `.mailmap`**, before the ledger
    (CLASSIC-DRAFT-compass-migration-D6).
 3. **Create the ledger** with `compass init --ledger`, after a dry run. With
-   no canonical identifiers in use, it should record none. This is not yet
-   confirmed: the dry run is refused while the duplicate numbers remain, so it
-   is first run after step 1, and if `init --ledger` declines to create an
-   empty ledger, the ledger waits for the first `compass assign`.
+   no canonical identifiers in use, it records none; the dry run is refused
+   while the duplicate numbers remain, so it runs after step 1.
 4. **Generate the index** with `compass index`.
 5. **Refresh `AGENTS.md`** from the current Compass snippet: add the sentence
    on `compass assign` and the ledger, and replace the note on the duplicated
@@ -458,10 +458,10 @@ Outside this plan, recorded so that it is not lost:
 ## Tensions and Risks
 
 - **The toolchain is ahead of its release.** The executable in local use was
-  built from Compass commit `ccb28e9` with uncommitted changes, before the
-  final 0.2 commit, `9a6ab23`. Local and CI results can differ until the local
-  build and CI build the same revision
-  (CLASSIC-DRAFT-compass-migration-O4).
+  built from Compass commit `ccb28e9` with uncommitted changes to `build.lisp`,
+  which became the final 0.2 commit, `9a6ab23`, the revision CI builds. Its
+  source is the same, but local and CI results can drift apart when either is
+  rebuilt from another revision (CLASSIC-DRAFT-compass-migration-O4).
 - **Accessibility is not checked yet.** Version 0.2 does not check captions,
   descriptions, heading levels, or link text, so Phase 3's accessibility work
   is verified by review, not by the toolchain.

@@ -21,7 +21,10 @@ demand only if you need the source text — do not preload it.
 
 Run `compass check` before finishing any change to the documentation, and fix
 the errors it reports in the files you changed. `compass help` lists the other
-commands (`show`, `outline`, `refs`, `index`, `rules`).
+commands (`show`, `outline`, `refs`, `index`, `next`, `rules`, and others).
+Numbers are assigned with `compass assign` only when a person asks for it; never
+edit the ledger, `doc/REGISTRY.sexp`, by hand. After changing documents, run
+`compass index` to regenerate `doc/INDEX.md`; never edit it by hand.
 
 Project-specific facts the skills cannot infer:
 
@@ -32,14 +35,13 @@ Project-specific facts the skills cannot infer:
   `~/src/lisp/compass`; otherwise `~/src/lisp/compass/bin/compass`
 - Federated repositories: COMPASS (`../compass`), ORIGIN (`../origin`), LEXTER
   (`../../chat/lexter`), as listed in `compass.sexp`
-- Migration: most documents in `doc/` predate Compass and have no
-  front-matter yet; run checks with `compass check --skip-unmarked`. Four
-  migrated Surveys share the open-question numbers CLASSIC-O1 to O6, which no
-  ledger allocated: `compass check` reports them under `register/unique` and
-  `ledger/coverage`, and `compass init --ledger` refuses to seed a ledger while
-  a number is defined twice. Give each Survey's questions provisional
-  identifiers formed from its own (`CLASSIC-DRAFT-archival-O1`, …); `compass
-  assign` numbers each Survey's questions when the Survey is accepted
+- Migration: the migration is planned in `doc/Plan.CompassMigration.md`
+  (CLASSIC-DRAFT-compass-migration). Until its Phase 2 lands, most documents
+  in `doc/` predate Compass and have no front-matter; run checks with
+  `compass check --skip-unmarked`. No document is numbered yet: every
+  document and record carries a provisional identifier
+  (`CLASSIC-DRAFT-<slug>`, `CLASSIC-DRAFT-<slug>-O1`, …), and the ledger is
+  empty until the steward asks for `compass assign`
 
 Essentials (full rules in Compass.md): every document opens with a §7 YAML
 front-matter block; genre and status use the controlled vocabularies; decision

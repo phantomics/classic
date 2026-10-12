@@ -25,13 +25,13 @@ cites:
     locator: OpenPGP, RFC 4880 — trust model
     external: true
 open-questions:
-  - CLASSIC-O1
-  - CLASSIC-O2
-  - CLASSIC-O3
-  - CLASSIC-O4
-  - CLASSIC-O5
-  - CLASSIC-O6
-  - CLASSIC-O7
+  - CLASSIC-DRAFT-distributed-moderation-O1
+  - CLASSIC-DRAFT-distributed-moderation-O2
+  - CLASSIC-DRAFT-distributed-moderation-O3
+  - CLASSIC-DRAFT-distributed-moderation-O4
+  - CLASSIC-DRAFT-distributed-moderation-O5
+  - CLASSIC-DRAFT-distributed-moderation-O6
+  - CLASSIC-DRAFT-distributed-moderation-O7
 ---
 
 # Distributed Content Moderation: Survey
@@ -314,7 +314,7 @@ Usenet-analog's three-layer structure.
 A discoverable **curator directory** — a directory-role deployment cataloging
 profiles by scope, activity, and subscriber count — lets newcomers find
 curators. This directory is the same primitive the Usenet-analog needs for group
-discovery ([Survey.Usenet.md](Survey.Usenet.md), CLASSIC-O1 there) and that the
+discovery ([Survey.Usenet.md](Survey.Usenet.md), CLASSIC-DRAFT-usenet-O1) and that the
 archival concept needs for preservation feeds; the three uses share one directory
 mechanism.
 
@@ -423,7 +423,7 @@ of a mandate.
 ## Relationship to Other Work
 
 This survey closes the open question left by
-[Survey.Usenet.md](Survey.Usenet.md) (its CLASSIC-O5, the relationship of
+[Survey.Usenet.md](Survey.Usenet.md) (CLASSIC-DRAFT-usenet-O5, the relationship of
 client-side lens filtering to a federated moderation model): the Usenet-analog's
 killfile on-ramp is the simplest case of the model surveyed here. It shares the
 **curation-feed primitive** and the **curator/preservation directory** with the
@@ -448,32 +448,32 @@ users), and the PGP web of trust (transitive, decentralized trust delegation).
 Identifiers below are provisional; canonical `CLASSIC-O<n>` numbers are assigned
 from the namespace registry at acceptance.
 
-### CLASSIC-O1 — Hybrid rules/actions resolution semantics
+### CLASSIC-DRAFT-distributed-moderation-O1 — Hybrid rules/actions resolution semantics
 
 Exactly how a ruleset's baseline disposition and score combine with discrete
 actions for named targets: precedence, score composition, and how conflicting
 actions from the same feed resolve.
 
-### CLASSIC-O2 — DSL grammar closure and sandbox boundary
+### CLASSIC-DRAFT-distributed-moderation-O2 — DSL grammar closure and sandbox boundary
 
 The precise closed vocabulary of predicates, combinators, and actions; the set
 of content-metadata fields exposed to rules; the resource limits on evaluation;
 and the audited boundary that guarantees a ruleset cannot escape into arbitrary
 computation or side effects.
 
-### CLASSIC-O3 — Composition-semantics default
+### CLASSIC-DRAFT-distributed-moderation-O3 — Composition-semantics default
 
 Whether effect-per-label is the right default, how weighted scoring is exposed as
 a power-user option, and how the two coexist in one `moderation-set` without
 confusing the user.
 
-### CLASSIC-O4 — Curator discovery and directory bootstrap
+### CLASSIC-DRAFT-distributed-moderation-O4 — Curator discovery and directory bootstrap
 
 How the curator directory catalogs profiles, what metadata it surfaces, and how a
 newcomer bootstraps trust — shared with the Usenet-analog and archival
 directory-role work.
 
-### CLASSIC-O5 — Meta-moderation
+### CLASSIC-DRAFT-distributed-moderation-O5 — Meta-moderation
 
 Because a moderation feed is ordinary content, feeds can moderate other curators
 ("curators to be skeptical of," "curators I endorse"), and subscribers can stack
@@ -482,13 +482,13 @@ self-correcting property that terminates when a subscriber stops subscribing.
 What, if any, protocol support this warrants beyond what falls out naturally is
 open.
 
-### CLASSIC-O6 — Shared curation-feed primitive with archival
+### CLASSIC-DRAFT-distributed-moderation-O6 — Shared curation-feed primitive with archival
 
 Whether the moderation feed and the archival preservation feed are one
 parameterized type or two parallel types, given that both are curated,
 subscribable feeds of actions pointed at content.
 
-### CLASSIC-O7 — Ranking gameability and reputation inputs
+### CLASSIC-DRAFT-distributed-moderation-O7 — Ranking gameability and reputation inputs
 
 How published ranking rulesets resist manipulation by authors who read them, and
 whether contributor-reputation inputs to rules can be sourced without recreating
