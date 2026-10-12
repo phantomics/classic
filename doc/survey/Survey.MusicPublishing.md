@@ -14,6 +14,7 @@ relates-to:
   - CLASSIC-DRAFT-federation-demo
   - CLASSIC-DRAFT-workflow
   - CLASSIC-DRAFT-ttrpg-host
+  - STACKS-DRAFT-stacks-and-classic
 cites:
   - title:   Bandcamp
     locator: bandcamp.com
@@ -56,6 +57,15 @@ the federation and co-hosting model
 workflow engine ([CLASSIC-DRAFT-workflow](../model/Ref.Workflow.md)), the
 composer pipeline, and the planned Seed authoring integration.
 
+It also follows the division of labour between Classic and Stacks recorded
+in [STACKS-DRAFT-stacks-and-classic](../../../stacks/doc/Survey.StacksAndClassic.md):
+Classic is the press, holding the intellectual provenance of works --
+credits, lineage, identifiers, workflow, publication -- and federating it;
+Stacks is the library, holding the musician's working catalogue and the
+audio itself. Classic references binary media by content hash and Stacks
+stores, locates, transfers, and preserves the bytes. Authored text (lyrics,
+liner notes) remains Classic's own.
+
 **Date:** 2026-07-04
 
 
@@ -86,8 +96,9 @@ they are artifacts of each platform owning its own opaque data model.
 Music is a departure for Classic in one respect -- the audio itself is
 discrete media, an opaque binary blob rather than Lexis-editable
 structure -- but everything *around* the audio is metadata-rich in
-exactly the way the substrate is built to exploit. The audio is the
-body; the ontology is everything else.
+exactly the way the substrate is built to exploit. The ontology is
+Classic's; the audio is held by Stacks and named from Classic by its
+content hash.
 
 
 ## Why the substrate fits
@@ -158,7 +169,8 @@ music-composition        (<- classic-creative-work)
 
 music-recording          (<- classic-creative-work classic-stateful
                              classic-deletable)
-  audio-blob             -> blob (format-tagged, content-addressed)
+  audio-ref              -> triple  (content reference: the hash of the
+                                     audio bytes, which Stacks keeps)
   of-composition         -> relation to music-composition
   performers, producer,
     mix-engineer,
@@ -180,7 +192,7 @@ music-album              (<- classic-publication classic-container
   tracks                 -> ordered relation list to music-track
   release-date           -> triple
   label                  -> relation to classic-organization
-  cover-art              -> blob (or a classic-media-object)
+  cover-art-ref          -> triple  (content reference kept by Stacks)
   liner-notes-body       -> blob (Lexis)
   catalog-number         -> triple
   workflow: preproduction -> pre-release -> released -> delisted
@@ -207,6 +219,14 @@ Classic is built around -- a single class inheriting from
 as first-class relation. This is exactly the kind of shape that forces
 bespoke per-feature plugins on conventional platforms.
 
+The two `-ref` slots are the one departure from Classic's usual
+practice of owning an entity's content. Binary media is referenced, not
+stored: the slot holds a content hash, and Stacks stores, locates,
+transfers, and preserves the bytes it names. The authored text bodies --
+lyrics, liner notes, contribution notes -- remain Lexis blobs owned by
+Classic. Deleting a `music-recording` therefore removes the description,
+not the audio, which remains in whatever Stacks catalogues hold it.
+
 
 ## The lifecycle, walked through the substrate
 
@@ -214,34 +234,49 @@ Each stage of the painful sprawl maps to existing substrate machinery:
 
 ### Recording and local organization
 
-A local `classic.models.music` deployment gives the artist a JRiver-like
-catalog browser rendered by Seed -- but the catalog is a semantic graph,
-not a flat tag database. The artist browses compositions, recordings,
-contributors, sessions, and the relationships among them as navigable
-networks. Import from the DAW happens through a watch-folder convention
-(drop a FLAC into a directory; Classic mints a skeletal
-`music-recording` with the `audio-blob` populated and prompts for
-metadata via Seed) or through DAW export presets that emit `.lisp`
-metadata sidecars alongside the audio.
+Local organization is the library's work, not the press's. Every take,
+bounce, and stem is catalogued by Stacks as it arrives -- through a
+watch folder or DAW export presets emitting `.lisp` metadata sidecars --
+with its timestamped filename kept as provenance, a working nickname,
+ratings, and faceted views, rendered by Seed. Stacks reports files that
+have gone missing rather than pretending they are present, which is the
+failure of conventional organizers such as JRiver.
+
+Classic enters when the artist **promotes** a take they judge viable for
+publishing. Promotion mints a `music-recording` whose `audio-ref` names
+the take's bytes, and begins its credits and workflow. A raw take is not
+a work, so not every file becomes a Classic entity; once promoted, the
+artist browses compositions, recordings, contributors, sessions, and
+the relationships among them as a semantic graph rather than a flat tag
+database.
 
 ### Sharing with editors and engineers
 
 Federation, following the academic-research co-hosting scenario. The
-mastering engineer runs their own Classic instance (or uses a hosted
-one). The artist's home instance federates the recording as a co-hosted
-entity with a workflow projection. The engineer sees a "pending review"
-queue in their Seed portal, fetches the audio, and marks the recording
-approved-with-notes or requesting-revision through the projection's
-action endpoint. The artist's instance receives the transition. No
-Dropbox link in the loop; the audit trail is intrinsic, every state
-change a signed federation event.
+editor or mastering engineer runs their own Classic instance (or uses a
+hosted one). The artist's home instance federates the recording as a
+co-hosted entity with a workflow projection. The federation event
+carries the recording's metadata and the content hash of its audio --
+never the audio, and nothing about where to fetch it. The engineer's
+Stacks instance, under an acquisition policy for accepted
+collaborators, fetches the bytes by hash (for example over BitTorrent,
+from the artist's Stacks) as an Origin-managed service. The engineer
+sees a "pending review" queue in their Seed portal and marks the
+recording approved-with-notes or requesting-revision through the
+projection's action endpoint. Edited versions become new Stacks items,
+promoted as new recordings with lineage to their sources, and are
+federated onward in the same way. No Dropbox link in the loop; the
+audit trail is intrinsic, every state change a signed federation event.
+Classic's workflow decides what moves; Stacks moves it.
 
 ### Album assembly
 
-A `music-album` is a container; assembling it is editing its ordered
-`tracks` relation. Alternate sequences (deluxe edition, vinyl A/B
-sides, radio version) are separate album entities sharing track
-references. The composer renders the album for whatever target is
+Draft orderings are working arrangements and live in Stacks as
+sequences, freely reordered. When an ordering is settled it is
+published as a `music-album`, a container whose ordered `tracks`
+relation is an authored, credited list. Released variants (deluxe
+edition, vinyl A/B sides, radio version) are separate album entities
+sharing track references. The composer renders the album for whatever target is
 wanted -- streaming listing, downloadable bundle, CD track list, vinyl
 liner-notes booklet -- as projections of the same structure, not as
 lossy exports.
@@ -283,23 +318,25 @@ graph queries, not legal archaeology.
 
 Music stresses parts of the substrate the text-centric use cases do not.
 
-### Blob-heavy persistence
+### Blob-heavy media, held by Stacks
 
 CD-quality FLAC runs ~30 MB per song; a working artist's catalog over a
-decade is tens of gigabytes. This has real consequences:
+decade is tens of gigabytes. This would strain Classic's persistence
+spectrum, which is built for rich metadata rather than bulk bytes, so
+Classic does not take it on:
 
-- Git is inadequate for the audio blobs themselves (metadata `.lisp`
-  files diff fine; audio does not). A content-addressed blob store,
-  Git-LFS-style, or an object-storage backend is needed for the
-  `:blob`-persisted audio.
-- Federation must separate metadata sync (small, frequent, chatty) from
-  blob transfer (large, batched, out-of-band). The clean pattern is a
-  tracker-style split: the federation event carries the audio's content
-  hash; the blob is fetched separately, BitTorrent-style, rather than
-  embedded in the event payload.
-- The `:blob` slot annotation should carry size/transfer hints so
-  backends can choose sensibly (inline small cover art; out-of-band
-  large audio).
+- Classic stores only content references for audio and cover art. The
+  metadata `.lisp` files remain small and diff well under Git; the audio
+  never enters Classic's persistence at all.
+- Storage, location, transfer, and preservation of the bytes are Stacks
+  concerns: content addressing, local and remote locations (local
+  directories, S3-compatible storage, IPFS, BitTorrent), and
+  category-driven backup are already part of its model.
+- Federation keeps metadata sync (small, frequent, chatty) separate from
+  bulk transfer (large, batched, out-of-band) by construction: the
+  federation event carries the content hash, and the receiving Stacks
+  instance fetches the bytes by whatever means its location backends
+  offer.
 
 ### Consumption asymmetry
 
@@ -317,9 +354,9 @@ consumer-facing deployment.
 
 Audio streaming needs chunked transfer, seek support, gapless playback
 across an album, and offline caching. These are client/transport
-concerns for Seed's web medium, not substrate concerns -- the substrate
-serves metadata and content-addressed URLs; the client handles
-playback. Synchronized listening parties add time-aligned playback
+concerns for Seed's web medium, not Classic concerns -- Classic serves
+metadata and content references; Stacks resolves them to locations; the
+client handles playback. Synchronized listening parties add time-aligned playback
 across many clients, which composes with the tight-federation-mode
 extension.
 
@@ -329,11 +366,13 @@ extension.
 Music makes the home-instance / hosted-service distinction especially
 concrete, because the two sides of the market have opposite needs.
 
+Table: The home-instance and hosted-aggregator deployment modes compared for music publishing.
+
 | Concern            | Home / personal (flat-file)      | Hosted aggregator (triplestore) |
 |--------------------|----------------------------------|---------------------------------|
 | Canonical role     | Artist's catalog, works-in-progress | Public catalog, discovery      |
-| Persistence        | Flat-file + content-addressed blobs | Triplestore + object storage  |
-| Blob store         | Local content-addressed dir      | S3-compatible / IPFS            |
+| Persistence        | Flat-file metadata               | Triplestore metadata            |
+| Audio held by      | The artist's Stacks (local disk) | The aggregator's Stacks (S3-compatible / IPFS) |
 | Cost               | Zero marginal                    | Service operation               |
 | Audience           | The artist and collaborators     | Listeners at large              |
 | Trust              | Peer-to-peer, signed events      | Service-mediated                |
@@ -382,30 +421,38 @@ Most of the use case falls out of existing machinery. Specifically new:
 
 1. A `classic.models.music` imprint -- the ontology sketched above.
    Substantial but self-contained.
-2. A content-addressed blob backend extending the `:blob` persistence
-   strategy with hashing, chunked transfer, and metadata/blob
-   separation.
-3. A federated blob-transfer protocol (content-hash in the event; blob
-   fetched out-of-band).
+2. Content-reference slots for binary media, and a promotion path that
+   mints a `music-recording` from a Stacks-catalogued take.
+3. A federation hook through which a received recording's content hash
+   reaches the receiving Stacks instance's acquisition policy.
 4. A Seed-rendered media player (`uim-web` deployment: HTML5 audio,
    playlist as dx-composed UI, controls wired to Classic operations).
 5. An aggregator deployment-mode configuration (catalog syndication,
    discovery indexes, listener accounts) atop the hosted-service mode.
 6. Payment federation (the genuinely open design question above).
-7. A DAW import path (watch-folder conventions; export presets).
-8. A streaming HTTP endpoint with range-request support for seeking.
 
-Not required: any change to the core protocol, the workflow engine, or
-the composer pipeline. Music sits on the existing substrate cleanly; it
-extends the blob and deployment-mode edges, not the core.
+Outside Classic, and the concern of Stacks and Seed: content-addressed
+storage, location, and transfer of the audio; the DAW import path
+(watch folders, export presets) into the musician's Stacks catalogue;
+and a streaming HTTP endpoint with range-request support, served by
+Seed from locations Stacks resolves.
+
+Not required: any change to the core protocol, the workflow engine, the
+composer pipeline, or the `:blob` persistence strategy. Music sits on
+the existing substrate cleanly; it extends the deployment-mode edge and
+adds content references, not the core.
 
 
 ## Honest Limits
 
 - **Blob economics.** Audio at scale is expensive to store and serve. A
-  hosted aggregator faces real storage/bandwidth costs that a text-only
-  Classic deployment does not. This is not a substrate flaw but it does
-  cap how "free" the consumer side can be.
+  hosted aggregator's Stacks faces real storage/bandwidth costs that a
+  text-only Classic deployment does not. This is not a substrate flaw but
+  it does cap how "free" the consumer side can be.
+- **A record does not guarantee a copy.** Because Classic references
+  audio rather than storing it, a release's record can outlive every copy
+  of its masters. Preservation is a Stacks responsibility that the
+  musician must configure.
 - **Payment federation is genuinely new work.** How a listener buys a
   track across peer instances is unspecified. Options: each aggregator
   handles payment internally and remits out-of-band; a federation
@@ -424,10 +471,11 @@ extends the blob and deployment-mode edges, not the core.
   trust problem: an aggregator asserting play counts or sales figures
   for royalty purposes needs the same signed-event integrity discussed
   for federation generally.
-- **DAW integration is ecosystem work.** Watch-folder import is easy;
-  rich metadata extraction (BPM/key detection, contributor pull from
-  session files, export presets per DAW) is a long tail of
-  integration effort outside the substrate proper.
+- **DAW integration is ecosystem work.** Watch-folder import into Stacks
+  is easy; rich metadata extraction (BPM/key detection, contributor pull
+  from session files, export presets per DAW) is a long tail of
+  integration effort outside Classic proper, shared between Stacks
+  extractors and the promotion path.
 
 
 ## The deeper claim
@@ -455,9 +503,16 @@ designed to hold music as anything but tracks with tags.
 
 ## Relationship to Other Work
 
-- **Persistence:** the blob backend is the sharpest driver yet for a
-  content-addressed `:blob` implementation and for separating metadata
-  sync from bulk transfer.
+- **Stacks:** [STACKS-DRAFT-stacks-and-classic](../../../stacks/doc/Survey.StacksAndClassic.md)
+  records the division this survey follows. Classic is the bibliographic
+  layer -- credits, lineage, identifiers, workflow, publication -- and
+  Stacks the holdings layer: the musician's working catalogue, draft
+  sequences, and the storage, transfer, and preservation of the audio.
+  Promotion and publication are the handoffs between them, and Classic's
+  workflow drives Stacks' acquisition of audio between collaborators.
+- **Persistence:** binary media stays out of Classic's persistence; only
+  content references are stored, keeping metadata sync separate from bulk
+  transfer by construction.
 - **Federation:** exercises co-hosting, syndication feeds, and signed
   provenance in a domain where release events and play/sale attestations
   carry real weight; motivates the tight-federation mode for listening
@@ -483,9 +538,12 @@ federation of peer instances and hosted aggregators.
 
 ### CLASSIC-DRAFT-music-publishing-O2 — Blob distribution protocol
 
-Whether to build a bespoke content-addressed transfer, adopt IPFS, or lean on
-object storage --and how federation events reference blobs across those
-choices.
+Largely resolved by the division with Stacks: federation events carry
+only content hashes, and Stacks chooses how bytes move (BitTorrent, IPFS,
+object storage) through its location backends. What remains open for
+Classic is the content-reference scheme itself -- hash algorithm,
+identifier syntax, and how several encodings of one release are listed --
+which is shared with STACKS-DRAFT-stacks-and-classic-O3.
 
 ### CLASSIC-DRAFT-music-publishing-O3 — Metadata authority across co-hosting
 
