@@ -5,7 +5,7 @@ genre:         Log
 scope:         project
 project:       Classic
 language:      en
-status:        Accepted
+status:        Implemented
 authors:
   - Andrew Sengul
 approved-by:   Andrew Sengul

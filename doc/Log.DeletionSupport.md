@@ -6,7 +6,11 @@ scope:         project
 project:       Classic
 component:     model
 language:      en
-status:        Draft
+status:        Implemented
+authors:
+  - Andrew Sengul
+approved-by:   Andrew Sengul
+reviewed:      2026-10-12
 provenance:
   assistant:   opencode
 relates-to:
@@ -74,7 +78,7 @@ Three questions were settled before implementation began.
 
 ### CLASSIC-DRAFT-deletion-support-D1 — Both soft and hard deletion
 
-**Status:** Proposed
+**Status:** Accepted
 
 **Context:** No `delete-entity` or `remove-relation` generics existed, and the
 memory backend accumulated entities indefinitely (see [Problem](#problem)).
@@ -90,7 +94,7 @@ an admin escape hatch.
 
 ### CLASSIC-DRAFT-deletion-support-D2 — Federation tombstones
 
-**Status:** Proposed
+**Status:** Accepted
 
 **Context:** If content was federated and then deleted locally, there was no
 tombstone or retraction protocol. Federated copies remained on peers
@@ -106,7 +110,7 @@ listings.
 
 ### CLASSIC-DRAFT-deletion-support-D3 — Deletion as workflow state
 
-**Status:** Proposed
+**Status:** Accepted
 
 **Context:** There was no "deleted" or "archived" state. The blog workflow had
 only `draft -> published`; once published, a post had no forward state to

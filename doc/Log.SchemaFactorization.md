@@ -6,7 +6,7 @@ scope:         project
 project:       Classic
 component:     schema
 language:      en
-status:        Accepted
+status:        Implemented
 authors:
   - Andrew Sengul
 approved-by:   Andrew Sengul

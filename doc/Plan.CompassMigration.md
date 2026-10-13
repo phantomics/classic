@@ -5,7 +5,11 @@ genre:         Plan
 scope:         project
 project:       Classic
 language:      en
-status:        Draft
+status:        Implemented
+authors:
+  - Andrew Sengul
+approved-by:   Andrew Sengul
+reviewed:      2026-10-12
 provenance:
   assistant:   opencode
 relates-to:
@@ -123,7 +127,7 @@ written.
 
 ### CLASSIC-DRAFT-compass-migration-D1 — Survey open questions take per-Survey provisional identifiers
 
-**Status:** Proposed
+**Status:** Accepted
 
 **Context:** Four Surveys define open questions numbered CLASSIC-O1 onward,
 each Survey starting again from one. No ledger allocated these numbers, and
@@ -146,7 +150,7 @@ canonical numbers when the steward accepts each Survey.
 
 ### CLASSIC-DRAFT-compass-migration-D2 — Genre-prefixed names, with the component subdirectories kept
 
-**Status:** Proposed
+**Status:** Accepted
 
 **Context:** Ten documents have no genre prefix (`Schema.md`, `Model.md`,
 `Forum.md`, and others). Compass names a document `<Genre>.<Topic>.md` (§10)
@@ -169,7 +173,7 @@ across the rename and the derived `authors` and `created` fields are kept.
 
 ### CLASSIC-DRAFT-compass-migration-D3 — Statuses an assistant may set during migration
 
-**Status:** Proposed
+**Status:** Accepted
 
 **Context:** An assistant never sets an authoritative status (`Accepted`,
 `Design-Record`, `Current`) or `approved-by` (§6). Every migrated document
@@ -197,7 +201,7 @@ migration has not yet been reviewed.
 
 ### CLASSIC-DRAFT-compass-migration-D4 — Log decisions become ADR records without new content
 
-**Status:** Proposed
+**Status:** Accepted
 
 **Context:** Every Log records decisions, about 95 in all, in four ad-hoc
 styles. Compass writes a decision as a record with Status, Context, Decision,
@@ -221,7 +225,7 @@ does not fit the three fields stays, after the fields.
 
 ### CLASSIC-DRAFT-compass-migration-D5 — Log code references pin to each Log's work commit
 
-**Status:** Proposed
+**Status:** Accepted
 
 **Context:** A Log's code references must be commit-pinned (§9), in the form
 `path:symbol@revision`. Classic's Logs name files as they stood when the work
@@ -276,7 +280,7 @@ pinned to the commit that holds that state.
 
 ### CLASSIC-DRAFT-compass-migration-D6 — Enforcement by CI, code owners, and a mailmap
 
-**Status:** Proposed
+**Status:** Accepted
 
 **Context:** The Compass repository enforces its standard with a CI workflow,
 a CODEOWNERS entry for the ledger, a pre-commit hook, and a `.mailmap`. A
@@ -308,7 +312,7 @@ set in the repository's settings by the steward.
 
 ### CLASSIC-DRAFT-compass-migration-D7 — Links are fixed; stale content is marked, not refreshed
 
-**Status:** Proposed
+**Status:** Accepted
 
 **Context:** Several reference documents are stale against the code: they use
 blog function names the General Model refactor replaced, or predate the
@@ -334,7 +338,7 @@ stays `Draft` when the steward reviews statuses.
 
 ### CLASSIC-DRAFT-compass-migration-D8 — CI builds the toolchain at a pinned release tag
 
-**Status:** Proposed
+**Status:** Accepted
 
 **Context:** CLASSIC-DRAFT-compass-migration-O4 asked which revision of the
 Compass toolchain CI builds. A pinned commit or tag is reproducible, but each
@@ -359,7 +363,7 @@ line. Until Compass publishes its first tag, the variable names commit
 
 ### CLASSIC-DRAFT-compass-migration-D9 — Logs of several pieces of work take dated Update sections
 
-**Status:** Proposed
+**Status:** Accepted
 
 **Context:** CLASSIC-DRAFT-compass-migration-O6 asked whether
 `Log.FederationConsistency.md`, `Log.SchemaMigration.md`, and
@@ -379,7 +383,7 @@ commit (CLASSIC-DRAFT-compass-migration-D5).
 
 ### CLASSIC-DRAFT-compass-migration-D10 — The schema contract is split into a Spec, a Guide, and a Survey
 
-**Status:** Proposed
+**Status:** Accepted
 
 **Context:** CLASSIC-DRAFT-compass-migration-O1 found that `SchemaContract.md`
 combined a normative contract written with lowercase "must" and "should", a
@@ -404,7 +408,7 @@ now point to the Survey.
 
 ### CLASSIC-DRAFT-compass-migration-D11 — The planned persistence backends move into an Arch
 
-**Status:** Proposed
+**Status:** Accepted
 
 **Context:** CLASSIC-DRAFT-compass-migration-O2 found that `Persistence.md`
 described the built memory backend beside a flat-file and a triplestore

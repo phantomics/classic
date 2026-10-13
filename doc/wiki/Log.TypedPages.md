@@ -6,7 +6,11 @@ scope:         component
 project:       Classic
 component:     wiki
 language:      en
-status:        Draft
+status:        Implemented
+authors:
+  - Andrew Sengul
+approved-by:   Andrew Sengul
+reviewed:      2026-10-12
 provenance:
   assistant:   opencode
 relates-to:
@@ -57,7 +61,7 @@ birth year and nationality).
 
 ### CLASSIC-DRAFT-typed-pages-D1 — Three typed subclasses: computer, CPU, person
 
-**Status:** Proposed
+**Status:** Accepted
 
 **Context:** The typed subclasses should exercise the lens system, including
 sublens references from one class to another.
@@ -73,7 +77,7 @@ resolution; three add the cross-class sublens chain.
 
 ### CLASSIC-DRAFT-typed-pages-D2 — Lens specs at two purposes per class
 
-**Status:** Proposed
+**Status:** Accepted
 
 **Context:** A typed page is rendered both as a full infobox and, when another
 page refers to it through a sublens, in compact form.
@@ -93,7 +97,7 @@ sidebar without special-casing the renderer.
 
 ### CLASSIC-DRAFT-typed-pages-D3 — Link indicators for REPL output
 
-**Status:** Proposed
+**Status:** Accepted
 
 **Context:** The original wiki rendered resolved links as bare text, invisible
 in REPL output.
@@ -118,7 +122,7 @@ treatments.
 
 ### CLASSIC-DRAFT-typed-pages-D4 — Slot value access via funcall on the accessor symbol
 
-**Status:** Proposed
+**Status:** Accepted
 
 **Context:** The lens renderer must read each property's value from the entity.
 
@@ -136,7 +140,7 @@ in the rendering context.
 
 ### CLASSIC-DRAFT-typed-pages-D5 — Anchor-based sublens resolution
 
-**Status:** Proposed
+**Status:** Accepted
 
 **Context:** Typed slots that reference other pages, like `computer-cpu`, must
 be rendered through the target's lens.
@@ -153,7 +157,7 @@ reuses the same resolution mechanism as `[[wiki-links]]` in body text.
 
 ### CLASSIC-DRAFT-typed-pages-D6 — Alist infobox coexists with typed slots
 
-**Status:** Proposed
+**Status:** Accepted
 
 **Context:** Typed pages may still want ad-hoc metadata beyond their typed
 slots.
