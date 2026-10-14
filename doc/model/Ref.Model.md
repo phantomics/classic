@@ -19,7 +19,7 @@ relates-to:
   - CLASSIC-0008
   - CLASSIC-0003
   - CLASSIC-DRAFT-general-model
-  - CLASSIC-DRAFT-slot-validation
+  - CLASSIC-0009
 ---
 
 # Ontological Model Reference

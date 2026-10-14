@@ -1,5 +1,5 @@
 ---
-id:            CLASSIC-DRAFT-slot-validation
+id:            CLASSIC-0009
 title:         Slot Type Validation Development Log
 genre:         Log
 scope:         component
@@ -16,7 +16,7 @@ provenance:
 relates-to:
   - CLASSIC-0007
 decisions:
-  - CLASSIC-DRAFT-slot-validation-D1
+  - CLASSIC-D28
 ---
 
 # Slot Type Validation: Development Log
@@ -55,7 +55,7 @@ as clear errors at the point of mutation.
 
 ## Design Decisions
 
-### CLASSIC-DRAFT-slot-validation-D1 — validate-entity, not (setf slot-value-using-class)
+### CLASSIC-D28 — validate-entity, not (setf slot-value-using-class)
 
 **Status:** Implemented
 

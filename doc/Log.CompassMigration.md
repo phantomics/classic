@@ -419,8 +419,8 @@ the index, which that change left stale, was regenerated with this batch.
   preset, and keeping the nickname). References are pinned to `2bf61ce`, the
   original `blog.lisp` to `c099e7d`, and a migration note records that the
   Log's date, 2026-06-05, precedes its commits of 2026-06-16 and 2026-06-17.
-- **[CLASSIC-DRAFT-slot-validation](model/Log.SlotValidation.md).** Its single
-  Rejected/Adopted pair became CLASSIC-DRAFT-slot-validation-D1, with both
+- **[CLASSIC-0009](model/Log.SlotValidation.md).** Its single
+  Rejected/Adopted pair became CLASSIC-D28, with both
   sets of four reasons kept. Pinned to `9ee593a`. A migration note records that
   the Log counts 13 annotated slots in one place and 12 in others; its lists
   name 12.
@@ -583,7 +583,7 @@ Table: Decision records created in Phase 3, by Log.
 | CLASSIC-DRAFT-dist-factorization | 5 | `a461f4e`, `d59df1b`, `e0c3b72` |
 | CLASSIC-0003 | 3 | `137cf8a` |
 | CLASSIC-DRAFT-general-model | 7 | `2bf61ce`, `c099e7d` |
-| CLASSIC-DRAFT-slot-validation | 1 | `9ee593a` |
+| CLASSIC-0009 | 1 | `9ee593a` |
 | CLASSIC-DRAFT-with-persistence | 6 | `31ee385` |
 | CLASSIC-0002 | 13 | `8d5cc1b`, `fb49791`, `99d050d` |
 | CLASSIC-0004 | 11 | `58452c7`, `0e4c5bb`, `88a920b`, `88af7f2` |

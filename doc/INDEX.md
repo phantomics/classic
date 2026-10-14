@@ -18,6 +18,7 @@ Table: Documents in the CLASSIC namespace.
 | [CLASSIC-0006](persistence/Ref.Persistence.md) | Persistence Reference | Ref | component | Current | persistence |
 | [CLASSIC-0007](model/Ref.Model.md) | Ontological Model Reference | Ref | component | Current | model |
 | [CLASSIC-0008](model/Ref.Workflow.md) | Workflow Reference | Ref | component | Current | model |
+| [CLASSIC-0009](model/Log.SlotValidation.md) | Slot Type Validation Development Log | Log | component | Accepted | model |
 | [CLASSIC-DRAFT-archival](survey/Survey.Archival.md) | Content Archival and Durability Survey | Survey | project | Draft | — |
 | [CLASSIC-DRAFT-capability-exclusion](theme/Log.CapabilityExclusion.md) | Capability Exclusion Development Log | Log | component | Draft | theme |
 | [CLASSIC-DRAFT-compass-integration](survey/Survey.CompassIntegration.md) | Compass Documentation on Classic Survey | Survey | project | Draft | — |
@@ -38,7 +39,6 @@ Table: Documents in the CLASSIC namespace.
 | [CLASSIC-DRAFT-schema-factorization](Log.SchemaFactorization.md) | Schema Factorization Development Log | Log | project | Implemented | schema |
 | [CLASSIC-DRAFT-schema-pluggability](Survey.SchemaPluggability.md) | Schema Pluggability Survey | Survey | project | Draft | schema |
 | [CLASSIC-DRAFT-slot-fills](theme/Log.SlotFills.md) | Template Slot Fills Development Log | Log | component | Draft | theme |
-| [CLASSIC-DRAFT-slot-validation](model/Log.SlotValidation.md) | Slot Type Validation Development Log | Log | component | Draft | model |
 | [CLASSIC-DRAFT-theme](theme/Ref.Theme.md) | Theme Ontology Reference | Ref | component | Draft | theme |
 | [CLASSIC-DRAFT-theme-ontology](theme/Log.ThemeOntology.md) | Theme Ontology Development Log | Log | component | Draft | theme |
 | [CLASSIC-DRAFT-ttrpg-host](survey/Survey.TTRPGHost.md) | Tabletop RPG Hosting (Play-by-Post) Survey | Survey | project | Draft | — |
@@ -80,6 +80,7 @@ Table: Decision, open-question, and memo records in the CLASSIC namespace.
 | [CLASSIC-D25](migration/Log.SchemaMigration.md#classic-d25--federation-translation-for-missing-classes) | Decision | Federation translation for missing classes | Accepted | CLASSIC-0004 |
 | [CLASSIC-D26](migration/Log.SchemaMigration.md#classic-d26--uri-namespace-prefix-in-the-migration-declaration) | Decision | URI namespace prefix in the migration declaration | Accepted | CLASSIC-0004 |
 | [CLASSIC-D27](migration/Log.SchemaMigration.md#classic-d27--migration-of-classic-migration-operation-itself) | Decision | Migration of classic-migration-operation itself | Accepted | CLASSIC-0004 |
+| [CLASSIC-D28](model/Log.SlotValidation.md#classic-d28--validate-entity-not-setf-slot-value-using-class) | Decision | validate-entity, not (setf slot-value-using-class) | Implemented | CLASSIC-0009 |
 | [CLASSIC-DRAFT-capability-exclusion-D1](theme/Log.CapabilityExclusion.md#classic-draft-capability-exclusion-d1--slot-name-excluded-capabilities) | Decision | Slot name: excluded-capabilities | Proposed | CLASSIC-DRAFT-capability-exclusion |
 | [CLASSIC-DRAFT-capability-exclusion-D2](theme/Log.CapabilityExclusion.md#classic-draft-capability-exclusion-d2--scope-ancestor-contributions-only) | Decision | Scope: ancestor contributions only | Proposed | CLASSIC-DRAFT-capability-exclusion |
 | [CLASSIC-DRAFT-capability-exclusion-D3](theme/Log.CapabilityExclusion.md#classic-draft-capability-exclusion-d3--exclusion-of-uninherited-capabilities-is-a-silent-no-op) | Decision | Exclusion of uninherited capabilities is a silent no-op | Proposed | CLASSIC-DRAFT-capability-exclusion |
@@ -133,7 +134,6 @@ Table: Decision, open-question, and memo records in the CLASSIC namespace.
 | [CLASSIC-DRAFT-slot-fills-D3](theme/Log.SlotFills.md#classic-draft-slot-fills-d3--inheritance-follows-the-bindings-precedent) | Decision | Inheritance follows the bindings precedent | Proposed | CLASSIC-DRAFT-slot-fills |
 | [CLASSIC-DRAFT-slot-fills-D4](theme/Log.SlotFills.md#classic-draft-slot-fills-d4--naming-slot-fills) | Decision | Naming: slot-fills | Proposed | CLASSIC-DRAFT-slot-fills |
 | [CLASSIC-DRAFT-slot-fills-D5](theme/Log.SlotFills.md#classic-draft-slot-fills-d5--classic-theme-override-symmetry-and-migration-registration) | Decision | classic-theme-override symmetry and migration registration | Proposed | CLASSIC-DRAFT-slot-fills |
-| [CLASSIC-DRAFT-slot-validation-D1](model/Log.SlotValidation.md#classic-draft-slot-validation-d1--validate-entity-not-setf-slot-value-using-class) | Decision | validate-entity, not (setf slot-value-using-class) | Proposed | CLASSIC-DRAFT-slot-validation |
 | [CLASSIC-DRAFT-theme-ontology-D1](theme/Log.ThemeOntology.md#classic-draft-theme-ontology-d1--where-should-theming-live-theme-ontology-in-core-rendering-in-the-composer) | Decision | Where should theming live? Theme ontology in core, rendering in the Composer | Proposed | CLASSIC-DRAFT-theme-ontology |
 | [CLASSIC-DRAFT-theme-ontology-D2](theme/Log.ThemeOntology.md#classic-draft-theme-ontology-d2--asset-storage-external-references) | Decision | Asset storage: external references | Proposed | CLASSIC-DRAFT-theme-ontology |
 | [CLASSIC-DRAFT-theme-ontology-D3](theme/Log.ThemeOntology.md#classic-draft-theme-ontology-d3--federation-behavior-federatable-but-non-obligatory) | Decision | Federation behavior: federatable but non-obligatory | Proposed | CLASSIC-DRAFT-theme-ontology |
