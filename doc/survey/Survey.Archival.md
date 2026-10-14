@@ -5,7 +5,7 @@ genre:         Survey
 scope:         project
 project:       Classic
 language:      en
-status:        Current
+status:        Accepted
 authors:
   - Andrew Sengul
 approved-by:   Andrew Sengul
