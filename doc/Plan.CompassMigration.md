@@ -416,7 +416,7 @@ backend that are designed but not built. A Ref describes running software; an
 Arch records a design that does not yet exist (§4).
 
 **Decision:** The two planned backends move to
-[CLASSIC-DRAFT-persistence-backends](persistence/Arch.PersistenceBackends.md),
+[CLASSIC-0034](persistence/Arch.PersistenceBackends.md),
 whose decision records state the design choices the original text makes, with
 "None recorded" where it names no alternative (as
 CLASSIC-D95 does for Logs), and whose open questions

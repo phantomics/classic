@@ -1,24 +1,28 @@
 ---
-id:            CLASSIC-DRAFT-persistence-backends
+id:            CLASSIC-0034
 title:         The Persistence Backends Architecture
 genre:         Architecture
 scope:         component
 project:       Classic
 component:     persistence
 language:      en
-status:        Draft
+status:        Accepted
+authors:
+  - Andrew Sengul
+approved-by:   Andrew Sengul
+reviewed:      2026-10-13
 provenance:
   assistant:   opencode
 relates-to:
   - CLASSIC-0006
 decisions:
-  - CLASSIC-DRAFT-persistence-backends-D1
-  - CLASSIC-DRAFT-persistence-backends-D2
-  - CLASSIC-DRAFT-persistence-backends-D3
-  - CLASSIC-DRAFT-persistence-backends-D4
+  - CLASSIC-D103
+  - CLASSIC-D104
+  - CLASSIC-D105
+  - CLASSIC-D106
 open-questions:
-  - CLASSIC-DRAFT-persistence-backends-O1
-  - CLASSIC-DRAFT-persistence-backends-O2
+  - CLASSIC-O49
+  - CLASSIC-O50
 ---
 
 # The Persistence Backends Architecture
@@ -70,9 +74,9 @@ and running a one-time export and import.
 The decisions below are recorded in the design text; it names no
 alternatives to any of them.
 
-### CLASSIC-DRAFT-persistence-backends-D1 — Flat-file entities split metadata from body
+### CLASSIC-D103 — Flat-file entities split metadata from body
 
-**Status:** Proposed
+**Status:** Accepted
 
 **Context:** Metadata is processed frequently, by index rebuilds and
 relationship resolution; the body is needed only for rendering.
@@ -82,9 +86,9 @@ plist, with the body inline or referenced as a separate file.
 
 **Alternatives:** None recorded.
 
-### CLASSIC-DRAFT-persistence-backends-D2 — Flat-file cross-entity queries use materialized index files
+### CLASSIC-D104 — Flat-file cross-entity queries use materialized index files
 
-**Status:** Proposed
+**Status:** Accepted
 
 **Context:** Relationships that need cross-entity queries, such as all posts
 by tag or by author, cannot be answered from one entity's file.
@@ -94,9 +98,9 @@ are derived artifacts rebuilt when the entities they depend on change.
 
 **Alternatives:** None recorded.
 
-### CLASSIC-DRAFT-persistence-backends-D3 — Container-level bundling for high-volume small items
+### CLASSIC-D105 — Container-level bundling for high-volume small items
 
-**Status:** Proposed
+**Status:** Accepted
 
 **Context:** Articles suit one file each; comments and forum replies are
 numerous and small.
@@ -107,9 +111,9 @@ container, and the strategy reads it to determine the layout.
 
 **Alternatives:** None recorded.
 
-### CLASSIC-DRAFT-persistence-backends-D4 — The triplestore splits relations from content
+### CLASSIC-D106 — The triplestore splits relations from content
 
-**Status:** Proposed
+**Status:** Accepted
 
 **Context:** Relationship queries and large content bodies have different
 storage needs.
@@ -182,13 +186,13 @@ a triple is equivalent to "no value," and the CLOS slot's
 
 ## Open Questions
 
-### CLASSIC-DRAFT-persistence-backends-O1 — Serialization, durability, and thread safety
+### CLASSIC-O49 — Serialization, durability, and thread safety
 
 The persistence reference assigns serialization, durability, and thread
 safety to these backends, which the memory backend does not provide, but the
 design above does not say how either backend provides them.
 
-### CLASSIC-DRAFT-persistence-backends-O2 — Rebuilding derived artifacts
+### CLASSIC-O50 — Rebuilding derived artifacts
 
 The flat-file backend's index files are derived artifacts, rebuilt when the
 entities they depend on change. The protocol's `invalidate-derived` and

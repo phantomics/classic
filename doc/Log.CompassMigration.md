@@ -595,7 +595,7 @@ Table: Decision records created in Phase 3, by Log.
 | CLASSIC-0023 | 6 | `6e6a6a2` |
 
 97 decision records in all, beside the four in
-[CLASSIC-DRAFT-persistence-backends](persistence/Arch.PersistenceBackends.md)
+[CLASSIC-0034](persistence/Arch.PersistenceBackends.md)
 from Phase 2. The steward has accepted the nine of the first batch; the rest
 are `Proposed`. What remains is the steward's: accepting the other records,
 setting `Implemented` on the Logs, promoting the accurate Refs and Guides to

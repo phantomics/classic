@@ -15,7 +15,7 @@ api-version:   "0.1.0"
 provenance:
   assistant:   opencode
 relates-to:
-  - CLASSIC-DRAFT-persistence-backends
+  - CLASSIC-0034
   - CLASSIC-DRAFT-with-persistence
   - CLASSIC-0003
   - CLASSIC-0005
@@ -268,7 +268,7 @@ backends.
 
 Two further backends, flat-file and triplestore, are designed but not built.
 Their design is recorded in
-[CLASSIC-DRAFT-persistence-backends](Arch.PersistenceBackends.md).
+[CLASSIC-0034](Arch.PersistenceBackends.md).
 
 
 ## How the Pieces Connect
@@ -301,7 +301,7 @@ top and connects, through slot annotations (`:persistence`, `:predicate`), to
 the protocol of generic functions. The protocol branches to three backends:
 memory (a hash table), flat-file (s-expressions), and triplestore (SPARQL and
 a blob store). Only the memory backend is built; the other two are designed in
-[CLASSIC-DRAFT-persistence-backends](Arch.PersistenceBackends.md).
+[CLASSIC-0034](Arch.PersistenceBackends.md).
 
 The ontology defines what exists and how things relate. The
 persistence strategy defines how that existence is recorded and

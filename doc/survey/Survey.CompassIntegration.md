@@ -18,7 +18,7 @@ relates-to:
   - COMPASS-DRAFT-toolchain
   - CLASSIC-0029
   - CLASSIC-0006
-  - CLASSIC-DRAFT-persistence-backends
+  - CLASSIC-0034
 cites:
   - title:   Schema.org TechArticle and APIReference
     locator: schema.org/TechArticle; schema.org/APIReference
@@ -140,7 +140,7 @@ would bolt on, are native to Classic's model.
   shown as its identifier, title, and status.
 - **The flat-file model resembles a Compass file.** Classic's flat-file design
   stores a metadata s-expression beside a Markdown body
-  ([CLASSIC-DRAFT-persistence-backends](../persistence/Arch.PersistenceBackends.md)); a Compass document is YAML front-matter
+  ([CLASSIC-0034](../persistence/Arch.PersistenceBackends.md)); a Compass document is YAML front-matter
   beside a Markdown body. A Tier 1 importer is a translation of one into the
   other.
 - **Federation has the right roles.** Each project repository is a Publisher,
