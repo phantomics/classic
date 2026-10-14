@@ -32,6 +32,7 @@ Table: Documents in the CLASSIC namespace.
 | [CLASSIC-0020](forum/Log.ForumDemo.md) | Forum Demo Development Log | Log | component | Implemented | forum |
 | [CLASSIC-0021](wiki/Guide.Wiki.md) | Wiki Preset Guide | Guide (tutorial) | component | Current | wiki |
 | [CLASSIC-0022](wiki/Log.WikiDemo.md) | Wiki Demo Development Log | Log | component | Implemented | wiki |
+| [CLASSIC-0023](wiki/Log.TypedPages.md) | Typed Page Classes Development Log | Log | component | Implemented | wiki |
 | [CLASSIC-DRAFT-archival](survey/Survey.Archival.md) | Content Archival and Durability Survey | Survey | project | Draft | — |
 | [CLASSIC-DRAFT-compass-integration](survey/Survey.CompassIntegration.md) | Compass Documentation on Classic Survey | Survey | project | Draft | — |
 | [CLASSIC-DRAFT-compass-migration](Plan.CompassMigration.md) | Compass Migration Plan | Plan | project | Implemented | — |
@@ -44,7 +45,6 @@ Table: Documents in the CLASSIC namespace.
 | [CLASSIC-DRAFT-realtime-chat](survey/Survey.RealtimeChat.md) | Real-Time Chat Integration Survey | Survey | project | Draft | — |
 | [CLASSIC-DRAFT-schema-pluggability](Survey.SchemaPluggability.md) | Schema Pluggability Survey | Survey | project | Draft | schema |
 | [CLASSIC-DRAFT-ttrpg-host](survey/Survey.TTRPGHost.md) | Tabletop RPG Hosting (Play-by-Post) Survey | Survey | project | Draft | — |
-| [CLASSIC-DRAFT-typed-pages](wiki/Log.TypedPages.md) | Typed Page Classes Development Log | Log | component | Implemented | wiki |
 | [CLASSIC-DRAFT-usenet](survey/Survey.Usenet.md) | Usenet-Analog Discussion Hosting Survey | Survey | project | Draft | — |
 | [CLASSIC-DRAFT-with-persistence](persistence/Log.WithPersistence.md) | with-persistence Development Log | Log | component | Accepted | persistence |
 | [CLASSIC-DRAFT-x400](Eval.X400.md) | X.400 Prior-Art Evaluation | Eval (prior-art) | project | Draft | — |
@@ -138,6 +138,12 @@ Table: Decision, open-question, and memo records in the CLASSIC namespace.
 | [CLASSIC-D83](wiki/Log.WikiDemo.md#classic-d83--alist-infobox-not-typed-page-subclasses) | Decision | Alist infobox, not typed page subclasses | Implemented | CLASSIC-0022 |
 | [CLASSIC-D84](wiki/Log.WikiDemo.md#classic-d84--influenced-by-stored-influences-computed-on-demand) | Decision | influenced-by stored, influences computed on demand | Implemented | CLASSIC-0022 |
 | [CLASSIC-D85](wiki/Log.WikiDemo.md#classic-d85--alphabetical-list-pages-and-separate-recent-changes) | Decision | Alphabetical list-pages and separate recent-changes | Implemented | CLASSIC-0022 |
+| [CLASSIC-D86](wiki/Log.TypedPages.md#classic-d86--three-typed-subclasses-computer-cpu-person) | Decision | Three typed subclasses: computer, CPU, person | Implemented | CLASSIC-0023 |
+| [CLASSIC-D87](wiki/Log.TypedPages.md#classic-d87--lens-specs-at-two-purposes-per-class) | Decision | Lens specs at two purposes per class | Implemented | CLASSIC-0023 |
+| [CLASSIC-D88](wiki/Log.TypedPages.md#classic-d88--link-indicators-for-repl-output) | Decision | Link indicators for REPL output | Implemented | CLASSIC-0023 |
+| [CLASSIC-D89](wiki/Log.TypedPages.md#classic-d89--slot-value-access-via-funcall-on-the-accessor-symbol) | Decision | Slot value access via funcall on the accessor symbol | Implemented | CLASSIC-0023 |
+| [CLASSIC-D90](wiki/Log.TypedPages.md#classic-d90--anchor-based-sublens-resolution) | Decision | Anchor-based sublens resolution | Implemented | CLASSIC-0023 |
+| [CLASSIC-D91](wiki/Log.TypedPages.md#classic-d91--alist-infobox-coexists-with-typed-slots) | Decision | Alist infobox coexists with typed slots | Implemented | CLASSIC-0023 |
 | [CLASSIC-DRAFT-compass-migration-D1](Plan.CompassMigration.md#classic-draft-compass-migration-d1--survey-open-questions-take-per-survey-provisional-identifiers) | Decision | Survey open questions take per-Survey provisional identifiers | Accepted | CLASSIC-DRAFT-compass-migration |
 | [CLASSIC-DRAFT-compass-migration-D2](Plan.CompassMigration.md#classic-draft-compass-migration-d2--genre-prefixed-names-with-the-component-subdirectories-kept) | Decision | Genre-prefixed names, with the component subdirectories kept | Accepted | CLASSIC-DRAFT-compass-migration |
 | [CLASSIC-DRAFT-compass-migration-D3](Plan.CompassMigration.md#classic-draft-compass-migration-d3--statuses-an-assistant-may-set-during-migration) | Decision | Statuses an assistant may set during migration | Accepted | CLASSIC-DRAFT-compass-migration |
@@ -158,12 +164,6 @@ Table: Decision, open-question, and memo records in the CLASSIC namespace.
 | [CLASSIC-DRAFT-persistence-backends-D2](persistence/Arch.PersistenceBackends.md#classic-draft-persistence-backends-d2--flat-file-cross-entity-queries-use-materialized-index-files) | Decision | Flat-file cross-entity queries use materialized index files | Proposed | CLASSIC-DRAFT-persistence-backends |
 | [CLASSIC-DRAFT-persistence-backends-D3](persistence/Arch.PersistenceBackends.md#classic-draft-persistence-backends-d3--container-level-bundling-for-high-volume-small-items) | Decision | Container-level bundling for high-volume small items | Proposed | CLASSIC-DRAFT-persistence-backends |
 | [CLASSIC-DRAFT-persistence-backends-D4](persistence/Arch.PersistenceBackends.md#classic-draft-persistence-backends-d4--the-triplestore-splits-relations-from-content) | Decision | The triplestore splits relations from content | Proposed | CLASSIC-DRAFT-persistence-backends |
-| [CLASSIC-DRAFT-typed-pages-D1](wiki/Log.TypedPages.md#classic-draft-typed-pages-d1--three-typed-subclasses-computer-cpu-person) | Decision | Three typed subclasses: computer, CPU, person | Accepted | CLASSIC-DRAFT-typed-pages |
-| [CLASSIC-DRAFT-typed-pages-D2](wiki/Log.TypedPages.md#classic-draft-typed-pages-d2--lens-specs-at-two-purposes-per-class) | Decision | Lens specs at two purposes per class | Accepted | CLASSIC-DRAFT-typed-pages |
-| [CLASSIC-DRAFT-typed-pages-D3](wiki/Log.TypedPages.md#classic-draft-typed-pages-d3--link-indicators-for-repl-output) | Decision | Link indicators for REPL output | Accepted | CLASSIC-DRAFT-typed-pages |
-| [CLASSIC-DRAFT-typed-pages-D4](wiki/Log.TypedPages.md#classic-draft-typed-pages-d4--slot-value-access-via-funcall-on-the-accessor-symbol) | Decision | Slot value access via funcall on the accessor symbol | Accepted | CLASSIC-DRAFT-typed-pages |
-| [CLASSIC-DRAFT-typed-pages-D5](wiki/Log.TypedPages.md#classic-draft-typed-pages-d5--anchor-based-sublens-resolution) | Decision | Anchor-based sublens resolution | Accepted | CLASSIC-DRAFT-typed-pages |
-| [CLASSIC-DRAFT-typed-pages-D6](wiki/Log.TypedPages.md#classic-draft-typed-pages-d6--alist-infobox-coexists-with-typed-slots) | Decision | Alist infobox coexists with typed slots | Accepted | CLASSIC-DRAFT-typed-pages |
 | [CLASSIC-DRAFT-with-persistence-D1](persistence/Log.WithPersistence.md#classic-draft-with-persistence-d1--a-with-persistence-macro) | Decision | A with-persistence macro | Implemented | CLASSIC-DRAFT-with-persistence |
 | [CLASSIC-DRAFT-with-persistence-D2](persistence/Log.WithPersistence.md#classic-draft-with-persistence-d2--persist-on-normal-exit-only) | Decision | Persist on normal exit only | Implemented | CLASSIC-DRAFT-with-persistence |
 | [CLASSIC-DRAFT-with-persistence-D3](persistence/Log.WithPersistence.md#classic-draft-with-persistence-d3--one-macro-for-one-entity-or-several) | Decision | One macro for one entity or several | Proposed | CLASSIC-DRAFT-with-persistence |

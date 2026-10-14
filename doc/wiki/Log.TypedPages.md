@@ -1,5 +1,5 @@
 ---
-id:            CLASSIC-DRAFT-typed-pages
+id:            CLASSIC-0023
 title:         Typed Page Classes Development Log
 genre:         Log
 scope:         component
@@ -17,12 +17,12 @@ relates-to:
   - CLASSIC-0022
   - CLASSIC-0021
 decisions:
-  - CLASSIC-DRAFT-typed-pages-D1
-  - CLASSIC-DRAFT-typed-pages-D2
-  - CLASSIC-DRAFT-typed-pages-D3
-  - CLASSIC-DRAFT-typed-pages-D4
-  - CLASSIC-DRAFT-typed-pages-D5
-  - CLASSIC-DRAFT-typed-pages-D6
+  - CLASSIC-D86
+  - CLASSIC-D87
+  - CLASSIC-D88
+  - CLASSIC-D89
+  - CLASSIC-D90
+  - CLASSIC-D91
 ---
 
 # Typed Page Classes: Development Log
@@ -59,9 +59,9 @@ birth year and nationality).
 
 ## Design Decisions
 
-### CLASSIC-DRAFT-typed-pages-D1 — Three typed subclasses: computer, CPU, person
+### CLASSIC-D86 — Three typed subclasses: computer, CPU, person
 
-**Status:** Accepted
+**Status:** Implemented
 
 **Context:** The typed subclasses should exercise the lens system, including
 sublens references from one class to another.
@@ -75,9 +75,9 @@ resolution; three add the cross-class sublens chain.
 - Two classes. Not adopted: they would have demonstrated typed slots and lens
   resolution, but not the cross-class sublens chain.
 
-### CLASSIC-DRAFT-typed-pages-D2 — Lens specs at two purposes per class
+### CLASSIC-D87 — Lens specs at two purposes per class
 
-**Status:** Accepted
+**Status:** Implemented
 
 **Context:** A typed page is rendered both as a full infobox and, when another
 page refers to it through a sublens, in compact form.
@@ -95,9 +95,9 @@ sidebar without special-casing the renderer.
 
 **Alternatives:** None recorded.
 
-### CLASSIC-DRAFT-typed-pages-D3 — Link indicators for REPL output
+### CLASSIC-D88 — Link indicators for REPL output
 
-**Status:** Accepted
+**Status:** Implemented
 
 **Context:** The original wiki rendered resolved links as bare text, invisible
 in REPL output.
@@ -120,9 +120,9 @@ treatments.
 - Bare text for resolved links, as the original wiki rendered them. Replaced:
   resolved links could not be told from normal words.
 
-### CLASSIC-DRAFT-typed-pages-D4 — Slot value access via funcall on the accessor symbol
+### CLASSIC-D89 — Slot value access via funcall on the accessor symbol
 
-**Status:** Accepted
+**Status:** Implemented
 
 **Context:** The lens renderer must read each property's value from the entity.
 
@@ -138,9 +138,9 @@ in the rendering context.
   CLOS-idiomatic, since accessors can be computed or have `:before`/`:after`
   methods.
 
-### CLASSIC-DRAFT-typed-pages-D5 — Anchor-based sublens resolution
+### CLASSIC-D90 — Anchor-based sublens resolution
 
-**Status:** Accepted
+**Status:** Implemented
 
 **Context:** Typed slots that reference other pages, like `computer-cpu`, must
 be rendered through the target's lens.
@@ -155,9 +155,9 @@ reuses the same resolution mechanism as `[[wiki-links]]` in body text.
 - URIs in typed slots. Not adopted: anchor strings match the wiki convention
   where everything is referenced by name.
 
-### CLASSIC-DRAFT-typed-pages-D6 — Alist infobox coexists with typed slots
+### CLASSIC-D91 — Alist infobox coexists with typed slots
 
-**Status:** Accepted
+**Status:** Implemented
 
 **Context:** Typed pages may still want ad-hoc metadata beyond their typed
 slots.

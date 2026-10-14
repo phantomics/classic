@@ -548,9 +548,9 @@ in these updates.
   `ea32b9c`. Its Files subsection became the Files section, with `README.md`
   and the Log itself added from the commit, and Future Work: Typed Page
   Subclasses became Outstanding Work, with a note that
-  [CLASSIC-DRAFT-typed-pages](wiki/Log.TypedPages.md) built it.
-- **[CLASSIC-DRAFT-typed-pages](wiki/Log.TypedPages.md).** Six decisions became
-  CLASSIC-DRAFT-typed-pages-D1 to CLASSIC-DRAFT-typed-pages-D6, pinned to
+  [CLASSIC-0023](wiki/Log.TypedPages.md) built it.
+- **[CLASSIC-0023](wiki/Log.TypedPages.md).** Six decisions became
+  CLASSIC-D86 to CLASSIC-D91, pinned to
   `6e6a6a2`, with a note on the same-day follow-up `2e6e88c` and on the
   `doc/wiki/Wiki.md` change the Files table omits.
 - **Guides.** `Guide.Forum.md` and `Guide.Wiki.md` gained captions for their
@@ -592,7 +592,7 @@ Table: Decision records created in Phase 3, by Log.
 | CLASSIC-0017 | 5 | `72b638c` |
 | CLASSIC-0020 | 7 | `c1df12c` |
 | CLASSIC-0022 | 10 | `ea32b9c` |
-| CLASSIC-DRAFT-typed-pages | 6 | `6e6a6a2` |
+| CLASSIC-0023 | 6 | `6e6a6a2` |
 
 97 decision records in all, beside the four in
 [CLASSIC-DRAFT-persistence-backends](persistence/Arch.PersistenceBackends.md)

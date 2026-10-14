@@ -15,7 +15,7 @@ provenance:
   assistant:   opencode
 relates-to:
   - CLASSIC-0021
-  - CLASSIC-DRAFT-typed-pages
+  - CLASSIC-0023
   - CLASSIC-0018
 decisions:
   - CLASSIC-D76
@@ -415,7 +415,7 @@ Table: Files added or changed in commit `ea32b9c`.
 
 *Migration note (2026-10-11):* this section was titled Future Work: Typed Page
 Subclasses. The typed subclasses were built the next day, recorded in
-[CLASSIC-DRAFT-typed-pages](Log.TypedPages.md).
+[CLASSIC-0023](Log.TypedPages.md).
 
 The infobox demonstrates structured metadata via a generic alist. The
 natural expansion is typed page subclasses — for example,

@@ -17,7 +17,7 @@ provenance:
   assistant:   opencode
 relates-to:
   - CLASSIC-0022
-  - CLASSIC-DRAFT-typed-pages
+  - CLASSIC-0023
 ---
 
 # Wiki Preset Guide
