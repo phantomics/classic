@@ -1,11 +1,15 @@
 ---
-id:            CLASSIC-DRAFT-realtime-chat
+id:            CLASSIC-0037
 title:         Real-Time Chat Integration Survey
 genre:         Survey
 scope:         project
 project:       Classic
 language:      en
-status:        Draft
+status:        Accepted
+authors:
+  - Andrew Sengul
+approved-by:   Andrew Sengul
+reviewed:      2026-10-13
 provenance:
   assistant:   opencode
 relates-to:
@@ -44,14 +48,14 @@ cites:
     locator:  microsoft.com/microsoft-teams — chat integrated with work-item and document tools
     external: true
 open-questions:
-  - CLASSIC-DRAFT-realtime-chat-O1
-  - CLASSIC-DRAFT-realtime-chat-O2
-  - CLASSIC-DRAFT-realtime-chat-O3
-  - CLASSIC-DRAFT-realtime-chat-O4
-  - CLASSIC-DRAFT-realtime-chat-O5
-  - CLASSIC-DRAFT-realtime-chat-O6
-  - CLASSIC-DRAFT-realtime-chat-O7
-  - CLASSIC-DRAFT-realtime-chat-O8
+  - CLASSIC-O52
+  - CLASSIC-O53
+  - CLASSIC-O54
+  - CLASSIC-O55
+  - CLASSIC-O56
+  - CLASSIC-O57
+  - CLASSIC-O58
+  - CLASSIC-O59
 ---
 
 # Real-Time Chat Integration: Survey
@@ -90,7 +94,7 @@ network and Discord plays for a community — but chat is rightly a separate sys
 with separate concerns. Its tempo is seconds, not hours; its natural unit is the
 message stream, not the authored entity; its delivery model is presence and
 push, not syndication. Folding chat into Classic's content substrate would
-compromise both. The right shape is the connected-system pattern already used
+compromise both. The right shape is the connected-system pattern already proposed
 for commerce and Git hosting: a purpose-built backend handles the specialized
 work, and Classic governs identity, content relationships, and the bridges
 between the two.
@@ -152,7 +156,7 @@ room is unavailable. An authoritative-host model admits a clean remedy — feder
 servers elect a temporary leader that accepts and orders messages in a log, then
 reconcile that log with the host when it returns — which pays its cost only during
 outages rather than on every message, as Matrix's design does. This is future work
-(CLASSIC-DRAFT-realtime-chat-O4), not a prerequisite.
+(CLASSIC-O55), not a prerequisite.
 
 ## The core integration
 
@@ -238,7 +242,7 @@ individually addressable and cross-referenceable. A high-volume room crystallize
 time-bounded segments — an hour or a day — with messages held inline in a single
 record, trading per-message addressability for far fewer entities. The threshold
 and the segment length are open questions
-(CLASSIC-DRAFT-realtime-chat-O3).
+(CLASSIC-O54).
 
 ### Semantic extraction
 
@@ -260,7 +264,7 @@ that turn message text into typed relations on the crystallized entity:
 Recognizers are simple and independent, and the set is extensible per project: a
 game studio adds recognizers for asset names, an operations team for service names
 and incident identifiers. How projects register recognizers is open
-(CLASSIC-DRAFT-realtime-chat-O2).
+(CLASSIC-O53).
 
 ### Ontology sketch
 
@@ -355,8 +359,8 @@ the conversation where it was requested.
 The same mechanism serves a forum moderator soliciting topics, a podcast host
 gathering listener questions, or a newsletter editor collecting links. The design
 of `content-solicitation` and its constraint vocabulary is open
-(CLASSIC-DRAFT-realtime-chat-O8), as is the stanza format both patterns share
-(CLASSIC-DRAFT-realtime-chat-O7).
+(CLASSIC-O59), as is the stanza format both patterns share
+(CLASSIC-O58).
 
 ### The solicited-contribution pattern
 
@@ -419,7 +423,7 @@ Table: Deployment tiers for chat connected to Classic.
 
 Leader-election failover, when built, would let rooms survive their host's
 outage without changing this model during normal operation
-(CLASSIC-DRAFT-realtime-chat-O4).
+(CLASSIC-O55).
 
 ## Client diversity
 
@@ -478,7 +482,7 @@ the content system to become a chat server.
   needs a crystallization setting (ephemeral, per-message, or segment), shown
   plainly when a user joins, and changing it should not silently apply to messages
   sent under the earlier setting. Whether individual messages can opt out is open
-  (CLASSIC-DRAFT-realtime-chat-O5).
+  (CLASSIC-O56).
 - **Trust in federated actors.** An XMPP server vouches for its own users'
   addresses. A workflow action arriving from a remote server must map to a Classic
   account with the required role before the engine accepts it; operative commands
@@ -531,48 +535,48 @@ the incumbent model for chat integrated with work items and documents.
 
 ## Open Questions
 
-### CLASSIC-DRAFT-realtime-chat-O1 — Crystallization edge timing
+### CLASSIC-O52 — Crystallization edge timing
 
 Whether the edge sweeps on a schedule, on room activity, or on explicit action;
 how it composes with ejabberd's archive retention so that no message is trimmed
 before it is persisted; and how failures mid-sweep recover.
 
-### CLASSIC-DRAFT-realtime-chat-O2 — Recognizer plugin interface
+### CLASSIC-O53 — Recognizer plugin interface
 
 How a project registers recognizers, whether recognizers are Classic content
 (declarative patterns, editable through structured UI) or code, and how
 extracted relations are corrected when a recognizer is wrong.
 
-### CLASSIC-DRAFT-realtime-chat-O3 — Granularity threshold
+### CLASSIC-O54 — Granularity threshold
 
 What room activity should move a room from per-message to segment
 crystallization, the right segment length, and whether a room can change mode
 without re-crystallizing its history.
 
-### CLASSIC-DRAFT-realtime-chat-O4 — Leader-election failover
+### CLASSIC-O55 — Leader-election failover
 
 The election and log-reconciliation protocol that would let federated servers
 keep a room available during its host's outage — its relation to established
 consensus algorithms and to ejabberd's clustering — deferred to future work.
 
-### CLASSIC-DRAFT-realtime-chat-O5 — Privacy and consent
+### CLASSIC-O56 — Privacy and consent
 
 How a room's crystallization setting is communicated and changed, whether
 individual messages or participants can opt out, and how erasure requests apply
 to crystallized records.
 
-### CLASSIC-DRAFT-realtime-chat-O6 — Moderating crystallized chat
+### CLASSIC-O57 — Moderating crystallized chat
 
 Whether moderation feeds act on crystallized chat records as they act on forum
 posts, and whether moderation decisions should also reach the live window.
 
-### CLASSIC-DRAFT-realtime-chat-O7 — Structured notification and command format
+### CLASSIC-O58 — Structured notification and command format
 
 The XMPP extension payload carrying entity URIs, operative descriptors, readable
 fallbacks, and command results — a custom namespace, or a profile of Data Forms
 (XEP-0004), which may be too constrained for full operative descriptors.
 
-### CLASSIC-DRAFT-realtime-chat-O8 — The content-solicitation entity
+### CLASSIC-O59 — The content-solicitation entity
 
 The design of `content-solicitation` and its constraint vocabulary, how
 constraints shape the input affordance in each medium, and whether it should be
