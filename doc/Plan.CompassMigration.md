@@ -16,7 +16,7 @@ relates-to:
   - COMPASS-0001
   - COMPASS-DRAFT-toolchain
   - COMPASS-DRAFT-ledger-log
-  - CLASSIC-DRAFT-compass-integration
+  - CLASSIC-0031
 decisions:
   - CLASSIC-DRAFT-compass-migration-D1
   - CLASSIC-DRAFT-compass-migration-D2
@@ -665,7 +665,7 @@ Table: Prior work in the federation and what this plan draws from each.
 | The Compass repository | Its CI workflow, CODEOWNERS entry, and `.mailmap`; the order of building the toolchain, checking against the base branch, and checking the index |
 | Origin's migration | A `.mailmap` and a ledger seeded by `compass init --ledger`, added together in Origin commit `7ef2f48`; this plan puts the mailmap first |
 | [COMPASS-DRAFT-ledger-log](../../compass/doc/Log.Ledger.md) | Why seeding refuses a number defined twice, and the remedy of provisional per-host identifiers |
-| [CLASSIC-DRAFT-compass-integration](survey/Survey.CompassIntegration.md) | The one Classic document written to the current standard: front-matter, provisional record identifiers, pinned references, captions, and a diagram description |
+| [CLASSIC-0031](survey/Survey.CompassIntegration.md) | The one Classic document written to the current standard: front-matter, provisional record identifiers, pinned references, captions, and a diagram description |
 
 ## Roadmap
 

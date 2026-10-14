@@ -1,11 +1,15 @@
 ---
-id:            CLASSIC-DRAFT-compass-integration
+id:            CLASSIC-0031
 title:         Compass Documentation on Classic Survey
 genre:         Survey
 scope:         project
 project:       Classic
 language:      en
-status:        Draft
+status:        Accepted
+authors:
+  - Andrew Sengul
+approved-by:   Andrew Sengul
+reviewed:      2026-10-14
 provenance:
   assistant:   opencode
 relates-to:
@@ -29,12 +33,12 @@ cites:
     locator: W3C Recommendation, 2013 — prov:SoftwareAgent
     external: true
 open-questions:
-  - CLASSIC-DRAFT-compass-integration-O1
-  - CLASSIC-DRAFT-compass-integration-O2
-  - CLASSIC-DRAFT-compass-integration-O3
-  - CLASSIC-DRAFT-compass-integration-O4
-  - CLASSIC-DRAFT-compass-integration-O5
-  - CLASSIC-DRAFT-compass-integration-O6
+  - CLASSIC-O37
+  - CLASSIC-O38
+  - CLASSIC-O39
+  - CLASSIC-O40
+  - CLASSIC-O41
+  - CLASSIC-O42
 ---
 
 # Compass Documentation on Classic: Survey
@@ -445,19 +449,19 @@ top:
 
 ## Open Questions
 
-### CLASSIC-DRAFT-compass-integration-O1 — Base schema or model module
+### CLASSIC-O37 — Base schema or model module
 
 The part and hypertext mixins, the relations between works, and software agents
 are argued above to belong in the base schema. Should each go there, or start in
 a technical-documentation module and move down once a second preset needs it?
 
-### CLASSIC-DRAFT-compass-integration-O2 — Authors as a list
+### CLASSIC-O38 — Authors as a list
 
 Should `author` change type, from one URI to a list, with a schema migration, or
 should a list-valued slot be added beside it, leaving `author` as the first or
 principal author?
 
-### CLASSIC-DRAFT-compass-integration-O3 — Records as parts with their own identity
+### CLASSIC-O39 — Records as parts with their own identity
 
 A Compass record has its own identifier in its namespace (`COMPASS-D3`), not one
 under its host, and is cited corpus-wide, yet it is defined inside its host and
@@ -465,17 +469,17 @@ changes with it. Is a record a part with its own URI, stored with its host, or a
 resource of its own that names its host? The answer decides what the part mixin
 must allow.
 
-### CLASSIC-DRAFT-compass-integration-O4 — Classic's own documentation first
+### CLASSIC-O40 — Classic's own documentation first
 
 Classic's `doc/` is a Compass corpus. Should the technical-documentation preset
 be built and tested against it first, before any other corpus?
 
-### CLASSIC-DRAFT-compass-integration-O5 — Where the prefix table lives
+### CLASSIC-O41 — Where the prefix table lives
 
 Is the table expanding prefixes to IRIs part of the core, which owns the
 `:predicate` slot option, or of each schema, which chooses its vocabularies?
 
-### CLASSIC-DRAFT-compass-integration-O6 — Assignment at acceptance in Tier 2
+### CLASSIC-O42 — Assignment at acceptance in Tier 2
 
 In Tier 1 the Compass toolchain assigns numbers. In Tier 2, should a workflow
 action on the acceptance transition assign them, or should Classic call the

@@ -33,14 +33,14 @@ Table: Documents in the CLASSIC namespace.
 | [CLASSIC-0021](wiki/Guide.Wiki.md) | Wiki Preset Guide | Guide (tutorial) | component | Current | wiki |
 | [CLASSIC-0022](wiki/Log.WikiDemo.md) | Wiki Demo Development Log | Log | component | Implemented | wiki |
 | [CLASSIC-0023](wiki/Log.TypedPages.md) | Typed Page Classes Development Log | Log | component | Implemented | wiki |
-| [CLASSIC-0024](survey/Survey.MusicPublishing.md) | Music Publishing Survey | Survey | project | Current | — |
-| [CLASSIC-0025](survey/Survey.TTRPGHost.md) | Tabletop RPG Hosting (Play-by-Post) Survey | Survey | project | Current | — |
-| [CLASSIC-0026](survey/Survey.Archival.md) | Content Archival and Durability Survey | Survey | project | Current | — |
-| [CLASSIC-0027](survey/Survey.DistributedModeration.md) | Distributed Content Moderation Survey | Survey | project | Current | — |
-| [CLASSIC-0028](survey/Survey.Usenet.md) | Usenet-Analog Discussion Hosting Survey | Survey | project | Current | — |
-| [CLASSIC-0029](survey/Survey.ProjectManagement.md) | Project Management as Classic Imprint Survey | Survey | project | Current | — |
-| [CLASSIC-0030](Eval.X400.md) | X.400 Prior-Art Evaluation | Eval (prior-art) | project | Current | — |
-| [CLASSIC-DRAFT-compass-integration](survey/Survey.CompassIntegration.md) | Compass Documentation on Classic Survey | Survey | project | Draft | — |
+| [CLASSIC-0024](survey/Survey.MusicPublishing.md) | Music Publishing Survey | Survey | project | Accepted | — |
+| [CLASSIC-0025](survey/Survey.TTRPGHost.md) | Tabletop RPG Hosting (Play-by-Post) Survey | Survey | project | Accepted | — |
+| [CLASSIC-0026](survey/Survey.Archival.md) | Content Archival and Durability Survey | Survey | project | Accepted | — |
+| [CLASSIC-0027](survey/Survey.DistributedModeration.md) | Distributed Content Moderation Survey | Survey | project | Accepted | — |
+| [CLASSIC-0028](survey/Survey.Usenet.md) | Usenet-Analog Discussion Hosting Survey | Survey | project | Accepted | — |
+| [CLASSIC-0029](survey/Survey.ProjectManagement.md) | Project Management as Classic Imprint Survey | Survey | project | Accepted | — |
+| [CLASSIC-0030](Eval.X400.md) | X.400 Prior-Art Evaluation | Eval (prior-art) | project | Accepted | — |
+| [CLASSIC-0031](survey/Survey.CompassIntegration.md) | Compass Documentation on Classic Survey | Survey | project | Accepted | — |
 | [CLASSIC-DRAFT-compass-migration](Plan.CompassMigration.md) | Compass Migration Plan | Plan | project | Implemented | — |
 | [CLASSIC-DRAFT-compass-migration-log](Log.CompassMigration.md) | Compass Migration Development Log | Log | project | Implemented | — |
 | [CLASSIC-DRAFT-new-schema](Guide.NewSchema.md) | Creating a New Schema Guide | Guide (howto) | project | Draft | schema |
@@ -206,12 +206,12 @@ Table: Decision, open-question, and memo records in the CLASSIC namespace.
 | [CLASSIC-O34](survey/Survey.ProjectManagement.md#classic-o34--custom-fields-and-project-specific-task-slots) | Open question | Custom fields and project-specific task slots | — | CLASSIC-0029 |
 | [CLASSIC-O35](survey/Survey.ProjectManagement.md#classic-o35--time-tracking-granularity-and-reporting) | Open question | Time-tracking granularity and reporting | — | CLASSIC-0029 |
 | [CLASSIC-O36](survey/Survey.ProjectManagement.md#classic-o36--git-federation-adapter-protocol) | Open question | Git federation adapter protocol | — | CLASSIC-0029 |
-| [CLASSIC-DRAFT-compass-integration-O1](survey/Survey.CompassIntegration.md#classic-draft-compass-integration-o1--base-schema-or-model-module) | Open question | Base schema or model module | — | CLASSIC-DRAFT-compass-integration |
-| [CLASSIC-DRAFT-compass-integration-O2](survey/Survey.CompassIntegration.md#classic-draft-compass-integration-o2--authors-as-a-list) | Open question | Authors as a list | — | CLASSIC-DRAFT-compass-integration |
-| [CLASSIC-DRAFT-compass-integration-O3](survey/Survey.CompassIntegration.md#classic-draft-compass-integration-o3--records-as-parts-with-their-own-identity) | Open question | Records as parts with their own identity | — | CLASSIC-DRAFT-compass-integration |
-| [CLASSIC-DRAFT-compass-integration-O4](survey/Survey.CompassIntegration.md#classic-draft-compass-integration-o4--classics-own-documentation-first) | Open question | Classic's own documentation first | — | CLASSIC-DRAFT-compass-integration |
-| [CLASSIC-DRAFT-compass-integration-O5](survey/Survey.CompassIntegration.md#classic-draft-compass-integration-o5--where-the-prefix-table-lives) | Open question | Where the prefix table lives | — | CLASSIC-DRAFT-compass-integration |
-| [CLASSIC-DRAFT-compass-integration-O6](survey/Survey.CompassIntegration.md#classic-draft-compass-integration-o6--assignment-at-acceptance-in-tier-2) | Open question | Assignment at acceptance in Tier 2 | — | CLASSIC-DRAFT-compass-integration |
+| [CLASSIC-O37](survey/Survey.CompassIntegration.md#classic-o37--base-schema-or-model-module) | Open question | Base schema or model module | — | CLASSIC-0031 |
+| [CLASSIC-O38](survey/Survey.CompassIntegration.md#classic-o38--authors-as-a-list) | Open question | Authors as a list | — | CLASSIC-0031 |
+| [CLASSIC-O39](survey/Survey.CompassIntegration.md#classic-o39--records-as-parts-with-their-own-identity) | Open question | Records as parts with their own identity | — | CLASSIC-0031 |
+| [CLASSIC-O40](survey/Survey.CompassIntegration.md#classic-o40--classics-own-documentation-first) | Open question | Classic's own documentation first | — | CLASSIC-0031 |
+| [CLASSIC-O41](survey/Survey.CompassIntegration.md#classic-o41--where-the-prefix-table-lives) | Open question | Where the prefix table lives | — | CLASSIC-0031 |
+| [CLASSIC-O42](survey/Survey.CompassIntegration.md#classic-o42--assignment-at-acceptance-in-tier-2) | Open question | Assignment at acceptance in Tier 2 | — | CLASSIC-0031 |
 | [CLASSIC-DRAFT-compass-migration-O1](Plan.CompassMigration.md#classic-draft-compass-migration-o1--splitting-the-schema-contract) | Open question | Splitting the schema contract | — | CLASSIC-DRAFT-compass-migration |
 | [CLASSIC-DRAFT-compass-migration-O2](Plan.CompassMigration.md#classic-draft-compass-migration-o2--planned-persistence-backends) | Open question | Planned persistence backends | — | CLASSIC-DRAFT-compass-migration |
 | [CLASSIC-DRAFT-compass-migration-O3](Plan.CompassMigration.md#classic-draft-compass-migration-o3--a-compiled-readme) | Open question | A compiled README | — | CLASSIC-DRAFT-compass-migration |
