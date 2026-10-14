@@ -353,7 +353,7 @@ It depends on the persistence protocol and its flat-file backend
 ([CLASSIC-0006](../persistence/Ref.Persistence.md)) and the federation and
 co-hosting model ([CLASSIC-0001](../federation/Guide.FederationDemo.md)), and it shares the
 text/binary blob split with the pre-Compass music survey
-([CLASSIC-DRAFT-music-publishing](Survey.MusicPublishing.md), which does not yet carry
+([CLASSIC-0024](Survey.MusicPublishing.md), which does not yet carry
 a Compass identifier).
 
 Externally, the model is comparable to LOCKSS (the cooperative many-copies library

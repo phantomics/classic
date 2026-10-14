@@ -326,7 +326,7 @@ is worth.
 
 This survey sits alongside two sibling use-case surveys that share its
 substrate analysis, deployment-mode framing, and grassroots niche-community
-adoption strategy: [CLASSIC-DRAFT-music-publishing](Survey.MusicPublishing.md) and
+adoption strategy: [CLASSIC-0024](Survey.MusicPublishing.md) and
 [CLASSIC-DRAFT-ttrpg-host](Survey.TTRPGHost.md). (Those documents predate the Compass
 format adopted here and do not yet carry Compass identifiers.)
 

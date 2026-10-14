@@ -443,7 +443,7 @@ forum imprint ([CLASSIC-0019](../forum/Guide.Forum.md)) for task discussions, an
 blog and wiki ([CLASSIC-0021](../wiki/Guide.Wiki.md)) imprints for announcements and
 documentation. It shares the
 deployment-mode framing and grassroots adoption strategy of the sibling surveys
-([CLASSIC-DRAFT-music-publishing](Survey.MusicPublishing.md),
+([CLASSIC-0024](Survey.MusicPublishing.md),
 [CLASSIC-DRAFT-usenet](Survey.Usenet.md),
 [CLASSIC-DRAFT-distributed-moderation](Survey.DistributedModeration.md),
 [CLASSIC-DRAFT-archival](Survey.Archival.md)). It depends on the ontological model

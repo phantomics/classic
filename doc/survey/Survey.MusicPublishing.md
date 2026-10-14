@@ -1,11 +1,15 @@
 ---
-id:            CLASSIC-DRAFT-music-publishing
+id:            CLASSIC-0024
 title:         Music Publishing Survey
 genre:         Survey
 scope:         project
 project:       Classic
 language:      en
-status:        Draft
+status:        Current
+authors:
+  - Andrew Sengul
+approved-by:   Andrew Sengul
+reviewed:      2026-10-14
 provenance:
   assistant:   opencode
 relates-to:
@@ -32,12 +36,12 @@ cites:
     locator: ipfs.tech
     external: true
 open-questions:
-  - CLASSIC-DRAFT-music-publishing-O1
-  - CLASSIC-DRAFT-music-publishing-O2
-  - CLASSIC-DRAFT-music-publishing-O3
-  - CLASSIC-DRAFT-music-publishing-O4
-  - CLASSIC-DRAFT-music-publishing-O5
-  - CLASSIC-DRAFT-music-publishing-O6
+  - CLASSIC-O1
+  - CLASSIC-O2
+  - CLASSIC-O3
+  - CLASSIC-O4
+  - CLASSIC-O5
+  - CLASSIC-O6
 ---
 
 # Music Publishing: Survey
@@ -531,12 +535,12 @@ designed to hold music as anything but tracks with tags.
 
 ## Open Questions
 
-### CLASSIC-DRAFT-music-publishing-O1 — Payment federation
+### CLASSIC-O1 — Payment federation
 
 The central unsolved design question: how value flows to artists across a
 federation of peer instances and hosted aggregators.
 
-### CLASSIC-DRAFT-music-publishing-O2 — Blob distribution protocol
+### CLASSIC-O2 — Blob distribution protocol
 
 Largely resolved by the division with Stacks: federation events carry
 only content hashes, and Stacks chooses how bytes move (BitTorrent, IPFS,
@@ -545,23 +549,23 @@ Classic is the content-reference scheme itself -- hash algorithm,
 identifier syntax, and how several encodings of one release are listed --
 which is shared with STACKS-DRAFT-stacks-and-classic-O3.
 
-### CLASSIC-DRAFT-music-publishing-O3 — Metadata authority across co-hosting
+### CLASSIC-O3 — Metadata authority across co-hosting
 
 When an artist co-hosts a recording with a label and an aggregator, who is
 canonical for which slots (the artist for credits, the label for catalog
 number, the aggregator for play counts?), and how conflicts resolve.
 
-### CLASSIC-DRAFT-music-publishing-O4 — Discovery model
+### CLASSIC-O4 — Discovery model
 
 What cross-catalog queries a public aggregator exposes, and how they are
 indexed for performance at scale.
 
-### CLASSIC-DRAFT-music-publishing-O5 — DAW integration depth
+### CLASSIC-O5 — DAW integration depth
 
 How far to go beyond watch-folder import toward rich session-metadata
 extraction and per-DAW export presets.
 
-### CLASSIC-DRAFT-music-publishing-O6 — Play-count and sales attestation
+### CLASSIC-O6 — Play-count and sales attestation
 
 The provenance/signing model for figures that drive royalty computation, tying
 back to the federation integrity primitives.

@@ -429,7 +429,7 @@ killfile on-ramp is the simplest case of the model surveyed here. It shares the
 planned archival survey (a preservation feed is a positive-curation feed pointed
 at an archival action rather than a display action); the two should share one
 underlying feed type where practical. It also relates to the two pre-Compass
-use-case surveys, [CLASSIC-DRAFT-music-publishing](Survey.MusicPublishing.md) and
+use-case surveys, [CLASSIC-0024](Survey.MusicPublishing.md) and
 [CLASSIC-DRAFT-ttrpg-host](Survey.TTRPGHost.md), which share its deployment-mode
 framing and grassroots adoption strategy. (Those documents predate the Compass
 format and do not yet carry Compass identifiers.)

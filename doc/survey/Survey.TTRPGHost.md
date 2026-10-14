@@ -5,7 +5,11 @@ genre:         Survey
 scope:         project
 project:       Classic
 language:      en
-status:        Draft
+status:        Current
+authors:
+  - Andrew Sengul
+approved-by:   Andrew Sengul
+reviewed:      2026-10-14
 provenance:
   assistant:   opencode
 relates-to:
@@ -14,7 +18,7 @@ relates-to:
   - CLASSIC-0019
   - CLASSIC-0001
   - CLASSIC-0006
-  - CLASSIC-DRAFT-music-publishing
+  - CLASSIC-0024
 cites:
   - title:   World of Darkness tabletop roleplaying games
     locator: White Wolf Publishing
@@ -471,7 +475,7 @@ knows exactly what that is worth.
 - **Seed integration:** character sheets are a strong test of fx-style
   structured editing; session and campaign views are strong tests of
   dx-composed application UIs.
-- **[CLASSIC-DRAFT-music-publishing](Survey.MusicPublishing.md):** a sibling domain sketch that shares the
+- **[CLASSIC-0024](Survey.MusicPublishing.md):** a sibling domain sketch that shares the
   deployment-mode analysis and the grassroots niche-community adoption
   strategy.
 

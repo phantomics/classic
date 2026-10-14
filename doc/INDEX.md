@@ -33,12 +33,12 @@ Table: Documents in the CLASSIC namespace.
 | [CLASSIC-0021](wiki/Guide.Wiki.md) | Wiki Preset Guide | Guide (tutorial) | component | Current | wiki |
 | [CLASSIC-0022](wiki/Log.WikiDemo.md) | Wiki Demo Development Log | Log | component | Implemented | wiki |
 | [CLASSIC-0023](wiki/Log.TypedPages.md) | Typed Page Classes Development Log | Log | component | Implemented | wiki |
+| [CLASSIC-0024](survey/Survey.MusicPublishing.md) | Music Publishing Survey | Survey | project | Current | — |
 | [CLASSIC-DRAFT-archival](survey/Survey.Archival.md) | Content Archival and Durability Survey | Survey | project | Draft | — |
 | [CLASSIC-DRAFT-compass-integration](survey/Survey.CompassIntegration.md) | Compass Documentation on Classic Survey | Survey | project | Draft | — |
 | [CLASSIC-DRAFT-compass-migration](Plan.CompassMigration.md) | Compass Migration Plan | Plan | project | Implemented | — |
 | [CLASSIC-DRAFT-compass-migration-log](Log.CompassMigration.md) | Compass Migration Development Log | Log | project | Implemented | — |
 | [CLASSIC-DRAFT-distributed-moderation](survey/Survey.DistributedModeration.md) | Distributed Content Moderation Survey | Survey | project | Draft | — |
-| [CLASSIC-DRAFT-music-publishing](survey/Survey.MusicPublishing.md) | Music Publishing Survey | Survey | project | Draft | — |
 | [CLASSIC-DRAFT-new-schema](Guide.NewSchema.md) | Creating a New Schema Guide | Guide (howto) | project | Draft | schema |
 | [CLASSIC-DRAFT-persistence-backends](persistence/Arch.PersistenceBackends.md) | The Persistence Backends Architecture | Architecture | component | Draft | persistence |
 | [CLASSIC-DRAFT-project-management](survey/Survey.ProjectManagement.md) | Project Management as Classic Imprint Survey | Survey | project | Draft | — |
@@ -170,6 +170,12 @@ Table: Decision, open-question, and memo records in the CLASSIC namespace.
 | [CLASSIC-DRAFT-with-persistence-D4](persistence/Log.WithPersistence.md#classic-draft-with-persistence-d4--the-bodys-return-values-are-preserved) | Decision | The body's return values are preserved | Implemented | CLASSIC-DRAFT-with-persistence |
 | [CLASSIC-DRAFT-with-persistence-D5](persistence/Log.WithPersistence.md#classic-draft-with-persistence-d5--no-automatic-clock-increment) | Decision | No automatic clock increment | Implemented | CLASSIC-DRAFT-with-persistence |
 | [CLASSIC-DRAFT-with-persistence-D6](persistence/Log.WithPersistence.md#classic-draft-with-persistence-d6--composition-with-validation-through-the-normal-path) | Decision | Composition with validation through the normal path | Implemented | CLASSIC-DRAFT-with-persistence |
+| [CLASSIC-O1](survey/Survey.MusicPublishing.md#classic-o1--payment-federation) | Open question | Payment federation | — | CLASSIC-0024 |
+| [CLASSIC-O2](survey/Survey.MusicPublishing.md#classic-o2--blob-distribution-protocol) | Open question | Blob distribution protocol | — | CLASSIC-0024 |
+| [CLASSIC-O3](survey/Survey.MusicPublishing.md#classic-o3--metadata-authority-across-co-hosting) | Open question | Metadata authority across co-hosting | — | CLASSIC-0024 |
+| [CLASSIC-O4](survey/Survey.MusicPublishing.md#classic-o4--discovery-model) | Open question | Discovery model | — | CLASSIC-0024 |
+| [CLASSIC-O5](survey/Survey.MusicPublishing.md#classic-o5--daw-integration-depth) | Open question | DAW integration depth | — | CLASSIC-0024 |
+| [CLASSIC-O6](survey/Survey.MusicPublishing.md#classic-o6--play-count-and-sales-attestation) | Open question | Play-count and sales attestation | — | CLASSIC-0024 |
 | [CLASSIC-DRAFT-archival-O1](survey/Survey.Archival.md#classic-draft-archival-o1--the-deletiondurability-policy-dial) | Open question | The deletion/durability policy dial | — | CLASSIC-DRAFT-archival |
 | [CLASSIC-DRAFT-archival-O2](survey/Survey.Archival.md#classic-draft-archival-o2--license-to-mirror-semantics) | Open question | License-to-mirror semantics | — | CLASSIC-DRAFT-archival |
 | [CLASSIC-DRAFT-archival-O3](survey/Survey.Archival.md#classic-draft-archival-o3--integrity-via-signed-origin-entities) | Open question | Integrity via signed origin entities | — | CLASSIC-DRAFT-archival |
@@ -195,12 +201,6 @@ Table: Decision, open-question, and memo records in the CLASSIC namespace.
 | [CLASSIC-DRAFT-distributed-moderation-O5](survey/Survey.DistributedModeration.md#classic-draft-distributed-moderation-o5--meta-moderation) | Open question | Meta-moderation | — | CLASSIC-DRAFT-distributed-moderation |
 | [CLASSIC-DRAFT-distributed-moderation-O6](survey/Survey.DistributedModeration.md#classic-draft-distributed-moderation-o6--shared-curation-feed-primitive-with-archival) | Open question | Shared curation-feed primitive with archival | — | CLASSIC-DRAFT-distributed-moderation |
 | [CLASSIC-DRAFT-distributed-moderation-O7](survey/Survey.DistributedModeration.md#classic-draft-distributed-moderation-o7--ranking-gameability-and-reputation-inputs) | Open question | Ranking gameability and reputation inputs | — | CLASSIC-DRAFT-distributed-moderation |
-| [CLASSIC-DRAFT-music-publishing-O1](survey/Survey.MusicPublishing.md#classic-draft-music-publishing-o1--payment-federation) | Open question | Payment federation | — | CLASSIC-DRAFT-music-publishing |
-| [CLASSIC-DRAFT-music-publishing-O2](survey/Survey.MusicPublishing.md#classic-draft-music-publishing-o2--blob-distribution-protocol) | Open question | Blob distribution protocol | — | CLASSIC-DRAFT-music-publishing |
-| [CLASSIC-DRAFT-music-publishing-O3](survey/Survey.MusicPublishing.md#classic-draft-music-publishing-o3--metadata-authority-across-co-hosting) | Open question | Metadata authority across co-hosting | — | CLASSIC-DRAFT-music-publishing |
-| [CLASSIC-DRAFT-music-publishing-O4](survey/Survey.MusicPublishing.md#classic-draft-music-publishing-o4--discovery-model) | Open question | Discovery model | — | CLASSIC-DRAFT-music-publishing |
-| [CLASSIC-DRAFT-music-publishing-O5](survey/Survey.MusicPublishing.md#classic-draft-music-publishing-o5--daw-integration-depth) | Open question | DAW integration depth | — | CLASSIC-DRAFT-music-publishing |
-| [CLASSIC-DRAFT-music-publishing-O6](survey/Survey.MusicPublishing.md#classic-draft-music-publishing-o6--play-count-and-sales-attestation) | Open question | Play-count and sales attestation | — | CLASSIC-DRAFT-music-publishing |
 | [CLASSIC-DRAFT-persistence-backends-O1](persistence/Arch.PersistenceBackends.md#classic-draft-persistence-backends-o1--serialization-durability-and-thread-safety) | Open question | Serialization, durability, and thread safety | — | CLASSIC-DRAFT-persistence-backends |
 | [CLASSIC-DRAFT-persistence-backends-O2](persistence/Arch.PersistenceBackends.md#classic-draft-persistence-backends-o2--rebuilding-derived-artifacts) | Open question | Rebuilding derived artifacts | — | CLASSIC-DRAFT-persistence-backends |
 | [CLASSIC-DRAFT-project-management-O1](survey/Survey.ProjectManagement.md#classic-draft-project-management-o1--dependency-graph-query-model) | Open question | Dependency-graph query model | — | CLASSIC-DRAFT-project-management |
