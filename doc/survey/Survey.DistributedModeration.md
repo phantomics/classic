@@ -46,7 +46,7 @@ whether by hard-blocking content, flagging it, or ranking it for display. The
 model applies to any forum genre (phpBB, Reddit, imageboard, Hacker News), not
 only to the Usenet-analog it was first raised alongside. It assumes the forum
 imprint ([CLASSIC-DRAFT-forum](../forum/Guide.Forum.md)), the federation model
-([CLASSIC-DRAFT-federation-demo](../federation/Guide.FederationDemo.md)), the workflow engine
+([CLASSIC-0001](../federation/Guide.FederationDemo.md)), the workflow engine
 ([CLASSIC-DRAFT-workflow](../model/Ref.Workflow.md)), the composer's aggregate tier, and the
 planned lens system and signed-federation-events work. It asks whether Classic
 should offer this model; it does not decide.

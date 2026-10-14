@@ -12,7 +12,7 @@ relates-to:
   - CLASSIC-DRAFT-model
   - CLASSIC-DRAFT-workflow
   - CLASSIC-DRAFT-forum
-  - CLASSIC-DRAFT-federation-demo
+  - CLASSIC-0001
   - CLASSIC-DRAFT-persistence
   - CLASSIC-DRAFT-music-publishing
 cites:
@@ -47,7 +47,7 @@ strengths, and where the genuine limits lie. It assumes the ontological
 model ([CLASSIC-DRAFT-model](../model/Ref.Model.md)), the workflow engine
 ([CLASSIC-DRAFT-workflow](../model/Ref.Workflow.md)), the forum imprint
 ([CLASSIC-DRAFT-forum](../forum/Guide.Forum.md)), the federation and
-co-hosting model ([CLASSIC-DRAFT-federation-demo](../federation/Guide.FederationDemo.md)),
+co-hosting model ([CLASSIC-0001](../federation/Guide.FederationDemo.md)),
 the persistence protocol
 ([CLASSIC-DRAFT-persistence](../persistence/Ref.Persistence.md)), the
 composer pipeline, and the planned Seed authoring integration.

@@ -38,7 +38,7 @@ held in a parallel, separately-scaling store, and with participants reading and
 posting through a variety of interfaces (web, TUI, desktop) running on their own
 Classic instances. It assumes the forum imprint
 ([CLASSIC-DRAFT-forum](../forum/Guide.Forum.md)), the federation and co-hosting model
-([CLASSIC-DRAFT-federation-demo](../federation/Guide.FederationDemo.md)), the workflow engine
+([CLASSIC-0001](../federation/Guide.FederationDemo.md)), the workflow engine
 ([CLASSIC-DRAFT-workflow](../model/Ref.Workflow.md)), the persistence protocol
 ([CLASSIC-DRAFT-persistence](../persistence/Ref.Persistence.md)), the composer pipeline, and
 the planned Seed authoring integration and TUI medium. It asks whether Classic
@@ -331,7 +331,7 @@ adoption strategy: [CLASSIC-DRAFT-music-publishing](Survey.MusicPublishing.md) a
 format adopted here and do not yet carry Compass identifiers.)
 
 It depends on the forum imprint ([CLASSIC-DRAFT-forum](../forum/Guide.Forum.md)), the federation
-model ([CLASSIC-DRAFT-federation-demo](../federation/Guide.FederationDemo.md)), the workflow engine
+model ([CLASSIC-0001](../federation/Guide.FederationDemo.md)), the workflow engine
 ([CLASSIC-DRAFT-workflow](../model/Ref.Workflow.md)), and the persistence protocol
 ([CLASSIC-DRAFT-persistence](../persistence/Ref.Persistence.md)).
 

@@ -11,7 +11,7 @@ provenance:
 relates-to:
   - CLASSIC-DRAFT-model
   - CLASSIC-DRAFT-persistence
-  - CLASSIC-DRAFT-federation-demo
+  - CLASSIC-0001
   - CLASSIC-DRAFT-workflow
   - CLASSIC-DRAFT-ttrpg-host
   - STACKS-DRAFT-stacks-and-classic
@@ -53,7 +53,7 @@ lie. It assumes the ontological model
 ([CLASSIC-DRAFT-model](../model/Ref.Model.md)), the persistence protocol and
 its `:blob` strategy ([CLASSIC-DRAFT-persistence](../persistence/Ref.Persistence.md)),
 the federation and co-hosting model
-([CLASSIC-DRAFT-federation-demo](../federation/Guide.FederationDemo.md)), the
+([CLASSIC-0001](../federation/Guide.FederationDemo.md)), the
 workflow engine ([CLASSIC-DRAFT-workflow](../model/Ref.Workflow.md)), the
 composer pipeline, and the planned Seed authoring integration.
 

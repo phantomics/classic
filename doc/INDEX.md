@@ -10,6 +10,7 @@ Table: Documents in the CLASSIC namespace.
 
 | ID | Title | Genre | Scope | Status | Component |
 |---|---|---|---|---|---|
+| [CLASSIC-0001](federation/Guide.FederationDemo.md) | Federation Demo Guide | Guide (tutorial) | component | Current | federation |
 | [CLASSIC-DRAFT-archival](survey/Survey.Archival.md) | Content Archival and Durability Survey | Survey | project | Draft | — |
 | [CLASSIC-DRAFT-capability-exclusion](theme/Log.CapabilityExclusion.md) | Capability Exclusion Development Log | Log | component | Draft | theme |
 | [CLASSIC-DRAFT-compass-integration](survey/Survey.CompassIntegration.md) | Compass Documentation on Classic Survey | Survey | project | Draft | — |
@@ -19,7 +20,6 @@ Table: Documents in the CLASSIC namespace.
 | [CLASSIC-DRAFT-dist-factorization](Log.DistFactorization.md) | Dist Factorization Development Log | Log | project | Implemented | — |
 | [CLASSIC-DRAFT-distributed-moderation](survey/Survey.DistributedModeration.md) | Distributed Content Moderation Survey | Survey | project | Draft | — |
 | [CLASSIC-DRAFT-federation-consistency](federation/Log.FederationConsistency.md) | Federation Consistency Development Log | Log | component | Draft | federation |
-| [CLASSIC-DRAFT-federation-demo](federation/Guide.FederationDemo.md) | Federation Demo Guide | Guide (tutorial) | component | Draft | federation |
 | [CLASSIC-DRAFT-forum](forum/Guide.Forum.md) | Forum Preset Guide | Guide (tutorial) | component | Draft | forum |
 | [CLASSIC-DRAFT-forum-demo](forum/Log.ForumDemo.md) | Forum Demo Development Log | Log | component | Draft | forum |
 | [CLASSIC-DRAFT-general-model](model/Log.GeneralModel.md) | General Publication Models Development Log | Log | component | Draft | model |

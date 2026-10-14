@@ -14,7 +14,7 @@ relates-to:
   - CLASSIC-DRAFT-archival
   - CLASSIC-DRAFT-x400
   - CLASSIC-DRAFT-forum
-  - CLASSIC-DRAFT-federation-demo
+  - CLASSIC-0001
   - CLASSIC-DRAFT-workflow
   - CLASSIC-DRAFT-ttrpg-host
   - CLASSIC-DRAFT-usenet
@@ -68,7 +68,7 @@ actions and content solicitations projected into chat as interactive messages, s
 that approving a pull request or submitting a sidebar entry can happen in the
 conversation where it was requested. It assumes the forum imprint
 ([CLASSIC-DRAFT-forum](../forum/Guide.Forum.md)), the federation model
-([CLASSIC-DRAFT-federation-demo](../federation/Guide.FederationDemo.md)), the
+([CLASSIC-0001](../federation/Guide.FederationDemo.md)), the
 workflow engine ([CLASSIC-DRAFT-workflow](../model/Ref.Workflow.md)), the
 composer's operative tier, and the project-management imprint surveyed in
 [CLASSIC-DRAFT-project-management](Survey.ProjectManagement.md). It asks whether
@@ -519,7 +519,7 @@ The solicited-contribution pattern relates the forum imprint's threads
 ([CLASSIC-DRAFT-forum](../forum/Guide.Forum.md)), the workflow engine
 ([CLASSIC-DRAFT-workflow](../model/Ref.Workflow.md)), and the TTRPG action flow.
 Federation alignment rests on
-[CLASSIC-DRAFT-federation-demo](../federation/Guide.FederationDemo.md).
+[CLASSIC-0001](../federation/Guide.FederationDemo.md).
 [CLASSIC-DRAFT-x400](../Eval.X400.md) evaluates an earlier structured-messaging
 system and is the prior-art companion for this survey's messaging concerns:
 structured delivery, receipts, and redaction.

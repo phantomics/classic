@@ -1,5 +1,5 @@
 ---
-id:            CLASSIC-DRAFT-federation-demo
+id:            CLASSIC-0001
 title:         Federation Demo Guide
 genre:         Guide
 subtype:       tutorial
@@ -7,7 +7,11 @@ scope:         component
 project:       Classic
 component:     federation
 language:      en
-status:        Draft
+status:        Current
+authors:
+  - Andrew Sengul
+approved-by:   Andrew Sengul
+reviewed:      2026-10-13
 api-version:   "0.1.0"
 provenance:
   assistant:   opencode
