@@ -16,7 +16,7 @@ provenance:
   assistant:   opencode
 relates-to:
   - CLASSIC-0010
-  - CLASSIC-DRAFT-capability-exclusion
+  - CLASSIC-0016
   - CLASSIC-DRAFT-slot-fills
 ---
 

@@ -1,23 +1,28 @@
 ---
-id:            CLASSIC-DRAFT-capability-exclusion
+id:            CLASSIC-0016
 title:         Capability Exclusion Development Log
 genre:         Log
 scope:         component
 project:       Classic
 component:     theme
 language:      en
-status:        Draft
+status:        Implemented
+authors:
+  - Andrew Sengul
+approved-by:   Andrew Sengul
+reviewed:      2026-10-13
+schema-version: "0.1.0"
 provenance:
   assistant:   opencode
 relates-to:
   - CLASSIC-0011
   - CLASSIC-0010
 decisions:
-  - CLASSIC-DRAFT-capability-exclusion-D1
-  - CLASSIC-DRAFT-capability-exclusion-D2
-  - CLASSIC-DRAFT-capability-exclusion-D3
-  - CLASSIC-DRAFT-capability-exclusion-D4
-  - CLASSIC-DRAFT-capability-exclusion-D5
+  - CLASSIC-D52
+  - CLASSIC-D53
+  - CLASSIC-D54
+  - CLASSIC-D55
+  - CLASSIC-D56
 ---
 
 # Capability Exclusion: Development Log
@@ -70,9 +75,9 @@ set as before, unchanged.
 
 The following questions were settled before implementation.
 
-### CLASSIC-DRAFT-capability-exclusion-D1 — Slot name: excluded-capabilities
+### CLASSIC-D52 — Slot name: excluded-capabilities
 
-**Status:** Proposed
+**Status:** Implemented
 
 **Context:** The slot needed a name. The initial sketch proposed
 `removed-capabilities`.
@@ -86,9 +91,9 @@ identity, not a transformation of someone else's data.
 **Alternatives:**
 - `removed-capabilities`, the initial sketch. Rejected for the reason above.
 
-### CLASSIC-DRAFT-capability-exclusion-D2 — Scope: ancestor contributions only
+### CLASSIC-D53 — Scope: ancestor contributions only
 
-**Status:** Proposed
+**Status:** Implemented
 
 **Context:** Three semantic options were considered for where exclusion
 applies.
@@ -123,9 +128,9 @@ Ancestor-only was selected, for two reasons:
   — if a theme excludes a capability, that exclusion should propagate
   downstream like any other contribution to the resolved set.
 
-### CLASSIC-DRAFT-capability-exclusion-D3 — Exclusion of uninherited capabilities is a silent no-op
+### CLASSIC-D54 — Exclusion of uninherited capabilities is a silent no-op
 
-**Status:** Proposed
+**Status:** Implemented
 
 **Context:** A theme may exclude a capability that no ancestor declared.
 
@@ -145,9 +150,9 @@ resolver does nothing. Two reasons:
 - Erroring on this case. Rejected: it would couple the child theme tightly to
   its ancestors' declarations, as the second reason above says.
 
-### CLASSIC-DRAFT-capability-exclusion-D4 — classic-theme-override does not gain a symmetric field
+### CLASSIC-D55 — classic-theme-override does not gain a symmetric field
 
-**Status:** Proposed
+**Status:** Implemented
 
 **Context:** The override class has `additional-capabilities`. Symmetric
 pairing would suggest adding `excluded-capabilities` there too.
@@ -162,9 +167,9 @@ concrete need. Easy to add later if a use case emerges.
 - Adding the field now. Deferred: it would introduce ontological vocabulary
   without a concrete need.
 
-### CLASSIC-DRAFT-capability-exclusion-D5 — No schema migration registered
+### CLASSIC-D56 — No schema migration registered
 
-**Status:** Proposed
+**Status:** Implemented
 
 **Context:** Adding a slot to a `classic-class` is normally an `:add-slot`
 operation that warrants a migration registration and class-version bump.

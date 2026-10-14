@@ -25,8 +25,8 @@ Table: Documents in the CLASSIC namespace.
 | [CLASSIC-0013](Ref.Schema.md) | Schema Architecture Reference | Ref | project | Current | schema |
 | [CLASSIC-0014](Spec.SchemaContract.md) | Schema Contract Specification | Spec | project | Current | schema |
 | [CLASSIC-0015](Log.DistFactorization.md) | Dist Factorization Development Log | Log | project | Implemented | — |
+| [CLASSIC-0016](theme/Log.CapabilityExclusion.md) | Capability Exclusion Development Log | Log | component | Implemented | theme |
 | [CLASSIC-DRAFT-archival](survey/Survey.Archival.md) | Content Archival and Durability Survey | Survey | project | Draft | — |
-| [CLASSIC-DRAFT-capability-exclusion](theme/Log.CapabilityExclusion.md) | Capability Exclusion Development Log | Log | component | Draft | theme |
 | [CLASSIC-DRAFT-compass-integration](survey/Survey.CompassIntegration.md) | Compass Documentation on Classic Survey | Survey | project | Draft | — |
 | [CLASSIC-DRAFT-compass-migration](Plan.CompassMigration.md) | Compass Migration Plan | Plan | project | Implemented | — |
 | [CLASSIC-DRAFT-compass-migration-log](Log.CompassMigration.md) | Compass Migration Development Log | Log | project | Implemented | — |
@@ -104,11 +104,11 @@ Table: Decision, open-question, and memo records in the CLASSIC namespace.
 | [CLASSIC-D49](Log.DistFactorization.md#classic-d49--the-engine-is-named-classicengineref) | Decision | The engine is named classic.engine.ref | Implemented | CLASSIC-0015 |
 | [CLASSIC-D50](Log.DistFactorization.md#classic-d50--one-classicmodelscommon-system-for-content-type-vocabulary) | Decision | One classic.models.common system for content-type vocabulary | Implemented | CLASSIC-0015 |
 | [CLASSIC-D51](Log.DistFactorization.md#classic-d51--a-mod-directory-for-modules-above-the-foundation) | Decision | A mod/ directory for modules above the foundation | Implemented | CLASSIC-0015 |
-| [CLASSIC-DRAFT-capability-exclusion-D1](theme/Log.CapabilityExclusion.md#classic-draft-capability-exclusion-d1--slot-name-excluded-capabilities) | Decision | Slot name: excluded-capabilities | Proposed | CLASSIC-DRAFT-capability-exclusion |
-| [CLASSIC-DRAFT-capability-exclusion-D2](theme/Log.CapabilityExclusion.md#classic-draft-capability-exclusion-d2--scope-ancestor-contributions-only) | Decision | Scope: ancestor contributions only | Proposed | CLASSIC-DRAFT-capability-exclusion |
-| [CLASSIC-DRAFT-capability-exclusion-D3](theme/Log.CapabilityExclusion.md#classic-draft-capability-exclusion-d3--exclusion-of-uninherited-capabilities-is-a-silent-no-op) | Decision | Exclusion of uninherited capabilities is a silent no-op | Proposed | CLASSIC-DRAFT-capability-exclusion |
-| [CLASSIC-DRAFT-capability-exclusion-D4](theme/Log.CapabilityExclusion.md#classic-draft-capability-exclusion-d4--classic-theme-override-does-not-gain-a-symmetric-field) | Decision | classic-theme-override does not gain a symmetric field | Proposed | CLASSIC-DRAFT-capability-exclusion |
-| [CLASSIC-DRAFT-capability-exclusion-D5](theme/Log.CapabilityExclusion.md#classic-draft-capability-exclusion-d5--no-schema-migration-registered) | Decision | No schema migration registered | Proposed | CLASSIC-DRAFT-capability-exclusion |
+| [CLASSIC-D52](theme/Log.CapabilityExclusion.md#classic-d52--slot-name-excluded-capabilities) | Decision | Slot name: excluded-capabilities | Implemented | CLASSIC-0016 |
+| [CLASSIC-D53](theme/Log.CapabilityExclusion.md#classic-d53--scope-ancestor-contributions-only) | Decision | Scope: ancestor contributions only | Implemented | CLASSIC-0016 |
+| [CLASSIC-D54](theme/Log.CapabilityExclusion.md#classic-d54--exclusion-of-uninherited-capabilities-is-a-silent-no-op) | Decision | Exclusion of uninherited capabilities is a silent no-op | Implemented | CLASSIC-0016 |
+| [CLASSIC-D55](theme/Log.CapabilityExclusion.md#classic-d55--classic-theme-override-does-not-gain-a-symmetric-field) | Decision | classic-theme-override does not gain a symmetric field | Implemented | CLASSIC-0016 |
+| [CLASSIC-D56](theme/Log.CapabilityExclusion.md#classic-d56--no-schema-migration-registered) | Decision | No schema migration registered | Implemented | CLASSIC-0016 |
 | [CLASSIC-DRAFT-compass-migration-D1](Plan.CompassMigration.md#classic-draft-compass-migration-d1--survey-open-questions-take-per-survey-provisional-identifiers) | Decision | Survey open questions take per-Survey provisional identifiers | Accepted | CLASSIC-DRAFT-compass-migration |
 | [CLASSIC-DRAFT-compass-migration-D2](Plan.CompassMigration.md#classic-draft-compass-migration-d2--genre-prefixed-names-with-the-component-subdirectories-kept) | Decision | Genre-prefixed names, with the component subdirectories kept | Accepted | CLASSIC-DRAFT-compass-migration |
 | [CLASSIC-DRAFT-compass-migration-D3](Plan.CompassMigration.md#classic-draft-compass-migration-d3--statuses-an-assistant-may-set-during-migration) | Decision | Statuses an assistant may set during migration | Accepted | CLASSIC-DRAFT-compass-migration |

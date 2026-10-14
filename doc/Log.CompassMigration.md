@@ -507,9 +507,9 @@ states.
   counted. Its What This Does Not Include became the update's Outstanding
   Work. Migration notes record that the work commit is dated just after
   midnight on 2026-05-28, and that `d20ec8c` also added `securityPoints.md`.
-- **[CLASSIC-DRAFT-capability-exclusion](theme/Log.CapabilityExclusion.md).**
-  Five numbered decisions became CLASSIC-DRAFT-capability-exclusion-D1 to
-  CLASSIC-DRAFT-capability-exclusion-D5, each with the alternative its text
+- **[CLASSIC-0016](theme/Log.CapabilityExclusion.md).**
+  Five numbered decisions became CLASSIC-D52 to
+  CLASSIC-D56, each with the alternative its text
   names. Pinned to `9626df5`; the Files table took the File, Action, and
   Description columns.
 - **[CLASSIC-DRAFT-slot-fills](theme/Log.SlotFills.md).** Five decisions became
@@ -588,7 +588,7 @@ Table: Decision records created in Phase 3, by Log.
 | CLASSIC-0002 | 13 | `8d5cc1b`, `fb49791`, `99d050d` |
 | CLASSIC-0004 | 11 | `58452c7`, `0e4c5bb`, `88a920b`, `88af7f2` |
 | CLASSIC-0010 | 14 | `d20ec8c`, `8aea5f4` |
-| CLASSIC-DRAFT-capability-exclusion | 5 | `9626df5` |
+| CLASSIC-0016 | 5 | `9626df5` |
 | CLASSIC-DRAFT-slot-fills | 5 | `72b638c` |
 | CLASSIC-DRAFT-forum-demo | 7 | `c1df12c` |
 | CLASSIC-DRAFT-wiki-demo | 10 | `ea32b9c` |
