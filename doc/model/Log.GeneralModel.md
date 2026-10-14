@@ -13,7 +13,7 @@ relates-to:
   - CLASSIC-0007
   - CLASSIC-0008
   - CLASSIC-0013
-  - CLASSIC-DRAFT-dist-factorization
+  - CLASSIC-0015
 decisions:
   - CLASSIC-DRAFT-general-model-D1
   - CLASSIC-DRAFT-general-model-D2
@@ -210,7 +210,7 @@ presets (`make-forum`, `make-wiki`) join it.
 **Status:** Proposed
 
 **Context:** The nickname was introduced during the dist factorization
-([CLASSIC-DRAFT-dist-factorization](../Log.DistFactorization.md)) to ease that
+([CLASSIC-0015](../Log.DistFactorization.md)) to ease that
 transition.
 
 **Decision:** It was dropped in the same pass, and the one consumer that used

@@ -15,10 +15,10 @@ provenance:
   assistant:   opencode
 relates-to:
   - CLASSIC-0013
-  - CLASSIC-DRAFT-schema-contract
+  - CLASSIC-0014
   - CLASSIC-DRAFT-schema-pluggability
   - CLASSIC-0004
-  - CLASSIC-DRAFT-dist-factorization
+  - CLASSIC-0015
 decisions:
   - CLASSIC-D43
   - CLASSIC-D44
@@ -165,7 +165,7 @@ the reference and lives with the reference framework.
   to take this form.
 
 *Migration note (2026-10-11):* the dist factorization,
-[CLASSIC-DRAFT-dist-factorization](Log.DistFactorization.md), later moved the
+[CLASSIC-0015](Log.DistFactorization.md), later moved the
 directory to `mod/classic.schema.alpha/`, still in this repository.
 
 ### CLASSIC-D46 — The classic.dist.alpha meta-system is deferred
@@ -190,7 +190,7 @@ packaging is a mechanical concern that can be split later.
   one session, doubling the surface area of changes to verify.
 
 *Migration note (2026-10-11):* the deferred meta-system was created by
-[CLASSIC-DRAFT-dist-factorization](Log.DistFactorization.md).
+[CLASSIC-0015](Log.DistFactorization.md).
 
 
 ## Implementation
@@ -398,7 +398,7 @@ The schema/core split clears the path for several future capabilities:
 - **Drop-in alternative schemas.** A future `classic.schema.beta` or
   domain-specific schema can replace `classic.schema.alpha` by
   satisfying the same contract (see
-  [CLASSIC-DRAFT-schema-contract](Spec.SchemaContract.md)).
+  [CLASSIC-0014](Spec.SchemaContract.md)).
 
 - **The `classic.dist.alpha` meta-system.** With the schema in its
   own directory and package, extracting it into a separate ASDF

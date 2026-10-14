@@ -390,7 +390,7 @@ combined a normative contract written with lowercase "must" and "should", a
 ten-step walkthrough, and an afterword exploring the limits of pluggability.
 
 **Decision:** The contract stays in
-[CLASSIC-DRAFT-schema-contract](Spec.SchemaContract.md) and adopts RFC 2119
+[CLASSIC-0014](Spec.SchemaContract.md) and adopts RFC 2119
 keywords. The walkthrough becomes
 [CLASSIC-DRAFT-new-schema](Guide.NewSchema.md), a how-to Guide, and the
 afterword becomes [CLASSIC-DRAFT-schema-pluggability](Survey.SchemaPluggability.md),

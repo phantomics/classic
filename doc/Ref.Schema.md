@@ -15,11 +15,11 @@ api-version:   "0.1.0"
 provenance:
   assistant:   opencode
 relates-to:
-  - CLASSIC-DRAFT-schema-contract
+  - CLASSIC-0014
   - CLASSIC-DRAFT-new-schema
   - CLASSIC-DRAFT-schema-pluggability
   - CLASSIC-0012
-  - CLASSIC-DRAFT-dist-factorization
+  - CLASSIC-0015
   - CLASSIC-0005
 ---
 
@@ -434,7 +434,7 @@ reference engine. The engine source is unchanged across schema
 variants because all of its schema references go through the
 `classic.schema` nickname.
 
-See [CLASSIC-DRAFT-dist-factorization](Log.DistFactorization.md) for the
+See [CLASSIC-0015](Log.DistFactorization.md) for the
 history of this extraction and
-[CLASSIC-DRAFT-schema-contract](Spec.SchemaContract.md) for what an alternative
+[CLASSIC-0014](Spec.SchemaContract.md) for what an alternative
 schema must provide.

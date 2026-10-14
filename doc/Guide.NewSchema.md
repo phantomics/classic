@@ -12,7 +12,7 @@ api-version:   "0.1.0"
 provenance:
   assistant:   opencode
 relates-to:
-  - CLASSIC-DRAFT-schema-contract
+  - CLASSIC-0014
   - CLASSIC-DRAFT-schema-pluggability
   - CLASSIC-0013
 ---
@@ -21,13 +21,13 @@ relates-to:
 
 This guide walks through creating a minimal `classic.schema.example`
 that satisfies the schema contract,
-[CLASSIC-DRAFT-schema-contract](Spec.SchemaContract.md). The example shows the
+[CLASSIC-0014](Spec.SchemaContract.md). The example shows the
 mechanical steps; in practice, an alternative schema would also redefine the
 content hierarchy.
 
 ## Prerequisites
 
-- The schema contract, [CLASSIC-DRAFT-schema-contract](Spec.SchemaContract.md),
+- The schema contract, [CLASSIC-0014](Spec.SchemaContract.md),
   which lists the classes, slots, accessors, and methods each step defines.
 - The schema/core layering, described in
   [CLASSIC-0013](Ref.Schema.md).

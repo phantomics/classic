@@ -10,10 +10,10 @@ status:        Draft
 provenance:
   assistant:   opencode
 relates-to:
-  - CLASSIC-DRAFT-schema-contract
+  - CLASSIC-0014
   - CLASSIC-DRAFT-new-schema
   - CLASSIC-0013
-  - CLASSIC-DRAFT-dist-factorization
+  - CLASSIC-0015
 open-questions:
   - CLASSIC-DRAFT-schema-pluggability-O1
 ---
@@ -21,7 +21,7 @@ open-questions:
 # Schema Pluggability: Survey
 
 This document surveys the limits of schema pluggability in Classic: what the
-schema contract, [CLASSIC-DRAFT-schema-contract](Spec.SchemaContract.md),
+schema contract, [CLASSIC-0014](Spec.SchemaContract.md),
 allows an alternative schema to do today, what it does not, and the work that
 would make the core engines fully name-agnostic. It was the afterword of the
 schema contract, and was moved here when the contract became a Spec, since it
@@ -95,7 +95,7 @@ fully pluggable (indirect dispatch) because:
   motivates the work
 
 This survey was written before the dist factorization,
-[CLASSIC-DRAFT-dist-factorization](Log.DistFactorization.md), which made
+[CLASSIC-0015](Log.DistFactorization.md), which made
 `classic.schema.alpha` its own ASDF system under `mod/` and gave its package
 the nickname `classic.schema`. The limit "Schemas are not yet separate ASDF
 systems" and the first step above describe the state before that work, and
@@ -104,13 +104,13 @@ package name is not examined here.
 
 ## Relationship to Other Work
 
-- **[CLASSIC-DRAFT-schema-contract](Spec.SchemaContract.md)** enumerates every
+- **[CLASSIC-0014](Spec.SchemaContract.md)** enumerates every
   class, slot accessor, and method the core engines depend on, which is what
   the indirection above would cover.
 - **[CLASSIC-DRAFT-new-schema](Guide.NewSchema.md)** walks through satisfying
   the contract as it stands, including the fixed package name.
 - **[CLASSIC-0013](Ref.Schema.md)** describes the schema/core layering.
-- **[CLASSIC-DRAFT-dist-factorization](Log.DistFactorization.md)** carried out
+- **[CLASSIC-0015](Log.DistFactorization.md)** carried out
   the extraction into separate ASDF systems.
 
 ## Open Questions

@@ -1,5 +1,5 @@
 ---
-id:            CLASSIC-DRAFT-dist-factorization
+id:            CLASSIC-0015
 title:         Dist Factorization Development Log
 genre:         Log
 scope:         project
@@ -15,14 +15,14 @@ provenance:
 relates-to:
   - CLASSIC-0012
   - CLASSIC-0013
-  - CLASSIC-DRAFT-schema-contract
+  - CLASSIC-0014
   - CLASSIC-DRAFT-general-model
 decisions:
-  - CLASSIC-DRAFT-dist-factorization-D1
-  - CLASSIC-DRAFT-dist-factorization-D2
-  - CLASSIC-DRAFT-dist-factorization-D3
-  - CLASSIC-DRAFT-dist-factorization-D4
-  - CLASSIC-DRAFT-dist-factorization-D5
+  - CLASSIC-D47
+  - CLASSIC-D48
+  - CLASSIC-D49
+  - CLASSIC-D50
+  - CLASSIC-D51
 ---
 
 # Dist Factorization: Development Log
@@ -90,9 +90,9 @@ A series of design questions had to be settled before implementation
 could begin. Each was discussed at length; the outcomes are recorded
 here.
 
-### CLASSIC-DRAFT-dist-factorization-D1 — Four-layer architecture with a thin dist shim
+### CLASSIC-D47 — Four-layer architecture with a thin dist shim
 
-**Status:** Accepted
+**Status:** Implemented
 
 **Context:** The four problems described under [Problem](#problem): both
 packages in one ASDF system and repository, core source naming the alpha
@@ -130,9 +130,9 @@ declares what's possible (protocols); schema declares what exists
 (classes); engine declares what happens (methods); dist composes
 everything; models supply ready-made content vocabulary.
 
-### CLASSIC-DRAFT-dist-factorization-D2 — Nickname-based schema indirection
+### CLASSIC-D48 — Nickname-based schema indirection
 
-**Status:** Accepted
+**Status:** Implemented
 
 **Context:** Core source referenced the alpha schema by name, in roughly 270
 explicit `classic.schema.alpha:` qualifications. The same engine source code
@@ -172,9 +172,9 @@ collide. This matches the design goal: the engine is wired to a
 specific schema at distribution time, and switching requires
 rebuilding the image.
 
-### CLASSIC-DRAFT-dist-factorization-D3 — The engine is named classic.engine.ref
+### CLASSIC-D49 — The engine is named classic.engine.ref
 
-**Status:** Accepted
+**Status:** Implemented
 
 **Context:** The naming axis here differs from the schema's: schemas are
 version-numbered along an alpha/beta progression (alphabetic suffixes
@@ -191,9 +191,9 @@ symbol names.
 
 **Alternatives:** None recorded.
 
-### CLASSIC-DRAFT-dist-factorization-D4 — One classic.models.common system for content-type vocabulary
+### CLASSIC-D50 — One classic.models.common system for content-type vocabulary
 
-**Status:** Accepted
+**Status:** Implemented
 
 **Context:** The fifth ASDF system addresses Classic's commitment to
 comingled content types. Classic's central thesis is that a class can usefully
@@ -213,9 +213,9 @@ Bundling says "here is the common content-type vocabulary; mix freely."
   separately-managed packages, with the conflict risks that entails, would
   work against the thesis at the structural level.
 
-### CLASSIC-DRAFT-dist-factorization-D5 — A mod/ directory for modules above the foundation
+### CLASSIC-D51 — A mod/ directory for modules above the foundation
 
-**Status:** Accepted
+**Status:** Implemented
 
 **Context:** The layers above the foundation (schema, engine, dist, models)
 needed a home in the repository.
@@ -556,7 +556,7 @@ out to be the latter.
   variants because all schema references go through the
   `classic.schema` nickname.
 - **A clear contract for what a schema must provide.**
-  [CLASSIC-DRAFT-schema-contract](Spec.SchemaContract.md) now enumerates the required exports (class names, slot accessors,
+  [CLASSIC-0014](Spec.SchemaContract.md) now enumerates the required exports (class names, slot accessors,
   workflow primitives, federation classes, migration classes) plus
   the requirement that the schema declare itself nicknamed
   `classic.schema`. Schema authors have a complete checklist.

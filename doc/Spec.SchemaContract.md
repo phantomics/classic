@@ -1,12 +1,16 @@
 ---
-id:            CLASSIC-DRAFT-schema-contract
+id:            CLASSIC-0014
 title:         Schema Contract Specification
 genre:         Spec
 scope:         project
 project:       Classic
 component:     schema
 language:      en
-status:        Draft
+status:        Current
+authors:
+  - Andrew Sengul
+approved-by:   Andrew Sengul
+reviewed:      2026-10-13
 schema-version: "0.1.0"
 provenance:
   assistant:   opencode

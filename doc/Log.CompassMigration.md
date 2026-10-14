@@ -336,7 +336,7 @@ Table: Files added or changed in commits `55c2390`, `dfeb862`, `fdad517`, and `5
   decision records; and CLASSIC-DRAFT-compass-migration-O3 and
   CLASSIC-DRAFT-compass-migration-O5 before any `compass assign`.
 - **Stray workflow definitions in the schema.**
-  [CLASSIC-DRAFT-dist-factorization](Log.DistFactorization.md#stray-engine-code-left-in-schema-files)
+  [CLASSIC-0015](Log.DistFactorization.md#stray-engine-code-left-in-schema-files)
   says each stray engine definition was deleted from the schema, but `defun`
   copies of `find-workflow-state` and `find-transition` remain in
   `mod/classic.schema.alpha/workflow-classes.lisp`
@@ -366,10 +366,10 @@ schema references.
   `7ad1602` for phases 4–7, and `88af7f2` for the files as they were before.
   The Pitfalls section became a subsection of Implementation, and the Files
   table took the File, Action, and Description columns.
-- **[CLASSIC-DRAFT-dist-factorization](Log.DistFactorization.md).** Five
-  decisions became CLASSIC-DRAFT-dist-factorization-D1 to
-  CLASSIC-DRAFT-dist-factorization-D5; CLASSIC-DRAFT-dist-factorization-D2 and
-  CLASSIC-DRAFT-dist-factorization-D4 carry the alternatives the Log names. References are pinned to `a461f4e`, with the state before the work at
+- **[CLASSIC-0015](Log.DistFactorization.md).** Five
+  decisions became CLASSIC-D47 to
+  CLASSIC-D51; CLASSIC-D48 and
+  CLASSIC-D50 carry the alternatives the Log names. References are pinned to `a461f4e`, with the state before the work at
   `e0c3b72`, and the stray engine code its Pitfalls section describes at
   `d59df1b`, a commit during the work that still held it. Pitfalls became a
   subsection of Implementation, and The Principle That Emerged moved after
@@ -398,11 +398,11 @@ defined at the revision of its file.
 
 The second batch converted the four model and persistence Logs and captioned
 the model and persistence references. Before it began, the steward set
-[CLASSIC-DRAFT-dist-factorization](Log.DistFactorization.md) to `Accepted`;
+[CLASSIC-0015](Log.DistFactorization.md) to `Accepted`;
 the index, which that change left stale, was regenerated with this batch.
 
 - **Stray workflow definitions.** The batch 1 review found that
-  CLASSIC-DRAFT-dist-factorization's account of deleting stray engine code
+  CLASSIC-0015's account of deleting stray engine code
   from the schema is not accurate for `find-workflow-state` and
   `find-transition`. A migration note in that Log records the discrepancy,
   and [Outstanding Work](#outstanding-work) above lists it for after the
@@ -580,7 +580,7 @@ Table: Decision records created in Phase 3, by Log.
 | Log | Records | Pinned to |
 |---|---|---|
 | CLASSIC-0012 | 4 | `e9f2af1`, `7ad1602`, `e725ef0` |
-| CLASSIC-DRAFT-dist-factorization | 5 | `a461f4e`, `d59df1b`, `e0c3b72` |
+| CLASSIC-0015 | 5 | `a461f4e`, `d59df1b`, `e0c3b72` |
 | CLASSIC-0003 | 3 | `137cf8a` |
 | CLASSIC-DRAFT-general-model | 7 | `2bf61ce`, `c099e7d` |
 | CLASSIC-0009 | 1 | `9ee593a` |

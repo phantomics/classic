@@ -23,12 +23,13 @@ Table: Documents in the CLASSIC namespace.
 | [CLASSIC-0011](theme/Ref.Theme.md) | Theme Ontology Reference | Ref | component | Current | theme |
 | [CLASSIC-0012](Log.SchemaFactorization.md) | Schema Factorization Development Log | Log | project | Implemented | schema |
 | [CLASSIC-0013](Ref.Schema.md) | Schema Architecture Reference | Ref | project | Current | schema |
+| [CLASSIC-0014](Spec.SchemaContract.md) | Schema Contract Specification | Spec | project | Current | schema |
+| [CLASSIC-0015](Log.DistFactorization.md) | Dist Factorization Development Log | Log | project | Implemented | — |
 | [CLASSIC-DRAFT-archival](survey/Survey.Archival.md) | Content Archival and Durability Survey | Survey | project | Draft | — |
 | [CLASSIC-DRAFT-capability-exclusion](theme/Log.CapabilityExclusion.md) | Capability Exclusion Development Log | Log | component | Draft | theme |
 | [CLASSIC-DRAFT-compass-integration](survey/Survey.CompassIntegration.md) | Compass Documentation on Classic Survey | Survey | project | Draft | — |
 | [CLASSIC-DRAFT-compass-migration](Plan.CompassMigration.md) | Compass Migration Plan | Plan | project | Implemented | — |
 | [CLASSIC-DRAFT-compass-migration-log](Log.CompassMigration.md) | Compass Migration Development Log | Log | project | Implemented | — |
-| [CLASSIC-DRAFT-dist-factorization](Log.DistFactorization.md) | Dist Factorization Development Log | Log | project | Implemented | — |
 | [CLASSIC-DRAFT-distributed-moderation](survey/Survey.DistributedModeration.md) | Distributed Content Moderation Survey | Survey | project | Draft | — |
 | [CLASSIC-DRAFT-forum](forum/Guide.Forum.md) | Forum Preset Guide | Guide (tutorial) | component | Draft | forum |
 | [CLASSIC-DRAFT-forum-demo](forum/Log.ForumDemo.md) | Forum Demo Development Log | Log | component | Draft | forum |
@@ -38,7 +39,6 @@ Table: Documents in the CLASSIC namespace.
 | [CLASSIC-DRAFT-persistence-backends](persistence/Arch.PersistenceBackends.md) | The Persistence Backends Architecture | Architecture | component | Draft | persistence |
 | [CLASSIC-DRAFT-project-management](survey/Survey.ProjectManagement.md) | Project Management as Classic Imprint Survey | Survey | project | Draft | — |
 | [CLASSIC-DRAFT-realtime-chat](survey/Survey.RealtimeChat.md) | Real-Time Chat Integration Survey | Survey | project | Draft | — |
-| [CLASSIC-DRAFT-schema-contract](Spec.SchemaContract.md) | Schema Contract Specification | Spec | project | Draft | schema |
 | [CLASSIC-DRAFT-schema-pluggability](Survey.SchemaPluggability.md) | Schema Pluggability Survey | Survey | project | Draft | schema |
 | [CLASSIC-DRAFT-slot-fills](theme/Log.SlotFills.md) | Template Slot Fills Development Log | Log | component | Draft | theme |
 | [CLASSIC-DRAFT-ttrpg-host](survey/Survey.TTRPGHost.md) | Tabletop RPG Hosting (Play-by-Post) Survey | Survey | project | Draft | — |
@@ -99,6 +99,11 @@ Table: Decision, open-question, and memo records in the CLASSIC namespace.
 | [CLASSIC-D44](Log.SchemaFactorization.md#classic-d44--the-schema-package-uses-core-core-does-not-use-the-schema) | Decision | The schema package uses core; core does not use the schema | Implemented | CLASSIC-0012 |
 | [CLASSIC-D45](Log.SchemaFactorization.md#classic-d45--the-reference-schema-stays-in-the-classic-repository) | Decision | The reference schema stays in the Classic repository | Implemented | CLASSIC-0012 |
 | [CLASSIC-D46](Log.SchemaFactorization.md#classic-d46--the-classicdistalpha-meta-system-is-deferred) | Decision | The classic.dist.alpha meta-system is deferred | Implemented | CLASSIC-0012 |
+| [CLASSIC-D47](Log.DistFactorization.md#classic-d47--four-layer-architecture-with-a-thin-dist-shim) | Decision | Four-layer architecture with a thin dist shim | Implemented | CLASSIC-0015 |
+| [CLASSIC-D48](Log.DistFactorization.md#classic-d48--nickname-based-schema-indirection) | Decision | Nickname-based schema indirection | Implemented | CLASSIC-0015 |
+| [CLASSIC-D49](Log.DistFactorization.md#classic-d49--the-engine-is-named-classicengineref) | Decision | The engine is named classic.engine.ref | Implemented | CLASSIC-0015 |
+| [CLASSIC-D50](Log.DistFactorization.md#classic-d50--one-classicmodelscommon-system-for-content-type-vocabulary) | Decision | One classic.models.common system for content-type vocabulary | Implemented | CLASSIC-0015 |
+| [CLASSIC-D51](Log.DistFactorization.md#classic-d51--a-mod-directory-for-modules-above-the-foundation) | Decision | A mod/ directory for modules above the foundation | Implemented | CLASSIC-0015 |
 | [CLASSIC-DRAFT-capability-exclusion-D1](theme/Log.CapabilityExclusion.md#classic-draft-capability-exclusion-d1--slot-name-excluded-capabilities) | Decision | Slot name: excluded-capabilities | Proposed | CLASSIC-DRAFT-capability-exclusion |
 | [CLASSIC-DRAFT-capability-exclusion-D2](theme/Log.CapabilityExclusion.md#classic-draft-capability-exclusion-d2--scope-ancestor-contributions-only) | Decision | Scope: ancestor contributions only | Proposed | CLASSIC-DRAFT-capability-exclusion |
 | [CLASSIC-DRAFT-capability-exclusion-D3](theme/Log.CapabilityExclusion.md#classic-draft-capability-exclusion-d3--exclusion-of-uninherited-capabilities-is-a-silent-no-op) | Decision | Exclusion of uninherited capabilities is a silent no-op | Proposed | CLASSIC-DRAFT-capability-exclusion |
@@ -120,11 +125,6 @@ Table: Decision, open-question, and memo records in the CLASSIC namespace.
 | [CLASSIC-DRAFT-compass-migration-log-D3](Log.CompassMigration.md#classic-draft-compass-migration-log-d3--in-body-status-lines-that-front-matter-replaces-are-removed-dates-stay) | Decision | In-body status lines that front-matter replaces are removed; dates stay | Implemented | CLASSIC-DRAFT-compass-migration-log |
 | [CLASSIC-DRAFT-compass-migration-log-D4](Log.CompassMigration.md#classic-draft-compass-migration-log-d4--headings-follow-the-genre-spine-body-text-is-not-rewritten) | Decision | Headings follow the genre spine; body text is not rewritten | Implemented | CLASSIC-DRAFT-compass-migration-log |
 | [CLASSIC-DRAFT-compass-migration-log-D5](Log.CompassMigration.md#classic-draft-compass-migration-log-d5--each-gate-is-checked-with-two-builds-of-the-toolchain) | Decision | Each gate is checked with two builds of the toolchain | Implemented | CLASSIC-DRAFT-compass-migration-log |
-| [CLASSIC-DRAFT-dist-factorization-D1](Log.DistFactorization.md#classic-draft-dist-factorization-d1--four-layer-architecture-with-a-thin-dist-shim) | Decision | Four-layer architecture with a thin dist shim | Accepted | CLASSIC-DRAFT-dist-factorization |
-| [CLASSIC-DRAFT-dist-factorization-D2](Log.DistFactorization.md#classic-draft-dist-factorization-d2--nickname-based-schema-indirection) | Decision | Nickname-based schema indirection | Accepted | CLASSIC-DRAFT-dist-factorization |
-| [CLASSIC-DRAFT-dist-factorization-D3](Log.DistFactorization.md#classic-draft-dist-factorization-d3--the-engine-is-named-classicengineref) | Decision | The engine is named classic.engine.ref | Accepted | CLASSIC-DRAFT-dist-factorization |
-| [CLASSIC-DRAFT-dist-factorization-D4](Log.DistFactorization.md#classic-draft-dist-factorization-d4--one-classicmodelscommon-system-for-content-type-vocabulary) | Decision | One classic.models.common system for content-type vocabulary | Accepted | CLASSIC-DRAFT-dist-factorization |
-| [CLASSIC-DRAFT-dist-factorization-D5](Log.DistFactorization.md#classic-draft-dist-factorization-d5--a-mod-directory-for-modules-above-the-foundation) | Decision | A mod/ directory for modules above the foundation | Accepted | CLASSIC-DRAFT-dist-factorization |
 | [CLASSIC-DRAFT-forum-demo-D1](forum/Log.ForumDemo.md#classic-draft-forum-demo-d1--forum-post-descends-from-classic-post-not-classic-article) | Decision | forum-post descends from classic-post, not classic-article | Proposed | CLASSIC-DRAFT-forum-demo |
 | [CLASSIC-DRAFT-forum-demo-D2](forum/Log.ForumDemo.md#classic-draft-forum-demo-d2--reactions-are-a-multiset-of-strings) | Decision | Reactions are a multiset of strings | Proposed | CLASSIC-DRAFT-forum-demo |
 | [CLASSIC-DRAFT-forum-demo-D3](forum/Log.ForumDemo.md#classic-draft-forum-demo-d3--quote--link-plus-duplicated-text) | Decision | Quote = link plus duplicated text | Proposed | CLASSIC-DRAFT-forum-demo |

@@ -317,8 +317,8 @@ Introspection utilities query these annotations at runtime:
 
 Classic is factored into a core framework (the `classic` package)
 and an ontological schema (the `classic.schema.alpha` package). See
-[CLASSIC-DRAFT-schema](doc/Ref.Schema.md) for the rationale and
-[CLASSIC-DRAFT-schema-contract](doc/Spec.SchemaContract.md) for the interface
+[CLASSIC-0013](doc/Ref.Schema.md) for the rationale and
+[CLASSIC-0014](doc/Spec.SchemaContract.md) for the interface
 between them. The documents are indexed in [doc/INDEX.md](doc/INDEX.md).
 
 ```
