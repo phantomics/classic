@@ -13,6 +13,7 @@ Table: Documents in the CLASSIC namespace.
 | [CLASSIC-0001](federation/Guide.FederationDemo.md) | Federation Demo Guide | Guide (tutorial) | component | Current | federation |
 | [CLASSIC-0002](federation/Log.FederationConsistency.md) | Federation Consistency Development Log | Log | component | Accepted | federation |
 | [CLASSIC-0003](Log.DeletionSupport.md) | Deletion Support Development Log | Log | project | Implemented | model |
+| [CLASSIC-0004](migration/Log.SchemaMigration.md) | Schema Migration Development Log | Log | component | Accepted | migration |
 | [CLASSIC-DRAFT-archival](survey/Survey.Archival.md) | Content Archival and Durability Survey | Survey | project | Draft | — |
 | [CLASSIC-DRAFT-capability-exclusion](theme/Log.CapabilityExclusion.md) | Capability Exclusion Development Log | Log | component | Draft | theme |
 | [CLASSIC-DRAFT-compass-integration](survey/Survey.CompassIntegration.md) | Compass Documentation on Classic Survey | Survey | project | Draft | — |
@@ -34,7 +35,6 @@ Table: Documents in the CLASSIC namespace.
 | [CLASSIC-DRAFT-schema](Ref.Schema.md) | Schema Architecture Reference | Ref | project | Draft | schema |
 | [CLASSIC-DRAFT-schema-contract](Spec.SchemaContract.md) | Schema Contract Specification | Spec | project | Draft | schema |
 | [CLASSIC-DRAFT-schema-factorization](Log.SchemaFactorization.md) | Schema Factorization Development Log | Log | project | Implemented | schema |
-| [CLASSIC-DRAFT-schema-migration](migration/Log.SchemaMigration.md) | Schema Migration Development Log | Log | component | Draft | migration |
 | [CLASSIC-DRAFT-schema-pluggability](Survey.SchemaPluggability.md) | Schema Pluggability Survey | Survey | project | Draft | schema |
 | [CLASSIC-DRAFT-slot-fills](theme/Log.SlotFills.md) | Template Slot Fills Development Log | Log | component | Draft | theme |
 | [CLASSIC-DRAFT-slot-validation](model/Log.SlotValidation.md) | Slot Type Validation Development Log | Log | component | Draft | model |
@@ -69,6 +69,17 @@ Table: Decision, open-question, and memo records in the CLASSIC namespace.
 | [CLASSIC-D14](Log.DeletionSupport.md#classic-d14--both-soft-and-hard-deletion) | Decision | Both soft and hard deletion | Accepted | CLASSIC-0003 |
 | [CLASSIC-D15](Log.DeletionSupport.md#classic-d15--federation-tombstones) | Decision | Federation tombstones | Accepted | CLASSIC-0003 |
 | [CLASSIC-D16](Log.DeletionSupport.md#classic-d16--deletion-as-workflow-state) | Decision | Deletion as workflow state | Accepted | CLASSIC-0003 |
+| [CLASSIC-D17](migration/Log.SchemaMigration.md#classic-d17--where-to-store-migration-metadata) | Decision | Where to store migration metadata | Accepted | CLASSIC-0004 |
+| [CLASSIC-D18](migration/Log.SchemaMigration.md#classic-d18--per-class-versioning-with-system-wide-manifests) | Decision | Per-class versioning with system-wide manifests | Accepted | CLASSIC-0004 |
+| [CLASSIC-D19](migration/Log.SchemaMigration.md#classic-d19--data-migrations-via-extensible-stubs) | Decision | Data migrations via extensible stubs | Accepted | CLASSIC-0004 |
+| [CLASSIC-D20](migration/Log.SchemaMigration.md#classic-d20--trigger-based-migration-timing) | Decision | Trigger-based migration timing | Accepted | CLASSIC-0004 |
+| [CLASSIC-D21](migration/Log.SchemaMigration.md#classic-d21--explicit-class-list-with-auto-discover-helper) | Decision | Explicit class list with auto-discover helper | Accepted | CLASSIC-0004 |
+| [CLASSIC-D22](migration/Log.SchemaMigration.md#classic-d22--uniform-target-version-with-auto-detected-from-version) | Decision | Uniform target version with auto-detected from-version | Accepted | CLASSIC-0004 |
+| [CLASSIC-D23](migration/Log.SchemaMigration.md#classic-d23--no---arrow-in-syntax) | Decision | No -> arrow in syntax | Accepted | CLASSIC-0004 |
+| [CLASSIC-D24](migration/Log.SchemaMigration.md#classic-d24--sentinel-version-for-class-did-not-exist) | Decision | Sentinel version for "class did not exist" | Accepted | CLASSIC-0004 |
+| [CLASSIC-D25](migration/Log.SchemaMigration.md#classic-d25--federation-translation-for-missing-classes) | Decision | Federation translation for missing classes | Accepted | CLASSIC-0004 |
+| [CLASSIC-D26](migration/Log.SchemaMigration.md#classic-d26--uri-namespace-prefix-in-the-migration-declaration) | Decision | URI namespace prefix in the migration declaration | Accepted | CLASSIC-0004 |
+| [CLASSIC-D27](migration/Log.SchemaMigration.md#classic-d27--migration-of-classic-migration-operation-itself) | Decision | Migration of classic-migration-operation itself | Accepted | CLASSIC-0004 |
 | [CLASSIC-DRAFT-capability-exclusion-D1](theme/Log.CapabilityExclusion.md#classic-draft-capability-exclusion-d1--slot-name-excluded-capabilities) | Decision | Slot name: excluded-capabilities | Proposed | CLASSIC-DRAFT-capability-exclusion |
 | [CLASSIC-DRAFT-capability-exclusion-D2](theme/Log.CapabilityExclusion.md#classic-draft-capability-exclusion-d2--scope-ancestor-contributions-only) | Decision | Scope: ancestor contributions only | Proposed | CLASSIC-DRAFT-capability-exclusion |
 | [CLASSIC-DRAFT-capability-exclusion-D3](theme/Log.CapabilityExclusion.md#classic-draft-capability-exclusion-d3--exclusion-of-uninherited-capabilities-is-a-silent-no-op) | Decision | Exclusion of uninherited capabilities is a silent no-op | Proposed | CLASSIC-DRAFT-capability-exclusion |
@@ -117,17 +128,6 @@ Table: Decision, open-question, and memo records in the CLASSIC namespace.
 | [CLASSIC-DRAFT-schema-factorization-D2](Log.SchemaFactorization.md#classic-draft-schema-factorization-d2--the-schema-package-uses-core-core-does-not-use-the-schema) | Decision | The schema package uses core; core does not use the schema | Accepted | CLASSIC-DRAFT-schema-factorization |
 | [CLASSIC-DRAFT-schema-factorization-D3](Log.SchemaFactorization.md#classic-draft-schema-factorization-d3--the-reference-schema-stays-in-the-classic-repository) | Decision | The reference schema stays in the Classic repository | Accepted | CLASSIC-DRAFT-schema-factorization |
 | [CLASSIC-DRAFT-schema-factorization-D4](Log.SchemaFactorization.md#classic-draft-schema-factorization-d4--the-classicdistalpha-meta-system-is-deferred) | Decision | The classic.dist.alpha meta-system is deferred | Accepted | CLASSIC-DRAFT-schema-factorization |
-| [CLASSIC-DRAFT-schema-migration-D1](migration/Log.SchemaMigration.md#classic-draft-schema-migration-d1--where-to-store-migration-metadata) | Decision | Where to store migration metadata | Proposed | CLASSIC-DRAFT-schema-migration |
-| [CLASSIC-DRAFT-schema-migration-D2](migration/Log.SchemaMigration.md#classic-draft-schema-migration-d2--per-class-versioning-with-system-wide-manifests) | Decision | Per-class versioning with system-wide manifests | Proposed | CLASSIC-DRAFT-schema-migration |
-| [CLASSIC-DRAFT-schema-migration-D3](migration/Log.SchemaMigration.md#classic-draft-schema-migration-d3--data-migrations-via-extensible-stubs) | Decision | Data migrations via extensible stubs | Proposed | CLASSIC-DRAFT-schema-migration |
-| [CLASSIC-DRAFT-schema-migration-D4](migration/Log.SchemaMigration.md#classic-draft-schema-migration-d4--trigger-based-migration-timing) | Decision | Trigger-based migration timing | Proposed | CLASSIC-DRAFT-schema-migration |
-| [CLASSIC-DRAFT-schema-migration-D5](migration/Log.SchemaMigration.md#classic-draft-schema-migration-d5--explicit-class-list-with-auto-discover-helper) | Decision | Explicit class list with auto-discover helper | Proposed | CLASSIC-DRAFT-schema-migration |
-| [CLASSIC-DRAFT-schema-migration-D6](migration/Log.SchemaMigration.md#classic-draft-schema-migration-d6--uniform-target-version-with-auto-detected-from-version) | Decision | Uniform target version with auto-detected from-version | Proposed | CLASSIC-DRAFT-schema-migration |
-| [CLASSIC-DRAFT-schema-migration-D7](migration/Log.SchemaMigration.md#classic-draft-schema-migration-d7--no---arrow-in-syntax) | Decision | No -> arrow in syntax | Proposed | CLASSIC-DRAFT-schema-migration |
-| [CLASSIC-DRAFT-schema-migration-D8](migration/Log.SchemaMigration.md#classic-draft-schema-migration-d8--sentinel-version-for-class-did-not-exist) | Decision | Sentinel version for "class did not exist" | Proposed | CLASSIC-DRAFT-schema-migration |
-| [CLASSIC-DRAFT-schema-migration-D9](migration/Log.SchemaMigration.md#classic-draft-schema-migration-d9--federation-translation-for-missing-classes) | Decision | Federation translation for missing classes | Proposed | CLASSIC-DRAFT-schema-migration |
-| [CLASSIC-DRAFT-schema-migration-D10](migration/Log.SchemaMigration.md#classic-draft-schema-migration-d10--uri-namespace-prefix-in-the-migration-declaration) | Decision | URI namespace prefix in the migration declaration | Proposed | CLASSIC-DRAFT-schema-migration |
-| [CLASSIC-DRAFT-schema-migration-D11](migration/Log.SchemaMigration.md#classic-draft-schema-migration-d11--migration-of-classic-migration-operation-itself) | Decision | Migration of classic-migration-operation itself | Proposed | CLASSIC-DRAFT-schema-migration |
 | [CLASSIC-DRAFT-slot-fills-D1](theme/Log.SlotFills.md#classic-draft-slot-fills-d1--a-dedicated-clos-slot-on-classic-theme) | Decision | A dedicated CLOS slot on classic-theme | Proposed | CLASSIC-DRAFT-slot-fills |
 | [CLASSIC-DRAFT-slot-fills-D2](theme/Log.SlotFills.md#classic-draft-slot-fills-d2--slot-names-are-strings-global-across-tiers) | Decision | Slot names are strings, global across tiers | Proposed | CLASSIC-DRAFT-slot-fills |
 | [CLASSIC-DRAFT-slot-fills-D3](theme/Log.SlotFills.md#classic-draft-slot-fills-d3--inheritance-follows-the-bindings-precedent) | Decision | Inheritance follows the bindings precedent | Proposed | CLASSIC-DRAFT-slot-fills |

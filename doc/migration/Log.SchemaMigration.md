@@ -1,29 +1,33 @@
 ---
-id:            CLASSIC-DRAFT-schema-migration
+id:            CLASSIC-0004
 title:         Schema Migration Development Log
 genre:         Log
 scope:         component
 project:       Classic
 component:     migration
 language:      en
-status:        Draft
+status:        Accepted
+authors:
+  - Andrew Sengul
+approved-by:   Andrew Sengul
+reviewed:      2026-10-13
 provenance:
   assistant:   opencode
 relates-to:
   - CLASSIC-DRAFT-migration
   - CLASSIC-DRAFT-schema-factorization
 decisions:
-  - CLASSIC-DRAFT-schema-migration-D1
-  - CLASSIC-DRAFT-schema-migration-D2
-  - CLASSIC-DRAFT-schema-migration-D3
-  - CLASSIC-DRAFT-schema-migration-D4
-  - CLASSIC-DRAFT-schema-migration-D5
-  - CLASSIC-DRAFT-schema-migration-D6
-  - CLASSIC-DRAFT-schema-migration-D7
-  - CLASSIC-DRAFT-schema-migration-D8
-  - CLASSIC-DRAFT-schema-migration-D9
-  - CLASSIC-DRAFT-schema-migration-D10
-  - CLASSIC-DRAFT-schema-migration-D11
+  - CLASSIC-D17
+  - CLASSIC-D18
+  - CLASSIC-D19
+  - CLASSIC-D20
+  - CLASSIC-D21
+  - CLASSIC-D22
+  - CLASSIC-D23
+  - CLASSIC-D24
+  - CLASSIC-D25
+  - CLASSIC-D26
+  - CLASSIC-D27
 ---
 
 # Schema Migration: Development Log
@@ -63,9 +67,9 @@ persisted data. This gets harder to fix the longer it's deferred.
 
 ## Design Decisions
 
-### CLASSIC-DRAFT-schema-migration-D1 — Where to store migration metadata
+### CLASSIC-D17 — Where to store migration metadata
 
-**Status:** Proposed
+**Status:** Accepted
 
 **Context:** One of four questions settled through analysis and discussion
 before implementation (see [Problem](#problem)): where to store migration
@@ -87,9 +91,9 @@ testable, versionable in Git, and loadable through ASDF.
 
 **Alternatives:** None recorded.
 
-### CLASSIC-DRAFT-schema-migration-D2 — Per-class versioning with system-wide manifests
+### CLASSIC-D18 — Per-class versioning with system-wide manifests
 
-**Status:** Proposed
+**Status:** Accepted
 
 **Context:** One of four questions settled through analysis and discussion
 before implementation (see [Problem](#problem)): how to version classes: per
@@ -139,9 +143,9 @@ DAG (ensures correct ordering).
 - Pure per-class versioning. Rejected: it creates a combinatorial explosion in
   federation negotiation.
 
-### CLASSIC-DRAFT-schema-migration-D3 — Data migrations via extensible stubs
+### CLASSIC-D19 — Data migrations via extensible stubs
 
-**Status:** Proposed
+**Status:** Accepted
 
 **Context:** One of four questions settled through analysis and discussion
 before implementation (see [Problem](#problem)): how to handle data migrations.
@@ -161,9 +165,9 @@ continues rather than aborting).
 
 **Alternatives:** None recorded.
 
-### CLASSIC-DRAFT-schema-migration-D4 — Trigger-based migration timing
+### CLASSIC-D20 — Trigger-based migration timing
 
-**Status:** Proposed
+**Status:** Accepted
 
 **Context:** One of four questions settled through analysis and discussion
 before implementation (see [Problem](#problem)): when migrations execute.
@@ -434,9 +438,9 @@ would require 5 migration definitions containing 15 individual
 predicate strings that must match exactly. Manual authoring is a
 significant source of transcription errors.
 
-### CLASSIC-DRAFT-schema-migration-D5 — Explicit class list with auto-discover helper
+### CLASSIC-D21 — Explicit class list with auto-discover helper
 
-**Status:** Proposed
+**Status:** Accepted
 
 **Context:** See the Problem of this update: a namespace rename needs one
 `:rename-predicate` operation per slot, across every class using the namespace.
@@ -462,9 +466,9 @@ without relying on runtime class scanning.
   capturing classes defined after the migration module was intended to be
   finalized.
 
-### CLASSIC-DRAFT-schema-migration-D6 — Uniform target version with auto-detected from-version
+### CLASSIC-D22 — Uniform target version with auto-detected from-version
 
-**Status:** Proposed
+**Status:** Accepted
 
 **Context:** See the Problem of this update: a namespace rename needs one
 `:rename-predicate` operation per slot, across every class using the namespace.
@@ -488,9 +492,9 @@ which version step, with no hidden per-class version differences.
   once and read many times; clarity of the version incrementation matters more
   than keystroke savings.
 
-### CLASSIC-DRAFT-schema-migration-D7 — No -> arrow in syntax
+### CLASSIC-D23 — No -> arrow in syntax
 
-**Status:** Proposed
+**Status:** Accepted
 
 **Context:** The macro takes an old and a new namespace prefix.
 
@@ -610,9 +614,9 @@ contents need to be describable as a sequence of migrations from
 `"0"`, so future schemas inherit a clean model for what their
 predecessors introduced.
 
-### CLASSIC-DRAFT-schema-migration-D8 — Sentinel version for "class did not exist"
+### CLASSIC-D24 — Sentinel version for "class did not exist"
 
-**Status:** Proposed
+**Status:** Accepted
 
 **Context:** One of four questions settled before implementation of the
 `:create-class` operation, introduced in the Context of this update: what
@@ -629,9 +633,9 @@ special-casing.
 - A symbol like `:undefined`. Rejected: it would require special-casing
   throughout the migration system, breaking the uniformity of version handling.
 
-### CLASSIC-DRAFT-schema-migration-D9 — Federation translation for missing classes
+### CLASSIC-D25 — Federation translation for missing classes
 
-**Status:** Proposed
+**Status:** Accepted
 
 **Context:** One of four questions settled before implementation of the
 `:create-class` operation, introduced in the Context of this update: how
@@ -661,9 +665,9 @@ makes the situation explicit.
   ancestor class, the two options of the three listed above that were not
   chosen.
 
-### CLASSIC-DRAFT-schema-migration-D10 — URI namespace prefix in the migration declaration
+### CLASSIC-D26 — URI namespace prefix in the migration declaration
 
-**Status:** Proposed
+**Status:** Accepted
 
 **Context:** One of four questions settled before implementation of the
 `:create-class` operation, introduced in the Context of this update: whether
@@ -683,9 +687,9 @@ superclasses for dependency reasoning, metaclass for documentation).
 - Including the prefix. Rejected: it is already in the class definition, and
   duplicating it risks drift.
 
-### CLASSIC-DRAFT-schema-migration-D11 — Migration of classic-migration-operation itself
+### CLASSIC-D27 — Migration of classic-migration-operation itself
 
-**Status:** Proposed
+**Status:** Accepted
 
 **Context:** One of four questions settled before implementation of the
 `:create-class` operation, introduced in the Context of this update: whether

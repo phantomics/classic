@@ -461,13 +461,13 @@ requested by the steward after batch 2, recording that the Files table of
   The bold "New file" and "Modified" lines became Implementation
   subsections, and Future Work Beyond Federation Consistency became the last
   update's Outstanding Work.
-- **[CLASSIC-DRAFT-schema-migration](migration/Log.SchemaMigration.md).** The
-  body became CLASSIC-DRAFT-schema-migration-D1 to
-  CLASSIC-DRAFT-schema-migration-D4, pinned to `58452c7`; the bulk namespace
-  rename addendum became an update with CLASSIC-DRAFT-schema-migration-D5 to
-  CLASSIC-DRAFT-schema-migration-D7, pinned to `0e4c5bb`; the `:create-class`
-  addendum an update with CLASSIC-DRAFT-schema-migration-D8 to
-  CLASSIC-DRAFT-schema-migration-D11, pinned to `88a920b`; and the
+- **[CLASSIC-0004](migration/Log.SchemaMigration.md).** The
+  body became CLASSIC-D17 to
+  CLASSIC-D20, pinned to `58452c7`; the bulk namespace
+  rename addendum became an update with CLASSIC-D21 to
+  CLASSIC-D23, pinned to `0e4c5bb`; the `:create-class`
+  addendum an update with CLASSIC-D24 to
+  CLASSIC-D27, pinned to `88a920b`; and the
   factorization confirmation an update of its own.
 - **Two factual discrepancies found.** The `:create-class` addendum says the
   `:depends-on` DSL bug was left for a separate change, and the factorization
@@ -586,7 +586,7 @@ Table: Decision records created in Phase 3, by Log.
 | CLASSIC-DRAFT-slot-validation | 1 | `9ee593a` |
 | CLASSIC-DRAFT-with-persistence | 6 | `31ee385` |
 | CLASSIC-0002 | 13 | `8d5cc1b`, `fb49791`, `99d050d` |
-| CLASSIC-DRAFT-schema-migration | 11 | `58452c7`, `0e4c5bb`, `88a920b`, `88af7f2` |
+| CLASSIC-0004 | 11 | `58452c7`, `0e4c5bb`, `88a920b`, `88af7f2` |
 | CLASSIC-DRAFT-theme-ontology | 14 | `d20ec8c`, `8aea5f4` |
 | CLASSIC-DRAFT-capability-exclusion | 5 | `9626df5` |
 | CLASSIC-DRAFT-slot-fills | 5 | `72b638c` |

@@ -11,7 +11,7 @@ api-version:   "0.1.0"
 provenance:
   assistant:   opencode
 relates-to:
-  - CLASSIC-DRAFT-schema-migration
+  - CLASSIC-0004
   - CLASSIC-DRAFT-persistence
 ---
 

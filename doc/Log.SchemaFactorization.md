@@ -17,7 +17,7 @@ relates-to:
   - CLASSIC-DRAFT-schema
   - CLASSIC-DRAFT-schema-contract
   - CLASSIC-DRAFT-schema-pluggability
-  - CLASSIC-DRAFT-schema-migration
+  - CLASSIC-0004
   - CLASSIC-DRAFT-dist-factorization
 decisions:
   - CLASSIC-DRAFT-schema-factorization-D1
