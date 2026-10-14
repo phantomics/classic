@@ -16,7 +16,7 @@ api-version:   "0.1.0"
 provenance:
   assistant:   opencode
 relates-to:
-  - CLASSIC-DRAFT-wiki-demo
+  - CLASSIC-0022
   - CLASSIC-DRAFT-typed-pages
 ---
 

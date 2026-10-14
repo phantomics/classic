@@ -31,6 +31,7 @@ Table: Documents in the CLASSIC namespace.
 | [CLASSIC-0019](forum/Guide.Forum.md) | Forum Preset Guide | Guide (tutorial) | component | Current | forum |
 | [CLASSIC-0020](forum/Log.ForumDemo.md) | Forum Demo Development Log | Log | component | Implemented | forum |
 | [CLASSIC-0021](wiki/Guide.Wiki.md) | Wiki Preset Guide | Guide (tutorial) | component | Current | wiki |
+| [CLASSIC-0022](wiki/Log.WikiDemo.md) | Wiki Demo Development Log | Log | component | Implemented | wiki |
 | [CLASSIC-DRAFT-archival](survey/Survey.Archival.md) | Content Archival and Durability Survey | Survey | project | Draft | — |
 | [CLASSIC-DRAFT-compass-integration](survey/Survey.CompassIntegration.md) | Compass Documentation on Classic Survey | Survey | project | Draft | — |
 | [CLASSIC-DRAFT-compass-migration](Plan.CompassMigration.md) | Compass Migration Plan | Plan | project | Implemented | — |
@@ -45,7 +46,6 @@ Table: Documents in the CLASSIC namespace.
 | [CLASSIC-DRAFT-ttrpg-host](survey/Survey.TTRPGHost.md) | Tabletop RPG Hosting (Play-by-Post) Survey | Survey | project | Draft | — |
 | [CLASSIC-DRAFT-typed-pages](wiki/Log.TypedPages.md) | Typed Page Classes Development Log | Log | component | Implemented | wiki |
 | [CLASSIC-DRAFT-usenet](survey/Survey.Usenet.md) | Usenet-Analog Discussion Hosting Survey | Survey | project | Draft | — |
-| [CLASSIC-DRAFT-wiki-demo](wiki/Log.WikiDemo.md) | Wiki Demo Development Log | Log | component | Draft | wiki |
 | [CLASSIC-DRAFT-with-persistence](persistence/Log.WithPersistence.md) | with-persistence Development Log | Log | component | Accepted | persistence |
 | [CLASSIC-DRAFT-x400](Eval.X400.md) | X.400 Prior-Art Evaluation | Eval (prior-art) | project | Draft | — |
 
@@ -128,6 +128,16 @@ Table: Decision, open-question, and memo records in the CLASSIC namespace.
 | [CLASSIC-D73](forum/Log.ForumDemo.md#classic-d73--pinning-and-locking-are-slot-updates-not-workflow-states) | Decision | Pinning and locking are slot updates, not workflow states | Implemented | CLASSIC-0020 |
 | [CLASSIC-D74](forum/Log.ForumDemo.md#classic-d74--atomic-thread-creation-whole-post-quoting) | Decision | Atomic thread creation; whole-post quoting | Implemented | CLASSIC-0020 |
 | [CLASSIC-D75](forum/Log.ForumDemo.md#classic-d75--stable-post-indices-via-placeholders) | Decision | Stable post indices via placeholders | Implemented | CLASSIC-0020 |
+| [CLASSIC-D76](wiki/Log.WikiDemo.md#classic-d76--dedicated-wiki-page-class) | Decision | Dedicated wiki-page class | Implemented | CLASSIC-0022 |
+| [CLASSIC-D77](wiki/Log.WikiDemo.md#classic-d77--standard-page-name-link-convention) | Decision | Standard [[Page Name]] link convention | Implemented | CLASSIC-0022 |
+| [CLASSIC-D78](wiki/Log.WikiDemo.md#classic-d78--independent-page-anchor-slot-defaulting-to-title) | Decision | Independent page-anchor slot, defaulting to title | Implemented | CLASSIC-0022 |
+| [CLASSIC-D79](wiki/Log.WikiDemo.md#classic-d79--parse-at-write-time-resolution) | Decision | Parse-at-write-time resolution | Implemented | CLASSIC-0022 |
+| [CLASSIC-D80](wiki/Log.WikiDemo.md#classic-d80--broken-links-displayed-as-anchor) | Decision | Broken links displayed as [?Anchor] | Implemented | CLASSIC-0022 |
+| [CLASSIC-D81](wiki/Log.WikiDemo.md#classic-d81--automatic-self-link-and-cross-reference-healing) | Decision | Automatic self-link and cross-reference healing | Implemented | CLASSIC-0022 |
+| [CLASSIC-D82](wiki/Log.WikiDemo.md#classic-d82--edit-log-revision-history-without-body-snapshots) | Decision | Edit-log revision history without body snapshots | Implemented | CLASSIC-0022 |
+| [CLASSIC-D83](wiki/Log.WikiDemo.md#classic-d83--alist-infobox-not-typed-page-subclasses) | Decision | Alist infobox, not typed page subclasses | Implemented | CLASSIC-0022 |
+| [CLASSIC-D84](wiki/Log.WikiDemo.md#classic-d84--influenced-by-stored-influences-computed-on-demand) | Decision | influenced-by stored, influences computed on demand | Implemented | CLASSIC-0022 |
+| [CLASSIC-D85](wiki/Log.WikiDemo.md#classic-d85--alphabetical-list-pages-and-separate-recent-changes) | Decision | Alphabetical list-pages and separate recent-changes | Implemented | CLASSIC-0022 |
 | [CLASSIC-DRAFT-compass-migration-D1](Plan.CompassMigration.md#classic-draft-compass-migration-d1--survey-open-questions-take-per-survey-provisional-identifiers) | Decision | Survey open questions take per-Survey provisional identifiers | Accepted | CLASSIC-DRAFT-compass-migration |
 | [CLASSIC-DRAFT-compass-migration-D2](Plan.CompassMigration.md#classic-draft-compass-migration-d2--genre-prefixed-names-with-the-component-subdirectories-kept) | Decision | Genre-prefixed names, with the component subdirectories kept | Accepted | CLASSIC-DRAFT-compass-migration |
 | [CLASSIC-DRAFT-compass-migration-D3](Plan.CompassMigration.md#classic-draft-compass-migration-d3--statuses-an-assistant-may-set-during-migration) | Decision | Statuses an assistant may set during migration | Accepted | CLASSIC-DRAFT-compass-migration |
@@ -154,16 +164,6 @@ Table: Decision, open-question, and memo records in the CLASSIC namespace.
 | [CLASSIC-DRAFT-typed-pages-D4](wiki/Log.TypedPages.md#classic-draft-typed-pages-d4--slot-value-access-via-funcall-on-the-accessor-symbol) | Decision | Slot value access via funcall on the accessor symbol | Accepted | CLASSIC-DRAFT-typed-pages |
 | [CLASSIC-DRAFT-typed-pages-D5](wiki/Log.TypedPages.md#classic-draft-typed-pages-d5--anchor-based-sublens-resolution) | Decision | Anchor-based sublens resolution | Accepted | CLASSIC-DRAFT-typed-pages |
 | [CLASSIC-DRAFT-typed-pages-D6](wiki/Log.TypedPages.md#classic-draft-typed-pages-d6--alist-infobox-coexists-with-typed-slots) | Decision | Alist infobox coexists with typed slots | Accepted | CLASSIC-DRAFT-typed-pages |
-| [CLASSIC-DRAFT-wiki-demo-D1](wiki/Log.WikiDemo.md#classic-draft-wiki-demo-d1--dedicated-wiki-page-class) | Decision | Dedicated wiki-page class | Proposed | CLASSIC-DRAFT-wiki-demo |
-| [CLASSIC-DRAFT-wiki-demo-D2](wiki/Log.WikiDemo.md#classic-draft-wiki-demo-d2--standard-page-name-link-convention) | Decision | Standard [[Page Name]] link convention | Proposed | CLASSIC-DRAFT-wiki-demo |
-| [CLASSIC-DRAFT-wiki-demo-D3](wiki/Log.WikiDemo.md#classic-draft-wiki-demo-d3--independent-page-anchor-slot-defaulting-to-title) | Decision | Independent page-anchor slot, defaulting to title | Proposed | CLASSIC-DRAFT-wiki-demo |
-| [CLASSIC-DRAFT-wiki-demo-D4](wiki/Log.WikiDemo.md#classic-draft-wiki-demo-d4--parse-at-write-time-resolution) | Decision | Parse-at-write-time resolution | Proposed | CLASSIC-DRAFT-wiki-demo |
-| [CLASSIC-DRAFT-wiki-demo-D5](wiki/Log.WikiDemo.md#classic-draft-wiki-demo-d5--broken-links-displayed-as-anchor) | Decision | Broken links displayed as [?Anchor] | Proposed | CLASSIC-DRAFT-wiki-demo |
-| [CLASSIC-DRAFT-wiki-demo-D6](wiki/Log.WikiDemo.md#classic-draft-wiki-demo-d6--automatic-self-link-and-cross-reference-healing) | Decision | Automatic self-link and cross-reference healing | Proposed | CLASSIC-DRAFT-wiki-demo |
-| [CLASSIC-DRAFT-wiki-demo-D7](wiki/Log.WikiDemo.md#classic-draft-wiki-demo-d7--edit-log-revision-history-without-body-snapshots) | Decision | Edit-log revision history without body snapshots | Proposed | CLASSIC-DRAFT-wiki-demo |
-| [CLASSIC-DRAFT-wiki-demo-D8](wiki/Log.WikiDemo.md#classic-draft-wiki-demo-d8--alist-infobox-not-typed-page-subclasses) | Decision | Alist infobox, not typed page subclasses | Proposed | CLASSIC-DRAFT-wiki-demo |
-| [CLASSIC-DRAFT-wiki-demo-D9](wiki/Log.WikiDemo.md#classic-draft-wiki-demo-d9--influenced-by-stored-influences-computed-on-demand) | Decision | influenced-by stored, influences computed on demand | Proposed | CLASSIC-DRAFT-wiki-demo |
-| [CLASSIC-DRAFT-wiki-demo-D10](wiki/Log.WikiDemo.md#classic-draft-wiki-demo-d10--alphabetical-list-pages-and-separate-recent-changes) | Decision | Alphabetical list-pages and separate recent-changes | Proposed | CLASSIC-DRAFT-wiki-demo |
 | [CLASSIC-DRAFT-with-persistence-D1](persistence/Log.WithPersistence.md#classic-draft-with-persistence-d1--a-with-persistence-macro) | Decision | A with-persistence macro | Implemented | CLASSIC-DRAFT-with-persistence |
 | [CLASSIC-DRAFT-with-persistence-D2](persistence/Log.WithPersistence.md#classic-draft-with-persistence-d2--persist-on-normal-exit-only) | Decision | Persist on normal exit only | Implemented | CLASSIC-DRAFT-with-persistence |
 | [CLASSIC-DRAFT-with-persistence-D3](persistence/Log.WithPersistence.md#classic-draft-with-persistence-d3--one-macro-for-one-entity-or-several) | Decision | One macro for one entity or several | Proposed | CLASSIC-DRAFT-with-persistence |

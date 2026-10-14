@@ -1,12 +1,16 @@
 ---
-id:            CLASSIC-DRAFT-wiki-demo
+id:            CLASSIC-0022
 title:         Wiki Demo Development Log
 genre:         Log
 scope:         component
 project:       Classic
 component:     wiki
 language:      en
-status:        Draft
+status:        Implemented
+authors:
+  - Andrew Sengul
+approved-by:   Andrew Sengul
+reviewed:      2026-10-14
 provenance:
   assistant:   opencode
 relates-to:
@@ -14,16 +18,16 @@ relates-to:
   - CLASSIC-DRAFT-typed-pages
   - CLASSIC-0018
 decisions:
-  - CLASSIC-DRAFT-wiki-demo-D1
-  - CLASSIC-DRAFT-wiki-demo-D2
-  - CLASSIC-DRAFT-wiki-demo-D3
-  - CLASSIC-DRAFT-wiki-demo-D4
-  - CLASSIC-DRAFT-wiki-demo-D5
-  - CLASSIC-DRAFT-wiki-demo-D6
-  - CLASSIC-DRAFT-wiki-demo-D7
-  - CLASSIC-DRAFT-wiki-demo-D8
-  - CLASSIC-DRAFT-wiki-demo-D9
-  - CLASSIC-DRAFT-wiki-demo-D10
+  - CLASSIC-D76
+  - CLASSIC-D77
+  - CLASSIC-D78
+  - CLASSIC-D79
+  - CLASSIC-D80
+  - CLASSIC-D81
+  - CLASSIC-D82
+  - CLASSIC-D83
+  - CLASSIC-D84
+  - CLASSIC-D85
 ---
 
 # Wiki Demo: Development Log
@@ -71,9 +75,9 @@ substrate.
 
 ## Design Decisions
 
-### CLASSIC-DRAFT-wiki-demo-D1 — Dedicated wiki-page class
+### CLASSIC-D76 — Dedicated wiki-page class
 
-**Status:** Proposed
+**Status:** Implemented
 
 **Context:** Wiki pages need a content class with homes for anchors, links,
 infobox, and lineage.
@@ -89,9 +93,9 @@ for typed page classes.
 - Reusing `publication-article`. Not adopted: the dedicated class gives the
   link graph and infobox slots a natural home and enables future subclassing.
 
-### CLASSIC-DRAFT-wiki-demo-D2 — Standard [[Page Name]] link convention
+### CLASSIC-D77 — Standard [[Page Name]] link convention
 
-**Status:** Proposed
+**Status:** Implemented
 
 **Context:** Pages reference one another from their body text.
 
@@ -102,9 +106,9 @@ display)` pairs; resolution is anchor-based and case-insensitive.
 
 **Alternatives:** None recorded.
 
-### CLASSIC-DRAFT-wiki-demo-D3 — Independent page-anchor slot, defaulting to title
+### CLASSIC-D78 — Independent page-anchor slot, defaulting to title
 
-**Status:** Proposed
+**Status:** Implemented
 
 **Context:** A reference needs a target name, which a page's title could serve
 as but a rename would then break.
@@ -117,9 +121,9 @@ original casing for display.
 
 **Alternatives:** None recorded.
 
-### CLASSIC-DRAFT-wiki-demo-D4 — Parse-at-write-time resolution
+### CLASSIC-D79 — Parse-at-write-time resolution
 
-**Status:** Proposed
+**Status:** Implemented
 
 **Context:** Inline references must be resolved to pages, and the link graph
 kept for backlinks, orphans, and broken-link reports.
@@ -145,9 +149,9 @@ approach — simpler than diffing, acceptable at demo scale.
 - Diffing old and new links on edit. Not adopted: rebuilding from scratch is
   simpler, and acceptable at demo scale.
 
-### CLASSIC-DRAFT-wiki-demo-D5 — Broken links displayed as [?Anchor]
+### CLASSIC-D80 — Broken links displayed as [?Anchor]
 
-**Status:** Proposed
+**Status:** Implemented
 
 **Context:** A reader must be able to tell resolved links from broken ones in
 REPL output.
@@ -159,9 +163,9 @@ the `[?...]` marker. Both markers are applied at display time from the stored
 
 **Alternatives:** None recorded.
 
-### CLASSIC-DRAFT-wiki-demo-D6 — Automatic self-link and cross-reference healing
+### CLASSIC-D81 — Automatic self-link and cross-reference healing
 
-**Status:** Proposed
+**Status:** Implemented
 
 **Context:** A reference may name a page that does not exist yet, including the
 page itself.
@@ -179,9 +183,9 @@ page itself.
 
 **Alternatives:** None recorded.
 
-### CLASSIC-DRAFT-wiki-demo-D7 — Edit-log revision history without body snapshots
+### CLASSIC-D82 — Edit-log revision history without body snapshots
 
-**Status:** Proposed
+**Status:** Implemented
 
 **Context:** Edits should leave a history.
 
@@ -195,9 +199,9 @@ production concern.
 - Full body snapshots, enabling diff display and rollback. Deferred as a
   production concern.
 
-### CLASSIC-DRAFT-wiki-demo-D8 — Alist infobox, not typed page subclasses
+### CLASSIC-D83 — Alist infobox, not typed page subclasses
 
-**Status:** Proposed
+**Status:** Implemented
 
 **Context:** The wiki should demonstrate structured metadata alongside prose.
 
@@ -210,9 +214,9 @@ MOP-annotated slots and lens-driven rendering — is noted below as future work.
 - Typed page subclasses with MOP-annotated slots and lens-driven rendering.
   Deferred as future work.
 
-### CLASSIC-DRAFT-wiki-demo-D9 — influenced-by stored, influences computed on demand
+### CLASSIC-D84 — influenced-by stored, influences computed on demand
 
-**Status:** Proposed
+**Status:** Implemented
 
 **Context:** Pages can declare their design influences, and readers want to see
 the inverse.
@@ -229,9 +233,9 @@ would be stored and maintained alongside backlinks.
   while page counts are small; production scale would store it alongside
   backlinks.
 
-### CLASSIC-DRAFT-wiki-demo-D10 — Alphabetical list-pages and separate recent-changes
+### CLASSIC-D85 — Alphabetical list-pages and separate recent-changes
 
-**Status:** Proposed
+**Status:** Implemented
 
 **Context:** The page index needs both an alphabetical view and an activity
 view.

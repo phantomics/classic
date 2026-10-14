@@ -347,4 +347,4 @@ Deferred from the demo, available as future refinements:
   pattern with an edit-published workflow and revision history.
 
 *Migration note (2026-10-11):* the wiki preset was built the next day,
-recorded in [CLASSIC-DRAFT-wiki-demo](../wiki/Log.WikiDemo.md).
+recorded in [CLASSIC-0022](../wiki/Log.WikiDemo.md).

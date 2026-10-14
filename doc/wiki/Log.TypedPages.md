@@ -14,7 +14,7 @@ reviewed:      2026-10-12
 provenance:
   assistant:   opencode
 relates-to:
-  - CLASSIC-DRAFT-wiki-demo
+  - CLASSIC-0022
   - CLASSIC-0021
 decisions:
   - CLASSIC-DRAFT-typed-pages-D1
@@ -38,7 +38,7 @@ at the rendering layer rather than the persistence layer.
 
 ## Problem
 
-The wiki demo ([CLASSIC-DRAFT-wiki-demo](Log.WikiDemo.md)) established
+The wiki demo ([CLASSIC-0022](Log.WikiDemo.md)) established
 cross-reference tracking, broken-link healing, revision history, and an
 alist-based infobox sidebar. The
 alist infobox proved that pages can carry structured metadata alongside

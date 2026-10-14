@@ -543,8 +543,8 @@ in these updates.
   files the commit changed and the table omitted, two of them the latent-bug
   fixes the Log describes, and another that the wiki preset its Outstanding
   Work anticipates was built the next day.
-- **[CLASSIC-DRAFT-wiki-demo](wiki/Log.WikiDemo.md).** Ten numbered decisions
-  became CLASSIC-DRAFT-wiki-demo-D1 to CLASSIC-DRAFT-wiki-demo-D10, pinned to
+- **[CLASSIC-0022](wiki/Log.WikiDemo.md).** Ten numbered decisions
+  became CLASSIC-D76 to CLASSIC-D85, pinned to
   `ea32b9c`. Its Files subsection became the Files section, with `README.md`
   and the Log itself added from the commit, and Future Work: Typed Page
   Subclasses became Outstanding Work, with a note that
@@ -591,7 +591,7 @@ Table: Decision records created in Phase 3, by Log.
 | CLASSIC-0016 | 5 | `9626df5` |
 | CLASSIC-0017 | 5 | `72b638c` |
 | CLASSIC-0020 | 7 | `c1df12c` |
-| CLASSIC-DRAFT-wiki-demo | 10 | `ea32b9c` |
+| CLASSIC-0022 | 10 | `ea32b9c` |
 | CLASSIC-DRAFT-typed-pages | 6 | `6e6a6a2` |
 
 97 decision records in all, beside the four in
