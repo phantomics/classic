@@ -12,7 +12,7 @@ provenance:
   assistant:   opencode
 relates-to:
   - CLASSIC-DRAFT-model
-  - CLASSIC-DRAFT-deletion-support
+  - CLASSIC-0003
 ---
 
 # Workflow Reference
@@ -354,7 +354,7 @@ history. The `classic-deletable` mixin adds metadata slots
 (`deleted-at`, `deleted-by`, `deletion-reason`) that are populated
 by the `attempt-deletion` convenience function.
 
-See [CLASSIC-DRAFT-deletion-support](../Log.DeletionSupport.md) for full details.
+See [CLASSIC-0003](../Log.DeletionSupport.md) for full details.
 
 
 ## Lifecycle Hooks

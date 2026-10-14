@@ -407,9 +407,9 @@ the index, which that change left stale, was regenerated with this batch.
   `find-transition`. A migration note in that Log records the discrepancy,
   and [Outstanding Work](#outstanding-work) above lists it for after the
   migration, as the steward directed.
-- **[CLASSIC-DRAFT-deletion-support](Log.DeletionSupport.md).** Three
-  bold-lead decisions became CLASSIC-DRAFT-deletion-support-D1 to
-  CLASSIC-DRAFT-deletion-support-D3, pinned to `137cf8a`. The workflow
+- **[CLASSIC-0003](Log.DeletionSupport.md).** Three
+  bold-lead decisions became CLASSIC-D14 to
+  CLASSIC-D16, pinned to `137cf8a`. The workflow
   diagram gained a description, Tests became Verification, and an Outstanding
   Work section says that none was recorded.
 - **[CLASSIC-DRAFT-general-model](model/Log.GeneralModel.md).** Seven
@@ -445,7 +445,7 @@ revision. One symbol was pinned by its file rather than as `path:symbol`:
 The third batch converted the two Logs that record several pieces of work,
 following CLASSIC-DRAFT-compass-migration-D9. It began with a migration note,
 requested by the steward after batch 2, recording that the Files table of
-[CLASSIC-DRAFT-deletion-support](Log.DeletionSupport.md) omits
+[CLASSIC-0003](Log.DeletionSupport.md) omits
 `test/helpers.lisp`.
 
 - **[CLASSIC-0002](federation/Log.FederationConsistency.md).**
@@ -581,7 +581,7 @@ Table: Decision records created in Phase 3, by Log.
 |---|---|---|
 | CLASSIC-DRAFT-schema-factorization | 4 | `e9f2af1`, `7ad1602`, `e725ef0` |
 | CLASSIC-DRAFT-dist-factorization | 5 | `a461f4e`, `d59df1b`, `e0c3b72` |
-| CLASSIC-DRAFT-deletion-support | 3 | `137cf8a` |
+| CLASSIC-0003 | 3 | `137cf8a` |
 | CLASSIC-DRAFT-general-model | 7 | `2bf61ce`, `c099e7d` |
 | CLASSIC-DRAFT-slot-validation | 1 | `9ee593a` |
 | CLASSIC-DRAFT-with-persistence | 6 | `31ee385` |

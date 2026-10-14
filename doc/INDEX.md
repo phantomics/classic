@@ -12,12 +12,12 @@ Table: Documents in the CLASSIC namespace.
 |---|---|---|---|---|---|
 | [CLASSIC-0001](federation/Guide.FederationDemo.md) | Federation Demo Guide | Guide (tutorial) | component | Current | federation |
 | [CLASSIC-0002](federation/Log.FederationConsistency.md) | Federation Consistency Development Log | Log | component | Accepted | federation |
+| [CLASSIC-0003](Log.DeletionSupport.md) | Deletion Support Development Log | Log | project | Implemented | model |
 | [CLASSIC-DRAFT-archival](survey/Survey.Archival.md) | Content Archival and Durability Survey | Survey | project | Draft | — |
 | [CLASSIC-DRAFT-capability-exclusion](theme/Log.CapabilityExclusion.md) | Capability Exclusion Development Log | Log | component | Draft | theme |
 | [CLASSIC-DRAFT-compass-integration](survey/Survey.CompassIntegration.md) | Compass Documentation on Classic Survey | Survey | project | Draft | — |
 | [CLASSIC-DRAFT-compass-migration](Plan.CompassMigration.md) | Compass Migration Plan | Plan | project | Implemented | — |
 | [CLASSIC-DRAFT-compass-migration-log](Log.CompassMigration.md) | Compass Migration Development Log | Log | project | Implemented | — |
-| [CLASSIC-DRAFT-deletion-support](Log.DeletionSupport.md) | Deletion Support Development Log | Log | project | Implemented | model |
 | [CLASSIC-DRAFT-dist-factorization](Log.DistFactorization.md) | Dist Factorization Development Log | Log | project | Implemented | — |
 | [CLASSIC-DRAFT-distributed-moderation](survey/Survey.DistributedModeration.md) | Distributed Content Moderation Survey | Survey | project | Draft | — |
 | [CLASSIC-DRAFT-forum](forum/Guide.Forum.md) | Forum Preset Guide | Guide (tutorial) | component | Draft | forum |
@@ -66,6 +66,9 @@ Table: Decision, open-question, and memo records in the CLASSIC namespace.
 | [CLASSIC-D11](federation/Log.FederationConsistency.md#classic-d11--update-message-type-and-receive-update) | Decision | :update message type and receive-update | Accepted | CLASSIC-0002 |
 | [CLASSIC-D12](federation/Log.FederationConsistency.md#classic-d12--per-peer-outbox-with-threshold-and-interval-flushing) | Decision | Per-peer outbox with threshold and interval flushing | Accepted | CLASSIC-0002 |
 | [CLASSIC-D13](federation/Log.FederationConsistency.md#classic-d13--blog-edit-post-with-update-propagation) | Decision | Blog edit-post with update propagation | Accepted | CLASSIC-0002 |
+| [CLASSIC-D14](Log.DeletionSupport.md#classic-d14--both-soft-and-hard-deletion) | Decision | Both soft and hard deletion | Accepted | CLASSIC-0003 |
+| [CLASSIC-D15](Log.DeletionSupport.md#classic-d15--federation-tombstones) | Decision | Federation tombstones | Accepted | CLASSIC-0003 |
+| [CLASSIC-D16](Log.DeletionSupport.md#classic-d16--deletion-as-workflow-state) | Decision | Deletion as workflow state | Accepted | CLASSIC-0003 |
 | [CLASSIC-DRAFT-capability-exclusion-D1](theme/Log.CapabilityExclusion.md#classic-draft-capability-exclusion-d1--slot-name-excluded-capabilities) | Decision | Slot name: excluded-capabilities | Proposed | CLASSIC-DRAFT-capability-exclusion |
 | [CLASSIC-DRAFT-capability-exclusion-D2](theme/Log.CapabilityExclusion.md#classic-draft-capability-exclusion-d2--scope-ancestor-contributions-only) | Decision | Scope: ancestor contributions only | Proposed | CLASSIC-DRAFT-capability-exclusion |
 | [CLASSIC-DRAFT-capability-exclusion-D3](theme/Log.CapabilityExclusion.md#classic-draft-capability-exclusion-d3--exclusion-of-uninherited-capabilities-is-a-silent-no-op) | Decision | Exclusion of uninherited capabilities is a silent no-op | Proposed | CLASSIC-DRAFT-capability-exclusion |
@@ -87,9 +90,6 @@ Table: Decision, open-question, and memo records in the CLASSIC namespace.
 | [CLASSIC-DRAFT-compass-migration-log-D3](Log.CompassMigration.md#classic-draft-compass-migration-log-d3--in-body-status-lines-that-front-matter-replaces-are-removed-dates-stay) | Decision | In-body status lines that front-matter replaces are removed; dates stay | Accepted | CLASSIC-DRAFT-compass-migration-log |
 | [CLASSIC-DRAFT-compass-migration-log-D4](Log.CompassMigration.md#classic-draft-compass-migration-log-d4--headings-follow-the-genre-spine-body-text-is-not-rewritten) | Decision | Headings follow the genre spine; body text is not rewritten | Accepted | CLASSIC-DRAFT-compass-migration-log |
 | [CLASSIC-DRAFT-compass-migration-log-D5](Log.CompassMigration.md#classic-draft-compass-migration-log-d5--each-gate-is-checked-with-two-builds-of-the-toolchain) | Decision | Each gate is checked with two builds of the toolchain | Accepted | CLASSIC-DRAFT-compass-migration-log |
-| [CLASSIC-DRAFT-deletion-support-D1](Log.DeletionSupport.md#classic-draft-deletion-support-d1--both-soft-and-hard-deletion) | Decision | Both soft and hard deletion | Accepted | CLASSIC-DRAFT-deletion-support |
-| [CLASSIC-DRAFT-deletion-support-D2](Log.DeletionSupport.md#classic-draft-deletion-support-d2--federation-tombstones) | Decision | Federation tombstones | Accepted | CLASSIC-DRAFT-deletion-support |
-| [CLASSIC-DRAFT-deletion-support-D3](Log.DeletionSupport.md#classic-draft-deletion-support-d3--deletion-as-workflow-state) | Decision | Deletion as workflow state | Accepted | CLASSIC-DRAFT-deletion-support |
 | [CLASSIC-DRAFT-dist-factorization-D1](Log.DistFactorization.md#classic-draft-dist-factorization-d1--four-layer-architecture-with-a-thin-dist-shim) | Decision | Four-layer architecture with a thin dist shim | Accepted | CLASSIC-DRAFT-dist-factorization |
 | [CLASSIC-DRAFT-dist-factorization-D2](Log.DistFactorization.md#classic-draft-dist-factorization-d2--nickname-based-schema-indirection) | Decision | Nickname-based schema indirection | Accepted | CLASSIC-DRAFT-dist-factorization |
 | [CLASSIC-DRAFT-dist-factorization-D3](Log.DistFactorization.md#classic-draft-dist-factorization-d3--the-engine-is-named-classicengineref) | Decision | The engine is named classic.engine.ref | Accepted | CLASSIC-DRAFT-dist-factorization |

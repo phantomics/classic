@@ -1,5 +1,5 @@
 ---
-id:            CLASSIC-DRAFT-deletion-support
+id:            CLASSIC-0003
 title:         Deletion Support Development Log
 genre:         Log
 scope:         project
@@ -18,9 +18,9 @@ relates-to:
   - CLASSIC-DRAFT-workflow
   - CLASSIC-DRAFT-persistence
 decisions:
-  - CLASSIC-DRAFT-deletion-support-D1
-  - CLASSIC-DRAFT-deletion-support-D2
-  - CLASSIC-DRAFT-deletion-support-D3
+  - CLASSIC-D14
+  - CLASSIC-D15
+  - CLASSIC-D16
 ---
 
 # Deletion Support: Development Log
@@ -76,7 +76,7 @@ a half-index that made relationship cleanup impossible.
 
 Three questions were settled before implementation began.
 
-### CLASSIC-DRAFT-deletion-support-D1 — Both soft and hard deletion
+### CLASSIC-D14 — Both soft and hard deletion
 
 **Status:** Accepted
 
@@ -92,7 +92,7 @@ an admin escape hatch.
 
 **Alternatives:** None recorded.
 
-### CLASSIC-DRAFT-deletion-support-D2 — Federation tombstones
+### CLASSIC-D15 — Federation tombstones
 
 **Status:** Accepted
 
@@ -108,7 +108,7 @@ listings.
 
 **Alternatives:** None recorded.
 
-### CLASSIC-DRAFT-deletion-support-D3 — Deletion as workflow state
+### CLASSIC-D16 — Deletion as workflow state
 
 **Status:** Accepted
 

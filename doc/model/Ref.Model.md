@@ -13,7 +13,7 @@ provenance:
 relates-to:
   - CLASSIC-DRAFT-schema
   - CLASSIC-DRAFT-workflow
-  - CLASSIC-DRAFT-deletion-support
+  - CLASSIC-0003
   - CLASSIC-DRAFT-general-model
   - CLASSIC-DRAFT-slot-validation
 ---
@@ -325,7 +325,7 @@ A mixin granting deletion metadata to any content type:
 - **`deletion-reason`** -- human-readable reason
 
 Works alongside `classic-stateful` for workflow-based deletion.
-See [CLASSIC-DRAFT-deletion-support](../Log.DeletionSupport.md).
+See [CLASSIC-0003](../Log.DeletionSupport.md).
 
 
 ## Publication Layer

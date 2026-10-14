@@ -13,7 +13,7 @@ provenance:
 relates-to:
   - CLASSIC-DRAFT-persistence-backends
   - CLASSIC-DRAFT-with-persistence
-  - CLASSIC-DRAFT-deletion-support
+  - CLASSIC-0003
   - CLASSIC-DRAFT-migration
   - CLASSIC-0002
 ---
@@ -344,7 +344,7 @@ from queries). Hard deletion (purge) removes entities from the
 store entirely via `delete-entity`, which also cleans all relation
 index entries.
 
-See [CLASSIC-DRAFT-deletion-support](../Log.DeletionSupport.md) for details.
+See [CLASSIC-0003](../Log.DeletionSupport.md) for details.
 
 
 ## Project Structure

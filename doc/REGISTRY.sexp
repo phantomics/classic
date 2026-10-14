@@ -16,3 +16,7 @@
 (:id "CLASSIC-D11" :kind :decision :draft "CLASSIC-DRAFT-federation-consistency-D11" :host "CLASSIC-0002" :date "2026-10-13" :by "Andrew Sengul")
 (:id "CLASSIC-D12" :kind :decision :draft "CLASSIC-DRAFT-federation-consistency-D12" :host "CLASSIC-0002" :date "2026-10-13" :by "Andrew Sengul")
 (:id "CLASSIC-D13" :kind :decision :draft "CLASSIC-DRAFT-federation-consistency-D13" :host "CLASSIC-0002" :date "2026-10-13" :by "Andrew Sengul")
+(:id "CLASSIC-0003" :kind :document :draft "CLASSIC-DRAFT-deletion-support" :path "doc/Log.DeletionSupport.md" :date "2026-10-13" :by "Andrew Sengul")
+(:id "CLASSIC-D14" :kind :decision :draft "CLASSIC-DRAFT-deletion-support-D1" :host "CLASSIC-0003" :date "2026-10-13" :by "Andrew Sengul")
+(:id "CLASSIC-D15" :kind :decision :draft "CLASSIC-DRAFT-deletion-support-D2" :host "CLASSIC-0003" :date "2026-10-13" :by "Andrew Sengul")
+(:id "CLASSIC-D16" :kind :decision :draft "CLASSIC-DRAFT-deletion-support-D3" :host "CLASSIC-0003" :date "2026-10-13" :by "Andrew Sengul")
