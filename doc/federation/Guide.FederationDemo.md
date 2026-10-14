@@ -16,7 +16,7 @@ api-version:   "0.1.0"
 provenance:
   assistant:   opencode
 relates-to:
-  - CLASSIC-DRAFT-federation-consistency
+  - CLASSIC-0002
 ---
 
 # Federation Demo Guide

@@ -15,7 +15,7 @@ relates-to:
   - CLASSIC-DRAFT-with-persistence
   - CLASSIC-DRAFT-deletion-support
   - CLASSIC-DRAFT-migration
-  - CLASSIC-DRAFT-federation-consistency
+  - CLASSIC-0002
 ---
 
 # Persistence Reference
@@ -332,7 +332,7 @@ federation protocol reads from and writes to persistence through the
 same generic functions used for content entities. There is no
 federation-specific global state.
 
-See [CLASSIC-DRAFT-federation-consistency](../federation/Log.FederationConsistency.md)
+See [CLASSIC-0002](../federation/Log.FederationConsistency.md)
 for details.
 
 ### Deletion

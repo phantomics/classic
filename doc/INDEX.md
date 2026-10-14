@@ -11,6 +11,7 @@ Table: Documents in the CLASSIC namespace.
 | ID | Title | Genre | Scope | Status | Component |
 |---|---|---|---|---|---|
 | [CLASSIC-0001](federation/Guide.FederationDemo.md) | Federation Demo Guide | Guide (tutorial) | component | Current | federation |
+| [CLASSIC-0002](federation/Log.FederationConsistency.md) | Federation Consistency Development Log | Log | component | Accepted | federation |
 | [CLASSIC-DRAFT-archival](survey/Survey.Archival.md) | Content Archival and Durability Survey | Survey | project | Draft | — |
 | [CLASSIC-DRAFT-capability-exclusion](theme/Log.CapabilityExclusion.md) | Capability Exclusion Development Log | Log | component | Draft | theme |
 | [CLASSIC-DRAFT-compass-integration](survey/Survey.CompassIntegration.md) | Compass Documentation on Classic Survey | Survey | project | Draft | — |
@@ -19,7 +20,6 @@ Table: Documents in the CLASSIC namespace.
 | [CLASSIC-DRAFT-deletion-support](Log.DeletionSupport.md) | Deletion Support Development Log | Log | project | Implemented | model |
 | [CLASSIC-DRAFT-dist-factorization](Log.DistFactorization.md) | Dist Factorization Development Log | Log | project | Implemented | — |
 | [CLASSIC-DRAFT-distributed-moderation](survey/Survey.DistributedModeration.md) | Distributed Content Moderation Survey | Survey | project | Draft | — |
-| [CLASSIC-DRAFT-federation-consistency](federation/Log.FederationConsistency.md) | Federation Consistency Development Log | Log | component | Draft | federation |
 | [CLASSIC-DRAFT-forum](forum/Guide.Forum.md) | Forum Preset Guide | Guide (tutorial) | component | Draft | forum |
 | [CLASSIC-DRAFT-forum-demo](forum/Log.ForumDemo.md) | Forum Demo Development Log | Log | component | Draft | forum |
 | [CLASSIC-DRAFT-general-model](model/Log.GeneralModel.md) | General Publication Models Development Log | Log | component | Draft | model |
@@ -53,6 +53,19 @@ Table: Decision, open-question, and memo records in the CLASSIC namespace.
 
 | ID | Kind | Title | Status | Host |
 |---|---|---|---|---|
+| [CLASSIC-D1](federation/Log.FederationConsistency.md#classic-d1--provenance-as-classic-resources) | Decision | Provenance as Classic resources | Accepted | CLASSIC-0002 |
+| [CLASSIC-D2](federation/Log.FederationConsistency.md#classic-d2--per-publication-scoping) | Decision | Per-publication scoping | Accepted | CLASSIC-0002 |
+| [CLASSIC-D3](federation/Log.FederationConsistency.md#classic-d3--event-log-as-classic-resources) | Decision | Event log as Classic resources | Accepted | CLASSIC-0002 |
+| [CLASSIC-D4](federation/Log.FederationConsistency.md#classic-d4--configurable-retention-policy) | Decision | Configurable retention policy | Accepted | CLASSIC-0002 |
+| [CLASSIC-D5](federation/Log.FederationConsistency.md#classic-d5--sync-status-on-provenance) | Decision | Sync status on provenance | Accepted | CLASSIC-0002 |
+| [CLASSIC-D6](federation/Log.FederationConsistency.md#classic-d6--transport-extensibility) | Decision | Transport extensibility | Accepted | CLASSIC-0002 |
+| [CLASSIC-D7](federation/Log.FederationConsistency.md#classic-d7--acknowledgment-abstraction) | Decision | Acknowledgment abstraction | Accepted | CLASSIC-0002 |
+| [CLASSIC-D8](federation/Log.FederationConsistency.md#classic-d8--idempotent-receive-via-timestamp-comparison) | Decision | Idempotent receive via timestamp comparison | Proposed | CLASSIC-0002 |
+| [CLASSIC-D9](federation/Log.FederationConsistency.md#classic-d9--synchronous-single-pass-retry-with-expansion-stubs) | Decision | Synchronous single-pass retry with expansion stubs | Accepted | CLASSIC-0002 |
+| [CLASSIC-D10](federation/Log.FederationConsistency.md#classic-d10--logical-clock-on-classic-resource) | Decision | Logical clock on classic-resource | Accepted | CLASSIC-0002 |
+| [CLASSIC-D11](federation/Log.FederationConsistency.md#classic-d11--update-message-type-and-receive-update) | Decision | :update message type and receive-update | Accepted | CLASSIC-0002 |
+| [CLASSIC-D12](federation/Log.FederationConsistency.md#classic-d12--per-peer-outbox-with-threshold-and-interval-flushing) | Decision | Per-peer outbox with threshold and interval flushing | Accepted | CLASSIC-0002 |
+| [CLASSIC-D13](federation/Log.FederationConsistency.md#classic-d13--blog-edit-post-with-update-propagation) | Decision | Blog edit-post with update propagation | Accepted | CLASSIC-0002 |
 | [CLASSIC-DRAFT-capability-exclusion-D1](theme/Log.CapabilityExclusion.md#classic-draft-capability-exclusion-d1--slot-name-excluded-capabilities) | Decision | Slot name: excluded-capabilities | Proposed | CLASSIC-DRAFT-capability-exclusion |
 | [CLASSIC-DRAFT-capability-exclusion-D2](theme/Log.CapabilityExclusion.md#classic-draft-capability-exclusion-d2--scope-ancestor-contributions-only) | Decision | Scope: ancestor contributions only | Proposed | CLASSIC-DRAFT-capability-exclusion |
 | [CLASSIC-DRAFT-capability-exclusion-D3](theme/Log.CapabilityExclusion.md#classic-draft-capability-exclusion-d3--exclusion-of-uninherited-capabilities-is-a-silent-no-op) | Decision | Exclusion of uninherited capabilities is a silent no-op | Proposed | CLASSIC-DRAFT-capability-exclusion |
@@ -82,19 +95,6 @@ Table: Decision, open-question, and memo records in the CLASSIC namespace.
 | [CLASSIC-DRAFT-dist-factorization-D3](Log.DistFactorization.md#classic-draft-dist-factorization-d3--the-engine-is-named-classicengineref) | Decision | The engine is named classic.engine.ref | Accepted | CLASSIC-DRAFT-dist-factorization |
 | [CLASSIC-DRAFT-dist-factorization-D4](Log.DistFactorization.md#classic-draft-dist-factorization-d4--one-classicmodelscommon-system-for-content-type-vocabulary) | Decision | One classic.models.common system for content-type vocabulary | Accepted | CLASSIC-DRAFT-dist-factorization |
 | [CLASSIC-DRAFT-dist-factorization-D5](Log.DistFactorization.md#classic-draft-dist-factorization-d5--a-mod-directory-for-modules-above-the-foundation) | Decision | A mod/ directory for modules above the foundation | Accepted | CLASSIC-DRAFT-dist-factorization |
-| [CLASSIC-DRAFT-federation-consistency-D1](federation/Log.FederationConsistency.md#classic-draft-federation-consistency-d1--provenance-as-classic-resources) | Decision | Provenance as Classic resources | Proposed | CLASSIC-DRAFT-federation-consistency |
-| [CLASSIC-DRAFT-federation-consistency-D2](federation/Log.FederationConsistency.md#classic-draft-federation-consistency-d2--per-publication-scoping) | Decision | Per-publication scoping | Proposed | CLASSIC-DRAFT-federation-consistency |
-| [CLASSIC-DRAFT-federation-consistency-D3](federation/Log.FederationConsistency.md#classic-draft-federation-consistency-d3--event-log-as-classic-resources) | Decision | Event log as Classic resources | Proposed | CLASSIC-DRAFT-federation-consistency |
-| [CLASSIC-DRAFT-federation-consistency-D4](federation/Log.FederationConsistency.md#classic-draft-federation-consistency-d4--configurable-retention-policy) | Decision | Configurable retention policy | Proposed | CLASSIC-DRAFT-federation-consistency |
-| [CLASSIC-DRAFT-federation-consistency-D5](federation/Log.FederationConsistency.md#classic-draft-federation-consistency-d5--sync-status-on-provenance) | Decision | Sync status on provenance | Proposed | CLASSIC-DRAFT-federation-consistency |
-| [CLASSIC-DRAFT-federation-consistency-D6](federation/Log.FederationConsistency.md#classic-draft-federation-consistency-d6--transport-extensibility) | Decision | Transport extensibility | Proposed | CLASSIC-DRAFT-federation-consistency |
-| [CLASSIC-DRAFT-federation-consistency-D7](federation/Log.FederationConsistency.md#classic-draft-federation-consistency-d7--acknowledgment-abstraction) | Decision | Acknowledgment abstraction | Proposed | CLASSIC-DRAFT-federation-consistency |
-| [CLASSIC-DRAFT-federation-consistency-D8](federation/Log.FederationConsistency.md#classic-draft-federation-consistency-d8--idempotent-receive-via-timestamp-comparison) | Decision | Idempotent receive via timestamp comparison | Proposed | CLASSIC-DRAFT-federation-consistency |
-| [CLASSIC-DRAFT-federation-consistency-D9](federation/Log.FederationConsistency.md#classic-draft-federation-consistency-d9--synchronous-single-pass-retry-with-expansion-stubs) | Decision | Synchronous single-pass retry with expansion stubs | Proposed | CLASSIC-DRAFT-federation-consistency |
-| [CLASSIC-DRAFT-federation-consistency-D10](federation/Log.FederationConsistency.md#classic-draft-federation-consistency-d10--logical-clock-on-classic-resource) | Decision | Logical clock on classic-resource | Proposed | CLASSIC-DRAFT-federation-consistency |
-| [CLASSIC-DRAFT-federation-consistency-D11](federation/Log.FederationConsistency.md#classic-draft-federation-consistency-d11--update-message-type-and-receive-update) | Decision | :update message type and receive-update | Proposed | CLASSIC-DRAFT-federation-consistency |
-| [CLASSIC-DRAFT-federation-consistency-D12](federation/Log.FederationConsistency.md#classic-draft-federation-consistency-d12--per-peer-outbox-with-threshold-and-interval-flushing) | Decision | Per-peer outbox with threshold and interval flushing | Proposed | CLASSIC-DRAFT-federation-consistency |
-| [CLASSIC-DRAFT-federation-consistency-D13](federation/Log.FederationConsistency.md#classic-draft-federation-consistency-d13--blog-edit-post-with-update-propagation) | Decision | Blog edit-post with update propagation | Proposed | CLASSIC-DRAFT-federation-consistency |
 | [CLASSIC-DRAFT-forum-demo-D1](forum/Log.ForumDemo.md#classic-draft-forum-demo-d1--forum-post-descends-from-classic-post-not-classic-article) | Decision | forum-post descends from classic-post, not classic-article | Proposed | CLASSIC-DRAFT-forum-demo |
 | [CLASSIC-DRAFT-forum-demo-D2](forum/Log.ForumDemo.md#classic-draft-forum-demo-d2--reactions-are-a-multiset-of-strings) | Decision | Reactions are a multiset of strings | Proposed | CLASSIC-DRAFT-forum-demo |
 | [CLASSIC-DRAFT-forum-demo-D3](forum/Log.ForumDemo.md#classic-draft-forum-demo-d3--quote--link-plus-duplicated-text) | Decision | Quote = link plus duplicated text | Proposed | CLASSIC-DRAFT-forum-demo |

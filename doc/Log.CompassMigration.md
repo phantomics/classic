@@ -448,11 +448,11 @@ requested by the steward after batch 2, recording that the Files table of
 [CLASSIC-DRAFT-deletion-support](Log.DeletionSupport.md) omits
 `test/helpers.lisp`.
 
-- **[CLASSIC-DRAFT-federation-consistency](federation/Log.FederationConsistency.md).**
+- **[CLASSIC-0002](federation/Log.FederationConsistency.md).**
   Phase A became the body, and Phases B and C two `## Update 2026-05-26`
   sections. Its 13 bold-lead decisions became
-  CLASSIC-DRAFT-federation-consistency-D1 to
-  CLASSIC-DRAFT-federation-consistency-D13, numbered across the body and both
+  CLASSIC-D1 to
+  CLASSIC-D13, numbered across the body and both
   updates; the four whose text names what was not done ("rather than…")
   carry that as their alternative, and the rest record none. Each phase is
   pinned to its own commit (`8d5cc1b`, `fb49791`, `99d050d`), with the
@@ -493,7 +493,7 @@ appear are retired headings (Addendum, Tests, Date, Design Decisions) and the
 The fourth batch converted the three theme Logs and captioned the theme
 reference. It began with migration notes, requested by the steward after
 batch 3, giving the actual line counts of the four new files whose
-approximate counts [CLASSIC-DRAFT-federation-consistency](federation/Log.FederationConsistency.md)
+approximate counts [CLASSIC-0002](federation/Log.FederationConsistency.md)
 states.
 
 - **[CLASSIC-DRAFT-theme-ontology](theme/Log.ThemeOntology.md).** Its
@@ -585,7 +585,7 @@ Table: Decision records created in Phase 3, by Log.
 | CLASSIC-DRAFT-general-model | 7 | `2bf61ce`, `c099e7d` |
 | CLASSIC-DRAFT-slot-validation | 1 | `9ee593a` |
 | CLASSIC-DRAFT-with-persistence | 6 | `31ee385` |
-| CLASSIC-DRAFT-federation-consistency | 13 | `8d5cc1b`, `fb49791`, `99d050d` |
+| CLASSIC-0002 | 13 | `8d5cc1b`, `fb49791`, `99d050d` |
 | CLASSIC-DRAFT-schema-migration | 11 | `58452c7`, `0e4c5bb`, `88a920b`, `88af7f2` |
 | CLASSIC-DRAFT-theme-ontology | 14 | `d20ec8c`, `8aea5f4` |
 | CLASSIC-DRAFT-capability-exclusion | 5 | `9626df5` |

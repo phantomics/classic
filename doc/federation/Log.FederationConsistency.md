@@ -1,30 +1,34 @@
 ---
-id:            CLASSIC-DRAFT-federation-consistency
+id:            CLASSIC-0002
 title:         Federation Consistency Development Log
 genre:         Log
 scope:         component
 project:       Classic
 component:     federation
 language:      en
-status:        Draft
+status:        Accepted
+authors:
+  - Andrew Sengul
+approved-by:   Andrew Sengul
+reviewed:      2026-10-13
 provenance:
   assistant:   opencode
 relates-to:
   - CLASSIC-0001
 decisions:
-  - CLASSIC-DRAFT-federation-consistency-D1
-  - CLASSIC-DRAFT-federation-consistency-D2
-  - CLASSIC-DRAFT-federation-consistency-D3
-  - CLASSIC-DRAFT-federation-consistency-D4
-  - CLASSIC-DRAFT-federation-consistency-D5
-  - CLASSIC-DRAFT-federation-consistency-D6
-  - CLASSIC-DRAFT-federation-consistency-D7
-  - CLASSIC-DRAFT-federation-consistency-D8
-  - CLASSIC-DRAFT-federation-consistency-D9
-  - CLASSIC-DRAFT-federation-consistency-D10
-  - CLASSIC-DRAFT-federation-consistency-D11
-  - CLASSIC-DRAFT-federation-consistency-D12
-  - CLASSIC-DRAFT-federation-consistency-D13
+  - CLASSIC-D1
+  - CLASSIC-D2
+  - CLASSIC-D3
+  - CLASSIC-D4
+  - CLASSIC-D5
+  - CLASSIC-D6
+  - CLASSIC-D7
+  - CLASSIC-D8
+  - CLASSIC-D9
+  - CLASSIC-D10
+  - CLASSIC-D11
+  - CLASSIC-D12
+  - CLASSIC-D13
 ---
 
 # Federation Consistency: Development Log
@@ -81,9 +85,9 @@ The federation system's state management had five specific defects:
 
 ## Design Decisions
 
-### CLASSIC-DRAFT-federation-consistency-D1 — Provenance as Classic resources
+### CLASSIC-D1 — Provenance as Classic resources
 
-**Status:** Proposed
+**Status:** Accepted
 
 **Context:** `*federation-provenance*` was a global hash table: not persisted,
 not thread-safe, not scoped per publication, and not itself federated (defect 1
@@ -101,9 +105,9 @@ same URI-based identity as all other Classic entities.
 - Replacing one hash table with another. Not adopted, for the reasons the
   Decision gives.
 
-### CLASSIC-DRAFT-federation-consistency-D2 — Per-publication scoping
+### CLASSIC-D2 — Per-publication scoping
 
-**Status:** Proposed
+**Status:** Accepted
 
 **Context:** Provenance lived in a shared global namespace (defect 1).
 
@@ -115,9 +119,9 @@ persistence protocol with a publication filter.
 
 **Alternatives:** None recorded.
 
-### CLASSIC-DRAFT-federation-consistency-D3 — Event log as Classic resources
+### CLASSIC-D3 — Event log as Classic resources
 
-**Status:** Proposed
+**Status:** Accepted
 
 **Context:** Federation operations left no audit trail (defect 2).
 
@@ -129,9 +133,9 @@ foundation (Phase B), and retry queue foundation (Phase B).
 
 **Alternatives:** None recorded.
 
-### CLASSIC-DRAFT-federation-consistency-D4 — Configurable retention policy
+### CLASSIC-D4 — Configurable retention policy
 
-**Status:** Proposed
+**Status:** Accepted
 
 **Context:** There was no mechanism for managing the growth of federation
 metadata over time (defect 4).
@@ -147,9 +151,9 @@ categories requires only extending the rules alist.
 
 **Alternatives:** None recorded.
 
-### CLASSIC-DRAFT-federation-consistency-D5 — Sync status on provenance
+### CLASSIC-D5 — Sync status on provenance
 
-**Status:** Proposed
+**Status:** Accepted
 
 **Context:** Provenance records did not track synchronization status, so a
 received retraction left them unchanged (defect 5).
@@ -163,9 +167,9 @@ should be shown to users" (for content listing).
 
 **Alternatives:** None recorded.
 
-### CLASSIC-DRAFT-federation-consistency-D6 — Transport extensibility
+### CLASSIC-D6 — Transport extensibility
 
-**Status:** Proposed
+**Status:** Accepted
 
 **Context:** The `ecase` dispatch in `federation-receive` signalled an error on
 any unknown message type, making protocol extension fragile (defect 3).
@@ -363,9 +367,9 @@ delivery. Three specific gaps remained:
    status `:failed` or `:pending` accumulated in the log with no path
    to resolution.
 
-### CLASSIC-DRAFT-federation-consistency-D7 — Acknowledgment abstraction
+### CLASSIC-D7 — Acknowledgment abstraction
 
-**Status:** Proposed
+**Status:** Accepted
 
 **Context:** A peer returning a non-ack response was logged as `:delivered`
 (gap 1 above).
@@ -386,7 +390,7 @@ on positive acknowledgment, `:failed` otherwise.
 - Coupling the federation protocol to a specific ack format. Not adopted, for
   the reasons the Decision gives.
 
-### CLASSIC-DRAFT-federation-consistency-D8 — Idempotent receive via timestamp comparison
+### CLASSIC-D8 — Idempotent receive via timestamp comparison
 
 **Status:** Proposed
 
@@ -422,9 +426,9 @@ and the retry system to use when staleness checking is needed.
 - Replacing `receive-from-peer` directly. Not adopted, for the reasons the
   Decision gives.
 
-### CLASSIC-DRAFT-federation-consistency-D9 — Synchronous single-pass retry with expansion stubs
+### CLASSIC-D9 — Synchronous single-pass retry with expansion stubs
 
-**Status:** Proposed
+**Status:** Accepted
 
 **Context:** Failed and pending deliveries accumulated in the event log with no
 path to resolution (gap 3).
@@ -573,9 +577,9 @@ delivery confirmation, and retry. Three gaps remained:
    (forums, social feeds) this creates excessive message overhead.
    There is no debounce or accumulation mechanism.
 
-### CLASSIC-DRAFT-federation-consistency-D10 — Logical clock on classic-resource
+### CLASSIC-D10 — Logical clock on classic-resource
 
-**Status:** Proposed
+**Status:** Accepted
 
 **Context:** Wall-clock timestamps are fragile for ordering: clocks skew
 between instances, timestamps can be absent, and simultaneous edits have no
@@ -607,9 +611,9 @@ takes precedence.
 **Alternatives:**
 - A mixin carrying the clock. Not adopted, for the reasons the Decision gives.
 
-### CLASSIC-DRAFT-federation-consistency-D11 — :update message type and receive-update
+### CLASSIC-D11 — :update message type and receive-update
 
-**Status:** Proposed
+**Status:** Accepted
 
 **Context:** Edits after federation did not reach peers; only initial publish
 and retraction were federated (gap 2).
@@ -631,9 +635,9 @@ logs events.
 
 **Alternatives:** None recorded.
 
-### CLASSIC-DRAFT-federation-consistency-D12 — Per-peer outbox with threshold and interval flushing
+### CLASSIC-D12 — Per-peer outbox with threshold and interval flushing
 
-**Status:** Proposed
+**Status:** Accepted
 
 **Context:** Every operation sent an individual message to each peer, with no
 debounce or accumulation (gap 3).
@@ -666,9 +670,9 @@ changing the behavior of existing code.
 
 **Alternatives:** None recorded.
 
-### CLASSIC-DRAFT-federation-consistency-D13 — Blog edit-post with update propagation
+### CLASSIC-D13 — Blog edit-post with update propagation
 
-**Status:** Proposed
+**Status:** Accepted
 
 **Context:** The blog model had no way to edit a published post and propagate
 the edit.
