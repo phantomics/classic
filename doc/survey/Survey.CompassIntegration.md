@@ -12,7 +12,7 @@ relates-to:
   - COMPASS-0001
   - COMPASS-DRAFT-semantic-binding
   - COMPASS-DRAFT-toolchain
-  - CLASSIC-DRAFT-project-management
+  - CLASSIC-0029
   - CLASSIC-0006
   - CLASSIC-DRAFT-persistence-backends
 cites:
@@ -409,7 +409,7 @@ top:
   built.
 - **Code references point into Git.** A revision and path name a commit in a Git
   repository, which Classic cannot resolve until it hosts Git itself, as
-  [CLASSIC-DRAFT-project-management](Survey.ProjectManagement.md#git-hosting-as-a-connected-system)
+  [CLASSIC-0029](Survey.ProjectManagement.md#git-hosting-as-a-connected-system)
   explores. Until then a code reference is a typed link to something outside the
   publication.
 - **Parts multiply resources.** A section per heading and a resource per record
@@ -435,7 +435,7 @@ top:
 - **[COMPASS-DRAFT-toolchain](../../../compass/doc/Plan.Toolchain.md)** holds the
   ledger that allocates Compass numbers, and the RDF export
   (COMPASS-DRAFT-toolchain-D17).
-- **[CLASSIC-DRAFT-project-management](Survey.ProjectManagement.md)** explores
+- **[CLASSIC-0029](Survey.ProjectManagement.md)** explores
   Classic as a Git host, which code references would eventually resolve in.
 - **The wiki preset** is the precedent for hypertext in Classic: its link graph
   and lenses are what the base-schema mixins above would generalise.

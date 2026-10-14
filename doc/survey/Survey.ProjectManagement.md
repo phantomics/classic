@@ -1,11 +1,15 @@
 ---
-id:            CLASSIC-DRAFT-project-management
+id:            CLASSIC-0029
 title:         Project Management as Classic Imprint Survey
 genre:         Survey
 scope:         project
 project:       Classic
 language:      en
-status:        Draft
+status:        Current
+authors:
+  - Andrew Sengul
+approved-by:   Andrew Sengul
+reviewed:      2026-10-14
 provenance:
   assistant:   opencode
 cites:
@@ -28,12 +32,12 @@ cites:
     locator: W3C Recommendation, 2018
     external: true
 open-questions:
-  - CLASSIC-DRAFT-project-management-O1
-  - CLASSIC-DRAFT-project-management-O2
-  - CLASSIC-DRAFT-project-management-O3
-  - CLASSIC-DRAFT-project-management-O4
-  - CLASSIC-DRAFT-project-management-O5
-  - CLASSIC-DRAFT-project-management-O6
+  - CLASSIC-O31
+  - CLASSIC-O32
+  - CLASSIC-O33
+  - CLASSIC-O34
+  - CLASSIC-O35
+  - CLASSIC-O36
 ---
 
 # Project Management as Classic Imprint: Survey
@@ -374,7 +378,7 @@ is small and mostly shared with other use cases:
    with the TTRPG imprint's derived-stat need.
 6. A Git federation adapter — the connected-system bridge that exchanges branch,
    commit, review, and merge events with a Git server (deferred to its own
-   survey; see CLASSIC-DRAFT-project-management-O6).
+   survey; see CLASSIC-O36).
 
 Not required: any change to the core protocol, the workflow engine's mechanism, or
 the composer pipeline. The PM imprint sits on the existing substrate.
@@ -463,38 +467,38 @@ collaboration.
 Identifiers below are provisional; canonical `CLASSIC-O<n>` numbers are assigned
 from the namespace registry at acceptance.
 
-### CLASSIC-DRAFT-project-management-O1 — Dependency-graph query model
+### CLASSIC-O31 — Dependency-graph query model
 
 How typed dependency relations (`blocks` / `blocked-by`) compose for critical-path
 and blocker analysis, and whether this is best served by a general graph-query
 facility over typed relations or a PM-specific traversal — a question that recurs
 wherever entities form dependency networks.
 
-### CLASSIC-DRAFT-project-management-O2 — Real-time board updates
+### CLASSIC-O32 — Real-time board updates
 
 Whether the tight-federation mode (reduced flush threshold, WebSocket transport)
 the sibling surveys also require suffices for a live-updating Kanban board, or
 whether a dedicated update-to-lens bridge is needed for synchronous team use.
 
-### CLASSIC-DRAFT-project-management-O3 — Calendar and timeline rendering
+### CLASSIC-O33 — Calendar and timeline rendering
 
 Whether calendar, timeline, and Gantt-style *display* (as distinct from scheduling
 computation, which is out of scope) is a lens display mode, a composer
 aggregate-tier capability, or a Seed medium concern.
 
-### CLASSIC-DRAFT-project-management-O4 — Custom fields and project-specific task slots
+### CLASSIC-O34 — Custom fields and project-specific task slots
 
 How a team adds domain-specific slots to `pm-task` without forking the imprint.
 Classic's MOP should support per-deployment class extension, but the authoring
 ergonomics — adding a field through configuration rather than code — need design.
 
-### CLASSIC-DRAFT-project-management-O5 — Time-tracking granularity and reporting
+### CLASSIC-O35 — Time-tracking granularity and reporting
 
 Whether time entries are first-class `pm-time-entry` entities or slot values on
 tasks, and how reporting aggregates time and progress across projects without
 recreating a centralized analytics silo.
 
-### CLASSIC-DRAFT-project-management-O6 — Git federation adapter protocol
+### CLASSIC-O36 — Git federation adapter protocol
 
 How Classic and a Git server exchange events (branch creation, commit
 notification, pull-request status, merge), what transport the adapter uses

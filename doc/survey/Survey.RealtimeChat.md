@@ -9,7 +9,7 @@ status:        Draft
 provenance:
   assistant:   opencode
 relates-to:
-  - CLASSIC-DRAFT-project-management
+  - CLASSIC-0029
   - CLASSIC-0027
   - CLASSIC-0026
   - CLASSIC-DRAFT-x400
@@ -71,7 +71,7 @@ conversation where it was requested. It assumes the forum imprint
 ([CLASSIC-0001](../federation/Guide.FederationDemo.md)), the
 workflow engine ([CLASSIC-0008](../model/Ref.Workflow.md)), the
 composer's operative tier, and the project-management imprint surveyed in
-[CLASSIC-DRAFT-project-management](Survey.ProjectManagement.md). It asks whether
+[CLASSIC-0029](Survey.ProjectManagement.md). It asks whether
 Classic should offer this integration; it does not decide.
 
 ## Motivation
@@ -378,7 +378,7 @@ or a terminal prompt as the medium requires.
 The project-management survey describes a Classic imprint for tasks, milestones,
 and reviews, connected to a Git backend that reports branch and merge events, with
 a wiki chronicle generated from those events
-([CLASSIC-DRAFT-project-management](Survey.ProjectManagement.md#git-hosting-as-a-connected-system)).
+([CLASSIC-0029](Survey.ProjectManagement.md#git-hosting-as-a-connected-system)).
 Chat completes that picture:
 
 1. A `pm-task` is created; the content linkage service creates its room.
@@ -399,7 +399,7 @@ tracker, a chat workspace, and a wiki, joined by pasted links and the discipline
 of copying decisions from one to another — is replaced by one graph whose edges
 the participants create simply by talking in the room associated with the work.
 The Git adapter that supplies the code events is the subject of
-[CLASSIC-DRAFT-project-management-O6](Survey.ProjectManagement.md#classic-draft-project-management-o6--git-federation-adapter-protocol).
+[CLASSIC-O36](Survey.ProjectManagement.md#classic-o36--git-federation-adapter-protocol).
 
 ## Federation and deployment modes
 
@@ -502,10 +502,10 @@ the content system to become a chat server.
 ## Relationship to Other Work
 
 This survey completes the development-lifecycle picture of
-[CLASSIC-DRAFT-project-management](Survey.ProjectManagement.md), supplying the
+[CLASSIC-0029](Survey.ProjectManagement.md), supplying the
 discussion layer beside its tasks, Git events, and wiki chronicle, and shares that
 survey's need for low-latency updates
-([CLASSIC-DRAFT-project-management-O2](Survey.ProjectManagement.md#classic-draft-project-management-o2--real-time-board-updates);
+([CLASSIC-O32](Survey.ProjectManagement.md#classic-o32--real-time-board-updates);
 compare [CLASSIC-O8](Survey.TTRPGHost.md#classic-o8--tight-federation-transport)).
 Crystallized chat is ordinary content, so it can be moderated through the feeds of
 [CLASSIC-0027](Survey.DistributedModeration.md) — whether

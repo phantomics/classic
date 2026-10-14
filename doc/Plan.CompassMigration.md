@@ -84,7 +84,7 @@ has changed in ways that affect the whole corpus:
 Against this, `compass check --skip-unmarked` at `be4fe84` reports 47 errors,
 all in four Surveys: [CLASSIC-0026](survey/Survey.Archival.md),
 [CLASSIC-0027](survey/Survey.DistributedModeration.md),
-[CLASSIC-DRAFT-project-management](survey/Survey.ProjectManagement.md), and
+[CLASSIC-0029](survey/Survey.ProjectManagement.md), and
 [CLASSIC-0028](survey/Survey.Usenet.md) each define their own
 CLASSIC-O1 onward, so CLASSIC-O1 to CLASSIC-O5 are each defined four times and
 CLASSIC-O6 three times (`register/unique`), and none of the numbers, CLASSIC-O7
@@ -442,14 +442,14 @@ reference's tables and diagram stays, since it explains the protocol.
    |---|---|---|
    | Archival | CLASSIC-O1 to CLASSIC-O6 | CLASSIC-O13 to `-O6` |
    | DistributedModeration | CLASSIC-O1 to CLASSIC-O7 | CLASSIC-O19 to `-O7` |
-   | ProjectManagement | CLASSIC-O1 to CLASSIC-O6 | CLASSIC-DRAFT-project-management-O1 to `-O6` |
+   | ProjectManagement | CLASSIC-O1 to CLASSIC-O6 | CLASSIC-O31 to `-O6` |
    | Usenet | CLASSIC-O1 to CLASSIC-O5 | CLASSIC-O26 to `-O5` |
 
    The four prose citations are rewritten to the question meant: the shared
    curation-feed question in Archival names both
    CLASSIC-O18 and CLASSIC-O24; the
    Git adapter in ProjectManagement names
-   CLASSIC-DRAFT-project-management-O6; and DistributedModeration's two
+   CLASSIC-O36; and DistributedModeration's two
    citations of Usenet name CLASSIC-O26 and
    CLASSIC-O30.
 2. **Add `.mailmap`**, before the ledger

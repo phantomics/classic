@@ -38,12 +38,12 @@ Table: Documents in the CLASSIC namespace.
 | [CLASSIC-0026](survey/Survey.Archival.md) | Content Archival and Durability Survey | Survey | project | Current | — |
 | [CLASSIC-0027](survey/Survey.DistributedModeration.md) | Distributed Content Moderation Survey | Survey | project | Current | — |
 | [CLASSIC-0028](survey/Survey.Usenet.md) | Usenet-Analog Discussion Hosting Survey | Survey | project | Current | — |
+| [CLASSIC-0029](survey/Survey.ProjectManagement.md) | Project Management as Classic Imprint Survey | Survey | project | Current | — |
 | [CLASSIC-DRAFT-compass-integration](survey/Survey.CompassIntegration.md) | Compass Documentation on Classic Survey | Survey | project | Draft | — |
 | [CLASSIC-DRAFT-compass-migration](Plan.CompassMigration.md) | Compass Migration Plan | Plan | project | Implemented | — |
 | [CLASSIC-DRAFT-compass-migration-log](Log.CompassMigration.md) | Compass Migration Development Log | Log | project | Implemented | — |
 | [CLASSIC-DRAFT-new-schema](Guide.NewSchema.md) | Creating a New Schema Guide | Guide (howto) | project | Draft | schema |
 | [CLASSIC-DRAFT-persistence-backends](persistence/Arch.PersistenceBackends.md) | The Persistence Backends Architecture | Architecture | component | Draft | persistence |
-| [CLASSIC-DRAFT-project-management](survey/Survey.ProjectManagement.md) | Project Management as Classic Imprint Survey | Survey | project | Draft | — |
 | [CLASSIC-DRAFT-realtime-chat](survey/Survey.RealtimeChat.md) | Real-Time Chat Integration Survey | Survey | project | Draft | — |
 | [CLASSIC-DRAFT-schema-pluggability](Survey.SchemaPluggability.md) | Schema Pluggability Survey | Survey | project | Draft | schema |
 | [CLASSIC-DRAFT-with-persistence](persistence/Log.WithPersistence.md) | with-persistence Development Log | Log | component | Accepted | persistence |
@@ -200,6 +200,12 @@ Table: Decision, open-question, and memo records in the CLASSIC namespace.
 | [CLASSIC-O28](survey/Survey.Usenet.md#classic-o28--retention-tiering-for-text-versus-binary) | Open question | Retention tiering for text versus binary | — | CLASSIC-0028 |
 | [CLASSIC-O29](survey/Survey.Usenet.md#classic-o29--nntp-bridge-scope-and-non-blocking-constraints) | Open question | NNTP bridge scope and non-blocking constraints | — | CLASSIC-0028 |
 | [CLASSIC-O30](survey/Survey.Usenet.md#classic-o30--relationship-to-the-federated-moderation-model) | Open question | Relationship to the federated moderation model | — | CLASSIC-0028 |
+| [CLASSIC-O31](survey/Survey.ProjectManagement.md#classic-o31--dependency-graph-query-model) | Open question | Dependency-graph query model | — | CLASSIC-0029 |
+| [CLASSIC-O32](survey/Survey.ProjectManagement.md#classic-o32--real-time-board-updates) | Open question | Real-time board updates | — | CLASSIC-0029 |
+| [CLASSIC-O33](survey/Survey.ProjectManagement.md#classic-o33--calendar-and-timeline-rendering) | Open question | Calendar and timeline rendering | — | CLASSIC-0029 |
+| [CLASSIC-O34](survey/Survey.ProjectManagement.md#classic-o34--custom-fields-and-project-specific-task-slots) | Open question | Custom fields and project-specific task slots | — | CLASSIC-0029 |
+| [CLASSIC-O35](survey/Survey.ProjectManagement.md#classic-o35--time-tracking-granularity-and-reporting) | Open question | Time-tracking granularity and reporting | — | CLASSIC-0029 |
+| [CLASSIC-O36](survey/Survey.ProjectManagement.md#classic-o36--git-federation-adapter-protocol) | Open question | Git federation adapter protocol | — | CLASSIC-0029 |
 | [CLASSIC-DRAFT-compass-integration-O1](survey/Survey.CompassIntegration.md#classic-draft-compass-integration-o1--base-schema-or-model-module) | Open question | Base schema or model module | — | CLASSIC-DRAFT-compass-integration |
 | [CLASSIC-DRAFT-compass-integration-O2](survey/Survey.CompassIntegration.md#classic-draft-compass-integration-o2--authors-as-a-list) | Open question | Authors as a list | — | CLASSIC-DRAFT-compass-integration |
 | [CLASSIC-DRAFT-compass-integration-O3](survey/Survey.CompassIntegration.md#classic-draft-compass-integration-o3--records-as-parts-with-their-own-identity) | Open question | Records as parts with their own identity | — | CLASSIC-DRAFT-compass-integration |
@@ -214,12 +220,6 @@ Table: Decision, open-question, and memo records in the CLASSIC namespace.
 | [CLASSIC-DRAFT-compass-migration-O6](Plan.CompassMigration.md#classic-draft-compass-migration-o6--logs-that-record-several-pieces-of-work) | Open question | Logs that record several pieces of work | — | CLASSIC-DRAFT-compass-migration |
 | [CLASSIC-DRAFT-persistence-backends-O1](persistence/Arch.PersistenceBackends.md#classic-draft-persistence-backends-o1--serialization-durability-and-thread-safety) | Open question | Serialization, durability, and thread safety | — | CLASSIC-DRAFT-persistence-backends |
 | [CLASSIC-DRAFT-persistence-backends-O2](persistence/Arch.PersistenceBackends.md#classic-draft-persistence-backends-o2--rebuilding-derived-artifacts) | Open question | Rebuilding derived artifacts | — | CLASSIC-DRAFT-persistence-backends |
-| [CLASSIC-DRAFT-project-management-O1](survey/Survey.ProjectManagement.md#classic-draft-project-management-o1--dependency-graph-query-model) | Open question | Dependency-graph query model | — | CLASSIC-DRAFT-project-management |
-| [CLASSIC-DRAFT-project-management-O2](survey/Survey.ProjectManagement.md#classic-draft-project-management-o2--real-time-board-updates) | Open question | Real-time board updates | — | CLASSIC-DRAFT-project-management |
-| [CLASSIC-DRAFT-project-management-O3](survey/Survey.ProjectManagement.md#classic-draft-project-management-o3--calendar-and-timeline-rendering) | Open question | Calendar and timeline rendering | — | CLASSIC-DRAFT-project-management |
-| [CLASSIC-DRAFT-project-management-O4](survey/Survey.ProjectManagement.md#classic-draft-project-management-o4--custom-fields-and-project-specific-task-slots) | Open question | Custom fields and project-specific task slots | — | CLASSIC-DRAFT-project-management |
-| [CLASSIC-DRAFT-project-management-O5](survey/Survey.ProjectManagement.md#classic-draft-project-management-o5--time-tracking-granularity-and-reporting) | Open question | Time-tracking granularity and reporting | — | CLASSIC-DRAFT-project-management |
-| [CLASSIC-DRAFT-project-management-O6](survey/Survey.ProjectManagement.md#classic-draft-project-management-o6--git-federation-adapter-protocol) | Open question | Git federation adapter protocol | — | CLASSIC-DRAFT-project-management |
 | [CLASSIC-DRAFT-realtime-chat-O1](survey/Survey.RealtimeChat.md#classic-draft-realtime-chat-o1--crystallization-edge-timing) | Open question | Crystallization edge timing | — | CLASSIC-DRAFT-realtime-chat |
 | [CLASSIC-DRAFT-realtime-chat-O2](survey/Survey.RealtimeChat.md#classic-draft-realtime-chat-o2--recognizer-plugin-interface) | Open question | Recognizer plugin interface | — | CLASSIC-DRAFT-realtime-chat |
 | [CLASSIC-DRAFT-realtime-chat-O3](survey/Survey.RealtimeChat.md#classic-draft-realtime-chat-o3--granularity-threshold) | Open question | Granularity threshold | — | CLASSIC-DRAFT-realtime-chat |
