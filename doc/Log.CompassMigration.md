@@ -1,5 +1,5 @@
 ---
-id:            CLASSIC-DRAFT-compass-migration-log
+id:            CLASSIC-0036
 title:         Compass Migration Development Log
 genre:         Log
 scope:         project
@@ -18,11 +18,11 @@ relates-to:
   - COMPASS-DRAFT-toolchain
   - COMPASS-DRAFT-ledger-log
 decisions:
-  - CLASSIC-DRAFT-compass-migration-log-D1
-  - CLASSIC-DRAFT-compass-migration-log-D2
-  - CLASSIC-DRAFT-compass-migration-log-D3
-  - CLASSIC-DRAFT-compass-migration-log-D4
-  - CLASSIC-DRAFT-compass-migration-log-D5
+  - CLASSIC-D107
+  - CLASSIC-D108
+  - CLASSIC-D109
+  - CLASSIC-D110
+  - CLASSIC-D111
 ---
 
 # Compass Migration: Development Log
@@ -60,7 +60,7 @@ The migration's own decisions are the plan's records,
 CLASSIC-D92 to CLASSIC-D102.
 The records below are the narrower choices made while carrying it out.
 
-### CLASSIC-DRAFT-compass-migration-log-D1 — A link whose text is a file name takes the target's identifier
+### CLASSIC-D107 — A link whose text is a file name takes the target's identifier
 
 **Status:** Implemented
 
@@ -80,7 +80,7 @@ link text was kept, and only the target changed.
 - Rewrite every link's text to the identifier. Rejected: descriptive text
   such as "the uniqueness guarantee" reads better and is equally conformant.
 
-### CLASSIC-DRAFT-compass-migration-log-D2 — Relations come from the corpus, not from the topic
+### CLASSIC-D108 — Relations come from the corpus, not from the topic
 
 **Status:** Implemented
 
@@ -100,7 +100,7 @@ that cite one another. Documents that merely share a subject are not listed.
   Log-to-Ref pairing is known now and is what `compass refs` and agents use
   to navigate.
 
-### CLASSIC-DRAFT-compass-migration-log-D3 — In-body status lines that front-matter replaces are removed; dates stay
+### CLASSIC-D109 — In-body status lines that front-matter replaces are removed; dates stay
 
 **Status:** Implemented
 
@@ -120,7 +120,7 @@ its author, which can differ from Git's dates, and two Logs' dates already do
 - Remove the date lines too. Rejected: they are historical claims of the
   author, which the migration does not edit.
 
-### CLASSIC-DRAFT-compass-migration-log-D4 — Headings follow the genre spine; body text is not rewritten
+### CLASSIC-D110 — Headings follow the genre spine; body text is not rewritten
 
 **Status:** Implemented
 
@@ -141,7 +141,7 @@ records with their wording intact.
   their open questions as records in Phase 2, and heading changes are cheapest
   made once, with the front-matter.
 
-### CLASSIC-DRAFT-compass-migration-log-D5 — Each gate is checked with two builds of the toolchain
+### CLASSIC-D111 — Each gate is checked with two builds of the toolchain
 
 **Status:** Implemented
 
@@ -212,7 +212,7 @@ Git-derived `created` field follow each file across it.
   provisional identifier, title, genre (with `subtype: tutorial` on the three
   Guides), scope, `project: Classic`, component, `language: en`,
   `status: Draft` (CLASSIC-D94), `provenance`, and
-  `relates-to` (CLASSIC-DRAFT-compass-migration-log-D2). Refs and Guides carry
+  `relates-to` (CLASSIC-D108). Refs and Guides carry
   `api-version: "0.1.0"`, from `classic.asd`. Three Logs whose work spans
   layers are project scope. Three documents have no component:
   `Log.DistFactorization.md`, which restructures every layer, and the two
@@ -232,12 +232,12 @@ Git-derived `created` field follow each file across it.
   ("None recorded" for alternatives) and two open questions. The Ref keeps a
   short section pointing to it.
 - **Surveys.** `Survey.MusicPublishing.md` and `Survey.TTRPGHost.md` were
-  reshaped (CLASSIC-DRAFT-compass-migration-log-D3,
-  CLASSIC-DRAFT-compass-migration-log-D4), their numbered open questions became
+  reshaped (CLASSIC-D109,
+  CLASSIC-D110), their numbered open questions became
   six records each, and the external products they name were listed in
   `cites:`.
 - **Links** (CLASSIC-D98). 52 Markdown links in the
-  Surveys were retargeted (CLASSIC-DRAFT-compass-migration-log-D1). About twenty
+  Surveys were retargeted (CLASSIC-D107). About twenty
   backticked document paths and prose mentions in Refs, Logs, and the
   integration Survey became id-keyed links, including five of the eight
   `DevLog.` references; the other three, in Files tables, were left as written.
@@ -257,7 +257,7 @@ Git-derived `created` field follow each file across it.
 ## Verification
 
 Each gate was run with the local executable and with Compass `9a6ab23` built
-from a clean clone (CLASSIC-DRAFT-compass-migration-log-D5); the two agreed
+from a clean clone (CLASSIC-D111); the two agreed
 every time.
 
 Table: The gate of each phase, and its result with both builds.

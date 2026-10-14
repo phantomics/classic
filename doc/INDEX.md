@@ -45,7 +45,7 @@ Table: Documents in the CLASSIC namespace.
 | [CLASSIC-0033](Guide.NewSchema.md) | Creating a New Schema Guide | Guide (howto) | project | Current | schema |
 | [CLASSIC-0034](persistence/Arch.PersistenceBackends.md) | The Persistence Backends Architecture | Architecture | component | Accepted | persistence |
 | [CLASSIC-0035](Survey.SchemaPluggability.md) | Schema Pluggability Survey | Survey | project | Implemented | schema |
-| [CLASSIC-DRAFT-compass-migration-log](Log.CompassMigration.md) | Compass Migration Development Log | Log | project | Implemented | — |
+| [CLASSIC-0036](Log.CompassMigration.md) | Compass Migration Development Log | Log | project | Implemented | — |
 | [CLASSIC-DRAFT-realtime-chat](survey/Survey.RealtimeChat.md) | Real-Time Chat Integration Survey | Survey | project | Draft | — |
 | [CLASSIC-DRAFT-with-persistence](persistence/Log.WithPersistence.md) | with-persistence Development Log | Log | component | Accepted | persistence |
 
@@ -159,11 +159,11 @@ Table: Decision, open-question, and memo records in the CLASSIC namespace.
 | [CLASSIC-D104](persistence/Arch.PersistenceBackends.md#classic-d104--flat-file-cross-entity-queries-use-materialized-index-files) | Decision | Flat-file cross-entity queries use materialized index files | Accepted | CLASSIC-0034 |
 | [CLASSIC-D105](persistence/Arch.PersistenceBackends.md#classic-d105--container-level-bundling-for-high-volume-small-items) | Decision | Container-level bundling for high-volume small items | Accepted | CLASSIC-0034 |
 | [CLASSIC-D106](persistence/Arch.PersistenceBackends.md#classic-d106--the-triplestore-splits-relations-from-content) | Decision | The triplestore splits relations from content | Accepted | CLASSIC-0034 |
-| [CLASSIC-DRAFT-compass-migration-log-D1](Log.CompassMigration.md#classic-draft-compass-migration-log-d1--a-link-whose-text-is-a-file-name-takes-the-targets-identifier) | Decision | A link whose text is a file name takes the target's identifier | Implemented | CLASSIC-DRAFT-compass-migration-log |
-| [CLASSIC-DRAFT-compass-migration-log-D2](Log.CompassMigration.md#classic-draft-compass-migration-log-d2--relations-come-from-the-corpus-not-from-the-topic) | Decision | Relations come from the corpus, not from the topic | Implemented | CLASSIC-DRAFT-compass-migration-log |
-| [CLASSIC-DRAFT-compass-migration-log-D3](Log.CompassMigration.md#classic-draft-compass-migration-log-d3--in-body-status-lines-that-front-matter-replaces-are-removed-dates-stay) | Decision | In-body status lines that front-matter replaces are removed; dates stay | Implemented | CLASSIC-DRAFT-compass-migration-log |
-| [CLASSIC-DRAFT-compass-migration-log-D4](Log.CompassMigration.md#classic-draft-compass-migration-log-d4--headings-follow-the-genre-spine-body-text-is-not-rewritten) | Decision | Headings follow the genre spine; body text is not rewritten | Implemented | CLASSIC-DRAFT-compass-migration-log |
-| [CLASSIC-DRAFT-compass-migration-log-D5](Log.CompassMigration.md#classic-draft-compass-migration-log-d5--each-gate-is-checked-with-two-builds-of-the-toolchain) | Decision | Each gate is checked with two builds of the toolchain | Implemented | CLASSIC-DRAFT-compass-migration-log |
+| [CLASSIC-D107](Log.CompassMigration.md#classic-d107--a-link-whose-text-is-a-file-name-takes-the-targets-identifier) | Decision | A link whose text is a file name takes the target's identifier | Implemented | CLASSIC-0036 |
+| [CLASSIC-D108](Log.CompassMigration.md#classic-d108--relations-come-from-the-corpus-not-from-the-topic) | Decision | Relations come from the corpus, not from the topic | Implemented | CLASSIC-0036 |
+| [CLASSIC-D109](Log.CompassMigration.md#classic-d109--in-body-status-lines-that-front-matter-replaces-are-removed-dates-stay) | Decision | In-body status lines that front-matter replaces are removed; dates stay | Implemented | CLASSIC-0036 |
+| [CLASSIC-D110](Log.CompassMigration.md#classic-d110--headings-follow-the-genre-spine-body-text-is-not-rewritten) | Decision | Headings follow the genre spine; body text is not rewritten | Implemented | CLASSIC-0036 |
+| [CLASSIC-D111](Log.CompassMigration.md#classic-d111--each-gate-is-checked-with-two-builds-of-the-toolchain) | Decision | Each gate is checked with two builds of the toolchain | Implemented | CLASSIC-0036 |
 | [CLASSIC-DRAFT-with-persistence-D1](persistence/Log.WithPersistence.md#classic-draft-with-persistence-d1--a-with-persistence-macro) | Decision | A with-persistence macro | Implemented | CLASSIC-DRAFT-with-persistence |
 | [CLASSIC-DRAFT-with-persistence-D2](persistence/Log.WithPersistence.md#classic-draft-with-persistence-d2--persist-on-normal-exit-only) | Decision | Persist on normal exit only | Implemented | CLASSIC-DRAFT-with-persistence |
 | [CLASSIC-DRAFT-with-persistence-D3](persistence/Log.WithPersistence.md#classic-draft-with-persistence-d3--one-macro-for-one-entity-or-several) | Decision | One macro for one entity or several | Proposed | CLASSIC-DRAFT-with-persistence |

@@ -393,7 +393,7 @@ beside the engine's own definitions
 `mod/classic.engine.ref/workflow-engine.lisp:find-transition@a461f4e`). They
 survived the cleanup commit `2d99cf8` and are still present at `6aa9023`. The
 discrepancy is recorded as outstanding work in
-[CLASSIC-DRAFT-compass-migration-log](Log.CompassMigration.md#outstanding-work),
+[CLASSIC-0036](Log.CompassMigration.md#outstanding-work),
 to be addressed once the migration is complete.
 
 #### The mechanical rewrite trap, revisited

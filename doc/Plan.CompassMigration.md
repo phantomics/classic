@@ -683,5 +683,5 @@ Table: Prior work in the federation and what this plan draws from each.
 Milestones 1 to 4 are complete: Phase 1 in `dfeb862`, Phase 2 in `fdad517` and
 `56d400a`, and Phase 3 in five batches from `6aa9023` to the forum and wiki
 batch, each recorded as an update in
-[CLASSIC-DRAFT-compass-migration-log](Log.CompassMigration.md). Milestone 5
+[CLASSIC-0036](Log.CompassMigration.md). Milestone 5
 is the steward's.
