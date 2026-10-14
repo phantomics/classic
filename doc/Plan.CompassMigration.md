@@ -1,5 +1,5 @@
 ---
-id:            CLASSIC-DRAFT-compass-migration
+id:            CLASSIC-0032
 title:         Compass Migration Plan
 genre:         Plan
 scope:         project
@@ -18,24 +18,24 @@ relates-to:
   - COMPASS-DRAFT-ledger-log
   - CLASSIC-0031
 decisions:
-  - CLASSIC-DRAFT-compass-migration-D1
-  - CLASSIC-DRAFT-compass-migration-D2
-  - CLASSIC-DRAFT-compass-migration-D3
-  - CLASSIC-DRAFT-compass-migration-D4
-  - CLASSIC-DRAFT-compass-migration-D5
-  - CLASSIC-DRAFT-compass-migration-D6
-  - CLASSIC-DRAFT-compass-migration-D7
-  - CLASSIC-DRAFT-compass-migration-D8
-  - CLASSIC-DRAFT-compass-migration-D9
-  - CLASSIC-DRAFT-compass-migration-D10
-  - CLASSIC-DRAFT-compass-migration-D11
+  - CLASSIC-D92
+  - CLASSIC-D93
+  - CLASSIC-D94
+  - CLASSIC-D95
+  - CLASSIC-D96
+  - CLASSIC-D97
+  - CLASSIC-D98
+  - CLASSIC-D99
+  - CLASSIC-D100
+  - CLASSIC-D101
+  - CLASSIC-D102
 open-questions:
-  - CLASSIC-DRAFT-compass-migration-O1
-  - CLASSIC-DRAFT-compass-migration-O2
-  - CLASSIC-DRAFT-compass-migration-O3
-  - CLASSIC-DRAFT-compass-migration-O4
-  - CLASSIC-DRAFT-compass-migration-O5
-  - CLASSIC-DRAFT-compass-migration-O6
+  - CLASSIC-O43
+  - CLASSIC-O44
+  - CLASSIC-O45
+  - CLASSIC-O46
+  - CLASSIC-O47
+  - CLASSIC-O48
 ---
 
 # Compass Migration: Development Plan
@@ -125,9 +125,9 @@ written.
 
 ## Settled Decisions
 
-### CLASSIC-DRAFT-compass-migration-D1 — Survey open questions take per-Survey provisional identifiers
+### CLASSIC-D92 — Survey open questions take per-Survey provisional identifiers
 
-**Status:** Accepted
+**Status:** Implemented
 
 **Context:** Four Surveys define open questions numbered CLASSIC-O1 onward,
 each Survey starting again from one. No ledger allocated these numbers, and
@@ -148,9 +148,9 @@ canonical numbers when the steward accepts each Survey.
 - Number all the questions now, in one sequence. Rejected: canonical numbers
   are assigned at acceptance, by the steward (§13), and the Surveys are drafts.
 
-### CLASSIC-DRAFT-compass-migration-D2 — Genre-prefixed names, with the component subdirectories kept
+### CLASSIC-D93 — Genre-prefixed names, with the component subdirectories kept
 
-**Status:** Accepted
+**Status:** Implemented
 
 **Context:** Ten documents have no genre prefix (`Schema.md`, `Model.md`,
 `Forum.md`, and others). Compass names a document `<Genre>.<Topic>.md` (§10)
@@ -171,9 +171,9 @@ across the rename and the derived `authors` and `created` fields are kept.
   from a Guide without opening the file. The toolchain does not check
   filenames, so this is the standard's rule, not a check that would fail.
 
-### CLASSIC-DRAFT-compass-migration-D3 — Statuses an assistant may set during migration
+### CLASSIC-D94 — Statuses an assistant may set during migration
 
-**Status:** Accepted
+**Status:** Implemented
 
 **Context:** An assistant never sets an authoritative status (`Accepted`,
 `Design-Record`, `Current`) or `approved-by` (§6). Every migrated document
@@ -199,9 +199,9 @@ migration has not yet been reviewed.
 - `Current` for the reference documents that are not stale. Rejected: it is an
   authoritative status, which an assistant does not set.
 
-### CLASSIC-DRAFT-compass-migration-D4 — Log decisions become ADR records without new content
+### CLASSIC-D95 — Log decisions become ADR records without new content
 
-**Status:** Accepted
+**Status:** Implemented
 
 **Context:** Every Log records decisions, about 95 in all, in four ad-hoc
 styles. Compass writes a decision as a record with Status, Context, Decision,
@@ -223,9 +223,9 @@ does not fit the three fields stays, after the fields.
 - Reconstruct missing alternatives from the code and history. Rejected: it
   would put claims in a historical record that its author never made.
 
-### CLASSIC-DRAFT-compass-migration-D5 — Log code references pin to each Log's work commit
+### CLASSIC-D96 — Log code references pin to each Log's work commit
 
-**Status:** Accepted
+**Status:** Implemented
 
 **Context:** A Log's code references must be commit-pinned (§9), in the form
 `path:symbol@revision`. Classic's Logs name files as they stood when the work
@@ -278,9 +278,9 @@ pinned to the commit that holds that state.
 - Pin to the commit that added the Log. Rejected: for several Logs the
   document came in a later commit than the code, after further changes.
 
-### CLASSIC-DRAFT-compass-migration-D6 — Enforcement by CI, code owners, and a mailmap
+### CLASSIC-D97 — Enforcement by CI, code owners, and a mailmap
 
-**Status:** Accepted
+**Status:** Implemented
 
 **Context:** The Compass repository enforces its standard with a CI workflow,
 a CODEOWNERS entry for the ledger, a pre-commit hook, and a `.mailmap`. A
@@ -293,7 +293,7 @@ ledger keeps numbers unique only if every change to it passes `compass check
   repository and runs `compass check --base` against the branch a pull request
   merges into, and `compass index --check`, with the full history fetched for
   Git-derived fields and code references. It builds the toolchain at a pinned
-  Compass release tag (CLASSIC-DRAFT-compass-migration-D8).
+  Compass release tag (CLASSIC-D99).
 - `.github/CODEOWNERS` assigns `/doc/REGISTRY.sexp` to the steward.
 - `.mailmap` maps the `phantomics` identity to Andrew Sengul, so that derived
   authors, and the allocator of every ledger entry, name a person. It lands
@@ -310,9 +310,9 @@ set in the repository's settings by the steward.
 - No CI. Rejected: the uniqueness of numbers depends on a check that cannot be
   bypassed.
 
-### CLASSIC-DRAFT-compass-migration-D7 — Links are fixed; stale content is marked, not refreshed
+### CLASSIC-D98 — Links are fixed; stale content is marked, not refreshed
 
-**Status:** Accepted
+**Status:** Implemented
 
 **Context:** Several reference documents are stale against the code: they use
 blog function names the General Model refactor replaced, or predate the
@@ -325,7 +325,7 @@ an id-keyed Markdown link to the document's new name, because
 `ref/doc-resolves` requires it. A path in a Log's Files table, or elsewhere in
 a Log's account of what a commit changed, is a record of that commit, not a
 link, and keeps the name the file had then, as
-CLASSIC-DRAFT-compass-migration-D5 keeps code paths; three of the eight
+CLASSIC-D96 keeps code paths; three of the eight
 `DevLog.` references are of this kind. The migration does not refresh the
 content. Each stale document is listed under
 [Scope and Non-Goals](#scope-and-non-goals) for a separate change, so that it
@@ -336,11 +336,11 @@ stays `Draft` when the steward reviews statuses.
   the change and mixes structural edits, which are mechanical, with edits that
   need checking against the code.
 
-### CLASSIC-DRAFT-compass-migration-D8 — CI builds the toolchain at a pinned release tag
+### CLASSIC-D99 — CI builds the toolchain at a pinned release tag
 
-**Status:** Accepted
+**Status:** Implemented
 
-**Context:** CLASSIC-DRAFT-compass-migration-O4 asked which revision of the
+**Context:** CLASSIC-O46 asked which revision of the
 Compass toolchain CI builds. A pinned commit or tag is reproducible, but each
 toolchain update is a change to Classic. Following the latest release needs no
 change to Classic, but a new release can fail Classic's CI without any change
@@ -361,11 +361,11 @@ line. Until Compass publishes its first tag, the variable names commit
 - Pin a commit permanently. Rejected: release tags name the versions Compass
   supports, and a commit does not say which release it belongs to.
 
-### CLASSIC-DRAFT-compass-migration-D9 — Logs of several pieces of work take dated Update sections
+### CLASSIC-D100 — Logs of several pieces of work take dated Update sections
 
-**Status:** Accepted
+**Status:** Implemented
 
-**Context:** CLASSIC-DRAFT-compass-migration-O6 asked whether
+**Context:** CLASSIC-O48 asked whether
 `Log.FederationConsistency.md`, `Log.SchemaMigration.md`, and
 `Log.ThemeOntology.md`, which each record work done over several commits in
 phases or addenda, should be split into one Log per piece of work. The Log
@@ -374,18 +374,18 @@ template appends follow-up work as `## Update <date> — <title>` sections.
 **Decision:** Each stays one Log. Its first piece of work is the Log's body,
 and each later phase or addendum becomes a `## Update <date> — <title>`
 section, with its own decision records and Files table, pinned to its own
-commit (CLASSIC-DRAFT-compass-migration-D5).
+commit (CLASSIC-D96).
 
 **Alternatives:**
 - Split each into one Log per piece of work. Rejected: the phases and addenda
   continue one line of work and cite one another, and a split would multiply
   identifiers and links without adding anything a reader needs.
 
-### CLASSIC-DRAFT-compass-migration-D10 — The schema contract is split into a Spec, a Guide, and a Survey
+### CLASSIC-D101 — The schema contract is split into a Spec, a Guide, and a Survey
 
-**Status:** Accepted
+**Status:** Implemented
 
-**Context:** CLASSIC-DRAFT-compass-migration-O1 found that `SchemaContract.md`
+**Context:** CLASSIC-O43 found that `SchemaContract.md`
 combined a normative contract written with lowercase "must" and "should", a
 ten-step walkthrough, and an afterword exploring the limits of pluggability.
 
@@ -406,11 +406,11 @@ now point to the Survey.
   appendices. Rejected: each part has a different genre, and a reader of the
   contract cannot tell which statements bind.
 
-### CLASSIC-DRAFT-compass-migration-D11 — The planned persistence backends move into an Arch
+### CLASSIC-D102 — The planned persistence backends move into an Arch
 
-**Status:** Accepted
+**Status:** Implemented
 
-**Context:** CLASSIC-DRAFT-compass-migration-O2 found that `Persistence.md`
+**Context:** CLASSIC-O44 found that `Persistence.md`
 described the built memory backend beside a flat-file and a triplestore
 backend that are designed but not built. A Ref describes running software; an
 Arch records a design that does not yet exist (§4).
@@ -419,7 +419,7 @@ Arch records a design that does not yet exist (§4).
 [CLASSIC-DRAFT-persistence-backends](persistence/Arch.PersistenceBackends.md),
 whose decision records state the design choices the original text makes, with
 "None recorded" where it names no alternative (as
-CLASSIC-DRAFT-compass-migration-D4 does for Logs), and whose open questions
+CLASSIC-D95 does for Logs), and whose open questions
 name what the reference leaves to these backends without the design saying
 how. [CLASSIC-0006](persistence/Ref.Persistence.md) keeps a short
 section pointing to it. The comparison of storage across backends in the
@@ -433,7 +433,7 @@ reference's tables and diagram stays, since it explains the protocol.
 ## Phase 1 — Clean baseline
 
 1. **Renumber the Survey open questions**
-   (CLASSIC-DRAFT-compass-migration-D1), in their headings and their
+   (CLASSIC-D92), in their headings and their
    `open-questions:` lists:
 
    Table: The new provisional identifiers of the Survey open questions.
@@ -453,7 +453,7 @@ reference's tables and diagram stays, since it explains the protocol.
    citations of Usenet name CLASSIC-O26 and
    CLASSIC-O30.
 2. **Add `.mailmap`**, before the ledger
-   (CLASSIC-DRAFT-compass-migration-D6).
+   (CLASSIC-D97).
 3. **Create the ledger** with `compass init --ledger`, after a dry run. With
    no canonical identifiers in use, it records none; the dry run is refused
    while the duplicate numbers remain, so it runs after step 1.
@@ -461,14 +461,14 @@ reference's tables and diagram stays, since it explains the protocol.
 5. **Refresh `AGENTS.md`** from the current Compass snippet: add the sentence
    on `compass assign` and the ledger, and replace the note on the duplicated
    numbers with one on provisional record identifiers.
-6. **Add CI and code owners** (CLASSIC-DRAFT-compass-migration-D6).
+6. **Add CI and code owners** (CLASSIC-D97).
 7. **Gate:** `compass check --skip-unmarked` reports no errors, and
    `compass index --check` passes.
 
 ## Phase 2 — Front-matter on every document
 
 1. **Rename**, in a commit with no other change
-   (CLASSIC-DRAFT-compass-migration-D2):
+   (CLASSIC-D93):
 
    Table: Documents renamed to genre-prefixed names, with their genres, migration statuses, and components.
 
@@ -486,7 +486,7 @@ reference's tables and diagram stays, since it explains the protocol.
    | `doc/wiki/Wiki.md` | `doc/wiki/Guide.Wiki.md` | Guide (tutorial), Draft | wiki |
 
    Then, in the content change, the two documents split under
-   CLASSIC-DRAFT-compass-migration-D10 and CLASSIC-DRAFT-compass-migration-D11
+   CLASSIC-D101 and CLASSIC-D102
    give three new ones:
 
    Table: Documents created by splitting the schema contract and the persistence reference.
@@ -500,7 +500,7 @@ reference's tables and diagram stays, since it explains the protocol.
 2. **Add front-matter** to the twenty-six unmarked documents, following each
    genre's template: a provisional `id`, `title`, `genre`, `scope`,
    `project: Classic`, `component`, `language`, the status of
-   CLASSIC-DRAFT-compass-migration-D3, and `provenance`; `api-version` on each
+   CLASSIC-D94, and `provenance`; `api-version` on each
    Ref and Guide and `schema-version` on the Spec, both from `classic.asd`;
    and `relates-to` and `cites` where they have real values. `authors`,
    `created`, and `updated` are left to Git.
@@ -509,7 +509,7 @@ reference's tables and diagram stays, since it explains the protocol.
    names of the Survey spine, and turn their numbered open questions into
    records, CLASSIC-O1 and CLASSIC-O7
    onward. TTRPGHost's mention of `Concept.MusicPublishing` becomes a link.
-4. **Fix every link** (CLASSIC-DRAFT-compass-migration-D7): backticked
+4. **Fix every link** (CLASSIC-D98): backticked
    document paths, bare filenames, and prose mentions of another document
    become id-keyed Markdown links. Of the eight `DevLog.` references, the five
    in `Ref.Model.md`, `Ref.Workflow.md`, `Ref.Persistence.md`, `Ref.Schema.md`,
@@ -525,8 +525,8 @@ reference's tables and diagram stays, since it explains the protocol.
 
 Committed in batches by component, each batch checked before the next.
 
-1. **Decision records in the Logs** (CLASSIC-DRAFT-compass-migration-D4).
-2. **Pinned code references in the Logs** (CLASSIC-DRAFT-compass-migration-D5).
+1. **Decision records in the Logs** (CLASSIC-D95).
+2. **Pinned code references in the Logs** (CLASSIC-D96).
    A path that names one symbol becomes `path:symbol@revision`; a path
    followed by a list of several of its symbols is pinned as
    `path@revision`, and the symbols stay as written, after each has been
@@ -540,14 +540,14 @@ Committed in batches by component, each batch checked before the next.
    - A Tests section becomes `## Verification`, keeping its content. A
      `## Metrics` section is an optional section of the Log spine, and stays.
    - A spine section a Log lacks is added without new claims, as
-     CLASSIC-DRAFT-compass-migration-D4 extracts decisions: a missing
+     CLASSIC-D95 extracts decisions: a missing
      Verification states the test command and the counts the Log already
      reports, and a missing Outstanding Work says that none was recorded.
      `Log.DeletionSupport.md`, `Log.SlotValidation.md`,
      `Log.WithPersistence.md`, and `Log.ThemeOntology.md` are among those
      affected.
    - Addenda and phase sections become dated `## Update` sections
-     (CLASSIC-DRAFT-compass-migration-D9).
+     (CLASSIC-D100).
    - Two Logs give dates that disagree with their commits
      (`Log.GeneralModel.md` and `Log.SlotFills.md`); the disagreement is noted
      in the Log, not silently corrected.
@@ -578,14 +578,14 @@ Outside this plan, recorded so that it is not lost:
   which became the final 0.2 commit, `9a6ab23`, the revision CI builds. Its
   source is the same, but local and CI results can drift apart when either is
   rebuilt from another revision; when CI moves to a release tag
-  (CLASSIC-DRAFT-compass-migration-D8), the local build should be reinstalled
+  (CLASSIC-D99), the local build should be reinstalled
   from the same tag.
 - **Accessibility is not checked yet.** Version 0.2 does not check captions,
   descriptions, heading levels, or link text, so Phase 3's accessibility work
   is verified by review, not by the toolchain.
 - **Renames and Git-derived fields.** Git follows a file across a rename only
   when the old and new contents are similar enough. Committing the renames
-  alone (CLASSIC-DRAFT-compass-migration-D2) keeps them identical.
+  alone (CLASSIC-D93) keeps them identical.
 - **Decision extraction is judgment.** Splitting a paragraph into Context,
   Decision, and Alternatives can change its emphasis. Each converted Log keeps
   its original wording where it can, and the steward reviews each batch.
@@ -598,7 +598,7 @@ Outside this plan, recorded so that it is not lost:
 
 ## Open Questions
 
-### CLASSIC-DRAFT-compass-migration-O1 — Splitting the schema contract
+### CLASSIC-O43 — Splitting the schema contract
 
 `SchemaContract.md` is mostly a normative contract, the shape of a Spec, but
 uses lowercase "must" and "should", ends with a ten-step walkthrough that is a
@@ -608,9 +608,9 @@ move out, and should the contract adopt RFC 2119 keywords? Each changes what
 the document says, so it is not done in this migration.
 
 **Resolution (2026-10-11):** Split as proposed, and the contract adopts RFC
-2119 keywords. Recorded as CLASSIC-DRAFT-compass-migration-D10.
+2119 keywords. Recorded as CLASSIC-D101.
 
-### CLASSIC-DRAFT-compass-migration-O2 — Planned persistence backends
+### CLASSIC-O44 — Planned persistence backends
 
 `Persistence.md` describes the built memory backend and two backends that are
 designed but not built, flat-file and triplestore. Should the planned backends
@@ -618,9 +618,9 @@ move into an Arch document, leaving `Ref.Persistence.md` to describe what
 exists?
 
 **Resolution (2026-10-11):** The planned backends move into an Arch. Recorded
-as CLASSIC-DRAFT-compass-migration-D11.
+as CLASSIC-D102.
 
-### CLASSIC-DRAFT-compass-migration-O3 — A compiled README
+### CLASSIC-O45 — A compiled README
 
 Compass lets a repository README be compiled from a template that includes
 sections of the corpus by identifier ([Compass §10](../../compass/Compass.md#the-repository-readme)).
@@ -628,7 +628,7 @@ Classic's README combines a quick start, an architecture overview, and a
 project tree that the Refs and Guides also hold. Should it be compiled once
 the compiler exists, or stay hand-written with links to the documents?
 
-### CLASSIC-DRAFT-compass-migration-O4 — Which toolchain CI builds
+### CLASSIC-O46 — Which toolchain CI builds
 
 CI can build the Compass toolchain from a pinned commit, from a release tag
 once Compass publishes one, or download a released executable. A pinned
@@ -636,16 +636,16 @@ commit needs a change to Classic for every toolchain update; a moving branch
 lets a toolchain change break Classic's CI without a change to Classic.
 
 **Resolution (2026-10-11):** A pinned release tag; until Compass publishes
-one, commit `9a6ab23`. Recorded as CLASSIC-DRAFT-compass-migration-D8.
+one, commit `9a6ab23`. Recorded as CLASSIC-D99.
 
-### CLASSIC-DRAFT-compass-migration-O5 — Which documents are numbered first
+### CLASSIC-O47 — Which documents are numbered first
 
 Once the migration lands, every document and record has a provisional
 identifier. Should the steward number the corpus at once, in path order, or
 document by document as each is reviewed and accepted, which gives numbers in
 order of acceptance?
 
-### CLASSIC-DRAFT-compass-migration-O6 — Logs that record several pieces of work
+### CLASSIC-O48 — Logs that record several pieces of work
 
 `Log.FederationConsistency.md` records three phases with three commits,
 `Log.SchemaMigration.md` a main body and three addenda over four days, and
@@ -654,7 +654,7 @@ each become one Log with dated `## Update` sections, or be split into one Log
 per piece of work, each with its own identifier and decisions?
 
 **Resolution (2026-10-11):** One Log each, with dated `## Update` sections.
-Recorded as CLASSIC-DRAFT-compass-migration-D9.
+Recorded as CLASSIC-D100.
 
 ## Prior Art
 
@@ -678,7 +678,7 @@ Table: Prior work in the federation and what this plan draws from each.
    and migration; theme; forum and wiki. Each batch converts decisions, pins
    references, and adds captions.
 5. The steward reviews statuses, sets `Implemented` on the Logs, and numbers
-   the corpus (CLASSIC-DRAFT-compass-migration-O5).
+   the corpus (CLASSIC-O47).
 
 Milestones 1 to 4 are complete: Phase 1 in `dfeb862`, Phase 2 in `fdad517` and
 `56d400a`, and Phase 3 in five batches from `6aa9023` to the forum and wiki

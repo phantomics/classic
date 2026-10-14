@@ -13,7 +13,7 @@ reviewed:      2026-10-12
 provenance:
   assistant:   opencode
 relates-to:
-  - CLASSIC-DRAFT-compass-migration
+  - CLASSIC-0032
   - COMPASS-0001
   - COMPASS-DRAFT-toolchain
   - COMPASS-DRAFT-ledger-log
@@ -30,7 +30,7 @@ decisions:
 This document chronicles the first three phases of bringing Classic's
 documentation up to version 0.3.0 of the Compass standard
 ([COMPASS-0001](../../compass/Compass.md)), as planned in
-[CLASSIC-DRAFT-compass-migration](Plan.CompassMigration.md): writing and
+[CLASSIC-0032](Plan.CompassMigration.md): writing and
 reviewing the plan (Phase 0, commit `55c2390`), a clean baseline with a ledger,
 index, and CI (Phase 1, `dfeb862`), and front-matter, genre-prefixed names,
 document splits, and links for every document under `doc/` (Phase 2, `fdad517`
@@ -57,7 +57,7 @@ the standard's changes in its
 ## Design Decisions
 
 The migration's own decisions are the plan's records,
-CLASSIC-DRAFT-compass-migration-D1 to CLASSIC-DRAFT-compass-migration-D11.
+CLASSIC-D92 to CLASSIC-D102.
 The records below are the narrower choices made while carrying it out.
 
 ### CLASSIC-DRAFT-compass-migration-log-D1 — A link whose text is a file name takes the target's identifier
@@ -148,7 +148,7 @@ records with their wording intact.
 **Context:** The `compass` executable in local use reports
 `0.2.0 (commit ccb28e932238-dirty)`: it was built from an uncommitted tree.
 CI builds Compass commit `9a6ab23`
-(CLASSIC-DRAFT-compass-migration-D8). A result that held only for the local
+(CLASSIC-D99). A result that held only for the local
 build would not predict CI.
 
 **Decision:** Compass `9a6ab23` was cloned and built outside the repository,
@@ -168,12 +168,12 @@ and six open-question records, and passed `compass check --federation`. A
 `compass-review` pass then recommended revision, and the plan was revised
 before its commit:
 
-- CLASSIC-DRAFT-compass-migration-D3 was changed, at the steward's direction,
+- CLASSIC-D94 was changed, at the steward's direction,
   so that the Logs stay `Draft` until the steward sets `Implemented`, since
   `Implemented` makes a Log eligible for `compass assign`.
-- CLASSIC-DRAFT-compass-migration-D5 gained a column for the commit before the
+- CLASSIC-D96 gained a column for the commit before the
   work, for references to code as it stood before a refactor moved it.
-- CLASSIC-DRAFT-compass-migration-D7 was narrowed to links, leaving the
+- CLASSIC-D98 was narrowed to links, leaving the
   historical names in Files tables.
 - Two decisions that pre-empted open questions were made to defer to them, and
   two factual counts in the Problem section were corrected.
@@ -184,7 +184,7 @@ before its commit:
   identifiers formed from each Survey's own, such as
   CLASSIC-O13, in headings and `open-questions:`, and the four
   prose citations were rewritten to name the question meant
-  (CLASSIC-DRAFT-compass-migration-D1). This removed all 47 errors.
+  (CLASSIC-D92). This removed all 47 errors.
 - **Mailmap, then ledger.** `.mailmap` was added first, so that derived
   authors and future ledger entries name Andrew Sengul. `compass init --ledger
   --dry-run` then reported a ledger of 0 entries, and the real run created
@@ -202,7 +202,7 @@ before its commit:
 ### Phase 2 — Renames (`fdad517`)
 
 The ten documents without a genre prefix were renamed with `git mv` and
-committed with no other change (CLASSIC-DRAFT-compass-migration-D2). Git
+committed with no other change (CLASSIC-D93). Git
 records every rename at 100% similarity, so `git log --follow` and the
 Git-derived `created` field follow each file across it.
 
@@ -211,14 +211,14 @@ Git-derived `created` field follow each file across it.
 - **Front-matter.** All 26 unmarked documents gained §7 front-matter: a
   provisional identifier, title, genre (with `subtype: tutorial` on the three
   Guides), scope, `project: Classic`, component, `language: en`,
-  `status: Draft` (CLASSIC-DRAFT-compass-migration-D3), `provenance`, and
+  `status: Draft` (CLASSIC-D94), `provenance`, and
   `relates-to` (CLASSIC-DRAFT-compass-migration-log-D2). Refs and Guides carry
   `api-version: "0.1.0"`, from `classic.asd`. Three Logs whose work spans
   layers are project scope. Three documents have no component:
   `Log.DistFactorization.md`, which restructures every layer, and the two
   application-domain Surveys, `Survey.MusicPublishing.md` and
   `Survey.TTRPGHost.md`.
-- **The schema contract split** (CLASSIC-DRAFT-compass-migration-D10).
+- **The schema contract split** (CLASSIC-D101).
   `doc/Spec.SchemaContract.md@56d400a` keeps the contract, with
   `schema-version: "0.1.0"`, an RFC 2119 conventions paragraph, and its
   lowercase "must" as MUST, except for the `uri-namespace-prefix` methods,
@@ -226,7 +226,7 @@ Git-derived `created` field follow each file across it.
   walkthrough, with Prerequisites added. `doc/Survey.SchemaPluggability.md@56d400a`
   holds the afterword, with the trigger for the refactor as an open question
   and a note on what the dist factorization later changed.
-- **The persistence split** (CLASSIC-DRAFT-compass-migration-D11).
+- **The persistence split** (CLASSIC-D102).
   `doc/persistence/Arch.PersistenceBackends.md@56d400a` holds the flat-file and
   triplestore designs, with four decision records drawn from the original text
   ("None recorded" for alternatives) and two open questions. The Ref keeps a
@@ -236,7 +236,7 @@ Git-derived `created` field follow each file across it.
   CLASSIC-DRAFT-compass-migration-log-D4), their numbered open questions became
   six records each, and the external products they name were listed in
   `cites:`.
-- **Links** (CLASSIC-DRAFT-compass-migration-D7). 52 Markdown links in the
+- **Links** (CLASSIC-D98). 52 Markdown links in the
   Surveys were retargeted (CLASSIC-DRAFT-compass-migration-log-D1). About twenty
   backticked document paths and prose mentions in Refs, Logs, and the
   integration Survey became id-keyed links, including five of the eight
@@ -244,15 +244,15 @@ Git-derived `created` field follow each file across it.
   The README's links to the Forum, Wiki, Schema, and SchemaContract documents
   were retargeted, and it now links to the index.
 - **Plan.** The steward settled four open questions:
-  CLASSIC-DRAFT-compass-migration-O1, CLASSIC-DRAFT-compass-migration-O2,
-  CLASSIC-DRAFT-compass-migration-O4 (a pinned release tag, after correcting
+  CLASSIC-O43, CLASSIC-O44,
+  CLASSIC-O46 (a pinned release tag, after correcting
   the assumption that a pinned tag needs no change to Classic to update), and
-  CLASSIC-DRAFT-compass-migration-O6. They are recorded as
-  CLASSIC-DRAFT-compass-migration-D8 to CLASSIC-DRAFT-compass-migration-D11,
+  CLASSIC-O48. They are recorded as
+  CLASSIC-D99 to CLASSIC-D102,
   with a dated Resolution under each question.
 - **CI and agent guide.** `--skip-unmarked` was removed from the workflow and
   from `AGENTS.md`, and the workflow comment names
-  CLASSIC-DRAFT-compass-migration-D8.
+  CLASSIC-D99.
 
 ## Verification
 
@@ -331,10 +331,10 @@ Table: Files added or changed in commits `55c2390`, `dfeb862`, `fdad517`, and `5
   stale against the code.
 - **For the steward.** Branch protection requiring the CI check and code-owner
   review; replacing `COMPASS_REV` with Compass's first release tag
-  (CLASSIC-DRAFT-compass-migration-D8); review of statuses, `Implemented` on
+  (CLASSIC-D99); review of statuses, `Implemented` on
   the Logs, and `Current` on the accurate Refs and Guides; acceptance of the
-  decision records; and CLASSIC-DRAFT-compass-migration-O3 and
-  CLASSIC-DRAFT-compass-migration-O5 before any `compass assign`.
+  decision records; and CLASSIC-O45 and
+  CLASSIC-O47 before any `compass assign`.
 - **Stray workflow definitions in the schema.**
   [CLASSIC-0015](Log.DistFactorization.md#stray-engine-code-left-in-schema-files)
   says each stray engine definition was deleted from the schema, but `defun`
@@ -378,7 +378,7 @@ schema references.
   and `Ref.Schema.md` a caption for its table and a description of its package
   diagram.
 - **Plan.** Two conventions met in this batch were added to the plan:
-  CLASSIC-DRAFT-compass-migration-D5 now pins a reference to an intermediate
+  CLASSIC-D96 now pins a reference to an intermediate
   state to the commit holding it, and Phase 3 step 2 says how a path with a
   list of symbols, and a Files table, are pinned.
 - **Migration notes.** Where a converted Log needed a statement the original
@@ -443,7 +443,7 @@ revision. One symbol was pinned by its file rather than as `path:symbol`:
 ## Update 2026-10-11 — Phase 3, batch 3: federation and migration
 
 The third batch converted the two Logs that record several pieces of work,
-following CLASSIC-DRAFT-compass-migration-D9. It began with a migration note,
+following CLASSIC-D100. It began with a migration note,
 requested by the steward after batch 2, recording that the Files table of
 [CLASSIC-0003](Log.DeletionSupport.md) omits
 `test/helpers.lisp`.
@@ -501,7 +501,7 @@ states.
   CLASSIC-D29 to CLASSIC-D32, with
   the options not chosen as alternatives, pinned to `d20ec8c`. The lens
   addendum became `## Update 2026-05-29 — Lens Integration` (as
-  CLASSIC-DRAFT-compass-migration-D9 provides), pinned to `8aea5f4`, and its
+  CLASSIC-D100 provides), pinned to `8aea5f4`, and its
   ten H4 decisions became CLASSIC-D33 to
   CLASSIC-D42, ten rather than the nine the plan
   counted. Its What This Does Not Include became the update's Outstanding
@@ -599,8 +599,8 @@ Table: Decision records created in Phase 3, by Log.
 from Phase 2. The steward has accepted the nine of the first batch; the rest
 are `Proposed`. What remains is the steward's: accepting the other records,
 setting `Implemented` on the Logs, promoting the accurate Refs and Guides to
-`Current`, settling CLASSIC-DRAFT-compass-migration-O3 and
-CLASSIC-DRAFT-compass-migration-O5, and numbering with `compass assign`; and,
+`Current`, settling CLASSIC-O45 and
+CLASSIC-O47, and numbering with `compass assign`; and,
 after the migration, the stray workflow definitions listed in Outstanding
 Work.
 

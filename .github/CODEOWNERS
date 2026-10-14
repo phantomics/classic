@@ -2,6 +2,6 @@
 #
 # Numbers are allocated by appending to the ledger (Compass §13). Requiring
 # review from code owners makes the steward's approval a condition of merging
-# any allocation (CLASSIC-DRAFT-compass-migration-D6).
+# any allocation (CLASSIC-D97).
 
 /doc/REGISTRY.sexp @phantomics

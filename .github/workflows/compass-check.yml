@@ -1,13 +1,13 @@
 # compass-check.yml — Build the Compass toolchain and check Classic's documentation corpus
 #
-# Adopted under CLASSIC-DRAFT-compass-migration-D6. The check compares the
+# Adopted under CLASSIC-D97. The check compares the
 # ledger, doc/REGISTRY.sexp, with the branch a pull request merges into, so
 # that ledger/append-only sees what the merge would change. Make this job a
 # required status check of the default branch, and require review from code
 # owners, so that .github/CODEOWNERS makes the steward approve every allocation.
 #
 # COMPASS_REV pins the toolchain to a Compass release tag
-# (CLASSIC-DRAFT-compass-migration-D8); updating the toolchain is a change to
+# (CLASSIC-D99); updating the toolchain is a change to
 # that line. Compass has published no tag yet, so it names the commit of
 # version 0.2.0 until the first tag exists.
 
