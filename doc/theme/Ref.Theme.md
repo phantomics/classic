@@ -17,7 +17,7 @@ provenance:
 relates-to:
   - CLASSIC-0010
   - CLASSIC-0016
-  - CLASSIC-DRAFT-slot-fills
+  - CLASSIC-0017
 ---
 
 # Theme Ontology Reference

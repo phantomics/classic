@@ -512,8 +512,8 @@ states.
   CLASSIC-D56, each with the alternative its text
   names. Pinned to `9626df5`; the Files table took the File, Action, and
   Description columns.
-- **[CLASSIC-DRAFT-slot-fills](theme/Log.SlotFills.md).** Five decisions became
-  CLASSIC-DRAFT-slot-fills-D1 to CLASSIC-DRAFT-slot-fills-D5, pinned to
+- **[CLASSIC-0017](theme/Log.SlotFills.md).** Five decisions became
+  CLASSIC-D57 to CLASSIC-D61, pinned to
   `72b638c`. Migration notes record the date mismatch (the Log says
   2026-06-04; the commit is 2026-06-16), a commit with the same tree,
   `9b20974`, merged in `c099e7d`, and the `:slot-type` annotations across
@@ -589,7 +589,7 @@ Table: Decision records created in Phase 3, by Log.
 | CLASSIC-0004 | 11 | `58452c7`, `0e4c5bb`, `88a920b`, `88af7f2` |
 | CLASSIC-0010 | 14 | `d20ec8c`, `8aea5f4` |
 | CLASSIC-0016 | 5 | `9626df5` |
-| CLASSIC-DRAFT-slot-fills | 5 | `72b638c` |
+| CLASSIC-0017 | 5 | `72b638c` |
 | CLASSIC-DRAFT-forum-demo | 7 | `c1df12c` |
 | CLASSIC-DRAFT-wiki-demo | 10 | `ea32b9c` |
 | CLASSIC-DRAFT-typed-pages | 6 | `6e6a6a2` |

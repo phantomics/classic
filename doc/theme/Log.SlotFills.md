@@ -1,23 +1,28 @@
 ---
-id:            CLASSIC-DRAFT-slot-fills
+id:            CLASSIC-0017
 title:         Template Slot Fills Development Log
 genre:         Log
 scope:         component
 project:       Classic
 component:     theme
 language:      en
-status:        Draft
+status:        Implemented
+authors:
+  - Andrew Sengul
+approved-by:   Andrew Sengul
+reviewed:      2026-10-13
+schema-version: "0.1.0"
 provenance:
   assistant:   opencode
 relates-to:
   - CLASSIC-0011
   - CLASSIC-0010
 decisions:
-  - CLASSIC-DRAFT-slot-fills-D1
-  - CLASSIC-DRAFT-slot-fills-D2
-  - CLASSIC-DRAFT-slot-fills-D3
-  - CLASSIC-DRAFT-slot-fills-D4
-  - CLASSIC-DRAFT-slot-fills-D5
+  - CLASSIC-D57
+  - CLASSIC-D58
+  - CLASSIC-D59
+  - CLASSIC-D60
+  - CLASSIC-D61
 ---
 
 # Template Slot Fills: Development Log
@@ -81,9 +86,9 @@ was selected for the reasons recorded below.
 
 ## Design Decisions
 
-### CLASSIC-DRAFT-slot-fills-D1 — A dedicated CLOS slot on classic-theme
+### CLASSIC-D57 — A dedicated CLOS slot on classic-theme
 
-**Status:** Proposed
+**Status:** Implemented
 
 **Context:** Three implementation shapes were considered for holding slot
 fills.
@@ -105,9 +110,9 @@ persistence (alongside `capabilities`, `excluded-capabilities`,
   bindings sets to attach to one theme (color set, layout set, typography set);
   slot fills do not have an analogous multi-set use case.
 
-### CLASSIC-DRAFT-slot-fills-D2 — Slot names are strings, global across tiers
+### CLASSIC-D58 — Slot names are strings, global across tiers
 
-**Status:** Proposed
+**Status:** Implemented
 
 **Context:** A fill must name the template slot it fills, and the same slot
 name may appear in more than one tier.
@@ -132,9 +137,9 @@ subtree continuing to mean "apply in every tier."
   (`theme.brand`, `theme.footer-extras`, or namespaced equivalents) act as
   informal disambiguation if collision becomes a real concern.
 
-### CLASSIC-DRAFT-slot-fills-D3 — Inheritance follows the bindings precedent
+### CLASSIC-D59 — Inheritance follows the bindings precedent
 
-**Status:** Proposed
+**Status:** Implemented
 
 **Context:** Slot fills must be resolved across a theme chain.
 
@@ -154,9 +159,9 @@ schema-enforced rule.
 
 **Alternatives:** None recorded.
 
-### CLASSIC-DRAFT-slot-fills-D4 — Naming: slot-fills
+### CLASSIC-D60 — Naming: slot-fills
 
-**Status:** Proposed
+**Status:** Implemented
 
 **Context:** Three names were considered during the planning round.
 
@@ -178,9 +183,9 @@ slot vs. Lexis template slot) up front.
   bare-name collision. Considered, then set aside in favor of the more concise
   `slot-fills`.
 
-### CLASSIC-DRAFT-slot-fills-D5 — classic-theme-override symmetry and migration registration
+### CLASSIC-D61 — classic-theme-override symmetry and migration registration
 
-**Status:** Proposed
+**Status:** Implemented
 
 **Context:** As with capability exclusion, the change raised whether
 `classic-theme-override` should gain a matching field and whether the slot

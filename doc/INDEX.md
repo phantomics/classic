@@ -26,6 +26,7 @@ Table: Documents in the CLASSIC namespace.
 | [CLASSIC-0014](Spec.SchemaContract.md) | Schema Contract Specification | Spec | project | Current | schema |
 | [CLASSIC-0015](Log.DistFactorization.md) | Dist Factorization Development Log | Log | project | Implemented | — |
 | [CLASSIC-0016](theme/Log.CapabilityExclusion.md) | Capability Exclusion Development Log | Log | component | Implemented | theme |
+| [CLASSIC-0017](theme/Log.SlotFills.md) | Template Slot Fills Development Log | Log | component | Implemented | theme |
 | [CLASSIC-DRAFT-archival](survey/Survey.Archival.md) | Content Archival and Durability Survey | Survey | project | Draft | — |
 | [CLASSIC-DRAFT-compass-integration](survey/Survey.CompassIntegration.md) | Compass Documentation on Classic Survey | Survey | project | Draft | — |
 | [CLASSIC-DRAFT-compass-migration](Plan.CompassMigration.md) | Compass Migration Plan | Plan | project | Implemented | — |
@@ -40,7 +41,6 @@ Table: Documents in the CLASSIC namespace.
 | [CLASSIC-DRAFT-project-management](survey/Survey.ProjectManagement.md) | Project Management as Classic Imprint Survey | Survey | project | Draft | — |
 | [CLASSIC-DRAFT-realtime-chat](survey/Survey.RealtimeChat.md) | Real-Time Chat Integration Survey | Survey | project | Draft | — |
 | [CLASSIC-DRAFT-schema-pluggability](Survey.SchemaPluggability.md) | Schema Pluggability Survey | Survey | project | Draft | schema |
-| [CLASSIC-DRAFT-slot-fills](theme/Log.SlotFills.md) | Template Slot Fills Development Log | Log | component | Draft | theme |
 | [CLASSIC-DRAFT-ttrpg-host](survey/Survey.TTRPGHost.md) | Tabletop RPG Hosting (Play-by-Post) Survey | Survey | project | Draft | — |
 | [CLASSIC-DRAFT-typed-pages](wiki/Log.TypedPages.md) | Typed Page Classes Development Log | Log | component | Implemented | wiki |
 | [CLASSIC-DRAFT-usenet](survey/Survey.Usenet.md) | Usenet-Analog Discussion Hosting Survey | Survey | project | Draft | — |
@@ -109,6 +109,11 @@ Table: Decision, open-question, and memo records in the CLASSIC namespace.
 | [CLASSIC-D54](theme/Log.CapabilityExclusion.md#classic-d54--exclusion-of-uninherited-capabilities-is-a-silent-no-op) | Decision | Exclusion of uninherited capabilities is a silent no-op | Implemented | CLASSIC-0016 |
 | [CLASSIC-D55](theme/Log.CapabilityExclusion.md#classic-d55--classic-theme-override-does-not-gain-a-symmetric-field) | Decision | classic-theme-override does not gain a symmetric field | Implemented | CLASSIC-0016 |
 | [CLASSIC-D56](theme/Log.CapabilityExclusion.md#classic-d56--no-schema-migration-registered) | Decision | No schema migration registered | Implemented | CLASSIC-0016 |
+| [CLASSIC-D57](theme/Log.SlotFills.md#classic-d57--a-dedicated-clos-slot-on-classic-theme) | Decision | A dedicated CLOS slot on classic-theme | Implemented | CLASSIC-0017 |
+| [CLASSIC-D58](theme/Log.SlotFills.md#classic-d58--slot-names-are-strings-global-across-tiers) | Decision | Slot names are strings, global across tiers | Implemented | CLASSIC-0017 |
+| [CLASSIC-D59](theme/Log.SlotFills.md#classic-d59--inheritance-follows-the-bindings-precedent) | Decision | Inheritance follows the bindings precedent | Implemented | CLASSIC-0017 |
+| [CLASSIC-D60](theme/Log.SlotFills.md#classic-d60--naming-slot-fills) | Decision | Naming: slot-fills | Implemented | CLASSIC-0017 |
+| [CLASSIC-D61](theme/Log.SlotFills.md#classic-d61--classic-theme-override-symmetry-and-migration-registration) | Decision | classic-theme-override symmetry and migration registration | Implemented | CLASSIC-0017 |
 | [CLASSIC-DRAFT-compass-migration-D1](Plan.CompassMigration.md#classic-draft-compass-migration-d1--survey-open-questions-take-per-survey-provisional-identifiers) | Decision | Survey open questions take per-Survey provisional identifiers | Accepted | CLASSIC-DRAFT-compass-migration |
 | [CLASSIC-DRAFT-compass-migration-D2](Plan.CompassMigration.md#classic-draft-compass-migration-d2--genre-prefixed-names-with-the-component-subdirectories-kept) | Decision | Genre-prefixed names, with the component subdirectories kept | Accepted | CLASSIC-DRAFT-compass-migration |
 | [CLASSIC-DRAFT-compass-migration-D3](Plan.CompassMigration.md#classic-draft-compass-migration-d3--statuses-an-assistant-may-set-during-migration) | Decision | Statuses an assistant may set during migration | Accepted | CLASSIC-DRAFT-compass-migration |
@@ -143,11 +148,6 @@ Table: Decision, open-question, and memo records in the CLASSIC namespace.
 | [CLASSIC-DRAFT-persistence-backends-D2](persistence/Arch.PersistenceBackends.md#classic-draft-persistence-backends-d2--flat-file-cross-entity-queries-use-materialized-index-files) | Decision | Flat-file cross-entity queries use materialized index files | Proposed | CLASSIC-DRAFT-persistence-backends |
 | [CLASSIC-DRAFT-persistence-backends-D3](persistence/Arch.PersistenceBackends.md#classic-draft-persistence-backends-d3--container-level-bundling-for-high-volume-small-items) | Decision | Container-level bundling for high-volume small items | Proposed | CLASSIC-DRAFT-persistence-backends |
 | [CLASSIC-DRAFT-persistence-backends-D4](persistence/Arch.PersistenceBackends.md#classic-draft-persistence-backends-d4--the-triplestore-splits-relations-from-content) | Decision | The triplestore splits relations from content | Proposed | CLASSIC-DRAFT-persistence-backends |
-| [CLASSIC-DRAFT-slot-fills-D1](theme/Log.SlotFills.md#classic-draft-slot-fills-d1--a-dedicated-clos-slot-on-classic-theme) | Decision | A dedicated CLOS slot on classic-theme | Proposed | CLASSIC-DRAFT-slot-fills |
-| [CLASSIC-DRAFT-slot-fills-D2](theme/Log.SlotFills.md#classic-draft-slot-fills-d2--slot-names-are-strings-global-across-tiers) | Decision | Slot names are strings, global across tiers | Proposed | CLASSIC-DRAFT-slot-fills |
-| [CLASSIC-DRAFT-slot-fills-D3](theme/Log.SlotFills.md#classic-draft-slot-fills-d3--inheritance-follows-the-bindings-precedent) | Decision | Inheritance follows the bindings precedent | Proposed | CLASSIC-DRAFT-slot-fills |
-| [CLASSIC-DRAFT-slot-fills-D4](theme/Log.SlotFills.md#classic-draft-slot-fills-d4--naming-slot-fills) | Decision | Naming: slot-fills | Proposed | CLASSIC-DRAFT-slot-fills |
-| [CLASSIC-DRAFT-slot-fills-D5](theme/Log.SlotFills.md#classic-draft-slot-fills-d5--classic-theme-override-symmetry-and-migration-registration) | Decision | classic-theme-override symmetry and migration registration | Proposed | CLASSIC-DRAFT-slot-fills |
 | [CLASSIC-DRAFT-typed-pages-D1](wiki/Log.TypedPages.md#classic-draft-typed-pages-d1--three-typed-subclasses-computer-cpu-person) | Decision | Three typed subclasses: computer, CPU, person | Accepted | CLASSIC-DRAFT-typed-pages |
 | [CLASSIC-DRAFT-typed-pages-D2](wiki/Log.TypedPages.md#classic-draft-typed-pages-d2--lens-specs-at-two-purposes-per-class) | Decision | Lens specs at two purposes per class | Accepted | CLASSIC-DRAFT-typed-pages |
 | [CLASSIC-DRAFT-typed-pages-D3](wiki/Log.TypedPages.md#classic-draft-typed-pages-d3--link-indicators-for-repl-output) | Decision | Link indicators for REPL output | Accepted | CLASSIC-DRAFT-typed-pages |
