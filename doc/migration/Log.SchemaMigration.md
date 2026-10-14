@@ -14,7 +14,7 @@ reviewed:      2026-10-13
 provenance:
   assistant:   opencode
 relates-to:
-  - CLASSIC-DRAFT-migration
+  - CLASSIC-0005
   - CLASSIC-DRAFT-schema-factorization
 decisions:
   - CLASSIC-D17

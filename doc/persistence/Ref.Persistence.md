@@ -14,7 +14,7 @@ relates-to:
   - CLASSIC-DRAFT-persistence-backends
   - CLASSIC-DRAFT-with-persistence
   - CLASSIC-0003
-  - CLASSIC-DRAFT-migration
+  - CLASSIC-0005
   - CLASSIC-0002
 ---
 
@@ -322,7 +322,7 @@ via two hooks:
 - **Lazy migration**: `retrieve-entity :around` detects version
   mismatches and transparently migrates entities on read
 
-See [CLASSIC-DRAFT-migration](../migration/Ref.Migration.md) for details.
+See [CLASSIC-0005](../migration/Ref.Migration.md) for details.
 
 ### Federation
 

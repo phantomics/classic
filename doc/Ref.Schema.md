@@ -16,7 +16,7 @@ relates-to:
   - CLASSIC-DRAFT-schema-pluggability
   - CLASSIC-DRAFT-schema-factorization
   - CLASSIC-DRAFT-dist-factorization
-  - CLASSIC-DRAFT-migration
+  - CLASSIC-0005
 ---
 
 # Schema Architecture Reference
@@ -363,7 +363,7 @@ To modify the reference schema:
 - **Add a slot to an existing class:** Edit the class's `defclass`
   form and bump the class's `:schema-version`. Define a corresponding
   `(:add-slot ...)` migration so existing persisted data updates
-  correctly. See [CLASSIC-DRAFT-migration](migration/Ref.Migration.md) for the migration DSL.
+  correctly. See [CLASSIC-0005](migration/Ref.Migration.md) for the migration DSL.
 
 - **Rename a predicate:** Edit the slot's `:predicate` value and
   define a `(:rename-predicate ...)` migration.

@@ -327,7 +327,7 @@ A migration between two class versions. Slots include `target-class`,
 A system-wide snapshot. Slots include `manifest-version`,
 `class-versions`, `parent-manifest`.
 
-See [CLASSIC-DRAFT-migration](migration/Ref.Migration.md) for how these classes
+See [CLASSIC-0005](migration/Ref.Migration.md) for how these classes
 are used.
 
 

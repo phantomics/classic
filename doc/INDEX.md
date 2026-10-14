@@ -14,6 +14,7 @@ Table: Documents in the CLASSIC namespace.
 | [CLASSIC-0002](federation/Log.FederationConsistency.md) | Federation Consistency Development Log | Log | component | Accepted | federation |
 | [CLASSIC-0003](Log.DeletionSupport.md) | Deletion Support Development Log | Log | project | Implemented | model |
 | [CLASSIC-0004](migration/Log.SchemaMigration.md) | Schema Migration Development Log | Log | component | Accepted | migration |
+| [CLASSIC-0005](migration/Ref.Migration.md) | Schema Migration Reference | Ref | component | Current | migration |
 | [CLASSIC-DRAFT-archival](survey/Survey.Archival.md) | Content Archival and Durability Survey | Survey | project | Draft | — |
 | [CLASSIC-DRAFT-capability-exclusion](theme/Log.CapabilityExclusion.md) | Capability Exclusion Development Log | Log | component | Draft | theme |
 | [CLASSIC-DRAFT-compass-integration](survey/Survey.CompassIntegration.md) | Compass Documentation on Classic Survey | Survey | project | Draft | — |
@@ -24,7 +25,6 @@ Table: Documents in the CLASSIC namespace.
 | [CLASSIC-DRAFT-forum](forum/Guide.Forum.md) | Forum Preset Guide | Guide (tutorial) | component | Draft | forum |
 | [CLASSIC-DRAFT-forum-demo](forum/Log.ForumDemo.md) | Forum Demo Development Log | Log | component | Draft | forum |
 | [CLASSIC-DRAFT-general-model](model/Log.GeneralModel.md) | General Publication Models Development Log | Log | component | Draft | model |
-| [CLASSIC-DRAFT-migration](migration/Ref.Migration.md) | Schema Migration Reference | Ref | component | Draft | migration |
 | [CLASSIC-DRAFT-model](model/Ref.Model.md) | Ontological Model Reference | Ref | component | Draft | model |
 | [CLASSIC-DRAFT-music-publishing](survey/Survey.MusicPublishing.md) | Music Publishing Survey | Survey | project | Draft | — |
 | [CLASSIC-DRAFT-new-schema](Guide.NewSchema.md) | Creating a New Schema Guide | Guide (howto) | project | Draft | schema |
