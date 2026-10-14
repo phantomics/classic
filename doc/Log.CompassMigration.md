@@ -182,7 +182,7 @@ before its commit:
 
 - **Survey open questions.** The 24 records in the four Surveys took
   identifiers formed from each Survey's own, such as
-  CLASSIC-DRAFT-archival-O1, in headings and `open-questions:`, and the four
+  CLASSIC-O13, in headings and `open-questions:`, and the four
   prose citations were rewritten to name the question meant
   (CLASSIC-DRAFT-compass-migration-D1). This removed all 47 errors.
 - **Mailmap, then ledger.** `.mailmap` was added first, so that derived

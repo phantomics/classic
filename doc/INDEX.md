@@ -35,7 +35,7 @@ Table: Documents in the CLASSIC namespace.
 | [CLASSIC-0023](wiki/Log.TypedPages.md) | Typed Page Classes Development Log | Log | component | Implemented | wiki |
 | [CLASSIC-0024](survey/Survey.MusicPublishing.md) | Music Publishing Survey | Survey | project | Current | — |
 | [CLASSIC-0025](survey/Survey.TTRPGHost.md) | Tabletop RPG Hosting (Play-by-Post) Survey | Survey | project | Current | — |
-| [CLASSIC-DRAFT-archival](survey/Survey.Archival.md) | Content Archival and Durability Survey | Survey | project | Draft | — |
+| [CLASSIC-0026](survey/Survey.Archival.md) | Content Archival and Durability Survey | Survey | project | Current | — |
 | [CLASSIC-DRAFT-compass-integration](survey/Survey.CompassIntegration.md) | Compass Documentation on Classic Survey | Survey | project | Draft | — |
 | [CLASSIC-DRAFT-compass-migration](Plan.CompassMigration.md) | Compass Migration Plan | Plan | project | Implemented | — |
 | [CLASSIC-DRAFT-compass-migration-log](Log.CompassMigration.md) | Compass Migration Development Log | Log | project | Implemented | — |
@@ -182,12 +182,12 @@ Table: Decision, open-question, and memo records in the CLASSIC namespace.
 | [CLASSIC-O10](survey/Survey.TTRPGHost.md#classic-o10--structured-guard-failures) | Open question | Structured guard failures | — | CLASSIC-0025 |
 | [CLASSIC-O11](survey/Survey.TTRPGHost.md#classic-o11--chronicle-publication) | Open question | Chronicle publication | — | CLASSIC-0025 |
 | [CLASSIC-O12](survey/Survey.TTRPGHost.md#classic-o12--system-breadth-strategy) | Open question | System breadth strategy | — | CLASSIC-0025 |
-| [CLASSIC-DRAFT-archival-O1](survey/Survey.Archival.md#classic-draft-archival-o1--the-deletiondurability-policy-dial) | Open question | The deletion/durability policy dial | — | CLASSIC-DRAFT-archival |
-| [CLASSIC-DRAFT-archival-O2](survey/Survey.Archival.md#classic-draft-archival-o2--license-to-mirror-semantics) | Open question | License-to-mirror semantics | — | CLASSIC-DRAFT-archival |
-| [CLASSIC-DRAFT-archival-O3](survey/Survey.Archival.md#classic-draft-archival-o3--integrity-via-signed-origin-entities) | Open question | Integrity via signed origin entities | — | CLASSIC-DRAFT-archival |
-| [CLASSIC-DRAFT-archival-O4](survey/Survey.Archival.md#classic-draft-archival-o4--static-tier-cold-content) | Open question | Static-tier cold content | — | CLASSIC-DRAFT-archival |
-| [CLASSIC-DRAFT-archival-O5](survey/Survey.Archival.md#classic-draft-archival-o5--browser-plugin-handshake-and-security-model) | Open question | Browser-plugin handshake and security model | — | CLASSIC-DRAFT-archival |
-| [CLASSIC-DRAFT-archival-O6](survey/Survey.Archival.md#classic-draft-archival-o6--shared-curation-feed-primitive-with-moderation) | Open question | Shared curation-feed primitive with moderation | — | CLASSIC-DRAFT-archival |
+| [CLASSIC-O13](survey/Survey.Archival.md#classic-o13--the-deletiondurability-policy-dial) | Open question | The deletion/durability policy dial | — | CLASSIC-0026 |
+| [CLASSIC-O14](survey/Survey.Archival.md#classic-o14--license-to-mirror-semantics) | Open question | License-to-mirror semantics | — | CLASSIC-0026 |
+| [CLASSIC-O15](survey/Survey.Archival.md#classic-o15--integrity-via-signed-origin-entities) | Open question | Integrity via signed origin entities | — | CLASSIC-0026 |
+| [CLASSIC-O16](survey/Survey.Archival.md#classic-o16--static-tier-cold-content) | Open question | Static-tier cold content | — | CLASSIC-0026 |
+| [CLASSIC-O17](survey/Survey.Archival.md#classic-o17--browser-plugin-handshake-and-security-model) | Open question | Browser-plugin handshake and security model | — | CLASSIC-0026 |
+| [CLASSIC-O18](survey/Survey.Archival.md#classic-o18--shared-curation-feed-primitive-with-moderation) | Open question | Shared curation-feed primitive with moderation | — | CLASSIC-0026 |
 | [CLASSIC-DRAFT-compass-integration-O1](survey/Survey.CompassIntegration.md#classic-draft-compass-integration-o1--base-schema-or-model-module) | Open question | Base schema or model module | — | CLASSIC-DRAFT-compass-integration |
 | [CLASSIC-DRAFT-compass-integration-O2](survey/Survey.CompassIntegration.md#classic-draft-compass-integration-o2--authors-as-a-list) | Open question | Authors as a list | — | CLASSIC-DRAFT-compass-integration |
 | [CLASSIC-DRAFT-compass-integration-O3](survey/Survey.CompassIntegration.md#classic-draft-compass-integration-o3--records-as-parts-with-their-own-identity) | Open question | Records as parts with their own identity | — | CLASSIC-DRAFT-compass-integration |

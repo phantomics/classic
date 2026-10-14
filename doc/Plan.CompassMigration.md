@@ -82,7 +82,7 @@ has changed in ways that affect the whole corpus:
   ([the uniqueness guarantee](../../compass/doc/Plan.Toolchain.md#the-uniqueness-guarantee)).
 
 Against this, `compass check --skip-unmarked` at `be4fe84` reports 47 errors,
-all in four Surveys: [CLASSIC-DRAFT-archival](survey/Survey.Archival.md),
+all in four Surveys: [CLASSIC-0026](survey/Survey.Archival.md),
 [CLASSIC-DRAFT-distributed-moderation](survey/Survey.DistributedModeration.md),
 [CLASSIC-DRAFT-project-management](survey/Survey.ProjectManagement.md), and
 [CLASSIC-DRAFT-usenet](survey/Survey.Usenet.md) each define their own
@@ -440,14 +440,14 @@ reference's tables and diagram stays, since it explains the protocol.
 
    | Survey | Old identifiers | New identifiers |
    |---|---|---|
-   | Archival | CLASSIC-O1 to CLASSIC-O6 | CLASSIC-DRAFT-archival-O1 to `-O6` |
+   | Archival | CLASSIC-O1 to CLASSIC-O6 | CLASSIC-O13 to `-O6` |
    | DistributedModeration | CLASSIC-O1 to CLASSIC-O7 | CLASSIC-DRAFT-distributed-moderation-O1 to `-O7` |
    | ProjectManagement | CLASSIC-O1 to CLASSIC-O6 | CLASSIC-DRAFT-project-management-O1 to `-O6` |
    | Usenet | CLASSIC-O1 to CLASSIC-O5 | CLASSIC-DRAFT-usenet-O1 to `-O5` |
 
    The four prose citations are rewritten to the question meant: the shared
    curation-feed question in Archival names both
-   CLASSIC-DRAFT-archival-O6 and CLASSIC-DRAFT-distributed-moderation-O6; the
+   CLASSIC-O18 and CLASSIC-DRAFT-distributed-moderation-O6; the
    Git adapter in ProjectManagement names
    CLASSIC-DRAFT-project-management-O6; and DistributedModeration's two
    citations of Usenet name CLASSIC-DRAFT-usenet-O1 and

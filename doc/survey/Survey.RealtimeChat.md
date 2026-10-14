@@ -11,7 +11,7 @@ provenance:
 relates-to:
   - CLASSIC-DRAFT-project-management
   - CLASSIC-DRAFT-distributed-moderation
-  - CLASSIC-DRAFT-archival
+  - CLASSIC-0026
   - CLASSIC-DRAFT-x400
   - CLASSIC-0019
   - CLASSIC-0001
@@ -298,7 +298,7 @@ The two layers have different retention: the live window is short and
 time-based, governed by ejabberd's archive settings, while crystallized records
 follow Classic's ordinary retention policy — indefinitely, for a project's
 records. Crystallized chat is ordinary Classic content, so it is also archivable
-in the sense of [CLASSIC-DRAFT-archival](Survey.Archival.md) and subject to the
+in the sense of [CLASSIC-0026](Survey.Archival.md) and subject to the
 same deletion/durability policy dial.
 
 ## Chat as operative medium
@@ -512,7 +512,7 @@ Crystallized chat is ordinary content, so it can be moderated through the feeds 
 by a shared curation-feed type is
 [CLASSIC-DRAFT-distributed-moderation-O6](Survey.DistributedModeration.md#classic-draft-distributed-moderation-o6--shared-curation-feed-primitive-with-archival)
 — and archived under the policies of
-[CLASSIC-DRAFT-archival](Survey.Archival.md). Room discovery across communities
+[CLASSIC-0026](Survey.Archival.md). Room discovery across communities
 meets the same directory question as
 [CLASSIC-DRAFT-usenet-O1](Survey.Usenet.md#classic-draft-usenet-o1--forum-naming-convention-and-directory-federation).
 The solicited-contribution pattern relates the forum imprint's threads
