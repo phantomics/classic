@@ -36,10 +36,10 @@ Table: Documents in the CLASSIC namespace.
 | [CLASSIC-0024](survey/Survey.MusicPublishing.md) | Music Publishing Survey | Survey | project | Current | — |
 | [CLASSIC-0025](survey/Survey.TTRPGHost.md) | Tabletop RPG Hosting (Play-by-Post) Survey | Survey | project | Current | — |
 | [CLASSIC-0026](survey/Survey.Archival.md) | Content Archival and Durability Survey | Survey | project | Current | — |
+| [CLASSIC-0027](survey/Survey.DistributedModeration.md) | Distributed Content Moderation Survey | Survey | project | Current | — |
 | [CLASSIC-DRAFT-compass-integration](survey/Survey.CompassIntegration.md) | Compass Documentation on Classic Survey | Survey | project | Draft | — |
 | [CLASSIC-DRAFT-compass-migration](Plan.CompassMigration.md) | Compass Migration Plan | Plan | project | Implemented | — |
 | [CLASSIC-DRAFT-compass-migration-log](Log.CompassMigration.md) | Compass Migration Development Log | Log | project | Implemented | — |
-| [CLASSIC-DRAFT-distributed-moderation](survey/Survey.DistributedModeration.md) | Distributed Content Moderation Survey | Survey | project | Draft | — |
 | [CLASSIC-DRAFT-new-schema](Guide.NewSchema.md) | Creating a New Schema Guide | Guide (howto) | project | Draft | schema |
 | [CLASSIC-DRAFT-persistence-backends](persistence/Arch.PersistenceBackends.md) | The Persistence Backends Architecture | Architecture | component | Draft | persistence |
 | [CLASSIC-DRAFT-project-management](survey/Survey.ProjectManagement.md) | Project Management as Classic Imprint Survey | Survey | project | Draft | — |
@@ -188,6 +188,13 @@ Table: Decision, open-question, and memo records in the CLASSIC namespace.
 | [CLASSIC-O16](survey/Survey.Archival.md#classic-o16--static-tier-cold-content) | Open question | Static-tier cold content | — | CLASSIC-0026 |
 | [CLASSIC-O17](survey/Survey.Archival.md#classic-o17--browser-plugin-handshake-and-security-model) | Open question | Browser-plugin handshake and security model | — | CLASSIC-0026 |
 | [CLASSIC-O18](survey/Survey.Archival.md#classic-o18--shared-curation-feed-primitive-with-moderation) | Open question | Shared curation-feed primitive with moderation | — | CLASSIC-0026 |
+| [CLASSIC-O19](survey/Survey.DistributedModeration.md#classic-o19--hybrid-rulesactions-resolution-semantics) | Open question | Hybrid rules/actions resolution semantics | — | CLASSIC-0027 |
+| [CLASSIC-O20](survey/Survey.DistributedModeration.md#classic-o20--dsl-grammar-closure-and-sandbox-boundary) | Open question | DSL grammar closure and sandbox boundary | — | CLASSIC-0027 |
+| [CLASSIC-O21](survey/Survey.DistributedModeration.md#classic-o21--composition-semantics-default) | Open question | Composition-semantics default | — | CLASSIC-0027 |
+| [CLASSIC-O22](survey/Survey.DistributedModeration.md#classic-o22--curator-discovery-and-directory-bootstrap) | Open question | Curator discovery and directory bootstrap | — | CLASSIC-0027 |
+| [CLASSIC-O23](survey/Survey.DistributedModeration.md#classic-o23--meta-moderation) | Open question | Meta-moderation | — | CLASSIC-0027 |
+| [CLASSIC-O24](survey/Survey.DistributedModeration.md#classic-o24--shared-curation-feed-primitive-with-archival) | Open question | Shared curation-feed primitive with archival | — | CLASSIC-0027 |
+| [CLASSIC-O25](survey/Survey.DistributedModeration.md#classic-o25--ranking-gameability-and-reputation-inputs) | Open question | Ranking gameability and reputation inputs | — | CLASSIC-0027 |
 | [CLASSIC-DRAFT-compass-integration-O1](survey/Survey.CompassIntegration.md#classic-draft-compass-integration-o1--base-schema-or-model-module) | Open question | Base schema or model module | — | CLASSIC-DRAFT-compass-integration |
 | [CLASSIC-DRAFT-compass-integration-O2](survey/Survey.CompassIntegration.md#classic-draft-compass-integration-o2--authors-as-a-list) | Open question | Authors as a list | — | CLASSIC-DRAFT-compass-integration |
 | [CLASSIC-DRAFT-compass-integration-O3](survey/Survey.CompassIntegration.md#classic-draft-compass-integration-o3--records-as-parts-with-their-own-identity) | Open question | Records as parts with their own identity | — | CLASSIC-DRAFT-compass-integration |
@@ -200,13 +207,6 @@ Table: Decision, open-question, and memo records in the CLASSIC namespace.
 | [CLASSIC-DRAFT-compass-migration-O4](Plan.CompassMigration.md#classic-draft-compass-migration-o4--which-toolchain-ci-builds) | Open question | Which toolchain CI builds | — | CLASSIC-DRAFT-compass-migration |
 | [CLASSIC-DRAFT-compass-migration-O5](Plan.CompassMigration.md#classic-draft-compass-migration-o5--which-documents-are-numbered-first) | Open question | Which documents are numbered first | — | CLASSIC-DRAFT-compass-migration |
 | [CLASSIC-DRAFT-compass-migration-O6](Plan.CompassMigration.md#classic-draft-compass-migration-o6--logs-that-record-several-pieces-of-work) | Open question | Logs that record several pieces of work | — | CLASSIC-DRAFT-compass-migration |
-| [CLASSIC-DRAFT-distributed-moderation-O1](survey/Survey.DistributedModeration.md#classic-draft-distributed-moderation-o1--hybrid-rulesactions-resolution-semantics) | Open question | Hybrid rules/actions resolution semantics | — | CLASSIC-DRAFT-distributed-moderation |
-| [CLASSIC-DRAFT-distributed-moderation-O2](survey/Survey.DistributedModeration.md#classic-draft-distributed-moderation-o2--dsl-grammar-closure-and-sandbox-boundary) | Open question | DSL grammar closure and sandbox boundary | — | CLASSIC-DRAFT-distributed-moderation |
-| [CLASSIC-DRAFT-distributed-moderation-O3](survey/Survey.DistributedModeration.md#classic-draft-distributed-moderation-o3--composition-semantics-default) | Open question | Composition-semantics default | — | CLASSIC-DRAFT-distributed-moderation |
-| [CLASSIC-DRAFT-distributed-moderation-O4](survey/Survey.DistributedModeration.md#classic-draft-distributed-moderation-o4--curator-discovery-and-directory-bootstrap) | Open question | Curator discovery and directory bootstrap | — | CLASSIC-DRAFT-distributed-moderation |
-| [CLASSIC-DRAFT-distributed-moderation-O5](survey/Survey.DistributedModeration.md#classic-draft-distributed-moderation-o5--meta-moderation) | Open question | Meta-moderation | — | CLASSIC-DRAFT-distributed-moderation |
-| [CLASSIC-DRAFT-distributed-moderation-O6](survey/Survey.DistributedModeration.md#classic-draft-distributed-moderation-o6--shared-curation-feed-primitive-with-archival) | Open question | Shared curation-feed primitive with archival | — | CLASSIC-DRAFT-distributed-moderation |
-| [CLASSIC-DRAFT-distributed-moderation-O7](survey/Survey.DistributedModeration.md#classic-draft-distributed-moderation-o7--ranking-gameability-and-reputation-inputs) | Open question | Ranking gameability and reputation inputs | — | CLASSIC-DRAFT-distributed-moderation |
 | [CLASSIC-DRAFT-persistence-backends-O1](persistence/Arch.PersistenceBackends.md#classic-draft-persistence-backends-o1--serialization-durability-and-thread-safety) | Open question | Serialization, durability, and thread safety | — | CLASSIC-DRAFT-persistence-backends |
 | [CLASSIC-DRAFT-persistence-backends-O2](persistence/Arch.PersistenceBackends.md#classic-draft-persistence-backends-o2--rebuilding-derived-artifacts) | Open question | Rebuilding derived artifacts | — | CLASSIC-DRAFT-persistence-backends |
 | [CLASSIC-DRAFT-project-management-O1](survey/Survey.ProjectManagement.md#classic-draft-project-management-o1--dependency-graph-query-model) | Open question | Dependency-graph query model | — | CLASSIC-DRAFT-project-management |

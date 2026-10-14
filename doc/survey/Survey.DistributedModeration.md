@@ -1,11 +1,15 @@
 ---
-id:            CLASSIC-DRAFT-distributed-moderation
+id:            CLASSIC-0027
 title:         Distributed Content Moderation Survey
 genre:         Survey
 scope:         project
 project:       Classic
 language:      en
-status:        Draft
+status:        Current
+authors:
+  - Andrew Sengul
+approved-by:   Andrew Sengul
+reviewed:      2026-10-14
 provenance:
   assistant:   opencode
 cites:
@@ -25,13 +29,13 @@ cites:
     locator: OpenPGP, RFC 4880 — trust model
     external: true
 open-questions:
-  - CLASSIC-DRAFT-distributed-moderation-O1
-  - CLASSIC-DRAFT-distributed-moderation-O2
-  - CLASSIC-DRAFT-distributed-moderation-O3
-  - CLASSIC-DRAFT-distributed-moderation-O4
-  - CLASSIC-DRAFT-distributed-moderation-O5
-  - CLASSIC-DRAFT-distributed-moderation-O6
-  - CLASSIC-DRAFT-distributed-moderation-O7
+  - CLASSIC-O19
+  - CLASSIC-O20
+  - CLASSIC-O21
+  - CLASSIC-O22
+  - CLASSIC-O23
+  - CLASSIC-O24
+  - CLASSIC-O25
 ---
 
 # Distributed Content Moderation: Survey
@@ -447,32 +451,32 @@ users), and the PGP web of trust (transitive, decentralized trust delegation).
 Identifiers below are provisional; canonical `CLASSIC-O<n>` numbers are assigned
 from the namespace registry at acceptance.
 
-### CLASSIC-DRAFT-distributed-moderation-O1 — Hybrid rules/actions resolution semantics
+### CLASSIC-O19 — Hybrid rules/actions resolution semantics
 
 Exactly how a ruleset's baseline disposition and score combine with discrete
 actions for named targets: precedence, score composition, and how conflicting
 actions from the same feed resolve.
 
-### CLASSIC-DRAFT-distributed-moderation-O2 — DSL grammar closure and sandbox boundary
+### CLASSIC-O20 — DSL grammar closure and sandbox boundary
 
 The precise closed vocabulary of predicates, combinators, and actions; the set
 of content-metadata fields exposed to rules; the resource limits on evaluation;
 and the audited boundary that guarantees a ruleset cannot escape into arbitrary
 computation or side effects.
 
-### CLASSIC-DRAFT-distributed-moderation-O3 — Composition-semantics default
+### CLASSIC-O21 — Composition-semantics default
 
 Whether effect-per-label is the right default, how weighted scoring is exposed as
 a power-user option, and how the two coexist in one `moderation-set` without
 confusing the user.
 
-### CLASSIC-DRAFT-distributed-moderation-O4 — Curator discovery and directory bootstrap
+### CLASSIC-O22 — Curator discovery and directory bootstrap
 
 How the curator directory catalogs profiles, what metadata it surfaces, and how a
 newcomer bootstraps trust — shared with the Usenet-analog and archival
 directory-role work.
 
-### CLASSIC-DRAFT-distributed-moderation-O5 — Meta-moderation
+### CLASSIC-O23 — Meta-moderation
 
 Because a moderation feed is ordinary content, feeds can moderate other curators
 ("curators to be skeptical of," "curators I endorse"), and subscribers can stack
@@ -481,13 +485,13 @@ self-correcting property that terminates when a subscriber stops subscribing.
 What, if any, protocol support this warrants beyond what falls out naturally is
 open.
 
-### CLASSIC-DRAFT-distributed-moderation-O6 — Shared curation-feed primitive with archival
+### CLASSIC-O24 — Shared curation-feed primitive with archival
 
 Whether the moderation feed and the archival preservation feed are one
 parameterized type or two parallel types, given that both are curated,
 subscribable feeds of actions pointed at content.
 
-### CLASSIC-DRAFT-distributed-moderation-O7 — Ranking gameability and reputation inputs
+### CLASSIC-O25 — Ranking gameability and reputation inputs
 
 How published ranking rulesets resist manipulation by authors who read them, and
 whether contributor-reputation inputs to rules can be sourced without recreating

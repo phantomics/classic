@@ -208,7 +208,7 @@ grant legible: a publisher offering an archive button is plausibly granting
 mirror-and-redistribute permission, and expressing the terms explicitly turns an
 implied grant into a stated one. Second, `preservation-feed` is structurally a
 *positive-curation* feed — the same primitive as a moderation promotion feed
-([CLASSIC-DRAFT-distributed-moderation](Survey.DistributedModeration.md)), pointed at an
+([CLASSIC-0027](Survey.DistributedModeration.md)), pointed at an
 archival action rather than a display action. Whether these are one parameterized
 type or two parallel types is an open question shared between the two surveys.
 
@@ -344,14 +344,14 @@ the strongest standing evidence that the substrate holds the right shape.
 ## Relationship to Other Work
 
 This survey shares the **curation-feed primitive** and the **directory mechanism**
-with [CLASSIC-DRAFT-distributed-moderation](Survey.DistributedModeration.md): a
+with [CLASSIC-0027](Survey.DistributedModeration.md): a
 preservation feed is a positive-curation feed pointed at an archival action, and
 the preservation aggregator is the same directory-role deployment as the moderation
 curator directory and the Usenet-analog group directory
 ([CLASSIC-DRAFT-usenet](Survey.Usenet.md)). Whether the moderation feed and the
 preservation feed are one parameterized type or two parallel types is the mutual
 open question recorded in both surveys, as CLASSIC-O18 here and
-CLASSIC-DRAFT-distributed-moderation-O6 there.
+CLASSIC-O24 there.
 
 It depends on the persistence protocol and its flat-file backend
 ([CLASSIC-0006](../persistence/Ref.Persistence.md)) and the federation and
@@ -410,4 +410,4 @@ confirmation).
 Whether the preservation feed and the moderation feed are one parameterized type
 or two parallel types, given that both are curated, subscribable feeds of actions
 pointed at content — the mutual open question with
-[CLASSIC-DRAFT-distributed-moderation](Survey.DistributedModeration.md).
+[CLASSIC-0027](Survey.DistributedModeration.md).

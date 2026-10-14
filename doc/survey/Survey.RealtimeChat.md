@@ -10,7 +10,7 @@ provenance:
   assistant:   opencode
 relates-to:
   - CLASSIC-DRAFT-project-management
-  - CLASSIC-DRAFT-distributed-moderation
+  - CLASSIC-0027
   - CLASSIC-0026
   - CLASSIC-DRAFT-x400
   - CLASSIC-0019
@@ -367,7 +367,7 @@ responses take effect. The TTRPG play session follows it — the game master set
 scene, players submit actions constrained by their characters, the game master
 resolves them. The distributed-moderation curator pipeline follows it — users
 suggest interventions, the curator reviews, accepted interventions publish to the
-feed ([CLASSIC-DRAFT-distributed-moderation](Survey.DistributedModeration.md)).
+feed ([CLASSIC-0027](Survey.DistributedModeration.md)).
 Recognizing **solicited contribution** as a substrate-level pattern — a request
 entity, a constrained response type, a review workflow, a placement rule — would
 let each of these share one mechanism, rendered as a chat affordance, a web form,
@@ -508,9 +508,9 @@ survey's need for low-latency updates
 ([CLASSIC-DRAFT-project-management-O2](Survey.ProjectManagement.md#classic-draft-project-management-o2--real-time-board-updates);
 compare [CLASSIC-O8](Survey.TTRPGHost.md#classic-o8--tight-federation-transport)).
 Crystallized chat is ordinary content, so it can be moderated through the feeds of
-[CLASSIC-DRAFT-distributed-moderation](Survey.DistributedModeration.md) — whether
+[CLASSIC-0027](Survey.DistributedModeration.md) — whether
 by a shared curation-feed type is
-[CLASSIC-DRAFT-distributed-moderation-O6](Survey.DistributedModeration.md#classic-draft-distributed-moderation-o6--shared-curation-feed-primitive-with-archival)
+[CLASSIC-O24](Survey.DistributedModeration.md#classic-o24--shared-curation-feed-primitive-with-archival)
 — and archived under the policies of
 [CLASSIC-0026](Survey.Archival.md). Room discovery across communities
 meets the same directory question as
