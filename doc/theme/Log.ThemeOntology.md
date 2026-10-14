@@ -14,7 +14,7 @@ reviewed:      2026-10-13
 provenance:
   assistant:   opencode
 relates-to:
-  - CLASSIC-DRAFT-theme
+  - CLASSIC-0011
 decisions:
   - CLASSIC-D29
   - CLASSIC-D30

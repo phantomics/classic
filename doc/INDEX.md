@@ -20,6 +20,7 @@ Table: Documents in the CLASSIC namespace.
 | [CLASSIC-0008](model/Ref.Workflow.md) | Workflow Reference | Ref | component | Current | model |
 | [CLASSIC-0009](model/Log.SlotValidation.md) | Slot Type Validation Development Log | Log | component | Accepted | model |
 | [CLASSIC-0010](theme/Log.ThemeOntology.md) | Theme Ontology Development Log | Log | component | Implemented | theme |
+| [CLASSIC-0011](theme/Ref.Theme.md) | Theme Ontology Reference | Ref | component | Current | theme |
 | [CLASSIC-DRAFT-archival](survey/Survey.Archival.md) | Content Archival and Durability Survey | Survey | project | Draft | — |
 | [CLASSIC-DRAFT-capability-exclusion](theme/Log.CapabilityExclusion.md) | Capability Exclusion Development Log | Log | component | Draft | theme |
 | [CLASSIC-DRAFT-compass-integration](survey/Survey.CompassIntegration.md) | Compass Documentation on Classic Survey | Survey | project | Draft | — |
@@ -40,7 +41,6 @@ Table: Documents in the CLASSIC namespace.
 | [CLASSIC-DRAFT-schema-factorization](Log.SchemaFactorization.md) | Schema Factorization Development Log | Log | project | Implemented | schema |
 | [CLASSIC-DRAFT-schema-pluggability](Survey.SchemaPluggability.md) | Schema Pluggability Survey | Survey | project | Draft | schema |
 | [CLASSIC-DRAFT-slot-fills](theme/Log.SlotFills.md) | Template Slot Fills Development Log | Log | component | Draft | theme |
-| [CLASSIC-DRAFT-theme](theme/Ref.Theme.md) | Theme Ontology Reference | Ref | component | Draft | theme |
 | [CLASSIC-DRAFT-ttrpg-host](survey/Survey.TTRPGHost.md) | Tabletop RPG Hosting (Play-by-Post) Survey | Survey | project | Draft | — |
 | [CLASSIC-DRAFT-typed-pages](wiki/Log.TypedPages.md) | Typed Page Classes Development Log | Log | component | Implemented | wiki |
 | [CLASSIC-DRAFT-usenet](survey/Survey.Usenet.md) | Usenet-Analog Discussion Hosting Survey | Survey | project | Draft | — |

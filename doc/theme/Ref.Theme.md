@@ -1,12 +1,16 @@
 ---
-id:            CLASSIC-DRAFT-theme
+id:            CLASSIC-0011
 title:         Theme Ontology Reference
 genre:         Ref
 scope:         component
 project:       Classic
 component:     theme
 language:      en
-status:        Draft
+status:        Current
+authors:
+  - Andrew Sengul
+approved-by:   Andrew Sengul
+reviewed:      2026-10-13
 api-version:   "0.1.0"
 provenance:
   assistant:   opencode

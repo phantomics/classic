@@ -10,7 +10,7 @@ status:        Draft
 provenance:
   assistant:   opencode
 relates-to:
-  - CLASSIC-DRAFT-theme
+  - CLASSIC-0011
   - CLASSIC-0010
 decisions:
   - CLASSIC-DRAFT-capability-exclusion-D1
