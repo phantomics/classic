@@ -16,7 +16,7 @@ provenance:
   assistant:   opencode
 relates-to:
   - CLASSIC-0013
-  - CLASSIC-DRAFT-new-schema
+  - CLASSIC-0033
   - CLASSIC-DRAFT-schema-pluggability
 cites:
   - title:   Key words for use in RFCs to Indicate Requirement Levels
@@ -34,7 +34,7 @@ domain-specific schemas).
 The contract is described as it currently exists in the reference
 distribution: specific class names, slot names, and method signatures
 that the core engines reference. A walkthrough of satisfying it is
-[CLASSIC-DRAFT-new-schema](Guide.NewSchema.md), and the limits of this
+[CLASSIC-0033](Guide.NewSchema.md), and the limits of this
 approach, with what would be needed to make the system fully name-agnostic,
 are surveyed in [CLASSIC-DRAFT-schema-pluggability](Survey.SchemaPluggability.md).
 

@@ -42,8 +42,8 @@ Table: Documents in the CLASSIC namespace.
 | [CLASSIC-0030](Eval.X400.md) | X.400 Prior-Art Evaluation | Eval (prior-art) | project | Accepted | — |
 | [CLASSIC-0031](survey/Survey.CompassIntegration.md) | Compass Documentation on Classic Survey | Survey | project | Accepted | — |
 | [CLASSIC-0032](Plan.CompassMigration.md) | Compass Migration Plan | Plan | project | Implemented | — |
+| [CLASSIC-0033](Guide.NewSchema.md) | Creating a New Schema Guide | Guide (howto) | project | Current | schema |
 | [CLASSIC-DRAFT-compass-migration-log](Log.CompassMigration.md) | Compass Migration Development Log | Log | project | Implemented | — |
-| [CLASSIC-DRAFT-new-schema](Guide.NewSchema.md) | Creating a New Schema Guide | Guide (howto) | project | Draft | schema |
 | [CLASSIC-DRAFT-persistence-backends](persistence/Arch.PersistenceBackends.md) | The Persistence Backends Architecture | Architecture | component | Draft | persistence |
 | [CLASSIC-DRAFT-realtime-chat](survey/Survey.RealtimeChat.md) | Real-Time Chat Integration Survey | Survey | project | Draft | — |
 | [CLASSIC-DRAFT-schema-pluggability](Survey.SchemaPluggability.md) | Schema Pluggability Survey | Survey | project | Draft | schema |

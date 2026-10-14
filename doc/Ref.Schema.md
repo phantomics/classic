@@ -16,7 +16,7 @@ provenance:
   assistant:   opencode
 relates-to:
   - CLASSIC-0014
-  - CLASSIC-DRAFT-new-schema
+  - CLASSIC-0033
   - CLASSIC-DRAFT-schema-pluggability
   - CLASSIC-0012
   - CLASSIC-0015

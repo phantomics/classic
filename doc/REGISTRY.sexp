@@ -183,3 +183,4 @@
 (:id "CLASSIC-O46" :kind :open-question :draft "CLASSIC-DRAFT-compass-migration-O4" :host "CLASSIC-0032" :date "2026-10-14" :by "Andrew Sengul")
 (:id "CLASSIC-O47" :kind :open-question :draft "CLASSIC-DRAFT-compass-migration-O5" :host "CLASSIC-0032" :date "2026-10-14" :by "Andrew Sengul")
 (:id "CLASSIC-O48" :kind :open-question :draft "CLASSIC-DRAFT-compass-migration-O6" :host "CLASSIC-0032" :date "2026-10-14" :by "Andrew Sengul")
+(:id "CLASSIC-0033" :kind :document :draft "CLASSIC-DRAFT-new-schema" :path "doc/Guide.NewSchema.md" :date "2026-10-14" :by "Andrew Sengul")

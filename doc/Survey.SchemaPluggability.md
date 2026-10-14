@@ -11,7 +11,7 @@ provenance:
   assistant:   opencode
 relates-to:
   - CLASSIC-0014
-  - CLASSIC-DRAFT-new-schema
+  - CLASSIC-0033
   - CLASSIC-0013
   - CLASSIC-0015
 open-questions:
@@ -107,7 +107,7 @@ package name is not examined here.
 - **[CLASSIC-0014](Spec.SchemaContract.md)** enumerates every
   class, slot accessor, and method the core engines depend on, which is what
   the indirection above would cover.
-- **[CLASSIC-DRAFT-new-schema](Guide.NewSchema.md)** walks through satisfying
+- **[CLASSIC-0033](Guide.NewSchema.md)** walks through satisfying
   the contract as it stands, including the fixed package name.
 - **[CLASSIC-0013](Ref.Schema.md)** describes the schema/core layering.
 - **[CLASSIC-0015](Log.DistFactorization.md)** carried out

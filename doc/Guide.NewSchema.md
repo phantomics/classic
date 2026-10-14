@@ -1,5 +1,5 @@
 ---
-id:            CLASSIC-DRAFT-new-schema
+id:            CLASSIC-0033
 title:         Creating a New Schema Guide
 genre:         Guide
 subtype:       howto
@@ -7,7 +7,7 @@ scope:         project
 project:       Classic
 component:     schema
 language:      en
-status:        Draft
+status:        Current
 api-version:   "0.1.0"
 provenance:
   assistant:   opencode
