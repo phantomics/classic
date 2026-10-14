@@ -6,7 +6,11 @@ scope:         component
 project:       Classic
 component:     model
 language:      en
-status:        Draft
+status:        Accepted
+authors:
+  - Andrew Sengul
+approved-by:   Andrew Sengul
+reviewed:      2026-10-13
 provenance:
   assistant:   opencode
 relates-to:
@@ -53,7 +57,7 @@ as clear errors at the point of mutation.
 
 ### CLASSIC-DRAFT-slot-validation-D1 — validate-entity, not (setf slot-value-using-class)
 
-**Status:** Proposed
+**Status:** Implemented
 
 **Context:** Classic's MOP annotations are metadata, not contracts, and CLOS
 slot `:type` declarations are advisory, so invalid values reach persistence,
