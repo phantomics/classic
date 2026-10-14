@@ -16,7 +16,7 @@ api-version:   "0.1.0"
 provenance:
   assistant:   opencode
 relates-to:
-  - CLASSIC-DRAFT-forum-demo
+  - CLASSIC-0020
 ---
 
 # Forum Preset Guide

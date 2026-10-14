@@ -535,8 +535,8 @@ Phase 3 is complete. *Outstanding Work* in the body of this Log was written
 before Phase 3; its Phase 3 and date-disagreement items are done, recorded
 in these updates.
 
-- **[CLASSIC-DRAFT-forum-demo](forum/Log.ForumDemo.md).** Seven numbered
-  decisions became CLASSIC-DRAFT-forum-demo-D1 to CLASSIC-DRAFT-forum-demo-D7,
+- **[CLASSIC-0020](forum/Log.ForumDemo.md).** Seven numbered
+  decisions became CLASSIC-D69 to CLASSIC-D75,
   pinned to `c1df12c`. Latent Bugs Found and Fixed became a subsection of
   Implementation, and the Files table, a subsection with File and Change
   columns, became the Log's Files section. A migration note records three
@@ -590,7 +590,7 @@ Table: Decision records created in Phase 3, by Log.
 | CLASSIC-0010 | 14 | `d20ec8c`, `8aea5f4` |
 | CLASSIC-0016 | 5 | `9626df5` |
 | CLASSIC-0017 | 5 | `72b638c` |
-| CLASSIC-DRAFT-forum-demo | 7 | `c1df12c` |
+| CLASSIC-0020 | 7 | `c1df12c` |
 | CLASSIC-DRAFT-wiki-demo | 10 | `ea32b9c` |
 | CLASSIC-DRAFT-typed-pages | 6 | `6e6a6a2` |
 

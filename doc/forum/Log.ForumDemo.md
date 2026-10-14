@@ -1,5 +1,5 @@
 ---
-id:            CLASSIC-DRAFT-forum-demo
+id:            CLASSIC-0020
 title:         Forum Demo Development Log
 genre:         Log
 scope:         component
@@ -17,13 +17,13 @@ relates-to:
   - CLASSIC-0019
   - CLASSIC-0018
 decisions:
-  - CLASSIC-DRAFT-forum-demo-D1
-  - CLASSIC-DRAFT-forum-demo-D2
-  - CLASSIC-DRAFT-forum-demo-D3
-  - CLASSIC-DRAFT-forum-demo-D4
-  - CLASSIC-DRAFT-forum-demo-D5
-  - CLASSIC-DRAFT-forum-demo-D6
-  - CLASSIC-DRAFT-forum-demo-D7
+  - CLASSIC-D69
+  - CLASSIC-D70
+  - CLASSIC-D71
+  - CLASSIC-D72
+  - CLASSIC-D73
+  - CLASSIC-D74
+  - CLASSIC-D75
 ---
 
 # Forum Demo: Development Log
@@ -68,7 +68,7 @@ scope.
 The shape of the forum was settled through discussion before
 implementation. The decisions:
 
-### CLASSIC-DRAFT-forum-demo-D1 — forum-post descends from classic-post, not classic-article
+### CLASSIC-D69 — forum-post descends from classic-post, not classic-article
 
 **Status:** Implemented
 
@@ -94,7 +94,7 @@ workflow, persistence), not the content-specific operations.
 - `classic-article` as the base, which the heading names. Not adopted: posts
   are threaded, and `classic-post` exists for exactly that.
 
-### CLASSIC-DRAFT-forum-demo-D2 — Reactions are a multiset of strings
+### CLASSIC-D70 — Reactions are a multiset of strings
 
 **Status:** Implemented
 
@@ -113,7 +113,7 @@ display, but the slot itself is unconstrained.
   per member per post. Deferred: a production forum would need it; the demo
   does not.
 
-### CLASSIC-DRAFT-forum-demo-D3 — Quote = link plus duplicated text
+### CLASSIC-D71 — Quote = link plus duplicated text
 
 **Status:** Implemented
 
@@ -130,7 +130,7 @@ the lifted text; the `post-quotes` relation is exactly that reference.
 
 **Alternatives:** None recorded.
 
-### CLASSIC-DRAFT-forum-demo-D4 — Three roles, gated at the operation layer
+### CLASSIC-D72 — Three roles, gated at the operation layer
 
 **Status:** Implemented
 
@@ -151,7 +151,7 @@ moderators and admins hold. This mirrors how the blog's `write-article` checks
 - Gating the `hide`/`delete` transitions to `"moderator"`. Rejected: it would
   have locked out admins, whose role label is not `"moderator"`.
 
-### CLASSIC-DRAFT-forum-demo-D5 — Pinning and locking are slot updates, not workflow states
+### CLASSIC-D73 — Pinning and locking are slot updates, not workflow states
 
 **Status:** Implemented
 
@@ -166,7 +166,7 @@ phpBB, where pin and lock are thread attributes.
 - Pin and lock as workflow states. Not adopted: the workflow engine is for
   content state machines, not for every boolean.
 
-### CLASSIC-DRAFT-forum-demo-D6 — Atomic thread creation; whole-post quoting
+### CLASSIC-D74 — Atomic thread creation; whole-post quoting
 
 **Status:** Implemented
 
@@ -180,7 +180,7 @@ is a production refinement.
 **Alternatives:**
 - Fragment quoting. Deferred as a production refinement.
 
-### CLASSIC-DRAFT-forum-demo-D7 — Stable post indices via placeholders
+### CLASSIC-D75 — Stable post indices via placeholders
 
 **Status:** Implemented
 

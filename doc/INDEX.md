@@ -29,12 +29,12 @@ Table: Documents in the CLASSIC namespace.
 | [CLASSIC-0017](theme/Log.SlotFills.md) | Template Slot Fills Development Log | Log | component | Implemented | theme |
 | [CLASSIC-0018](model/Log.GeneralModel.md) | General Publication Models Development Log | Log | component | Implemented | model |
 | [CLASSIC-0019](forum/Guide.Forum.md) | Forum Preset Guide | Guide (tutorial) | component | Current | forum |
+| [CLASSIC-0020](forum/Log.ForumDemo.md) | Forum Demo Development Log | Log | component | Implemented | forum |
 | [CLASSIC-DRAFT-archival](survey/Survey.Archival.md) | Content Archival and Durability Survey | Survey | project | Draft | — |
 | [CLASSIC-DRAFT-compass-integration](survey/Survey.CompassIntegration.md) | Compass Documentation on Classic Survey | Survey | project | Draft | — |
 | [CLASSIC-DRAFT-compass-migration](Plan.CompassMigration.md) | Compass Migration Plan | Plan | project | Implemented | — |
 | [CLASSIC-DRAFT-compass-migration-log](Log.CompassMigration.md) | Compass Migration Development Log | Log | project | Implemented | — |
 | [CLASSIC-DRAFT-distributed-moderation](survey/Survey.DistributedModeration.md) | Distributed Content Moderation Survey | Survey | project | Draft | — |
-| [CLASSIC-DRAFT-forum-demo](forum/Log.ForumDemo.md) | Forum Demo Development Log | Log | component | Draft | forum |
 | [CLASSIC-DRAFT-music-publishing](survey/Survey.MusicPublishing.md) | Music Publishing Survey | Survey | project | Draft | — |
 | [CLASSIC-DRAFT-new-schema](Guide.NewSchema.md) | Creating a New Schema Guide | Guide (howto) | project | Draft | schema |
 | [CLASSIC-DRAFT-persistence-backends](persistence/Arch.PersistenceBackends.md) | The Persistence Backends Architecture | Architecture | component | Draft | persistence |
@@ -121,6 +121,13 @@ Table: Decision, open-question, and memo records in the CLASSIC namespace.
 | [CLASSIC-D66](model/Log.GeneralModel.md#classic-d66--presets-are-kept-as-the-user-facing-surface) | Decision | Presets are kept as the user-facing surface | Implemented | CLASSIC-0018 |
 | [CLASSIC-D67](model/Log.GeneralModel.md#classic-d67--the-classic-blog-package-nickname-is-dropped) | Decision | The classic-blog package nickname is dropped | Implemented | CLASSIC-0018 |
 | [CLASSIC-D68](model/Log.GeneralModel.md#classic-d68--combined-data-and-display-retained-on-state-change-no-op-kept) | Decision | Combined data and display retained; on-state-change no-op kept | Implemented | CLASSIC-0018 |
+| [CLASSIC-D69](forum/Log.ForumDemo.md#classic-d69--forum-post-descends-from-classic-post-not-classic-article) | Decision | forum-post descends from classic-post, not classic-article | Implemented | CLASSIC-0020 |
+| [CLASSIC-D70](forum/Log.ForumDemo.md#classic-d70--reactions-are-a-multiset-of-strings) | Decision | Reactions are a multiset of strings | Implemented | CLASSIC-0020 |
+| [CLASSIC-D71](forum/Log.ForumDemo.md#classic-d71--quote--link-plus-duplicated-text) | Decision | Quote = link plus duplicated text | Implemented | CLASSIC-0020 |
+| [CLASSIC-D72](forum/Log.ForumDemo.md#classic-d72--three-roles-gated-at-the-operation-layer) | Decision | Three roles, gated at the operation layer | Implemented | CLASSIC-0020 |
+| [CLASSIC-D73](forum/Log.ForumDemo.md#classic-d73--pinning-and-locking-are-slot-updates-not-workflow-states) | Decision | Pinning and locking are slot updates, not workflow states | Implemented | CLASSIC-0020 |
+| [CLASSIC-D74](forum/Log.ForumDemo.md#classic-d74--atomic-thread-creation-whole-post-quoting) | Decision | Atomic thread creation; whole-post quoting | Implemented | CLASSIC-0020 |
+| [CLASSIC-D75](forum/Log.ForumDemo.md#classic-d75--stable-post-indices-via-placeholders) | Decision | Stable post indices via placeholders | Implemented | CLASSIC-0020 |
 | [CLASSIC-DRAFT-compass-migration-D1](Plan.CompassMigration.md#classic-draft-compass-migration-d1--survey-open-questions-take-per-survey-provisional-identifiers) | Decision | Survey open questions take per-Survey provisional identifiers | Accepted | CLASSIC-DRAFT-compass-migration |
 | [CLASSIC-DRAFT-compass-migration-D2](Plan.CompassMigration.md#classic-draft-compass-migration-d2--genre-prefixed-names-with-the-component-subdirectories-kept) | Decision | Genre-prefixed names, with the component subdirectories kept | Accepted | CLASSIC-DRAFT-compass-migration |
 | [CLASSIC-DRAFT-compass-migration-D3](Plan.CompassMigration.md#classic-draft-compass-migration-d3--statuses-an-assistant-may-set-during-migration) | Decision | Statuses an assistant may set during migration | Accepted | CLASSIC-DRAFT-compass-migration |
@@ -137,13 +144,6 @@ Table: Decision, open-question, and memo records in the CLASSIC namespace.
 | [CLASSIC-DRAFT-compass-migration-log-D3](Log.CompassMigration.md#classic-draft-compass-migration-log-d3--in-body-status-lines-that-front-matter-replaces-are-removed-dates-stay) | Decision | In-body status lines that front-matter replaces are removed; dates stay | Implemented | CLASSIC-DRAFT-compass-migration-log |
 | [CLASSIC-DRAFT-compass-migration-log-D4](Log.CompassMigration.md#classic-draft-compass-migration-log-d4--headings-follow-the-genre-spine-body-text-is-not-rewritten) | Decision | Headings follow the genre spine; body text is not rewritten | Implemented | CLASSIC-DRAFT-compass-migration-log |
 | [CLASSIC-DRAFT-compass-migration-log-D5](Log.CompassMigration.md#classic-draft-compass-migration-log-d5--each-gate-is-checked-with-two-builds-of-the-toolchain) | Decision | Each gate is checked with two builds of the toolchain | Implemented | CLASSIC-DRAFT-compass-migration-log |
-| [CLASSIC-DRAFT-forum-demo-D1](forum/Log.ForumDemo.md#classic-draft-forum-demo-d1--forum-post-descends-from-classic-post-not-classic-article) | Decision | forum-post descends from classic-post, not classic-article | Proposed | CLASSIC-DRAFT-forum-demo |
-| [CLASSIC-DRAFT-forum-demo-D2](forum/Log.ForumDemo.md#classic-draft-forum-demo-d2--reactions-are-a-multiset-of-strings) | Decision | Reactions are a multiset of strings | Proposed | CLASSIC-DRAFT-forum-demo |
-| [CLASSIC-DRAFT-forum-demo-D3](forum/Log.ForumDemo.md#classic-draft-forum-demo-d3--quote--link-plus-duplicated-text) | Decision | Quote = link plus duplicated text | Proposed | CLASSIC-DRAFT-forum-demo |
-| [CLASSIC-DRAFT-forum-demo-D4](forum/Log.ForumDemo.md#classic-draft-forum-demo-d4--three-roles-gated-at-the-operation-layer) | Decision | Three roles, gated at the operation layer | Proposed | CLASSIC-DRAFT-forum-demo |
-| [CLASSIC-DRAFT-forum-demo-D5](forum/Log.ForumDemo.md#classic-draft-forum-demo-d5--pinning-and-locking-are-slot-updates-not-workflow-states) | Decision | Pinning and locking are slot updates, not workflow states | Proposed | CLASSIC-DRAFT-forum-demo |
-| [CLASSIC-DRAFT-forum-demo-D6](forum/Log.ForumDemo.md#classic-draft-forum-demo-d6--atomic-thread-creation-whole-post-quoting) | Decision | Atomic thread creation; whole-post quoting | Proposed | CLASSIC-DRAFT-forum-demo |
-| [CLASSIC-DRAFT-forum-demo-D7](forum/Log.ForumDemo.md#classic-draft-forum-demo-d7--stable-post-indices-via-placeholders) | Decision | Stable post indices via placeholders | Proposed | CLASSIC-DRAFT-forum-demo |
 | [CLASSIC-DRAFT-persistence-backends-D1](persistence/Arch.PersistenceBackends.md#classic-draft-persistence-backends-d1--flat-file-entities-split-metadata-from-body) | Decision | Flat-file entities split metadata from body | Proposed | CLASSIC-DRAFT-persistence-backends |
 | [CLASSIC-DRAFT-persistence-backends-D2](persistence/Arch.PersistenceBackends.md#classic-draft-persistence-backends-d2--flat-file-cross-entity-queries-use-materialized-index-files) | Decision | Flat-file cross-entity queries use materialized index files | Proposed | CLASSIC-DRAFT-persistence-backends |
 | [CLASSIC-DRAFT-persistence-backends-D3](persistence/Arch.PersistenceBackends.md#classic-draft-persistence-backends-d3--container-level-bundling-for-high-volume-small-items) | Decision | Container-level bundling for high-volume small items | Proposed | CLASSIC-DRAFT-persistence-backends |
