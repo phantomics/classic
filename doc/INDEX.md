@@ -39,6 +39,7 @@ Table: Documents in the CLASSIC namespace.
 | [CLASSIC-0027](survey/Survey.DistributedModeration.md) | Distributed Content Moderation Survey | Survey | project | Current | — |
 | [CLASSIC-0028](survey/Survey.Usenet.md) | Usenet-Analog Discussion Hosting Survey | Survey | project | Current | — |
 | [CLASSIC-0029](survey/Survey.ProjectManagement.md) | Project Management as Classic Imprint Survey | Survey | project | Current | — |
+| [CLASSIC-0030](Eval.X400.md) | X.400 Prior-Art Evaluation | Eval (prior-art) | project | Current | — |
 | [CLASSIC-DRAFT-compass-integration](survey/Survey.CompassIntegration.md) | Compass Documentation on Classic Survey | Survey | project | Draft | — |
 | [CLASSIC-DRAFT-compass-migration](Plan.CompassMigration.md) | Compass Migration Plan | Plan | project | Implemented | — |
 | [CLASSIC-DRAFT-compass-migration-log](Log.CompassMigration.md) | Compass Migration Development Log | Log | project | Implemented | — |
@@ -47,7 +48,6 @@ Table: Documents in the CLASSIC namespace.
 | [CLASSIC-DRAFT-realtime-chat](survey/Survey.RealtimeChat.md) | Real-Time Chat Integration Survey | Survey | project | Draft | — |
 | [CLASSIC-DRAFT-schema-pluggability](Survey.SchemaPluggability.md) | Schema Pluggability Survey | Survey | project | Draft | schema |
 | [CLASSIC-DRAFT-with-persistence](persistence/Log.WithPersistence.md) | with-persistence Development Log | Log | component | Accepted | persistence |
-| [CLASSIC-DRAFT-x400](Eval.X400.md) | X.400 Prior-Art Evaluation | Eval (prior-art) | project | Draft | — |
 
 Table: Decision, open-question, and memo records in the CLASSIC namespace.
 

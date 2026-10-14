@@ -157,3 +157,4 @@
 (:id "CLASSIC-O34" :kind :open-question :draft "CLASSIC-DRAFT-project-management-O4" :host "CLASSIC-0029" :date "2026-10-14" :by "Andrew Sengul")
 (:id "CLASSIC-O35" :kind :open-question :draft "CLASSIC-DRAFT-project-management-O5" :host "CLASSIC-0029" :date "2026-10-14" :by "Andrew Sengul")
 (:id "CLASSIC-O36" :kind :open-question :draft "CLASSIC-DRAFT-project-management-O6" :host "CLASSIC-0029" :date "2026-10-14" :by "Andrew Sengul")
+(:id "CLASSIC-0030" :kind :document :draft "CLASSIC-DRAFT-x400" :path "doc/Eval.X400.md" :date "2026-10-14" :by "Andrew Sengul")

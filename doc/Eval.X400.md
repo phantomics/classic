@@ -1,12 +1,16 @@
 ---
-id:            CLASSIC-DRAFT-x400
+id:            CLASSIC-0030
 title:         X.400 Prior-Art Evaluation
 genre:         Eval
 subtype:       prior-art
 scope:         project
 project:       Classic
 language:      en
-status:        Draft
+status:        Accepted
+authors:
+  - Andrew Sengul
+approved-by:   Andrew Sengul
+reviewed:      2026-10-14
 provenance:
   assistant:   opencode
 cites:

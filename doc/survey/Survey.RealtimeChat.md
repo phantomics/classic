@@ -12,7 +12,7 @@ relates-to:
   - CLASSIC-0029
   - CLASSIC-0027
   - CLASSIC-0026
-  - CLASSIC-DRAFT-x400
+  - CLASSIC-0030
   - CLASSIC-0019
   - CLASSIC-0001
   - CLASSIC-0008
@@ -520,7 +520,7 @@ The solicited-contribution pattern relates the forum imprint's threads
 ([CLASSIC-0008](../model/Ref.Workflow.md)), and the TTRPG action flow.
 Federation alignment rests on
 [CLASSIC-0001](../federation/Guide.FederationDemo.md).
-[CLASSIC-DRAFT-x400](../Eval.X400.md) evaluates an earlier structured-messaging
+[CLASSIC-0030](../Eval.X400.md) evaluates an earlier structured-messaging
 system and is the prior-art companion for this survey's messaging concerns:
 structured delivery, receipts, and redaction.
 
