@@ -507,7 +507,7 @@ reference's tables and diagram stays, since it explains the protocol.
 3. **Bring the two remaining Surveys to shape.** `Survey.MusicPublishing.md`
    and `Survey.TTRPGHost.md` lose the H1 prefix "Concept:", take the section
    names of the Survey spine, and turn their numbered open questions into
-   records, CLASSIC-O1 and CLASSIC-DRAFT-ttrpg-host-O1
+   records, CLASSIC-O1 and CLASSIC-O7
    onward. TTRPGHost's mention of `Concept.MusicPublishing` becomes a link.
 4. **Fix every link** (CLASSIC-DRAFT-compass-migration-D7): backticked
    document paths, bare filenames, and prose mentions of another document

@@ -34,6 +34,7 @@ Table: Documents in the CLASSIC namespace.
 | [CLASSIC-0022](wiki/Log.WikiDemo.md) | Wiki Demo Development Log | Log | component | Implemented | wiki |
 | [CLASSIC-0023](wiki/Log.TypedPages.md) | Typed Page Classes Development Log | Log | component | Implemented | wiki |
 | [CLASSIC-0024](survey/Survey.MusicPublishing.md) | Music Publishing Survey | Survey | project | Current | — |
+| [CLASSIC-0025](survey/Survey.TTRPGHost.md) | Tabletop RPG Hosting (Play-by-Post) Survey | Survey | project | Current | — |
 | [CLASSIC-DRAFT-archival](survey/Survey.Archival.md) | Content Archival and Durability Survey | Survey | project | Draft | — |
 | [CLASSIC-DRAFT-compass-integration](survey/Survey.CompassIntegration.md) | Compass Documentation on Classic Survey | Survey | project | Draft | — |
 | [CLASSIC-DRAFT-compass-migration](Plan.CompassMigration.md) | Compass Migration Plan | Plan | project | Implemented | — |
@@ -44,7 +45,6 @@ Table: Documents in the CLASSIC namespace.
 | [CLASSIC-DRAFT-project-management](survey/Survey.ProjectManagement.md) | Project Management as Classic Imprint Survey | Survey | project | Draft | — |
 | [CLASSIC-DRAFT-realtime-chat](survey/Survey.RealtimeChat.md) | Real-Time Chat Integration Survey | Survey | project | Draft | — |
 | [CLASSIC-DRAFT-schema-pluggability](Survey.SchemaPluggability.md) | Schema Pluggability Survey | Survey | project | Draft | schema |
-| [CLASSIC-DRAFT-ttrpg-host](survey/Survey.TTRPGHost.md) | Tabletop RPG Hosting (Play-by-Post) Survey | Survey | project | Draft | — |
 | [CLASSIC-DRAFT-usenet](survey/Survey.Usenet.md) | Usenet-Analog Discussion Hosting Survey | Survey | project | Draft | — |
 | [CLASSIC-DRAFT-with-persistence](persistence/Log.WithPersistence.md) | with-persistence Development Log | Log | component | Accepted | persistence |
 | [CLASSIC-DRAFT-x400](Eval.X400.md) | X.400 Prior-Art Evaluation | Eval (prior-art) | project | Draft | — |
@@ -176,6 +176,12 @@ Table: Decision, open-question, and memo records in the CLASSIC namespace.
 | [CLASSIC-O4](survey/Survey.MusicPublishing.md#classic-o4--discovery-model) | Open question | Discovery model | — | CLASSIC-0024 |
 | [CLASSIC-O5](survey/Survey.MusicPublishing.md#classic-o5--daw-integration-depth) | Open question | DAW integration depth | — | CLASSIC-0024 |
 | [CLASSIC-O6](survey/Survey.MusicPublishing.md#classic-o6--play-count-and-sales-attestation) | Open question | Play-count and sales attestation | — | CLASSIC-0024 |
+| [CLASSIC-O7](survey/Survey.TTRPGHost.md#classic-o7--commit-reveal-rng-protocol) | Open question | Commit-reveal RNG protocol | — | CLASSIC-0025 |
+| [CLASSIC-O8](survey/Survey.TTRPGHost.md#classic-o8--tight-federation-transport) | Open question | Tight-federation transport | — | CLASSIC-0025 |
+| [CLASSIC-O9](survey/Survey.TTRPGHost.md#classic-o9--sheet-schema-authorship) | Open question | Sheet schema authorship | — | CLASSIC-0025 |
+| [CLASSIC-O10](survey/Survey.TTRPGHost.md#classic-o10--structured-guard-failures) | Open question | Structured guard failures | — | CLASSIC-0025 |
+| [CLASSIC-O11](survey/Survey.TTRPGHost.md#classic-o11--chronicle-publication) | Open question | Chronicle publication | — | CLASSIC-0025 |
+| [CLASSIC-O12](survey/Survey.TTRPGHost.md#classic-o12--system-breadth-strategy) | Open question | System breadth strategy | — | CLASSIC-0025 |
 | [CLASSIC-DRAFT-archival-O1](survey/Survey.Archival.md#classic-draft-archival-o1--the-deletiondurability-policy-dial) | Open question | The deletion/durability policy dial | — | CLASSIC-DRAFT-archival |
 | [CLASSIC-DRAFT-archival-O2](survey/Survey.Archival.md#classic-draft-archival-o2--license-to-mirror-semantics) | Open question | License-to-mirror semantics | — | CLASSIC-DRAFT-archival |
 | [CLASSIC-DRAFT-archival-O3](survey/Survey.Archival.md#classic-draft-archival-o3--integrity-via-signed-origin-entities) | Open question | Integrity via signed origin entities | — | CLASSIC-DRAFT-archival |
@@ -218,12 +224,6 @@ Table: Decision, open-question, and memo records in the CLASSIC namespace.
 | [CLASSIC-DRAFT-realtime-chat-O7](survey/Survey.RealtimeChat.md#classic-draft-realtime-chat-o7--structured-notification-and-command-format) | Open question | Structured notification and command format | — | CLASSIC-DRAFT-realtime-chat |
 | [CLASSIC-DRAFT-realtime-chat-O8](survey/Survey.RealtimeChat.md#classic-draft-realtime-chat-o8--the-content-solicitation-entity) | Open question | The content-solicitation entity | — | CLASSIC-DRAFT-realtime-chat |
 | [CLASSIC-DRAFT-schema-pluggability-O1](Survey.SchemaPluggability.md#classic-draft-schema-pluggability-o1--when-to-indirect-class-and-accessor-references) | Open question | When to indirect class and accessor references | — | CLASSIC-DRAFT-schema-pluggability |
-| [CLASSIC-DRAFT-ttrpg-host-O1](survey/Survey.TTRPGHost.md#classic-draft-ttrpg-host-o1--commit-reveal-rng-protocol) | Open question | Commit-reveal RNG protocol | — | CLASSIC-DRAFT-ttrpg-host |
-| [CLASSIC-DRAFT-ttrpg-host-O2](survey/Survey.TTRPGHost.md#classic-draft-ttrpg-host-o2--tight-federation-transport) | Open question | Tight-federation transport | — | CLASSIC-DRAFT-ttrpg-host |
-| [CLASSIC-DRAFT-ttrpg-host-O3](survey/Survey.TTRPGHost.md#classic-draft-ttrpg-host-o3--sheet-schema-authorship) | Open question | Sheet schema authorship | — | CLASSIC-DRAFT-ttrpg-host |
-| [CLASSIC-DRAFT-ttrpg-host-O4](survey/Survey.TTRPGHost.md#classic-draft-ttrpg-host-o4--structured-guard-failures) | Open question | Structured guard failures | — | CLASSIC-DRAFT-ttrpg-host |
-| [CLASSIC-DRAFT-ttrpg-host-O5](survey/Survey.TTRPGHost.md#classic-draft-ttrpg-host-o5--chronicle-publication) | Open question | Chronicle publication | — | CLASSIC-DRAFT-ttrpg-host |
-| [CLASSIC-DRAFT-ttrpg-host-O6](survey/Survey.TTRPGHost.md#classic-draft-ttrpg-host-o6--system-breadth-strategy) | Open question | System breadth strategy | — | CLASSIC-DRAFT-ttrpg-host |
 | [CLASSIC-DRAFT-usenet-O1](survey/Survey.Usenet.md#classic-draft-usenet-o1--forum-naming-convention-and-directory-federation) | Open question | Forum naming convention and directory federation | — | CLASSIC-DRAFT-usenet |
 | [CLASSIC-DRAFT-usenet-O2](survey/Survey.Usenet.md#classic-draft-usenet-o2--cross-posting-and-deduplication-semantics) | Open question | Cross-posting and deduplication semantics | — | CLASSIC-DRAFT-usenet |
 | [CLASSIC-DRAFT-usenet-O3](survey/Survey.Usenet.md#classic-draft-usenet-o3--retention-tiering-for-text-versus-binary) | Open question | Retention tiering for text versus binary | — | CLASSIC-DRAFT-usenet |

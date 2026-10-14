@@ -16,7 +16,7 @@ relates-to:
   - CLASSIC-0019
   - CLASSIC-0001
   - CLASSIC-0008
-  - CLASSIC-DRAFT-ttrpg-host
+  - CLASSIC-0025
   - CLASSIC-DRAFT-usenet
 cites:
   - title:    Extensible Messaging and Presence Protocol (XMPP)
@@ -332,7 +332,7 @@ as one can be offered in chat: publish a post, assign a task, close a milestone,
 accept a deliverable. An approval in chat carries the same provenance, guard
 validation, and federation behavior as an approval in the web editor. How
 structured actions should map to failures a person can act on is shared with
-[CLASSIC-DRAFT-ttrpg-host-O4](Survey.TTRPGHost.md#classic-draft-ttrpg-host-o4--structured-guard-failures).
+[CLASSIC-O10](Survey.TTRPGHost.md#classic-o10--structured-guard-failures).
 
 ### Content solicitation in chat
 
@@ -506,7 +506,7 @@ This survey completes the development-lifecycle picture of
 discussion layer beside its tasks, Git events, and wiki chronicle, and shares that
 survey's need for low-latency updates
 ([CLASSIC-DRAFT-project-management-O2](Survey.ProjectManagement.md#classic-draft-project-management-o2--real-time-board-updates);
-compare [CLASSIC-DRAFT-ttrpg-host-O2](Survey.TTRPGHost.md#classic-draft-ttrpg-host-o2--tight-federation-transport)).
+compare [CLASSIC-O8](Survey.TTRPGHost.md#classic-o8--tight-federation-transport)).
 Crystallized chat is ordinary content, so it can be moderated through the feeds of
 [CLASSIC-DRAFT-distributed-moderation](Survey.DistributedModeration.md) — whether
 by a shared curation-feed type is

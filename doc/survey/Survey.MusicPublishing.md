@@ -17,7 +17,7 @@ relates-to:
   - CLASSIC-0006
   - CLASSIC-0001
   - CLASSIC-0008
-  - CLASSIC-DRAFT-ttrpg-host
+  - CLASSIC-0025
   - STACKS-DRAFT-stacks-and-classic
 cites:
   - title:   Bandcamp

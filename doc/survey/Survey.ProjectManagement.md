@@ -436,7 +436,7 @@ applications can match.
 ## Relationship to Other Work
 
 Structurally, the PM imprint is closest to the TTRPG hosting survey
-([CLASSIC-DRAFT-ttrpg-host](Survey.TTRPGHost.md)): a project is a campaign, tasks are
+([CLASSIC-0025](Survey.TTRPGHost.md)): a project is a campaign, tasks are
 game actions, milestones are sessions, the project lead is the GM, and both use the
 thread-bearing mixin and role-gated workflow in the same way. It composes with the
 forum imprint ([CLASSIC-0019](../forum/Guide.Forum.md)) for task discussions, and with the

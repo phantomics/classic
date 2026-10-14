@@ -327,7 +327,7 @@ is worth.
 This survey sits alongside two sibling use-case surveys that share its
 substrate analysis, deployment-mode framing, and grassroots niche-community
 adoption strategy: [CLASSIC-0024](Survey.MusicPublishing.md) and
-[CLASSIC-DRAFT-ttrpg-host](Survey.TTRPGHost.md). (Those documents predate the Compass
+[CLASSIC-0025](Survey.TTRPGHost.md). (Those documents predate the Compass
 format adopted here and do not yet carry Compass identifiers.)
 
 It depends on the forum imprint ([CLASSIC-0019](../forum/Guide.Forum.md)), the federation

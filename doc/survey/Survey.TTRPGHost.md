@@ -1,5 +1,5 @@
 ---
-id:            CLASSIC-DRAFT-ttrpg-host
+id:            CLASSIC-0025
 title:         Tabletop RPG Hosting (Play-by-Post) Survey
 genre:         Survey
 scope:         project
@@ -30,12 +30,12 @@ cites:
     locator: discord.com
     external: true
 open-questions:
-  - CLASSIC-DRAFT-ttrpg-host-O1
-  - CLASSIC-DRAFT-ttrpg-host-O2
-  - CLASSIC-DRAFT-ttrpg-host-O3
-  - CLASSIC-DRAFT-ttrpg-host-O4
-  - CLASSIC-DRAFT-ttrpg-host-O5
-  - CLASSIC-DRAFT-ttrpg-host-O6
+  - CLASSIC-O7
+  - CLASSIC-O8
+  - CLASSIC-O9
+  - CLASSIC-O10
+  - CLASSIC-O11
+  - CLASSIC-O12
 ---
 
 # Tabletop RPG Hosting (Play-by-Post): Survey
@@ -482,32 +482,32 @@ knows exactly what that is worth.
 
 ## Open Questions
 
-### CLASSIC-DRAFT-ttrpg-host-O1 — Commit-reveal RNG protocol
+### CLASSIC-O7 — Commit-reveal RNG protocol
 
 The concrete event schema for committing to and revealing rolls, and how it
 degrades gracefully to trusted-service rolls in the hosted mode.
 
-### CLASSIC-DRAFT-ttrpg-host-O2 — Tight-federation transport
+### CLASSIC-O8 — Tight-federation transport
 
 The design of the low-latency active-session mode, shared with the
 collaborative-authoring case.
 
-### CLASSIC-DRAFT-ttrpg-host-O3 — Sheet schema authorship
+### CLASSIC-O9 — Sheet schema authorship
 
 How far game-system rules and sheet schemas can be authored purely as fx
 content versus requiring code, and where that boundary falls for a homebrewer.
 
-### CLASSIC-DRAFT-ttrpg-host-O4 — Structured guard failures
+### CLASSIC-O10 — Structured guard failures
 
 The shape of workflow-guard failure objects that carry enough information for a
 helpful player-facing message without leaking GM-only state.
 
-### CLASSIC-DRAFT-ttrpg-host-O5 — Chronicle publication
+### CLASSIC-O11 — Chronicle publication
 
 How a completed campaign is projected into a readable, typeset chronicle
 artifact through the composer and Lexis renderers.
 
-### CLASSIC-DRAFT-ttrpg-host-O6 — System breadth strategy
+### CLASSIC-O12 — System breadth strategy
 
 Whether to invest in one polished WoD game deeply or a shallow base that many
 community-authored systems extend.
