@@ -412,9 +412,9 @@ the index, which that change left stale, was regenerated with this batch.
   CLASSIC-D16, pinned to `137cf8a`. The workflow
   diagram gained a description, Tests became Verification, and an Outstanding
   Work section says that none was recorded.
-- **[CLASSIC-DRAFT-general-model](model/Log.GeneralModel.md).** Seven
-  decisions became CLASSIC-DRAFT-general-model-D1 to
-  CLASSIC-DRAFT-general-model-D7, five with alternatives the Log rejects by
+- **[CLASSIC-0018](model/Log.GeneralModel.md).** Seven
+  decisions became CLASSIC-D62 to
+  CLASSIC-D68, five with alternatives the Log rejects by
   name (`imprint-article`, `editorial-imprint`, `published-article`, no
   preset, and keeping the nickname). References are pinned to `2bf61ce`, the
   original `blog.lisp` to `c099e7d`, and a migration note records that the
@@ -582,7 +582,7 @@ Table: Decision records created in Phase 3, by Log.
 | CLASSIC-0012 | 4 | `e9f2af1`, `7ad1602`, `e725ef0` |
 | CLASSIC-0015 | 5 | `a461f4e`, `d59df1b`, `e0c3b72` |
 | CLASSIC-0003 | 3 | `137cf8a` |
-| CLASSIC-DRAFT-general-model | 7 | `2bf61ce`, `c099e7d` |
+| CLASSIC-0018 | 7 | `2bf61ce`, `c099e7d` |
 | CLASSIC-0009 | 1 | `9ee593a` |
 | CLASSIC-DRAFT-with-persistence | 6 | `31ee385` |
 | CLASSIC-0002 | 13 | `8d5cc1b`, `fb49791`, `99d050d` |

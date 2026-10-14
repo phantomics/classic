@@ -12,7 +12,7 @@ provenance:
 relates-to:
   - CLASSIC-DRAFT-wiki
   - CLASSIC-DRAFT-typed-pages
-  - CLASSIC-DRAFT-general-model
+  - CLASSIC-0018
 decisions:
   - CLASSIC-DRAFT-wiki-demo-D1
   - CLASSIC-DRAFT-wiki-demo-D2
@@ -396,7 +396,7 @@ Table: Files added or changed in commit `ea32b9c`.
   proved the editorial workflow works for blogs; the wiki proves it
   works for any editorially-managed content, validating that the
   workflow shapes extracted during the General Model refactor
-  ([CLASSIC-DRAFT-general-model](../model/Log.GeneralModel.md)) are
+  ([CLASSIC-0018](../model/Log.GeneralModel.md)) are
   genuinely reusable.
 
 - **Three presets, same substrate.** Blog, forum, and wiki are

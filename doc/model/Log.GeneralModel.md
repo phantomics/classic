@@ -1,12 +1,17 @@
 ---
-id:            CLASSIC-DRAFT-general-model
+id:            CLASSIC-0018
 title:         General Publication Models Development Log
 genre:         Log
 scope:         component
 project:       Classic
 component:     model
 language:      en
-status:        Draft
+status:        Implemented
+authors:
+  - Andrew Sengul
+approved-by:   Andrew Sengul
+reviewed:      2026-10-13
+schema-version: "0.1.0"
 provenance:
   assistant:   opencode
 relates-to:
@@ -15,13 +20,13 @@ relates-to:
   - CLASSIC-0013
   - CLASSIC-0015
 decisions:
-  - CLASSIC-DRAFT-general-model-D1
-  - CLASSIC-DRAFT-general-model-D2
-  - CLASSIC-DRAFT-general-model-D3
-  - CLASSIC-DRAFT-general-model-D4
-  - CLASSIC-DRAFT-general-model-D5
-  - CLASSIC-DRAFT-general-model-D6
-  - CLASSIC-DRAFT-general-model-D7
+  - CLASSIC-D62
+  - CLASSIC-D63
+  - CLASSIC-D64
+  - CLASSIC-D65
+  - CLASSIC-D66
+  - CLASSIC-D67
+  - CLASSIC-D68
 ---
 
 # General Publication Models: Development Log
@@ -87,9 +92,9 @@ built toward. This refactor takes it.
 
 ## Design Decisions
 
-### CLASSIC-DRAFT-general-model-D1 — Two-prefix vocabulary: publication- and imprint-
+### CLASSIC-D62 — Two-prefix vocabulary: publication- and imprint-
 
-**Status:** Proposed
+**Status:** Implemented
 
 **Context:** The single most important decision, because it determines what
 every symbol is named. The old `blog-*` vocabulary named runtime apparatus
@@ -135,9 +140,9 @@ Table: The vocabulary's prefixes, the concern each names, and whether what it na
 | Publishable content / identity classes | `publication-` | Yes (ontological) |
 | Workflow shape / preset configuration | `editorial-`, future `discussion-` | (names a stance) |
 
-### CLASSIC-DRAFT-general-model-D2 — publication-imprint, not editorial-imprint
+### CLASSIC-D63 — publication-imprint, not editorial-imprint
 
-**Status:** Proposed
+**Status:** Implemented
 
 **Context:** The runtime context needed a name. "Editorial" names the
 draft → published → archived stance, which forums do not share.
@@ -158,9 +163,9 @@ arrangement under which a publisher releases work; the analogy holds.
 - `editorial-imprint`, an early proposal. Rejected: "editorial" names a
   stance forums do not share.
 
-### CLASSIC-DRAFT-general-model-D3 — publication-article, not published-article
+### CLASSIC-D64 — publication-article, not published-article
 
-**Status:** Proposed
+**Status:** Implemented
 
 **Context:** The article class needed a name under the `publication-` prefix.
 
@@ -173,9 +178,9 @@ in.
   that is actively misleading, since a `publication-article` is frequently in
   the `draft` state, never having been published.
 
-### CLASSIC-DRAFT-general-model-D4 — publication-account, with editorial-account reserved
+### CLASSIC-D65 — publication-account, with editorial-account reserved
 
-**Status:** Proposed
+**Status:** Implemented
 
 **Context:** Blog and magazine accounts may need features (bylines,
 contributor tiers, editor bios) that forum-style accounts do not.
@@ -188,9 +193,9 @@ carries only the role binding.
 
 **Alternatives:** None recorded.
 
-### CLASSIC-DRAFT-general-model-D5 — Presets are kept as the user-facing surface
+### CLASSIC-D66 — Presets are kept as the user-facing surface
 
-**Status:** Proposed
+**Status:** Implemented
 
 **Context:** With the universals extracted, `make-blog` was no longer a
 primitive.
@@ -205,9 +210,9 @@ presets (`make-forum`, `make-wiki`) join it.
 - No preset, with users composing the universals. Rejected: a user who wants
   "a blog" should not have to name the four primitives that compose one.
 
-### CLASSIC-DRAFT-general-model-D6 — The classic-blog package nickname is dropped
+### CLASSIC-D67 — The classic-blog package nickname is dropped
 
-**Status:** Proposed
+**Status:** Implemented
 
 **Context:** The nickname was introduced during the dist factorization
 ([CLASSIC-0015](../Log.DistFactorization.md)) to ease that
@@ -221,9 +226,9 @@ it (`test/test-deletion.lisp`) was updated to the canonical
 - Keep the nickname. Rejected: after this refactor it would misname a package
   that is no longer blog-specific.
 
-### CLASSIC-DRAFT-general-model-D7 — Combined data and display retained; on-state-change no-op kept
+### CLASSIC-D68 — Combined data and display retained; on-state-change no-op kept
 
-**Status:** Proposed
+**Status:** Implemented
 
 **Context:** The preset layer's operations print as well as return, matching
 its REPL-friendly character.

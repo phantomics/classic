@@ -16,7 +16,7 @@ relates-to:
   - CLASSIC-0012
   - CLASSIC-0013
   - CLASSIC-0014
-  - CLASSIC-DRAFT-general-model
+  - CLASSIC-0018
 decisions:
   - CLASSIC-D47
   - CLASSIC-D48

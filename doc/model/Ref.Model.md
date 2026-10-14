@@ -18,7 +18,7 @@ relates-to:
   - CLASSIC-0013
   - CLASSIC-0008
   - CLASSIC-0003
-  - CLASSIC-DRAFT-general-model
+  - CLASSIC-0018
   - CLASSIC-0009
 ---
 

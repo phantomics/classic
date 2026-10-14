@@ -11,7 +11,7 @@ provenance:
   assistant:   opencode
 relates-to:
   - CLASSIC-DRAFT-forum
-  - CLASSIC-DRAFT-general-model
+  - CLASSIC-0018
 decisions:
   - CLASSIC-DRAFT-forum-demo-D1
   - CLASSIC-DRAFT-forum-demo-D2
@@ -28,7 +28,7 @@ This document chronicles the implementation of Classic's forum preset:
 a phpBB-style discussion board built on the common publication models.
 It is the second content profile (after the blog preset) and the first
 real test of the universals-plus-presets pattern established by the
-General Model refactor ([CLASSIC-DRAFT-general-model](../model/Log.GeneralModel.md)).
+General Model refactor ([CLASSIC-0018](../model/Log.GeneralModel.md)).
 
 **Date:** 2026-06-20
 

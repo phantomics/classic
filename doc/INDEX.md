@@ -27,6 +27,7 @@ Table: Documents in the CLASSIC namespace.
 | [CLASSIC-0015](Log.DistFactorization.md) | Dist Factorization Development Log | Log | project | Implemented | — |
 | [CLASSIC-0016](theme/Log.CapabilityExclusion.md) | Capability Exclusion Development Log | Log | component | Implemented | theme |
 | [CLASSIC-0017](theme/Log.SlotFills.md) | Template Slot Fills Development Log | Log | component | Implemented | theme |
+| [CLASSIC-0018](model/Log.GeneralModel.md) | General Publication Models Development Log | Log | component | Implemented | model |
 | [CLASSIC-DRAFT-archival](survey/Survey.Archival.md) | Content Archival and Durability Survey | Survey | project | Draft | — |
 | [CLASSIC-DRAFT-compass-integration](survey/Survey.CompassIntegration.md) | Compass Documentation on Classic Survey | Survey | project | Draft | — |
 | [CLASSIC-DRAFT-compass-migration](Plan.CompassMigration.md) | Compass Migration Plan | Plan | project | Implemented | — |
@@ -34,7 +35,6 @@ Table: Documents in the CLASSIC namespace.
 | [CLASSIC-DRAFT-distributed-moderation](survey/Survey.DistributedModeration.md) | Distributed Content Moderation Survey | Survey | project | Draft | — |
 | [CLASSIC-DRAFT-forum](forum/Guide.Forum.md) | Forum Preset Guide | Guide (tutorial) | component | Draft | forum |
 | [CLASSIC-DRAFT-forum-demo](forum/Log.ForumDemo.md) | Forum Demo Development Log | Log | component | Draft | forum |
-| [CLASSIC-DRAFT-general-model](model/Log.GeneralModel.md) | General Publication Models Development Log | Log | component | Draft | model |
 | [CLASSIC-DRAFT-music-publishing](survey/Survey.MusicPublishing.md) | Music Publishing Survey | Survey | project | Draft | — |
 | [CLASSIC-DRAFT-new-schema](Guide.NewSchema.md) | Creating a New Schema Guide | Guide (howto) | project | Draft | schema |
 | [CLASSIC-DRAFT-persistence-backends](persistence/Arch.PersistenceBackends.md) | The Persistence Backends Architecture | Architecture | component | Draft | persistence |
@@ -114,6 +114,13 @@ Table: Decision, open-question, and memo records in the CLASSIC namespace.
 | [CLASSIC-D59](theme/Log.SlotFills.md#classic-d59--inheritance-follows-the-bindings-precedent) | Decision | Inheritance follows the bindings precedent | Implemented | CLASSIC-0017 |
 | [CLASSIC-D60](theme/Log.SlotFills.md#classic-d60--naming-slot-fills) | Decision | Naming: slot-fills | Implemented | CLASSIC-0017 |
 | [CLASSIC-D61](theme/Log.SlotFills.md#classic-d61--classic-theme-override-symmetry-and-migration-registration) | Decision | classic-theme-override symmetry and migration registration | Implemented | CLASSIC-0017 |
+| [CLASSIC-D62](model/Log.GeneralModel.md#classic-d62--two-prefix-vocabulary-publication--and-imprint-) | Decision | Two-prefix vocabulary: publication- and imprint- | Implemented | CLASSIC-0018 |
+| [CLASSIC-D63](model/Log.GeneralModel.md#classic-d63--publication-imprint-not-editorial-imprint) | Decision | publication-imprint, not editorial-imprint | Implemented | CLASSIC-0018 |
+| [CLASSIC-D64](model/Log.GeneralModel.md#classic-d64--publication-article-not-published-article) | Decision | publication-article, not published-article | Implemented | CLASSIC-0018 |
+| [CLASSIC-D65](model/Log.GeneralModel.md#classic-d65--publication-account-with-editorial-account-reserved) | Decision | publication-account, with editorial-account reserved | Implemented | CLASSIC-0018 |
+| [CLASSIC-D66](model/Log.GeneralModel.md#classic-d66--presets-are-kept-as-the-user-facing-surface) | Decision | Presets are kept as the user-facing surface | Implemented | CLASSIC-0018 |
+| [CLASSIC-D67](model/Log.GeneralModel.md#classic-d67--the-classic-blog-package-nickname-is-dropped) | Decision | The classic-blog package nickname is dropped | Implemented | CLASSIC-0018 |
+| [CLASSIC-D68](model/Log.GeneralModel.md#classic-d68--combined-data-and-display-retained-on-state-change-no-op-kept) | Decision | Combined data and display retained; on-state-change no-op kept | Implemented | CLASSIC-0018 |
 | [CLASSIC-DRAFT-compass-migration-D1](Plan.CompassMigration.md#classic-draft-compass-migration-d1--survey-open-questions-take-per-survey-provisional-identifiers) | Decision | Survey open questions take per-Survey provisional identifiers | Accepted | CLASSIC-DRAFT-compass-migration |
 | [CLASSIC-DRAFT-compass-migration-D2](Plan.CompassMigration.md#classic-draft-compass-migration-d2--genre-prefixed-names-with-the-component-subdirectories-kept) | Decision | Genre-prefixed names, with the component subdirectories kept | Accepted | CLASSIC-DRAFT-compass-migration |
 | [CLASSIC-DRAFT-compass-migration-D3](Plan.CompassMigration.md#classic-draft-compass-migration-d3--statuses-an-assistant-may-set-during-migration) | Decision | Statuses an assistant may set during migration | Accepted | CLASSIC-DRAFT-compass-migration |
@@ -137,13 +144,6 @@ Table: Decision, open-question, and memo records in the CLASSIC namespace.
 | [CLASSIC-DRAFT-forum-demo-D5](forum/Log.ForumDemo.md#classic-draft-forum-demo-d5--pinning-and-locking-are-slot-updates-not-workflow-states) | Decision | Pinning and locking are slot updates, not workflow states | Proposed | CLASSIC-DRAFT-forum-demo |
 | [CLASSIC-DRAFT-forum-demo-D6](forum/Log.ForumDemo.md#classic-draft-forum-demo-d6--atomic-thread-creation-whole-post-quoting) | Decision | Atomic thread creation; whole-post quoting | Proposed | CLASSIC-DRAFT-forum-demo |
 | [CLASSIC-DRAFT-forum-demo-D7](forum/Log.ForumDemo.md#classic-draft-forum-demo-d7--stable-post-indices-via-placeholders) | Decision | Stable post indices via placeholders | Proposed | CLASSIC-DRAFT-forum-demo |
-| [CLASSIC-DRAFT-general-model-D1](model/Log.GeneralModel.md#classic-draft-general-model-d1--two-prefix-vocabulary-publication--and-imprint-) | Decision | Two-prefix vocabulary: publication- and imprint- | Proposed | CLASSIC-DRAFT-general-model |
-| [CLASSIC-DRAFT-general-model-D2](model/Log.GeneralModel.md#classic-draft-general-model-d2--publication-imprint-not-editorial-imprint) | Decision | publication-imprint, not editorial-imprint | Proposed | CLASSIC-DRAFT-general-model |
-| [CLASSIC-DRAFT-general-model-D3](model/Log.GeneralModel.md#classic-draft-general-model-d3--publication-article-not-published-article) | Decision | publication-article, not published-article | Proposed | CLASSIC-DRAFT-general-model |
-| [CLASSIC-DRAFT-general-model-D4](model/Log.GeneralModel.md#classic-draft-general-model-d4--publication-account-with-editorial-account-reserved) | Decision | publication-account, with editorial-account reserved | Proposed | CLASSIC-DRAFT-general-model |
-| [CLASSIC-DRAFT-general-model-D5](model/Log.GeneralModel.md#classic-draft-general-model-d5--presets-are-kept-as-the-user-facing-surface) | Decision | Presets are kept as the user-facing surface | Proposed | CLASSIC-DRAFT-general-model |
-| [CLASSIC-DRAFT-general-model-D6](model/Log.GeneralModel.md#classic-draft-general-model-d6--the-classic-blog-package-nickname-is-dropped) | Decision | The classic-blog package nickname is dropped | Proposed | CLASSIC-DRAFT-general-model |
-| [CLASSIC-DRAFT-general-model-D7](model/Log.GeneralModel.md#classic-draft-general-model-d7--combined-data-and-display-retained-on-state-change-no-op-kept) | Decision | Combined data and display retained; on-state-change no-op kept | Proposed | CLASSIC-DRAFT-general-model |
 | [CLASSIC-DRAFT-persistence-backends-D1](persistence/Arch.PersistenceBackends.md#classic-draft-persistence-backends-d1--flat-file-entities-split-metadata-from-body) | Decision | Flat-file entities split metadata from body | Proposed | CLASSIC-DRAFT-persistence-backends |
 | [CLASSIC-DRAFT-persistence-backends-D2](persistence/Arch.PersistenceBackends.md#classic-draft-persistence-backends-d2--flat-file-cross-entity-queries-use-materialized-index-files) | Decision | Flat-file cross-entity queries use materialized index files | Proposed | CLASSIC-DRAFT-persistence-backends |
 | [CLASSIC-DRAFT-persistence-backends-D3](persistence/Arch.PersistenceBackends.md#classic-draft-persistence-backends-d3--container-level-bundling-for-high-volume-small-items) | Decision | Container-level bundling for high-volume small items | Proposed | CLASSIC-DRAFT-persistence-backends |
