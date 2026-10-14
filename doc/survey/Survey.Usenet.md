@@ -37,7 +37,7 @@ threaded discussion groups that propagate between peers, with binary content
 held in a parallel, separately-scaling store, and with participants reading and
 posting through a variety of interfaces (web, TUI, desktop) running on their own
 Classic instances. It assumes the forum imprint
-([CLASSIC-DRAFT-forum](../forum/Guide.Forum.md)), the federation and co-hosting model
+([CLASSIC-0019](../forum/Guide.Forum.md)), the federation and co-hosting model
 ([CLASSIC-0001](../federation/Guide.FederationDemo.md)), the workflow engine
 ([CLASSIC-0008](../model/Ref.Workflow.md)), the persistence protocol
 ([CLASSIC-0006](../persistence/Ref.Persistence.md)), the composer pipeline, and
@@ -330,7 +330,7 @@ adoption strategy: [CLASSIC-DRAFT-music-publishing](Survey.MusicPublishing.md) a
 [CLASSIC-DRAFT-ttrpg-host](Survey.TTRPGHost.md). (Those documents predate the Compass
 format adopted here and do not yet carry Compass identifiers.)
 
-It depends on the forum imprint ([CLASSIC-DRAFT-forum](../forum/Guide.Forum.md)), the federation
+It depends on the forum imprint ([CLASSIC-0019](../forum/Guide.Forum.md)), the federation
 model ([CLASSIC-0001](../federation/Guide.FederationDemo.md)), the workflow engine
 ([CLASSIC-0008](../model/Ref.Workflow.md)), and the persistence protocol
 ([CLASSIC-0006](../persistence/Ref.Persistence.md)).

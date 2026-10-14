@@ -167,7 +167,7 @@ of other content models are popular besides these.
 
 Two additional worked examples are available as REPL walkthroughs:
 
-- **Forum** ([CLASSIC-DRAFT-forum](doc/forum/Guide.Forum.md)) — a
+- **Forum** ([CLASSIC-0019](doc/forum/Guide.Forum.md)) — a
   phpBB-style discussion board with members, threads, reaction
   stickers, quotes, and moderation.
 - **Wiki** ([CLASSIC-DRAFT-wiki](doc/wiki/Guide.Wiki.md)) — a

@@ -10,7 +10,7 @@ status:        Draft
 provenance:
   assistant:   opencode
 relates-to:
-  - CLASSIC-DRAFT-forum
+  - CLASSIC-0019
   - CLASSIC-0018
 decisions:
   - CLASSIC-DRAFT-forum-demo-D1

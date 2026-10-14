@@ -28,12 +28,12 @@ Table: Documents in the CLASSIC namespace.
 | [CLASSIC-0016](theme/Log.CapabilityExclusion.md) | Capability Exclusion Development Log | Log | component | Implemented | theme |
 | [CLASSIC-0017](theme/Log.SlotFills.md) | Template Slot Fills Development Log | Log | component | Implemented | theme |
 | [CLASSIC-0018](model/Log.GeneralModel.md) | General Publication Models Development Log | Log | component | Implemented | model |
+| [CLASSIC-0019](forum/Guide.Forum.md) | Forum Preset Guide | Guide (tutorial) | component | Current | forum |
 | [CLASSIC-DRAFT-archival](survey/Survey.Archival.md) | Content Archival and Durability Survey | Survey | project | Draft | — |
 | [CLASSIC-DRAFT-compass-integration](survey/Survey.CompassIntegration.md) | Compass Documentation on Classic Survey | Survey | project | Draft | — |
 | [CLASSIC-DRAFT-compass-migration](Plan.CompassMigration.md) | Compass Migration Plan | Plan | project | Implemented | — |
 | [CLASSIC-DRAFT-compass-migration-log](Log.CompassMigration.md) | Compass Migration Development Log | Log | project | Implemented | — |
 | [CLASSIC-DRAFT-distributed-moderation](survey/Survey.DistributedModeration.md) | Distributed Content Moderation Survey | Survey | project | Draft | — |
-| [CLASSIC-DRAFT-forum](forum/Guide.Forum.md) | Forum Preset Guide | Guide (tutorial) | component | Draft | forum |
 | [CLASSIC-DRAFT-forum-demo](forum/Log.ForumDemo.md) | Forum Demo Development Log | Log | component | Draft | forum |
 | [CLASSIC-DRAFT-music-publishing](survey/Survey.MusicPublishing.md) | Music Publishing Survey | Survey | project | Draft | — |
 | [CLASSIC-DRAFT-new-schema](Guide.NewSchema.md) | Creating a New Schema Guide | Guide (howto) | project | Draft | schema |

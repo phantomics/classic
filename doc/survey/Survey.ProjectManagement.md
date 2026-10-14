@@ -50,7 +50,7 @@ Classic's "general-purpose from the start" approach avoids the convention lock-i
 Rails accreted. It assumes the ontological model
 ([CLASSIC-0007](../model/Ref.Model.md)), the workflow engine
 ([CLASSIC-0008](../model/Ref.Workflow.md)), the forum imprint's thread-bearing pattern
-([CLASSIC-DRAFT-forum](../forum/Guide.Forum.md)), the federation and co-hosting model
+([CLASSIC-0019](../forum/Guide.Forum.md)), the federation and co-hosting model
 ([CLASSIC-0001](../federation/Guide.FederationDemo.md)), the persistence protocol
 ([CLASSIC-0006](../persistence/Ref.Persistence.md)), the composer's aggregate tier,
 and the planned Seed authoring integration. It asks whether Classic should offer
@@ -439,7 +439,7 @@ Structurally, the PM imprint is closest to the TTRPG hosting survey
 ([CLASSIC-DRAFT-ttrpg-host](Survey.TTRPGHost.md)): a project is a campaign, tasks are
 game actions, milestones are sessions, the project lead is the GM, and both use the
 thread-bearing mixin and role-gated workflow in the same way. It composes with the
-forum imprint ([CLASSIC-DRAFT-forum](../forum/Guide.Forum.md)) for task discussions, and with the
+forum imprint ([CLASSIC-0019](../forum/Guide.Forum.md)) for task discussions, and with the
 blog and wiki ([CLASSIC-DRAFT-wiki](../wiki/Guide.Wiki.md)) imprints for announcements and
 documentation. It shares the
 deployment-mode framing and grassroots adoption strategy of the sibling surveys

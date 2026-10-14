@@ -11,7 +11,7 @@ provenance:
 relates-to:
   - CLASSIC-0007
   - CLASSIC-0008
-  - CLASSIC-DRAFT-forum
+  - CLASSIC-0019
   - CLASSIC-0001
   - CLASSIC-0006
   - CLASSIC-DRAFT-music-publishing
@@ -46,7 +46,7 @@ Classic's model, why the play-by-post mode fits the substrate's existing
 strengths, and where the genuine limits lie. It assumes the ontological
 model ([CLASSIC-0007](../model/Ref.Model.md)), the workflow engine
 ([CLASSIC-0008](../model/Ref.Workflow.md)), the forum imprint
-([CLASSIC-DRAFT-forum](../forum/Guide.Forum.md)), the federation and
+([CLASSIC-0019](../forum/Guide.Forum.md)), the federation and
 co-hosting model ([CLASSIC-0001](../federation/Guide.FederationDemo.md)),
 the persistence protocol
 ([CLASSIC-0006](../persistence/Ref.Persistence.md)), the
