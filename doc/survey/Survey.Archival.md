@@ -348,7 +348,7 @@ with [CLASSIC-0027](Survey.DistributedModeration.md): a
 preservation feed is a positive-curation feed pointed at an archival action, and
 the preservation aggregator is the same directory-role deployment as the moderation
 curator directory and the Usenet-analog group directory
-([CLASSIC-DRAFT-usenet](Survey.Usenet.md)). Whether the moderation feed and the
+([CLASSIC-0028](Survey.Usenet.md)). Whether the moderation feed and the
 preservation feed are one parameterized type or two parallel types is the mutual
 open question recorded in both surveys, as CLASSIC-O18 here and
 CLASSIC-O24 there.
@@ -370,9 +370,6 @@ academic-torrents (the BitTorrent-for-durable-artifacts precedent, whose
 cold-content problem this survey inherits).
 
 ## Open Questions
-
-Identifiers below are provisional; canonical `CLASSIC-O<n>` numbers are assigned
-from the namespace registry at acceptance.
 
 ### CLASSIC-O13 — The deletion/durability policy dial
 

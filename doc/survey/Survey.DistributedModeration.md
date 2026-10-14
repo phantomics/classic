@@ -317,7 +317,7 @@ Table: Participant roles in the distributed-moderation model.
 A discoverable **curator directory** — a directory-role deployment cataloging
 profiles by scope, activity, and subscriber count — lets newcomers find
 curators. This directory is the same primitive the Usenet-analog needs for group
-discovery ([CLASSIC-DRAFT-usenet](Survey.Usenet.md), CLASSIC-DRAFT-usenet-O1) and that the
+discovery ([CLASSIC-0028](Survey.Usenet.md), CLASSIC-O26) and that the
 archival concept needs for preservation feeds; the three uses share one directory
 mechanism.
 
@@ -426,7 +426,7 @@ of a mandate.
 ## Relationship to Other Work
 
 This survey closes the open question left by
-[CLASSIC-DRAFT-usenet](Survey.Usenet.md) (CLASSIC-DRAFT-usenet-O5, the relationship of
+[CLASSIC-0028](Survey.Usenet.md) (CLASSIC-O30, the relationship of
 client-side lens filtering to a federated moderation model): the Usenet-analog's
 killfile on-ramp is the simplest case of the model surveyed here. It shares the
 **curation-feed primitive** and the **curator/preservation directory** with the
@@ -447,9 +447,6 @@ SpamAssassin's collaborative filtering (aggregated identification across many
 users), and the PGP web of trust (transitive, decentralized trust delegation).
 
 ## Open Questions
-
-Identifiers below are provisional; canonical `CLASSIC-O<n>` numbers are assigned
-from the namespace registry at acceptance.
 
 ### CLASSIC-O19 — Hybrid rules/actions resolution semantics
 

@@ -85,7 +85,7 @@ Against this, `compass check --skip-unmarked` at `be4fe84` reports 47 errors,
 all in four Surveys: [CLASSIC-0026](survey/Survey.Archival.md),
 [CLASSIC-0027](survey/Survey.DistributedModeration.md),
 [CLASSIC-DRAFT-project-management](survey/Survey.ProjectManagement.md), and
-[CLASSIC-DRAFT-usenet](survey/Survey.Usenet.md) each define their own
+[CLASSIC-0028](survey/Survey.Usenet.md) each define their own
 CLASSIC-O1 onward, so CLASSIC-O1 to CLASSIC-O5 are each defined four times and
 CLASSIC-O6 three times (`register/unique`), and none of the numbers, CLASSIC-O7
 included, is in a ledger (`ledger/coverage`). Because a
@@ -443,15 +443,15 @@ reference's tables and diagram stays, since it explains the protocol.
    | Archival | CLASSIC-O1 to CLASSIC-O6 | CLASSIC-O13 to `-O6` |
    | DistributedModeration | CLASSIC-O1 to CLASSIC-O7 | CLASSIC-O19 to `-O7` |
    | ProjectManagement | CLASSIC-O1 to CLASSIC-O6 | CLASSIC-DRAFT-project-management-O1 to `-O6` |
-   | Usenet | CLASSIC-O1 to CLASSIC-O5 | CLASSIC-DRAFT-usenet-O1 to `-O5` |
+   | Usenet | CLASSIC-O1 to CLASSIC-O5 | CLASSIC-O26 to `-O5` |
 
    The four prose citations are rewritten to the question meant: the shared
    curation-feed question in Archival names both
    CLASSIC-O18 and CLASSIC-O24; the
    Git adapter in ProjectManagement names
    CLASSIC-DRAFT-project-management-O6; and DistributedModeration's two
-   citations of Usenet name CLASSIC-DRAFT-usenet-O1 and
-   CLASSIC-DRAFT-usenet-O5.
+   citations of Usenet name CLASSIC-O26 and
+   CLASSIC-O30.
 2. **Add `.mailmap`**, before the ledger
    (CLASSIC-DRAFT-compass-migration-D6).
 3. **Create the ledger** with `compass init --ledger`, after a dry run. With

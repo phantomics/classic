@@ -1,11 +1,15 @@
 ---
-id:            CLASSIC-DRAFT-usenet
+id:            CLASSIC-0028
 title:         Usenet-Analog Discussion Hosting Survey
 genre:         Survey
 scope:         project
 project:       Classic
 language:      en
-status:        Draft
+status:        Current
+authors:
+  - Andrew Sengul
+approved-by:   Andrew Sengul
+reviewed:      2026-10-14
 provenance:
   assistant:   opencode
 cites:
@@ -22,11 +26,11 @@ cites:
     locator: W3C Recommendation, 2018
     external: true
 open-questions:
-  - CLASSIC-DRAFT-usenet-O1
-  - CLASSIC-DRAFT-usenet-O2
-  - CLASSIC-DRAFT-usenet-O3
-  - CLASSIC-DRAFT-usenet-O4
-  - CLASSIC-DRAFT-usenet-O5
+  - CLASSIC-O26
+  - CLASSIC-O27
+  - CLASSIC-O28
+  - CLASSIC-O29
+  - CLASSIC-O30
 ---
 
 # Usenet-Analog Discussion Hosting: Survey
@@ -351,10 +355,7 @@ those efforts do not target.
 
 ## Open Questions
 
-Identifiers below are provisional; canonical `CLASSIC-O<n>` numbers are assigned
-from the namespace registry at acceptance.
-
-### CLASSIC-DRAFT-usenet-O1 — Forum naming convention and directory federation
+### CLASSIC-O26 — Forum naming convention and directory federation
 
 What is the canonical naming scheme for federated groups (dot-hierarchy, URI
 hierarchy, or other), and how does a directory-role deployment catalog groups
@@ -362,25 +363,25 @@ and peers so that participants can discover them? This is the least-designed and
 most Usenet-specific piece, and it interacts with the general directory-role
 work already anticipated for federation.
 
-### CLASSIC-DRAFT-usenet-O2 — Cross-posting and deduplication semantics
+### CLASSIC-O27 — Cross-posting and deduplication semantics
 
 How does a post carried in multiple groups propagate and render without
 duplication, and how do per-group moderation states interact when a single post
 is cross-posted into groups with different policies?
 
-### CLASSIC-DRAFT-usenet-O3 — Retention tiering for text versus binary
+### CLASSIC-O28 — Retention tiering for text versus binary
 
 How are differentiated retention policies expressed — text retained indefinitely,
 binaries expired quickly — keyed off content class or blob size, and how do peers
 with different retention settings reconcile?
 
-### CLASSIC-DRAFT-usenet-O4 — NNTP bridge scope and non-blocking constraints
+### CLASSIC-O29 — NNTP bridge scope and non-blocking constraints
 
 What is the minimal set of forum-post model and transport constraints that keeps
 a future NNTP gateway reachable without building it now, and where exactly does
 the safe (unidirectional import) / risky (bidirectional) boundary fall?
 
-### CLASSIC-DRAFT-usenet-O5 — Relationship to the federated moderation model
+### CLASSIC-O30 — Relationship to the federated moderation model
 
 How does the Usenet-analog's client-side lens filtering compose with the
 subscription-based federated moderation model to be surveyed separately, and what

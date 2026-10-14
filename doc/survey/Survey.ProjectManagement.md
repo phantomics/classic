@@ -444,7 +444,7 @@ blog and wiki ([CLASSIC-0021](../wiki/Guide.Wiki.md)) imprints for announcements
 documentation. It shares the
 deployment-mode framing and grassroots adoption strategy of the sibling surveys
 ([CLASSIC-0024](Survey.MusicPublishing.md),
-[CLASSIC-DRAFT-usenet](Survey.Usenet.md),
+[CLASSIC-0028](Survey.Usenet.md),
 [CLASSIC-0027](Survey.DistributedModeration.md),
 [CLASSIC-0026](Survey.Archival.md)). It depends on the ontological model
 ([CLASSIC-0007](../model/Ref.Model.md)), the workflow engine

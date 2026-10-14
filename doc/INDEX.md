@@ -37,6 +37,7 @@ Table: Documents in the CLASSIC namespace.
 | [CLASSIC-0025](survey/Survey.TTRPGHost.md) | Tabletop RPG Hosting (Play-by-Post) Survey | Survey | project | Current | — |
 | [CLASSIC-0026](survey/Survey.Archival.md) | Content Archival and Durability Survey | Survey | project | Current | — |
 | [CLASSIC-0027](survey/Survey.DistributedModeration.md) | Distributed Content Moderation Survey | Survey | project | Current | — |
+| [CLASSIC-0028](survey/Survey.Usenet.md) | Usenet-Analog Discussion Hosting Survey | Survey | project | Current | — |
 | [CLASSIC-DRAFT-compass-integration](survey/Survey.CompassIntegration.md) | Compass Documentation on Classic Survey | Survey | project | Draft | — |
 | [CLASSIC-DRAFT-compass-migration](Plan.CompassMigration.md) | Compass Migration Plan | Plan | project | Implemented | — |
 | [CLASSIC-DRAFT-compass-migration-log](Log.CompassMigration.md) | Compass Migration Development Log | Log | project | Implemented | — |
@@ -45,7 +46,6 @@ Table: Documents in the CLASSIC namespace.
 | [CLASSIC-DRAFT-project-management](survey/Survey.ProjectManagement.md) | Project Management as Classic Imprint Survey | Survey | project | Draft | — |
 | [CLASSIC-DRAFT-realtime-chat](survey/Survey.RealtimeChat.md) | Real-Time Chat Integration Survey | Survey | project | Draft | — |
 | [CLASSIC-DRAFT-schema-pluggability](Survey.SchemaPluggability.md) | Schema Pluggability Survey | Survey | project | Draft | schema |
-| [CLASSIC-DRAFT-usenet](survey/Survey.Usenet.md) | Usenet-Analog Discussion Hosting Survey | Survey | project | Draft | — |
 | [CLASSIC-DRAFT-with-persistence](persistence/Log.WithPersistence.md) | with-persistence Development Log | Log | component | Accepted | persistence |
 | [CLASSIC-DRAFT-x400](Eval.X400.md) | X.400 Prior-Art Evaluation | Eval (prior-art) | project | Draft | — |
 
@@ -195,6 +195,11 @@ Table: Decision, open-question, and memo records in the CLASSIC namespace.
 | [CLASSIC-O23](survey/Survey.DistributedModeration.md#classic-o23--meta-moderation) | Open question | Meta-moderation | — | CLASSIC-0027 |
 | [CLASSIC-O24](survey/Survey.DistributedModeration.md#classic-o24--shared-curation-feed-primitive-with-archival) | Open question | Shared curation-feed primitive with archival | — | CLASSIC-0027 |
 | [CLASSIC-O25](survey/Survey.DistributedModeration.md#classic-o25--ranking-gameability-and-reputation-inputs) | Open question | Ranking gameability and reputation inputs | — | CLASSIC-0027 |
+| [CLASSIC-O26](survey/Survey.Usenet.md#classic-o26--forum-naming-convention-and-directory-federation) | Open question | Forum naming convention and directory federation | — | CLASSIC-0028 |
+| [CLASSIC-O27](survey/Survey.Usenet.md#classic-o27--cross-posting-and-deduplication-semantics) | Open question | Cross-posting and deduplication semantics | — | CLASSIC-0028 |
+| [CLASSIC-O28](survey/Survey.Usenet.md#classic-o28--retention-tiering-for-text-versus-binary) | Open question | Retention tiering for text versus binary | — | CLASSIC-0028 |
+| [CLASSIC-O29](survey/Survey.Usenet.md#classic-o29--nntp-bridge-scope-and-non-blocking-constraints) | Open question | NNTP bridge scope and non-blocking constraints | — | CLASSIC-0028 |
+| [CLASSIC-O30](survey/Survey.Usenet.md#classic-o30--relationship-to-the-federated-moderation-model) | Open question | Relationship to the federated moderation model | — | CLASSIC-0028 |
 | [CLASSIC-DRAFT-compass-integration-O1](survey/Survey.CompassIntegration.md#classic-draft-compass-integration-o1--base-schema-or-model-module) | Open question | Base schema or model module | — | CLASSIC-DRAFT-compass-integration |
 | [CLASSIC-DRAFT-compass-integration-O2](survey/Survey.CompassIntegration.md#classic-draft-compass-integration-o2--authors-as-a-list) | Open question | Authors as a list | — | CLASSIC-DRAFT-compass-integration |
 | [CLASSIC-DRAFT-compass-integration-O3](survey/Survey.CompassIntegration.md#classic-draft-compass-integration-o3--records-as-parts-with-their-own-identity) | Open question | Records as parts with their own identity | — | CLASSIC-DRAFT-compass-integration |
@@ -224,8 +229,3 @@ Table: Decision, open-question, and memo records in the CLASSIC namespace.
 | [CLASSIC-DRAFT-realtime-chat-O7](survey/Survey.RealtimeChat.md#classic-draft-realtime-chat-o7--structured-notification-and-command-format) | Open question | Structured notification and command format | — | CLASSIC-DRAFT-realtime-chat |
 | [CLASSIC-DRAFT-realtime-chat-O8](survey/Survey.RealtimeChat.md#classic-draft-realtime-chat-o8--the-content-solicitation-entity) | Open question | The content-solicitation entity | — | CLASSIC-DRAFT-realtime-chat |
 | [CLASSIC-DRAFT-schema-pluggability-O1](Survey.SchemaPluggability.md#classic-draft-schema-pluggability-o1--when-to-indirect-class-and-accessor-references) | Open question | When to indirect class and accessor references | — | CLASSIC-DRAFT-schema-pluggability |
-| [CLASSIC-DRAFT-usenet-O1](survey/Survey.Usenet.md#classic-draft-usenet-o1--forum-naming-convention-and-directory-federation) | Open question | Forum naming convention and directory federation | — | CLASSIC-DRAFT-usenet |
-| [CLASSIC-DRAFT-usenet-O2](survey/Survey.Usenet.md#classic-draft-usenet-o2--cross-posting-and-deduplication-semantics) | Open question | Cross-posting and deduplication semantics | — | CLASSIC-DRAFT-usenet |
-| [CLASSIC-DRAFT-usenet-O3](survey/Survey.Usenet.md#classic-draft-usenet-o3--retention-tiering-for-text-versus-binary) | Open question | Retention tiering for text versus binary | — | CLASSIC-DRAFT-usenet |
-| [CLASSIC-DRAFT-usenet-O4](survey/Survey.Usenet.md#classic-draft-usenet-o4--nntp-bridge-scope-and-non-blocking-constraints) | Open question | NNTP bridge scope and non-blocking constraints | — | CLASSIC-DRAFT-usenet |
-| [CLASSIC-DRAFT-usenet-O5](survey/Survey.Usenet.md#classic-draft-usenet-o5--relationship-to-the-federated-moderation-model) | Open question | Relationship to the federated moderation model | — | CLASSIC-DRAFT-usenet |

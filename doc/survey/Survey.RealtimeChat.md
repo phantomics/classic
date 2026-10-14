@@ -17,7 +17,7 @@ relates-to:
   - CLASSIC-0001
   - CLASSIC-0008
   - CLASSIC-0025
-  - CLASSIC-DRAFT-usenet
+  - CLASSIC-0028
 cites:
   - title:    Extensible Messaging and Presence Protocol (XMPP)
     locator:  RFC 6120 (core); RFC 6121 (instant messaging and presence)
@@ -514,7 +514,7 @@ by a shared curation-feed type is
 — and archived under the policies of
 [CLASSIC-0026](Survey.Archival.md). Room discovery across communities
 meets the same directory question as
-[CLASSIC-DRAFT-usenet-O1](Survey.Usenet.md#classic-draft-usenet-o1--forum-naming-convention-and-directory-federation).
+[CLASSIC-O26](Survey.Usenet.md#classic-o26--forum-naming-convention-and-directory-federation).
 The solicited-contribution pattern relates the forum imprint's threads
 ([CLASSIC-0019](../forum/Guide.Forum.md)), the workflow engine
 ([CLASSIC-0008](../model/Ref.Workflow.md)), and the TTRPG action flow.
