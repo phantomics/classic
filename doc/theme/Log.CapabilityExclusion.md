@@ -11,7 +11,7 @@ provenance:
   assistant:   opencode
 relates-to:
   - CLASSIC-DRAFT-theme
-  - CLASSIC-DRAFT-theme-ontology
+  - CLASSIC-0010
 decisions:
   - CLASSIC-DRAFT-capability-exclusion-D1
   - CLASSIC-DRAFT-capability-exclusion-D2

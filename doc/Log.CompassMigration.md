@@ -496,14 +496,14 @@ batch 3, giving the actual line counts of the four new files whose
 approximate counts [CLASSIC-0002](federation/Log.FederationConsistency.md)
 states.
 
-- **[CLASSIC-DRAFT-theme-ontology](theme/Log.ThemeOntology.md).** Its
+- **[CLASSIC-0010](theme/Log.ThemeOntology.md).** Its
   Design Decisions Chronology of four question headings became
-  CLASSIC-DRAFT-theme-ontology-D1 to CLASSIC-DRAFT-theme-ontology-D4, with
+  CLASSIC-D29 to CLASSIC-D32, with
   the options not chosen as alternatives, pinned to `d20ec8c`. The lens
   addendum became `## Update 2026-05-29 — Lens Integration` (as
   CLASSIC-DRAFT-compass-migration-D9 provides), pinned to `8aea5f4`, and its
-  ten H4 decisions became CLASSIC-DRAFT-theme-ontology-D5 to
-  CLASSIC-DRAFT-theme-ontology-D14, ten rather than the nine the plan
+  ten H4 decisions became CLASSIC-D33 to
+  CLASSIC-D42, ten rather than the nine the plan
   counted. Its What This Does Not Include became the update's Outstanding
   Work. Migration notes record that the work commit is dated just after
   midnight on 2026-05-28, and that `d20ec8c` also added `securityPoints.md`.
@@ -587,7 +587,7 @@ Table: Decision records created in Phase 3, by Log.
 | CLASSIC-DRAFT-with-persistence | 6 | `31ee385` |
 | CLASSIC-0002 | 13 | `8d5cc1b`, `fb49791`, `99d050d` |
 | CLASSIC-0004 | 11 | `58452c7`, `0e4c5bb`, `88a920b`, `88af7f2` |
-| CLASSIC-DRAFT-theme-ontology | 14 | `d20ec8c`, `8aea5f4` |
+| CLASSIC-0010 | 14 | `d20ec8c`, `8aea5f4` |
 | CLASSIC-DRAFT-capability-exclusion | 5 | `9626df5` |
 | CLASSIC-DRAFT-slot-fills | 5 | `72b638c` |
 | CLASSIC-DRAFT-forum-demo | 7 | `c1df12c` |

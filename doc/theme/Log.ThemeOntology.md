@@ -1,31 +1,35 @@
 ---
-id:            CLASSIC-DRAFT-theme-ontology
+id:            CLASSIC-0010
 title:         Theme Ontology Development Log
 genre:         Log
 scope:         component
 project:       Classic
 component:     theme
 language:      en
-status:        Draft
+status:        Implemented
+authors:
+  - Andrew Sengul
+approved-by:   Andrew Sengul
+reviewed:      2026-10-13
 provenance:
   assistant:   opencode
 relates-to:
   - CLASSIC-DRAFT-theme
 decisions:
-  - CLASSIC-DRAFT-theme-ontology-D1
-  - CLASSIC-DRAFT-theme-ontology-D2
-  - CLASSIC-DRAFT-theme-ontology-D3
-  - CLASSIC-DRAFT-theme-ontology-D4
-  - CLASSIC-DRAFT-theme-ontology-D5
-  - CLASSIC-DRAFT-theme-ontology-D6
-  - CLASSIC-DRAFT-theme-ontology-D7
-  - CLASSIC-DRAFT-theme-ontology-D8
-  - CLASSIC-DRAFT-theme-ontology-D9
-  - CLASSIC-DRAFT-theme-ontology-D10
-  - CLASSIC-DRAFT-theme-ontology-D11
-  - CLASSIC-DRAFT-theme-ontology-D12
-  - CLASSIC-DRAFT-theme-ontology-D13
-  - CLASSIC-DRAFT-theme-ontology-D14
+  - CLASSIC-D29
+  - CLASSIC-D30
+  - CLASSIC-D31
+  - CLASSIC-D32
+  - CLASSIC-D33
+  - CLASSIC-D34
+  - CLASSIC-D35
+  - CLASSIC-D36
+  - CLASSIC-D37
+  - CLASSIC-D38
+  - CLASSIC-D39
+  - CLASSIC-D40
+  - CLASSIC-D41
+  - CLASSIC-D42
 ---
 
 # Theme Ontology: Development Log
@@ -74,9 +78,9 @@ opaque string identifier. This created four problems:
 Chronology; its four question headings became the records below, with the
 options not chosen as their alternatives.
 
-### CLASSIC-DRAFT-theme-ontology-D1 — Where should theming live? Theme ontology in core, rendering in the Composer
+### CLASSIC-D29 — Where should theming live? Theme ontology in core, rendering in the Composer
 
-**Status:** Proposed
+**Status:** Implemented
 
 **Context:** Three options were considered for where theming should live.
 
@@ -98,9 +102,9 @@ queryable metadata.
 - Option C: Hybrid. Minimal theme identity in the core (enough for federation
   and persistence), full compositional machinery in the Composer.
 
-### CLASSIC-DRAFT-theme-ontology-D2 — Asset storage: external references
+### CLASSIC-D30 — Asset storage: external references
 
-**Status:** Proposed
+**Status:** Implemented
 
 **Context:** Should theme assets (CSS, images, JS) be stored as Classic
 resources (blobs in the persistence layer) or as external filesystem
@@ -116,9 +120,9 @@ deployment requires (CDN, build tools, SCSS compilation, etc.).
 - Storing binary assets as persistence blobs, as Classic resources. Rejected:
   it would add complexity without proportional benefit.
 
-### CLASSIC-DRAFT-theme-ontology-D3 — Federation behavior: federatable but non-obligatory
+### CLASSIC-D31 — Federation behavior: federatable but non-obligatory
 
-**Status:** Proposed
+**Status:** Implemented
 
 **Context:** Should themes be federatable? Could a publisher's theme be shared
 so federated content renders in the publisher's visual style?
@@ -136,9 +140,9 @@ to use it.
 - Obliging peers to render federated content in the publisher's theme. Not
   adopted: it would not respect each instance's editorial independence.
 
-### CLASSIC-DRAFT-theme-ontology-D4 — Configuration bindings: plural bindings resources
+### CLASSIC-D32 — Configuration bindings: plural bindings resources
 
-**Status:** Proposed
+**Status:** Implemented
 
 **Context:** Three representations were considered for theme configuration
 (colors, fonts, layout flags, feature toggles).
@@ -380,9 +384,9 @@ contribution: declarative property-level selection with display
 hints and sublens references.
 
 
-### CLASSIC-DRAFT-theme-ontology-D5 — Lens scope: class-level only initially
+### CLASSIC-D33 — Lens scope: class-level only initially
 
-**Status:** Proposed
+**Status:** Implemented
 
 **Context:** Fresnel supports both class-level (`fresnel:classLensDomain`) and
 instance-level (`fresnel:instanceLensDomain`) targeting.
@@ -394,9 +398,9 @@ instance-level (`fresnel:instanceLensDomain`) targeting.
   Deferred: the use cases are uncommon in publishing scenarios, and the
   class-level mechanism with superclass fallback covers most needs.
 
-### CLASSIC-DRAFT-theme-ontology-D6 — Display modes belong in the lens, not the capability system
+### CLASSIC-D34 — Display modes belong in the lens, not the capability system
 
-**Status:** Proposed
+**Status:** Implemented
 
 **Context:** The most consequential design decision was where display modes
 should live. Two coherent positions emerged.
@@ -431,9 +435,9 @@ capability rewrites it. This was rejected for two reasons:
    universal default and let capabilities override it -- which is
    exactly the problem Fresnel's `fresnel:value` solves.
 
-### CLASSIC-DRAFT-theme-ontology-D7 — Display mode default cascade
+### CLASSIC-D35 — Display mode default cascade
 
-**Status:** Proposed
+**Status:** Implemented
 
 **Context:** A lens need not say how each of its properties is displayed.
 
@@ -454,9 +458,9 @@ needs no lens annotations at all.
 
 **Alternatives:** None recorded.
 
-### CLASSIC-DRAFT-theme-ontology-D8 — Sublens references included from the start
+### CLASSIC-D36 — Sublens references included from the start
 
-**Status:** Proposed
+**Status:** Implemented
 
 **Context:** Fresnel's `fresnel:sublens` lets a property spec for a relation
 slot declare which lens to use when rendering the related entity inline.
@@ -478,9 +482,9 @@ built-in label representation (entity's `label` slot).
   Deferred: cycles in lens declarations are uncommon; if they appear, depth
   limiting can be added without changing the lens structure.
 
-### CLASSIC-DRAFT-theme-ontology-D9 — Lens purposes: :default and :label
+### CLASSIC-D37 — Lens purposes: :default and :label
 
-**Status:** Proposed
+**Status:** Implemented
 
 **Context:** A class may have more than one lens, distinguished by purpose.
 
@@ -497,9 +501,9 @@ disambiguate multiple lenses per class.
 
 **Alternatives:** None recorded.
 
-### CLASSIC-DRAFT-theme-ontology-D10 — Property spec dual form
+### CLASSIC-D38 — Property spec dual form
 
-**Status:** Proposed
+**Status:** Implemented
 
 **Context:** Each entry in a lens's `:properties` list names a slot, with or
 without overrides.
@@ -515,9 +519,9 @@ in the Composer never have to handle both representations.
 
 **Alternatives:** None recorded.
 
-### CLASSIC-DRAFT-theme-ontology-D11 — Inheritance is wholesale per (class, purpose) pair
+### CLASSIC-D39 — Inheritance is wholesale per (class, purpose) pair
 
-**Status:** Proposed
+**Status:** Implemented
 
 **Context:** Lenses are resolved across a theme chain.
 
@@ -534,9 +538,9 @@ preserved.
   of property-by-property reconciliation between parent and child property
   lists.
 
-### CLASSIC-DRAFT-theme-ontology-D12 — Storage: a flat list, not an alist keyed by class
+### CLASSIC-D40 — Storage: a flat list, not an alist keyed by class
 
-**Status:** Proposed
+**Status:** Implemented
 
 **Context:** The `lenses` slot must hold several lenses per class, with
 different purposes.
@@ -551,9 +555,9 @@ natural key only at resolution time, in `resolve-theme-lenses`.
 - An alist keyed by class. Not adopted: it would not allow multiple lenses per
   class with different purposes.
 
-### CLASSIC-DRAFT-theme-ontology-D13 — Class symbols, not strings
+### CLASSIC-D41 — Class symbols, not strings
 
-**Status:** Proposed
+**Status:** Implemented
 
 **Context:** Lens specs must reference their target classes.
 
@@ -566,9 +570,9 @@ true of the rest of the theme system (tier templates use the same convention).
 - Strings, which the heading names as the alternative. The Log gives its
   reasons for symbols and none for rejecting strings.
 
-### CLASSIC-DRAFT-theme-ontology-D14 — Superclass fallback in find-lens
+### CLASSIC-D42 — Superclass fallback in find-lens
 
-**Status:** Proposed
+**Status:** Implemented
 
 **Context:** A class may have no lens of its own.
 

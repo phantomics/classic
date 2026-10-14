@@ -11,7 +11,7 @@ api-version:   "0.1.0"
 provenance:
   assistant:   opencode
 relates-to:
-  - CLASSIC-DRAFT-theme-ontology
+  - CLASSIC-0010
   - CLASSIC-DRAFT-capability-exclusion
   - CLASSIC-DRAFT-slot-fills
 ---

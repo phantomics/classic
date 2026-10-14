@@ -11,14 +11,15 @@ Table: Documents in the CLASSIC namespace.
 | ID | Title | Genre | Scope | Status | Component |
 |---|---|---|---|---|---|
 | [CLASSIC-0001](federation/Guide.FederationDemo.md) | Federation Demo Guide | Guide (tutorial) | component | Current | federation |
-| [CLASSIC-0002](federation/Log.FederationConsistency.md) | Federation Consistency Development Log | Log | component | Accepted | federation |
+| [CLASSIC-0002](federation/Log.FederationConsistency.md) | Federation Consistency Development Log | Log | component | Implemented | federation |
 | [CLASSIC-0003](Log.DeletionSupport.md) | Deletion Support Development Log | Log | project | Implemented | model |
-| [CLASSIC-0004](migration/Log.SchemaMigration.md) | Schema Migration Development Log | Log | component | Accepted | migration |
+| [CLASSIC-0004](migration/Log.SchemaMigration.md) | Schema Migration Development Log | Log | component | Implemented | migration |
 | [CLASSIC-0005](migration/Ref.Migration.md) | Schema Migration Reference | Ref | component | Current | migration |
 | [CLASSIC-0006](persistence/Ref.Persistence.md) | Persistence Reference | Ref | component | Current | persistence |
 | [CLASSIC-0007](model/Ref.Model.md) | Ontological Model Reference | Ref | component | Current | model |
 | [CLASSIC-0008](model/Ref.Workflow.md) | Workflow Reference | Ref | component | Current | model |
 | [CLASSIC-0009](model/Log.SlotValidation.md) | Slot Type Validation Development Log | Log | component | Accepted | model |
+| [CLASSIC-0010](theme/Log.ThemeOntology.md) | Theme Ontology Development Log | Log | component | Implemented | theme |
 | [CLASSIC-DRAFT-archival](survey/Survey.Archival.md) | Content Archival and Durability Survey | Survey | project | Draft | — |
 | [CLASSIC-DRAFT-capability-exclusion](theme/Log.CapabilityExclusion.md) | Capability Exclusion Development Log | Log | component | Draft | theme |
 | [CLASSIC-DRAFT-compass-integration](survey/Survey.CompassIntegration.md) | Compass Documentation on Classic Survey | Survey | project | Draft | — |
@@ -40,47 +41,60 @@ Table: Documents in the CLASSIC namespace.
 | [CLASSIC-DRAFT-schema-pluggability](Survey.SchemaPluggability.md) | Schema Pluggability Survey | Survey | project | Draft | schema |
 | [CLASSIC-DRAFT-slot-fills](theme/Log.SlotFills.md) | Template Slot Fills Development Log | Log | component | Draft | theme |
 | [CLASSIC-DRAFT-theme](theme/Ref.Theme.md) | Theme Ontology Reference | Ref | component | Draft | theme |
-| [CLASSIC-DRAFT-theme-ontology](theme/Log.ThemeOntology.md) | Theme Ontology Development Log | Log | component | Draft | theme |
 | [CLASSIC-DRAFT-ttrpg-host](survey/Survey.TTRPGHost.md) | Tabletop RPG Hosting (Play-by-Post) Survey | Survey | project | Draft | — |
 | [CLASSIC-DRAFT-typed-pages](wiki/Log.TypedPages.md) | Typed Page Classes Development Log | Log | component | Implemented | wiki |
 | [CLASSIC-DRAFT-usenet](survey/Survey.Usenet.md) | Usenet-Analog Discussion Hosting Survey | Survey | project | Draft | — |
 | [CLASSIC-DRAFT-wiki](wiki/Guide.Wiki.md) | Wiki Preset Guide | Guide (tutorial) | component | Draft | wiki |
 | [CLASSIC-DRAFT-wiki-demo](wiki/Log.WikiDemo.md) | Wiki Demo Development Log | Log | component | Draft | wiki |
-| [CLASSIC-DRAFT-with-persistence](persistence/Log.WithPersistence.md) | with-persistence Development Log | Log | component | Draft | persistence |
+| [CLASSIC-DRAFT-with-persistence](persistence/Log.WithPersistence.md) | with-persistence Development Log | Log | component | Accepted | persistence |
 | [CLASSIC-DRAFT-x400](Eval.X400.md) | X.400 Prior-Art Evaluation | Eval (prior-art) | project | Draft | — |
 
 Table: Decision, open-question, and memo records in the CLASSIC namespace.
 
 | ID | Kind | Title | Status | Host |
 |---|---|---|---|---|
-| [CLASSIC-D1](federation/Log.FederationConsistency.md#classic-d1--provenance-as-classic-resources) | Decision | Provenance as Classic resources | Accepted | CLASSIC-0002 |
-| [CLASSIC-D2](federation/Log.FederationConsistency.md#classic-d2--per-publication-scoping) | Decision | Per-publication scoping | Accepted | CLASSIC-0002 |
-| [CLASSIC-D3](federation/Log.FederationConsistency.md#classic-d3--event-log-as-classic-resources) | Decision | Event log as Classic resources | Accepted | CLASSIC-0002 |
-| [CLASSIC-D4](federation/Log.FederationConsistency.md#classic-d4--configurable-retention-policy) | Decision | Configurable retention policy | Accepted | CLASSIC-0002 |
-| [CLASSIC-D5](federation/Log.FederationConsistency.md#classic-d5--sync-status-on-provenance) | Decision | Sync status on provenance | Accepted | CLASSIC-0002 |
-| [CLASSIC-D6](federation/Log.FederationConsistency.md#classic-d6--transport-extensibility) | Decision | Transport extensibility | Accepted | CLASSIC-0002 |
-| [CLASSIC-D7](federation/Log.FederationConsistency.md#classic-d7--acknowledgment-abstraction) | Decision | Acknowledgment abstraction | Accepted | CLASSIC-0002 |
+| [CLASSIC-D1](federation/Log.FederationConsistency.md#classic-d1--provenance-as-classic-resources) | Decision | Provenance as Classic resources | Implemented | CLASSIC-0002 |
+| [CLASSIC-D2](federation/Log.FederationConsistency.md#classic-d2--per-publication-scoping) | Decision | Per-publication scoping | Implemented | CLASSIC-0002 |
+| [CLASSIC-D3](federation/Log.FederationConsistency.md#classic-d3--event-log-as-classic-resources) | Decision | Event log as Classic resources | Implemented | CLASSIC-0002 |
+| [CLASSIC-D4](federation/Log.FederationConsistency.md#classic-d4--configurable-retention-policy) | Decision | Configurable retention policy | Implemented | CLASSIC-0002 |
+| [CLASSIC-D5](federation/Log.FederationConsistency.md#classic-d5--sync-status-on-provenance) | Decision | Sync status on provenance | Implemented | CLASSIC-0002 |
+| [CLASSIC-D6](federation/Log.FederationConsistency.md#classic-d6--transport-extensibility) | Decision | Transport extensibility | Implemented | CLASSIC-0002 |
+| [CLASSIC-D7](federation/Log.FederationConsistency.md#classic-d7--acknowledgment-abstraction) | Decision | Acknowledgment abstraction | Implemented | CLASSIC-0002 |
 | [CLASSIC-D8](federation/Log.FederationConsistency.md#classic-d8--idempotent-receive-via-timestamp-comparison) | Decision | Idempotent receive via timestamp comparison | Proposed | CLASSIC-0002 |
-| [CLASSIC-D9](federation/Log.FederationConsistency.md#classic-d9--synchronous-single-pass-retry-with-expansion-stubs) | Decision | Synchronous single-pass retry with expansion stubs | Accepted | CLASSIC-0002 |
-| [CLASSIC-D10](federation/Log.FederationConsistency.md#classic-d10--logical-clock-on-classic-resource) | Decision | Logical clock on classic-resource | Accepted | CLASSIC-0002 |
-| [CLASSIC-D11](federation/Log.FederationConsistency.md#classic-d11--update-message-type-and-receive-update) | Decision | :update message type and receive-update | Accepted | CLASSIC-0002 |
-| [CLASSIC-D12](federation/Log.FederationConsistency.md#classic-d12--per-peer-outbox-with-threshold-and-interval-flushing) | Decision | Per-peer outbox with threshold and interval flushing | Accepted | CLASSIC-0002 |
-| [CLASSIC-D13](federation/Log.FederationConsistency.md#classic-d13--blog-edit-post-with-update-propagation) | Decision | Blog edit-post with update propagation | Accepted | CLASSIC-0002 |
+| [CLASSIC-D9](federation/Log.FederationConsistency.md#classic-d9--synchronous-single-pass-retry-with-expansion-stubs) | Decision | Synchronous single-pass retry with expansion stubs | Implemented | CLASSIC-0002 |
+| [CLASSIC-D10](federation/Log.FederationConsistency.md#classic-d10--logical-clock-on-classic-resource) | Decision | Logical clock on classic-resource | Implemented | CLASSIC-0002 |
+| [CLASSIC-D11](federation/Log.FederationConsistency.md#classic-d11--update-message-type-and-receive-update) | Decision | :update message type and receive-update | Implemented | CLASSIC-0002 |
+| [CLASSIC-D12](federation/Log.FederationConsistency.md#classic-d12--per-peer-outbox-with-threshold-and-interval-flushing) | Decision | Per-peer outbox with threshold and interval flushing | Implemented | CLASSIC-0002 |
+| [CLASSIC-D13](federation/Log.FederationConsistency.md#classic-d13--blog-edit-post-with-update-propagation) | Decision | Blog edit-post with update propagation | Implemented | CLASSIC-0002 |
 | [CLASSIC-D14](Log.DeletionSupport.md#classic-d14--both-soft-and-hard-deletion) | Decision | Both soft and hard deletion | Accepted | CLASSIC-0003 |
 | [CLASSIC-D15](Log.DeletionSupport.md#classic-d15--federation-tombstones) | Decision | Federation tombstones | Accepted | CLASSIC-0003 |
 | [CLASSIC-D16](Log.DeletionSupport.md#classic-d16--deletion-as-workflow-state) | Decision | Deletion as workflow state | Accepted | CLASSIC-0003 |
-| [CLASSIC-D17](migration/Log.SchemaMigration.md#classic-d17--where-to-store-migration-metadata) | Decision | Where to store migration metadata | Accepted | CLASSIC-0004 |
-| [CLASSIC-D18](migration/Log.SchemaMigration.md#classic-d18--per-class-versioning-with-system-wide-manifests) | Decision | Per-class versioning with system-wide manifests | Accepted | CLASSIC-0004 |
-| [CLASSIC-D19](migration/Log.SchemaMigration.md#classic-d19--data-migrations-via-extensible-stubs) | Decision | Data migrations via extensible stubs | Accepted | CLASSIC-0004 |
-| [CLASSIC-D20](migration/Log.SchemaMigration.md#classic-d20--trigger-based-migration-timing) | Decision | Trigger-based migration timing | Accepted | CLASSIC-0004 |
-| [CLASSIC-D21](migration/Log.SchemaMigration.md#classic-d21--explicit-class-list-with-auto-discover-helper) | Decision | Explicit class list with auto-discover helper | Accepted | CLASSIC-0004 |
-| [CLASSIC-D22](migration/Log.SchemaMigration.md#classic-d22--uniform-target-version-with-auto-detected-from-version) | Decision | Uniform target version with auto-detected from-version | Accepted | CLASSIC-0004 |
-| [CLASSIC-D23](migration/Log.SchemaMigration.md#classic-d23--no---arrow-in-syntax) | Decision | No -> arrow in syntax | Accepted | CLASSIC-0004 |
-| [CLASSIC-D24](migration/Log.SchemaMigration.md#classic-d24--sentinel-version-for-class-did-not-exist) | Decision | Sentinel version for "class did not exist" | Accepted | CLASSIC-0004 |
-| [CLASSIC-D25](migration/Log.SchemaMigration.md#classic-d25--federation-translation-for-missing-classes) | Decision | Federation translation for missing classes | Accepted | CLASSIC-0004 |
-| [CLASSIC-D26](migration/Log.SchemaMigration.md#classic-d26--uri-namespace-prefix-in-the-migration-declaration) | Decision | URI namespace prefix in the migration declaration | Accepted | CLASSIC-0004 |
-| [CLASSIC-D27](migration/Log.SchemaMigration.md#classic-d27--migration-of-classic-migration-operation-itself) | Decision | Migration of classic-migration-operation itself | Accepted | CLASSIC-0004 |
+| [CLASSIC-D17](migration/Log.SchemaMigration.md#classic-d17--where-to-store-migration-metadata) | Decision | Where to store migration metadata | Implemented | CLASSIC-0004 |
+| [CLASSIC-D18](migration/Log.SchemaMigration.md#classic-d18--per-class-versioning-with-system-wide-manifests) | Decision | Per-class versioning with system-wide manifests | Implemented | CLASSIC-0004 |
+| [CLASSIC-D19](migration/Log.SchemaMigration.md#classic-d19--data-migrations-via-extensible-stubs) | Decision | Data migrations via extensible stubs | Implemented | CLASSIC-0004 |
+| [CLASSIC-D20](migration/Log.SchemaMigration.md#classic-d20--trigger-based-migration-timing) | Decision | Trigger-based migration timing | Implemented | CLASSIC-0004 |
+| [CLASSIC-D21](migration/Log.SchemaMigration.md#classic-d21--explicit-class-list-with-auto-discover-helper) | Decision | Explicit class list with auto-discover helper | Implemented | CLASSIC-0004 |
+| [CLASSIC-D22](migration/Log.SchemaMigration.md#classic-d22--uniform-target-version-with-auto-detected-from-version) | Decision | Uniform target version with auto-detected from-version | Implemented | CLASSIC-0004 |
+| [CLASSIC-D23](migration/Log.SchemaMigration.md#classic-d23--no---arrow-in-syntax) | Decision | No -> arrow in syntax | Implemented | CLASSIC-0004 |
+| [CLASSIC-D24](migration/Log.SchemaMigration.md#classic-d24--sentinel-version-for-class-did-not-exist) | Decision | Sentinel version for "class did not exist" | Implemented | CLASSIC-0004 |
+| [CLASSIC-D25](migration/Log.SchemaMigration.md#classic-d25--federation-translation-for-missing-classes) | Decision | Federation translation for missing classes | Implemented | CLASSIC-0004 |
+| [CLASSIC-D26](migration/Log.SchemaMigration.md#classic-d26--uri-namespace-prefix-in-the-migration-declaration) | Decision | URI namespace prefix in the migration declaration | Implemented | CLASSIC-0004 |
+| [CLASSIC-D27](migration/Log.SchemaMigration.md#classic-d27--migration-of-classic-migration-operation-itself) | Decision | Migration of classic-migration-operation itself | Implemented | CLASSIC-0004 |
 | [CLASSIC-D28](model/Log.SlotValidation.md#classic-d28--validate-entity-not-setf-slot-value-using-class) | Decision | validate-entity, not (setf slot-value-using-class) | Implemented | CLASSIC-0009 |
+| [CLASSIC-D29](theme/Log.ThemeOntology.md#classic-d29--where-should-theming-live-theme-ontology-in-core-rendering-in-the-composer) | Decision | Where should theming live? Theme ontology in core, rendering in the Composer | Implemented | CLASSIC-0010 |
+| [CLASSIC-D30](theme/Log.ThemeOntology.md#classic-d30--asset-storage-external-references) | Decision | Asset storage: external references | Implemented | CLASSIC-0010 |
+| [CLASSIC-D31](theme/Log.ThemeOntology.md#classic-d31--federation-behavior-federatable-but-non-obligatory) | Decision | Federation behavior: federatable but non-obligatory | Implemented | CLASSIC-0010 |
+| [CLASSIC-D32](theme/Log.ThemeOntology.md#classic-d32--configuration-bindings-plural-bindings-resources) | Decision | Configuration bindings: plural bindings resources | Implemented | CLASSIC-0010 |
+| [CLASSIC-D33](theme/Log.ThemeOntology.md#classic-d33--lens-scope-class-level-only-initially) | Decision | Lens scope: class-level only initially | Implemented | CLASSIC-0010 |
+| [CLASSIC-D34](theme/Log.ThemeOntology.md#classic-d34--display-modes-belong-in-the-lens-not-the-capability-system) | Decision | Display modes belong in the lens, not the capability system | Implemented | CLASSIC-0010 |
+| [CLASSIC-D35](theme/Log.ThemeOntology.md#classic-d35--display-mode-default-cascade) | Decision | Display mode default cascade | Implemented | CLASSIC-0010 |
+| [CLASSIC-D36](theme/Log.ThemeOntology.md#classic-d36--sublens-references-included-from-the-start) | Decision | Sublens references included from the start | Implemented | CLASSIC-0010 |
+| [CLASSIC-D37](theme/Log.ThemeOntology.md#classic-d37--lens-purposes-default-and-label) | Decision | Lens purposes: :default and :label | Implemented | CLASSIC-0010 |
+| [CLASSIC-D38](theme/Log.ThemeOntology.md#classic-d38--property-spec-dual-form) | Decision | Property spec dual form | Implemented | CLASSIC-0010 |
+| [CLASSIC-D39](theme/Log.ThemeOntology.md#classic-d39--inheritance-is-wholesale-per-class-purpose-pair) | Decision | Inheritance is wholesale per (class, purpose) pair | Implemented | CLASSIC-0010 |
+| [CLASSIC-D40](theme/Log.ThemeOntology.md#classic-d40--storage-a-flat-list-not-an-alist-keyed-by-class) | Decision | Storage: a flat list, not an alist keyed by class | Implemented | CLASSIC-0010 |
+| [CLASSIC-D41](theme/Log.ThemeOntology.md#classic-d41--class-symbols-not-strings) | Decision | Class symbols, not strings | Implemented | CLASSIC-0010 |
+| [CLASSIC-D42](theme/Log.ThemeOntology.md#classic-d42--superclass-fallback-in-find-lens) | Decision | Superclass fallback in find-lens | Implemented | CLASSIC-0010 |
 | [CLASSIC-DRAFT-capability-exclusion-D1](theme/Log.CapabilityExclusion.md#classic-draft-capability-exclusion-d1--slot-name-excluded-capabilities) | Decision | Slot name: excluded-capabilities | Proposed | CLASSIC-DRAFT-capability-exclusion |
 | [CLASSIC-DRAFT-capability-exclusion-D2](theme/Log.CapabilityExclusion.md#classic-draft-capability-exclusion-d2--scope-ancestor-contributions-only) | Decision | Scope: ancestor contributions only | Proposed | CLASSIC-DRAFT-capability-exclusion |
 | [CLASSIC-DRAFT-capability-exclusion-D3](theme/Log.CapabilityExclusion.md#classic-draft-capability-exclusion-d3--exclusion-of-uninherited-capabilities-is-a-silent-no-op) | Decision | Exclusion of uninherited capabilities is a silent no-op | Proposed | CLASSIC-DRAFT-capability-exclusion |
@@ -97,11 +111,11 @@ Table: Decision, open-question, and memo records in the CLASSIC namespace.
 | [CLASSIC-DRAFT-compass-migration-D9](Plan.CompassMigration.md#classic-draft-compass-migration-d9--logs-of-several-pieces-of-work-take-dated-update-sections) | Decision | Logs of several pieces of work take dated Update sections | Accepted | CLASSIC-DRAFT-compass-migration |
 | [CLASSIC-DRAFT-compass-migration-D10](Plan.CompassMigration.md#classic-draft-compass-migration-d10--the-schema-contract-is-split-into-a-spec-a-guide-and-a-survey) | Decision | The schema contract is split into a Spec, a Guide, and a Survey | Accepted | CLASSIC-DRAFT-compass-migration |
 | [CLASSIC-DRAFT-compass-migration-D11](Plan.CompassMigration.md#classic-draft-compass-migration-d11--the-planned-persistence-backends-move-into-an-arch) | Decision | The planned persistence backends move into an Arch | Accepted | CLASSIC-DRAFT-compass-migration |
-| [CLASSIC-DRAFT-compass-migration-log-D1](Log.CompassMigration.md#classic-draft-compass-migration-log-d1--a-link-whose-text-is-a-file-name-takes-the-targets-identifier) | Decision | A link whose text is a file name takes the target's identifier | Accepted | CLASSIC-DRAFT-compass-migration-log |
-| [CLASSIC-DRAFT-compass-migration-log-D2](Log.CompassMigration.md#classic-draft-compass-migration-log-d2--relations-come-from-the-corpus-not-from-the-topic) | Decision | Relations come from the corpus, not from the topic | Accepted | CLASSIC-DRAFT-compass-migration-log |
-| [CLASSIC-DRAFT-compass-migration-log-D3](Log.CompassMigration.md#classic-draft-compass-migration-log-d3--in-body-status-lines-that-front-matter-replaces-are-removed-dates-stay) | Decision | In-body status lines that front-matter replaces are removed; dates stay | Accepted | CLASSIC-DRAFT-compass-migration-log |
-| [CLASSIC-DRAFT-compass-migration-log-D4](Log.CompassMigration.md#classic-draft-compass-migration-log-d4--headings-follow-the-genre-spine-body-text-is-not-rewritten) | Decision | Headings follow the genre spine; body text is not rewritten | Accepted | CLASSIC-DRAFT-compass-migration-log |
-| [CLASSIC-DRAFT-compass-migration-log-D5](Log.CompassMigration.md#classic-draft-compass-migration-log-d5--each-gate-is-checked-with-two-builds-of-the-toolchain) | Decision | Each gate is checked with two builds of the toolchain | Accepted | CLASSIC-DRAFT-compass-migration-log |
+| [CLASSIC-DRAFT-compass-migration-log-D1](Log.CompassMigration.md#classic-draft-compass-migration-log-d1--a-link-whose-text-is-a-file-name-takes-the-targets-identifier) | Decision | A link whose text is a file name takes the target's identifier | Implemented | CLASSIC-DRAFT-compass-migration-log |
+| [CLASSIC-DRAFT-compass-migration-log-D2](Log.CompassMigration.md#classic-draft-compass-migration-log-d2--relations-come-from-the-corpus-not-from-the-topic) | Decision | Relations come from the corpus, not from the topic | Implemented | CLASSIC-DRAFT-compass-migration-log |
+| [CLASSIC-DRAFT-compass-migration-log-D3](Log.CompassMigration.md#classic-draft-compass-migration-log-d3--in-body-status-lines-that-front-matter-replaces-are-removed-dates-stay) | Decision | In-body status lines that front-matter replaces are removed; dates stay | Implemented | CLASSIC-DRAFT-compass-migration-log |
+| [CLASSIC-DRAFT-compass-migration-log-D4](Log.CompassMigration.md#classic-draft-compass-migration-log-d4--headings-follow-the-genre-spine-body-text-is-not-rewritten) | Decision | Headings follow the genre spine; body text is not rewritten | Implemented | CLASSIC-DRAFT-compass-migration-log |
+| [CLASSIC-DRAFT-compass-migration-log-D5](Log.CompassMigration.md#classic-draft-compass-migration-log-d5--each-gate-is-checked-with-two-builds-of-the-toolchain) | Decision | Each gate is checked with two builds of the toolchain | Implemented | CLASSIC-DRAFT-compass-migration-log |
 | [CLASSIC-DRAFT-dist-factorization-D1](Log.DistFactorization.md#classic-draft-dist-factorization-d1--four-layer-architecture-with-a-thin-dist-shim) | Decision | Four-layer architecture with a thin dist shim | Accepted | CLASSIC-DRAFT-dist-factorization |
 | [CLASSIC-DRAFT-dist-factorization-D2](Log.DistFactorization.md#classic-draft-dist-factorization-d2--nickname-based-schema-indirection) | Decision | Nickname-based schema indirection | Accepted | CLASSIC-DRAFT-dist-factorization |
 | [CLASSIC-DRAFT-dist-factorization-D3](Log.DistFactorization.md#classic-draft-dist-factorization-d3--the-engine-is-named-classicengineref) | Decision | The engine is named classic.engine.ref | Accepted | CLASSIC-DRAFT-dist-factorization |
@@ -134,20 +148,6 @@ Table: Decision, open-question, and memo records in the CLASSIC namespace.
 | [CLASSIC-DRAFT-slot-fills-D3](theme/Log.SlotFills.md#classic-draft-slot-fills-d3--inheritance-follows-the-bindings-precedent) | Decision | Inheritance follows the bindings precedent | Proposed | CLASSIC-DRAFT-slot-fills |
 | [CLASSIC-DRAFT-slot-fills-D4](theme/Log.SlotFills.md#classic-draft-slot-fills-d4--naming-slot-fills) | Decision | Naming: slot-fills | Proposed | CLASSIC-DRAFT-slot-fills |
 | [CLASSIC-DRAFT-slot-fills-D5](theme/Log.SlotFills.md#classic-draft-slot-fills-d5--classic-theme-override-symmetry-and-migration-registration) | Decision | classic-theme-override symmetry and migration registration | Proposed | CLASSIC-DRAFT-slot-fills |
-| [CLASSIC-DRAFT-theme-ontology-D1](theme/Log.ThemeOntology.md#classic-draft-theme-ontology-d1--where-should-theming-live-theme-ontology-in-core-rendering-in-the-composer) | Decision | Where should theming live? Theme ontology in core, rendering in the Composer | Proposed | CLASSIC-DRAFT-theme-ontology |
-| [CLASSIC-DRAFT-theme-ontology-D2](theme/Log.ThemeOntology.md#classic-draft-theme-ontology-d2--asset-storage-external-references) | Decision | Asset storage: external references | Proposed | CLASSIC-DRAFT-theme-ontology |
-| [CLASSIC-DRAFT-theme-ontology-D3](theme/Log.ThemeOntology.md#classic-draft-theme-ontology-d3--federation-behavior-federatable-but-non-obligatory) | Decision | Federation behavior: federatable but non-obligatory | Proposed | CLASSIC-DRAFT-theme-ontology |
-| [CLASSIC-DRAFT-theme-ontology-D4](theme/Log.ThemeOntology.md#classic-draft-theme-ontology-d4--configuration-bindings-plural-bindings-resources) | Decision | Configuration bindings: plural bindings resources | Proposed | CLASSIC-DRAFT-theme-ontology |
-| [CLASSIC-DRAFT-theme-ontology-D5](theme/Log.ThemeOntology.md#classic-draft-theme-ontology-d5--lens-scope-class-level-only-initially) | Decision | Lens scope: class-level only initially | Proposed | CLASSIC-DRAFT-theme-ontology |
-| [CLASSIC-DRAFT-theme-ontology-D6](theme/Log.ThemeOntology.md#classic-draft-theme-ontology-d6--display-modes-belong-in-the-lens-not-the-capability-system) | Decision | Display modes belong in the lens, not the capability system | Proposed | CLASSIC-DRAFT-theme-ontology |
-| [CLASSIC-DRAFT-theme-ontology-D7](theme/Log.ThemeOntology.md#classic-draft-theme-ontology-d7--display-mode-default-cascade) | Decision | Display mode default cascade | Proposed | CLASSIC-DRAFT-theme-ontology |
-| [CLASSIC-DRAFT-theme-ontology-D8](theme/Log.ThemeOntology.md#classic-draft-theme-ontology-d8--sublens-references-included-from-the-start) | Decision | Sublens references included from the start | Proposed | CLASSIC-DRAFT-theme-ontology |
-| [CLASSIC-DRAFT-theme-ontology-D9](theme/Log.ThemeOntology.md#classic-draft-theme-ontology-d9--lens-purposes-default-and-label) | Decision | Lens purposes: :default and :label | Proposed | CLASSIC-DRAFT-theme-ontology |
-| [CLASSIC-DRAFT-theme-ontology-D10](theme/Log.ThemeOntology.md#classic-draft-theme-ontology-d10--property-spec-dual-form) | Decision | Property spec dual form | Proposed | CLASSIC-DRAFT-theme-ontology |
-| [CLASSIC-DRAFT-theme-ontology-D11](theme/Log.ThemeOntology.md#classic-draft-theme-ontology-d11--inheritance-is-wholesale-per-class-purpose-pair) | Decision | Inheritance is wholesale per (class, purpose) pair | Proposed | CLASSIC-DRAFT-theme-ontology |
-| [CLASSIC-DRAFT-theme-ontology-D12](theme/Log.ThemeOntology.md#classic-draft-theme-ontology-d12--storage-a-flat-list-not-an-alist-keyed-by-class) | Decision | Storage: a flat list, not an alist keyed by class | Proposed | CLASSIC-DRAFT-theme-ontology |
-| [CLASSIC-DRAFT-theme-ontology-D13](theme/Log.ThemeOntology.md#classic-draft-theme-ontology-d13--class-symbols-not-strings) | Decision | Class symbols, not strings | Proposed | CLASSIC-DRAFT-theme-ontology |
-| [CLASSIC-DRAFT-theme-ontology-D14](theme/Log.ThemeOntology.md#classic-draft-theme-ontology-d14--superclass-fallback-in-find-lens) | Decision | Superclass fallback in find-lens | Proposed | CLASSIC-DRAFT-theme-ontology |
 | [CLASSIC-DRAFT-typed-pages-D1](wiki/Log.TypedPages.md#classic-draft-typed-pages-d1--three-typed-subclasses-computer-cpu-person) | Decision | Three typed subclasses: computer, CPU, person | Accepted | CLASSIC-DRAFT-typed-pages |
 | [CLASSIC-DRAFT-typed-pages-D2](wiki/Log.TypedPages.md#classic-draft-typed-pages-d2--lens-specs-at-two-purposes-per-class) | Decision | Lens specs at two purposes per class | Accepted | CLASSIC-DRAFT-typed-pages |
 | [CLASSIC-DRAFT-typed-pages-D3](wiki/Log.TypedPages.md#classic-draft-typed-pages-d3--link-indicators-for-repl-output) | Decision | Link indicators for REPL output | Accepted | CLASSIC-DRAFT-typed-pages |
@@ -164,12 +164,12 @@ Table: Decision, open-question, and memo records in the CLASSIC namespace.
 | [CLASSIC-DRAFT-wiki-demo-D8](wiki/Log.WikiDemo.md#classic-draft-wiki-demo-d8--alist-infobox-not-typed-page-subclasses) | Decision | Alist infobox, not typed page subclasses | Proposed | CLASSIC-DRAFT-wiki-demo |
 | [CLASSIC-DRAFT-wiki-demo-D9](wiki/Log.WikiDemo.md#classic-draft-wiki-demo-d9--influenced-by-stored-influences-computed-on-demand) | Decision | influenced-by stored, influences computed on demand | Proposed | CLASSIC-DRAFT-wiki-demo |
 | [CLASSIC-DRAFT-wiki-demo-D10](wiki/Log.WikiDemo.md#classic-draft-wiki-demo-d10--alphabetical-list-pages-and-separate-recent-changes) | Decision | Alphabetical list-pages and separate recent-changes | Proposed | CLASSIC-DRAFT-wiki-demo |
-| [CLASSIC-DRAFT-with-persistence-D1](persistence/Log.WithPersistence.md#classic-draft-with-persistence-d1--a-with-persistence-macro) | Decision | A with-persistence macro | Proposed | CLASSIC-DRAFT-with-persistence |
-| [CLASSIC-DRAFT-with-persistence-D2](persistence/Log.WithPersistence.md#classic-draft-with-persistence-d2--persist-on-normal-exit-only) | Decision | Persist on normal exit only | Proposed | CLASSIC-DRAFT-with-persistence |
+| [CLASSIC-DRAFT-with-persistence-D1](persistence/Log.WithPersistence.md#classic-draft-with-persistence-d1--a-with-persistence-macro) | Decision | A with-persistence macro | Implemented | CLASSIC-DRAFT-with-persistence |
+| [CLASSIC-DRAFT-with-persistence-D2](persistence/Log.WithPersistence.md#classic-draft-with-persistence-d2--persist-on-normal-exit-only) | Decision | Persist on normal exit only | Implemented | CLASSIC-DRAFT-with-persistence |
 | [CLASSIC-DRAFT-with-persistence-D3](persistence/Log.WithPersistence.md#classic-draft-with-persistence-d3--one-macro-for-one-entity-or-several) | Decision | One macro for one entity or several | Proposed | CLASSIC-DRAFT-with-persistence |
-| [CLASSIC-DRAFT-with-persistence-D4](persistence/Log.WithPersistence.md#classic-draft-with-persistence-d4--the-bodys-return-values-are-preserved) | Decision | The body's return values are preserved | Proposed | CLASSIC-DRAFT-with-persistence |
-| [CLASSIC-DRAFT-with-persistence-D5](persistence/Log.WithPersistence.md#classic-draft-with-persistence-d5--no-automatic-clock-increment) | Decision | No automatic clock increment | Proposed | CLASSIC-DRAFT-with-persistence |
-| [CLASSIC-DRAFT-with-persistence-D6](persistence/Log.WithPersistence.md#classic-draft-with-persistence-d6--composition-with-validation-through-the-normal-path) | Decision | Composition with validation through the normal path | Proposed | CLASSIC-DRAFT-with-persistence |
+| [CLASSIC-DRAFT-with-persistence-D4](persistence/Log.WithPersistence.md#classic-draft-with-persistence-d4--the-bodys-return-values-are-preserved) | Decision | The body's return values are preserved | Implemented | CLASSIC-DRAFT-with-persistence |
+| [CLASSIC-DRAFT-with-persistence-D5](persistence/Log.WithPersistence.md#classic-draft-with-persistence-d5--no-automatic-clock-increment) | Decision | No automatic clock increment | Implemented | CLASSIC-DRAFT-with-persistence |
+| [CLASSIC-DRAFT-with-persistence-D6](persistence/Log.WithPersistence.md#classic-draft-with-persistence-d6--composition-with-validation-through-the-normal-path) | Decision | Composition with validation through the normal path | Implemented | CLASSIC-DRAFT-with-persistence |
 | [CLASSIC-DRAFT-archival-O1](survey/Survey.Archival.md#classic-draft-archival-o1--the-deletiondurability-policy-dial) | Open question | The deletion/durability policy dial | — | CLASSIC-DRAFT-archival |
 | [CLASSIC-DRAFT-archival-O2](survey/Survey.Archival.md#classic-draft-archival-o2--license-to-mirror-semantics) | Open question | License-to-mirror semantics | — | CLASSIC-DRAFT-archival |
 | [CLASSIC-DRAFT-archival-O3](survey/Survey.Archival.md#classic-draft-archival-o3--integrity-via-signed-origin-entities) | Open question | Integrity via signed origin entities | — | CLASSIC-DRAFT-archival |
