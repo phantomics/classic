@@ -21,6 +21,7 @@ Table: Documents in the CLASSIC namespace.
 | [CLASSIC-0009](model/Log.SlotValidation.md) | Slot Type Validation Development Log | Log | component | Accepted | model |
 | [CLASSIC-0010](theme/Log.ThemeOntology.md) | Theme Ontology Development Log | Log | component | Implemented | theme |
 | [CLASSIC-0011](theme/Ref.Theme.md) | Theme Ontology Reference | Ref | component | Current | theme |
+| [CLASSIC-0012](Log.SchemaFactorization.md) | Schema Factorization Development Log | Log | project | Implemented | schema |
 | [CLASSIC-DRAFT-archival](survey/Survey.Archival.md) | Content Archival and Durability Survey | Survey | project | Draft | — |
 | [CLASSIC-DRAFT-capability-exclusion](theme/Log.CapabilityExclusion.md) | Capability Exclusion Development Log | Log | component | Draft | theme |
 | [CLASSIC-DRAFT-compass-integration](survey/Survey.CompassIntegration.md) | Compass Documentation on Classic Survey | Survey | project | Draft | — |
@@ -38,7 +39,6 @@ Table: Documents in the CLASSIC namespace.
 | [CLASSIC-DRAFT-realtime-chat](survey/Survey.RealtimeChat.md) | Real-Time Chat Integration Survey | Survey | project | Draft | — |
 | [CLASSIC-DRAFT-schema](Ref.Schema.md) | Schema Architecture Reference | Ref | project | Draft | schema |
 | [CLASSIC-DRAFT-schema-contract](Spec.SchemaContract.md) | Schema Contract Specification | Spec | project | Draft | schema |
-| [CLASSIC-DRAFT-schema-factorization](Log.SchemaFactorization.md) | Schema Factorization Development Log | Log | project | Implemented | schema |
 | [CLASSIC-DRAFT-schema-pluggability](Survey.SchemaPluggability.md) | Schema Pluggability Survey | Survey | project | Draft | schema |
 | [CLASSIC-DRAFT-slot-fills](theme/Log.SlotFills.md) | Template Slot Fills Development Log | Log | component | Draft | theme |
 | [CLASSIC-DRAFT-ttrpg-host](survey/Survey.TTRPGHost.md) | Tabletop RPG Hosting (Play-by-Post) Survey | Survey | project | Draft | — |
@@ -95,6 +95,10 @@ Table: Decision, open-question, and memo records in the CLASSIC namespace.
 | [CLASSIC-D40](theme/Log.ThemeOntology.md#classic-d40--storage-a-flat-list-not-an-alist-keyed-by-class) | Decision | Storage: a flat list, not an alist keyed by class | Implemented | CLASSIC-0010 |
 | [CLASSIC-D41](theme/Log.ThemeOntology.md#classic-d41--class-symbols-not-strings) | Decision | Class symbols, not strings | Implemented | CLASSIC-0010 |
 | [CLASSIC-D42](theme/Log.ThemeOntology.md#classic-d42--superclass-fallback-in-find-lens) | Decision | Superclass fallback in find-lens | Implemented | CLASSIC-0010 |
+| [CLASSIC-D43](Log.SchemaFactorization.md#classic-d43--federation-protocol-in-core-federation-classes-in-the-schema) | Decision | Federation protocol in core, federation classes in the schema | Implemented | CLASSIC-0012 |
+| [CLASSIC-D44](Log.SchemaFactorization.md#classic-d44--the-schema-package-uses-core-core-does-not-use-the-schema) | Decision | The schema package uses core; core does not use the schema | Implemented | CLASSIC-0012 |
+| [CLASSIC-D45](Log.SchemaFactorization.md#classic-d45--the-reference-schema-stays-in-the-classic-repository) | Decision | The reference schema stays in the Classic repository | Implemented | CLASSIC-0012 |
+| [CLASSIC-D46](Log.SchemaFactorization.md#classic-d46--the-classicdistalpha-meta-system-is-deferred) | Decision | The classic.dist.alpha meta-system is deferred | Implemented | CLASSIC-0012 |
 | [CLASSIC-DRAFT-capability-exclusion-D1](theme/Log.CapabilityExclusion.md#classic-draft-capability-exclusion-d1--slot-name-excluded-capabilities) | Decision | Slot name: excluded-capabilities | Proposed | CLASSIC-DRAFT-capability-exclusion |
 | [CLASSIC-DRAFT-capability-exclusion-D2](theme/Log.CapabilityExclusion.md#classic-draft-capability-exclusion-d2--scope-ancestor-contributions-only) | Decision | Scope: ancestor contributions only | Proposed | CLASSIC-DRAFT-capability-exclusion |
 | [CLASSIC-DRAFT-capability-exclusion-D3](theme/Log.CapabilityExclusion.md#classic-draft-capability-exclusion-d3--exclusion-of-uninherited-capabilities-is-a-silent-no-op) | Decision | Exclusion of uninherited capabilities is a silent no-op | Proposed | CLASSIC-DRAFT-capability-exclusion |
@@ -139,10 +143,6 @@ Table: Decision, open-question, and memo records in the CLASSIC namespace.
 | [CLASSIC-DRAFT-persistence-backends-D2](persistence/Arch.PersistenceBackends.md#classic-draft-persistence-backends-d2--flat-file-cross-entity-queries-use-materialized-index-files) | Decision | Flat-file cross-entity queries use materialized index files | Proposed | CLASSIC-DRAFT-persistence-backends |
 | [CLASSIC-DRAFT-persistence-backends-D3](persistence/Arch.PersistenceBackends.md#classic-draft-persistence-backends-d3--container-level-bundling-for-high-volume-small-items) | Decision | Container-level bundling for high-volume small items | Proposed | CLASSIC-DRAFT-persistence-backends |
 | [CLASSIC-DRAFT-persistence-backends-D4](persistence/Arch.PersistenceBackends.md#classic-draft-persistence-backends-d4--the-triplestore-splits-relations-from-content) | Decision | The triplestore splits relations from content | Proposed | CLASSIC-DRAFT-persistence-backends |
-| [CLASSIC-DRAFT-schema-factorization-D1](Log.SchemaFactorization.md#classic-draft-schema-factorization-d1--federation-protocol-in-core-federation-classes-in-the-schema) | Decision | Federation protocol in core, federation classes in the schema | Accepted | CLASSIC-DRAFT-schema-factorization |
-| [CLASSIC-DRAFT-schema-factorization-D2](Log.SchemaFactorization.md#classic-draft-schema-factorization-d2--the-schema-package-uses-core-core-does-not-use-the-schema) | Decision | The schema package uses core; core does not use the schema | Accepted | CLASSIC-DRAFT-schema-factorization |
-| [CLASSIC-DRAFT-schema-factorization-D3](Log.SchemaFactorization.md#classic-draft-schema-factorization-d3--the-reference-schema-stays-in-the-classic-repository) | Decision | The reference schema stays in the Classic repository | Accepted | CLASSIC-DRAFT-schema-factorization |
-| [CLASSIC-DRAFT-schema-factorization-D4](Log.SchemaFactorization.md#classic-draft-schema-factorization-d4--the-classicdistalpha-meta-system-is-deferred) | Decision | The classic.dist.alpha meta-system is deferred | Accepted | CLASSIC-DRAFT-schema-factorization |
 | [CLASSIC-DRAFT-slot-fills-D1](theme/Log.SlotFills.md#classic-draft-slot-fills-d1--a-dedicated-clos-slot-on-classic-theme) | Decision | A dedicated CLOS slot on classic-theme | Proposed | CLASSIC-DRAFT-slot-fills |
 | [CLASSIC-DRAFT-slot-fills-D2](theme/Log.SlotFills.md#classic-draft-slot-fills-d2--slot-names-are-strings-global-across-tiers) | Decision | Slot names are strings, global across tiers | Proposed | CLASSIC-DRAFT-slot-fills |
 | [CLASSIC-DRAFT-slot-fills-D3](theme/Log.SlotFills.md#classic-draft-slot-fills-d3--inheritance-follows-the-bindings-precedent) | Decision | Inheritance follows the bindings precedent | Proposed | CLASSIC-DRAFT-slot-fills |

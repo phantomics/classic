@@ -13,7 +13,7 @@ reviewed:      2026-10-11
 provenance:
   assistant:   opencode
 relates-to:
-  - CLASSIC-DRAFT-schema-factorization
+  - CLASSIC-0012
   - CLASSIC-DRAFT-schema
   - CLASSIC-DRAFT-schema-contract
   - CLASSIC-DRAFT-general-model
@@ -40,7 +40,7 @@ engine and foundation through thin distribution shims.
 ## Problem
 
 The schema factorization completed in May 2026
-([CLASSIC-DRAFT-schema-factorization](Log.SchemaFactorization.md)) successfully separated
+([CLASSIC-0012](Log.SchemaFactorization.md)) successfully separated
 the ontological vocabulary (`classic.schema.alpha`) from the framework
 core (`classic`) at the package level. That refactor was the necessary
 first step. But several capabilities it pointed toward were still
@@ -265,7 +265,7 @@ Each module gained its own `package.lisp`:
 - **Schema** added `(:nicknames #:classic.schema)` to its package
   definition. The export list and `:use` list otherwise stayed as
   they were after the May factorization
-  ([CLASSIC-DRAFT-schema-factorization](Log.SchemaFactorization.md)).
+  ([CLASSIC-0012](Log.SchemaFactorization.md)).
 - **Engine** declared `(:use #:cl #:classic)` — notably not
   `:use #:classic.schema.alpha`. The decision to fully qualify schema
   references throughout engine source (rather than `:use` the schema)
@@ -356,7 +356,7 @@ could arise.
 #### Stray engine code left in schema files
 
 When the May factorization
-([CLASSIC-DRAFT-schema-factorization](Log.SchemaFactorization.md)) moved engines out of schema files, some
+([CLASSIC-0012](Log.SchemaFactorization.md)) moved engines out of schema files, some
 engine-side definitions were inadvertently duplicated rather than
 moved. `mod/classic.schema.alpha/workflow-classes.lisp`, as it stood
 during the work (`mod/classic.schema.alpha/workflow-classes.lisp@d59df1b`),

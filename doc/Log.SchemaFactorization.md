@@ -1,5 +1,5 @@
 ---
-id:            CLASSIC-DRAFT-schema-factorization
+id:            CLASSIC-0012
 title:         Schema Factorization Development Log
 genre:         Log
 scope:         project
@@ -20,10 +20,10 @@ relates-to:
   - CLASSIC-0004
   - CLASSIC-DRAFT-dist-factorization
 decisions:
-  - CLASSIC-DRAFT-schema-factorization-D1
-  - CLASSIC-DRAFT-schema-factorization-D2
-  - CLASSIC-DRAFT-schema-factorization-D3
-  - CLASSIC-DRAFT-schema-factorization-D4
+  - CLASSIC-D43
+  - CLASSIC-D44
+  - CLASSIC-D45
+  - CLASSIC-D46
 ---
 
 # Schema Factorization: Development Log
@@ -89,9 +89,9 @@ framework that operates on it.
 The following questions were settled through discussion before
 implementation began.
 
-### CLASSIC-DRAFT-schema-factorization-D1 — Federation protocol in core, federation classes in the schema
+### CLASSIC-D43 — Federation protocol in core, federation classes in the schema
 
-**Status:** Accepted
+**Status:** Implemented
 
 **Context:** The federation system contains both a protocol (transport
 abstraction, peer discovery, syndication operations, content
@@ -117,9 +117,9 @@ classic-class` and `:persistence` slot annotations is schema; any
 function or generic that operates on such classes via accessors is
 core.
 
-### CLASSIC-DRAFT-schema-factorization-D2 — The schema package uses core; core does not use the schema
+### CLASSIC-D44 — The schema package uses core; core does not use the schema
 
-**Status:** Accepted
+**Status:** Implemented
 
 **Context:** Two packages with mutual `:use` relationships are legal but
 operationally confusing. The schema needs the `classic-class`
@@ -145,9 +145,9 @@ trivially.
   signalled name conflicts (see
   [Name conflicts on `:use`](#name-conflicts-on-use)).
 
-### CLASSIC-DRAFT-schema-factorization-D3 — The reference schema stays in the Classic repository
+### CLASSIC-D45 — The reference schema stays in the Classic repository
 
-**Status:** Accepted
+**Status:** Implemented
 
 **Context:** A fully separated schema would live in its own Git repository as
 `classic-schema-alpha`. The reference schema demonstrates the framework's
@@ -168,9 +168,9 @@ the reference and lives with the reference framework.
 [CLASSIC-DRAFT-dist-factorization](Log.DistFactorization.md), later moved the
 directory to `mod/classic.schema.alpha/`, still in this repository.
 
-### CLASSIC-DRAFT-schema-factorization-D4 — The classic.dist.alpha meta-system is deferred
+### CLASSIC-D46 — The classic.dist.alpha meta-system is deferred
 
-**Status:** Accepted
+**Status:** Implemented
 
 **Context:** The original plan included a `classic.dist.alpha` meta-system that
 would compose `classic`, `classic.schema.alpha`, and a basic imprint
@@ -352,7 +352,7 @@ conflicted with internal `uri` argument names in core functions
 that had been interned in the `classic` package.
 
 This was the trigger to commit fully to explicit qualification in
-core (CLASSIC-DRAFT-schema-factorization-D2). Once the conflict was
+core (CLASSIC-D44). Once the conflict was
 avoided by not `:use`ing the schema from core, the loading proceeded
 cleanly.
 

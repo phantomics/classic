@@ -54,3 +54,8 @@
 (:id "CLASSIC-D41" :kind :decision :draft "CLASSIC-DRAFT-theme-ontology-D13" :host "CLASSIC-0010" :date "2026-10-13" :by "Andrew Sengul")
 (:id "CLASSIC-D42" :kind :decision :draft "CLASSIC-DRAFT-theme-ontology-D14" :host "CLASSIC-0010" :date "2026-10-13" :by "Andrew Sengul")
 (:id "CLASSIC-0011" :kind :document :draft "CLASSIC-DRAFT-theme" :path "doc/theme/Ref.Theme.md" :date "2026-10-13" :by "Andrew Sengul")
+(:id "CLASSIC-0012" :kind :document :draft "CLASSIC-DRAFT-schema-factorization" :path "doc/Log.SchemaFactorization.md" :date "2026-10-13" :by "Andrew Sengul")
+(:id "CLASSIC-D43" :kind :decision :draft "CLASSIC-DRAFT-schema-factorization-D1" :host "CLASSIC-0012" :date "2026-10-13" :by "Andrew Sengul")
+(:id "CLASSIC-D44" :kind :decision :draft "CLASSIC-DRAFT-schema-factorization-D2" :host "CLASSIC-0012" :date "2026-10-13" :by "Andrew Sengul")
+(:id "CLASSIC-D45" :kind :decision :draft "CLASSIC-DRAFT-schema-factorization-D3" :host "CLASSIC-0012" :date "2026-10-13" :by "Andrew Sengul")
+(:id "CLASSIC-D46" :kind :decision :draft "CLASSIC-DRAFT-schema-factorization-D4" :host "CLASSIC-0012" :date "2026-10-13" :by "Andrew Sengul")

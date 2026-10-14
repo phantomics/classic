@@ -356,12 +356,12 @@ Table: Files added or changed in commits `55c2390`, `dfeb862`, `fdad517`, and `5
 The first Phase 3 batch converted the two schema-layer Logs and captioned the
 schema references.
 
-- **[CLASSIC-DRAFT-schema-factorization](Log.SchemaFactorization.md).** Its
-  four numbered decisions became CLASSIC-DRAFT-schema-factorization-D1 to
-  CLASSIC-DRAFT-schema-factorization-D4. The alternatives come from the Log's
+- **[CLASSIC-0012](Log.SchemaFactorization.md).** Its
+  four numbered decisions became CLASSIC-D43 to
+  CLASSIC-D46. The alternatives come from the Log's
   own text, including the rejected re-export and the abandoned core `:use` of
   the schema that its Pitfalls section describes;
-  CLASSIC-DRAFT-schema-factorization-D1 records none. Its seven
+  CLASSIC-D43 records none. Its seven
   phases are pinned to the commits that hold them: `e9f2af1` for phases 1–3,
   `7ad1602` for phases 4–7, and `88af7f2` for the files as they were before.
   The Pitfalls section became a subsection of Implementation, and the Files
@@ -384,7 +384,7 @@ schema references.
 - **Migration notes.** Where a converted Log needed a statement the original
   does not make, it is marked `*Migration note (2026-10-11):*`: neither Log
   names the command that ran its tests, and two of
-  CLASSIC-DRAFT-schema-factorization's decisions were later carried out by the
+  CLASSIC-0012's decisions were later carried out by the
   dist factorization.
 
 Verification: `compass check --federation` reports 0 errors and 0 warnings
@@ -579,7 +579,7 @@ Table: Decision records created in Phase 3, by Log.
 
 | Log | Records | Pinned to |
 |---|---|---|
-| CLASSIC-DRAFT-schema-factorization | 4 | `e9f2af1`, `7ad1602`, `e725ef0` |
+| CLASSIC-0012 | 4 | `e9f2af1`, `7ad1602`, `e725ef0` |
 | CLASSIC-DRAFT-dist-factorization | 5 | `a461f4e`, `d59df1b`, `e0c3b72` |
 | CLASSIC-0003 | 3 | `137cf8a` |
 | CLASSIC-DRAFT-general-model | 7 | `2bf61ce`, `c099e7d` |

@@ -15,7 +15,7 @@ provenance:
   assistant:   opencode
 relates-to:
   - CLASSIC-0005
-  - CLASSIC-DRAFT-schema-factorization
+  - CLASSIC-0012
 decisions:
   - CLASSIC-D17
   - CLASSIC-D18
@@ -846,7 +846,7 @@ without entangling it with the `:create-class` enhancement.
 
 The schema migration system was the chief design pressure behind the
 schema/core factorization completed on 2026-05-29 (see
-[CLASSIC-DRAFT-schema-factorization](../Log.SchemaFactorization.md)). Factoring the migration classes
+[CLASSIC-0012](../Log.SchemaFactorization.md)). Factoring the migration classes
 out of the core `classic` package and into `classic.schema.alpha`
 confirmed that the migration system's design holds up under
 relocation: no protocol generics needed to change, no client code
@@ -876,5 +876,5 @@ body was complete).
 
 *Migration note (2026-10-11):* the factorization's code is in commits
 `e9f2af1` to `e725ef0`, recorded in
-[CLASSIC-DRAFT-schema-factorization](../Log.SchemaFactorization.md); this
+[CLASSIC-0012](../Log.SchemaFactorization.md); this
 update's text was added with its documentation, in `e0c3b72`.

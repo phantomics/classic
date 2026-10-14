@@ -14,7 +14,7 @@ relates-to:
   - CLASSIC-DRAFT-schema-contract
   - CLASSIC-DRAFT-new-schema
   - CLASSIC-DRAFT-schema-pluggability
-  - CLASSIC-DRAFT-schema-factorization
+  - CLASSIC-0012
   - CLASSIC-DRAFT-dist-factorization
   - CLASSIC-0005
 ---
