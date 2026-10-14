@@ -10,8 +10,8 @@ status:        Draft
 provenance:
   assistant:   opencode
 relates-to:
-  - CLASSIC-DRAFT-model
-  - CLASSIC-DRAFT-workflow
+  - CLASSIC-0007
+  - CLASSIC-0008
   - CLASSIC-DRAFT-schema
   - CLASSIC-DRAFT-dist-factorization
 decisions:

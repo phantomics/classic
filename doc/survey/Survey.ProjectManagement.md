@@ -48,8 +48,8 @@ application domain that shaped Rails, on a substrate that makes ontological rath
 than web-framework commitments, is the cleanest available test of whether
 Classic's "general-purpose from the start" approach avoids the convention lock-in
 Rails accreted. It assumes the ontological model
-([CLASSIC-DRAFT-model](../model/Ref.Model.md)), the workflow engine
-([CLASSIC-DRAFT-workflow](../model/Ref.Workflow.md)), the forum imprint's thread-bearing pattern
+([CLASSIC-0007](../model/Ref.Model.md)), the workflow engine
+([CLASSIC-0008](../model/Ref.Workflow.md)), the forum imprint's thread-bearing pattern
 ([CLASSIC-DRAFT-forum](../forum/Guide.Forum.md)), the federation and co-hosting model
 ([CLASSIC-0001](../federation/Guide.FederationDemo.md)), the persistence protocol
 ([CLASSIC-0006](../persistence/Ref.Persistence.md)), the composer's aggregate tier,
@@ -447,8 +447,8 @@ deployment-mode framing and grassroots adoption strategy of the sibling surveys
 [CLASSIC-DRAFT-usenet](Survey.Usenet.md),
 [CLASSIC-DRAFT-distributed-moderation](Survey.DistributedModeration.md),
 [CLASSIC-DRAFT-archival](Survey.Archival.md)). It depends on the ontological model
-([CLASSIC-DRAFT-model](../model/Ref.Model.md)), the workflow engine
-([CLASSIC-DRAFT-workflow](../model/Ref.Workflow.md)), the federation model
+([CLASSIC-0007](../model/Ref.Model.md)), the workflow engine
+([CLASSIC-0008](../model/Ref.Workflow.md)), the federation model
 ([CLASSIC-0001](../federation/Guide.FederationDemo.md)), and the persistence protocol
 ([CLASSIC-0006](../persistence/Ref.Persistence.md)).
 

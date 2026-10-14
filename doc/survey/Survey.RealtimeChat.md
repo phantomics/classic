@@ -15,7 +15,7 @@ relates-to:
   - CLASSIC-DRAFT-x400
   - CLASSIC-DRAFT-forum
   - CLASSIC-0001
-  - CLASSIC-DRAFT-workflow
+  - CLASSIC-0008
   - CLASSIC-DRAFT-ttrpg-host
   - CLASSIC-DRAFT-usenet
 cites:
@@ -69,7 +69,7 @@ that approving a pull request or submitting a sidebar entry can happen in the
 conversation where it was requested. It assumes the forum imprint
 ([CLASSIC-DRAFT-forum](../forum/Guide.Forum.md)), the federation model
 ([CLASSIC-0001](../federation/Guide.FederationDemo.md)), the
-workflow engine ([CLASSIC-DRAFT-workflow](../model/Ref.Workflow.md)), the
+workflow engine ([CLASSIC-0008](../model/Ref.Workflow.md)), the
 composer's operative tier, and the project-management imprint surveyed in
 [CLASSIC-DRAFT-project-management](Survey.ProjectManagement.md). It asks whether
 Classic should offer this integration; it does not decide.
@@ -517,7 +517,7 @@ meets the same directory question as
 [CLASSIC-DRAFT-usenet-O1](Survey.Usenet.md#classic-draft-usenet-o1--forum-naming-convention-and-directory-federation).
 The solicited-contribution pattern relates the forum imprint's threads
 ([CLASSIC-DRAFT-forum](../forum/Guide.Forum.md)), the workflow engine
-([CLASSIC-DRAFT-workflow](../model/Ref.Workflow.md)), and the TTRPG action flow.
+([CLASSIC-0008](../model/Ref.Workflow.md)), and the TTRPG action flow.
 Federation alignment rests on
 [CLASSIC-0001](../federation/Guide.FederationDemo.md).
 [CLASSIC-DRAFT-x400](../Eval.X400.md) evaluates an earlier structured-messaging

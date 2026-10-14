@@ -9,10 +9,10 @@ status:        Draft
 provenance:
   assistant:   opencode
 relates-to:
-  - CLASSIC-DRAFT-model
+  - CLASSIC-0007
   - CLASSIC-0006
   - CLASSIC-0001
-  - CLASSIC-DRAFT-workflow
+  - CLASSIC-0008
   - CLASSIC-DRAFT-ttrpg-host
   - STACKS-DRAFT-stacks-and-classic
 cites:
@@ -50,11 +50,11 @@ find the music. It is a conceptual sketch, not a build plan; it records
 why the idea is a natural fit for Classic's model, where music departs
 from the substrate's usual assumptions, and where the genuine limits
 lie. It assumes the ontological model
-([CLASSIC-DRAFT-model](../model/Ref.Model.md)), the persistence protocol and
+([CLASSIC-0007](../model/Ref.Model.md)), the persistence protocol and
 its `:blob` strategy ([CLASSIC-0006](../persistence/Ref.Persistence.md)),
 the federation and co-hosting model
 ([CLASSIC-0001](../federation/Guide.FederationDemo.md)), the
-workflow engine ([CLASSIC-DRAFT-workflow](../model/Ref.Workflow.md)), the
+workflow engine ([CLASSIC-0008](../model/Ref.Workflow.md)), the
 composer pipeline, and the planned Seed authoring integration.
 
 It also follows the division of labour between Classic and Stacks recorded

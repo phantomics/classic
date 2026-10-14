@@ -1,18 +1,22 @@
 ---
-id:            CLASSIC-DRAFT-model
+id:            CLASSIC-0007
 title:         Ontological Model Reference
 genre:         Ref
 scope:         component
 project:       Classic
 component:     model
 language:      en
-status:        Draft
+status:        Current
+authors:
+  - Andrew Sengul
+approved-by:   Andrew Sengul
+reviewed:      2026-10-13
 api-version:   "0.1.0"
 provenance:
   assistant:   opencode
 relates-to:
   - CLASSIC-DRAFT-schema
-  - CLASSIC-DRAFT-workflow
+  - CLASSIC-0008
   - CLASSIC-0003
   - CLASSIC-DRAFT-general-model
   - CLASSIC-DRAFT-slot-validation

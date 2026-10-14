@@ -14,8 +14,8 @@ reviewed:      2026-10-12
 provenance:
   assistant:   opencode
 relates-to:
-  - CLASSIC-DRAFT-model
-  - CLASSIC-DRAFT-workflow
+  - CLASSIC-0007
+  - CLASSIC-0008
   - CLASSIC-0006
 decisions:
   - CLASSIC-D14

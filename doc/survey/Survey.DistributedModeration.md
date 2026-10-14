@@ -47,7 +47,7 @@ model applies to any forum genre (phpBB, Reddit, imageboard, Hacker News), not
 only to the Usenet-analog it was first raised alongside. It assumes the forum
 imprint ([CLASSIC-DRAFT-forum](../forum/Guide.Forum.md)), the federation model
 ([CLASSIC-0001](../federation/Guide.FederationDemo.md)), the workflow engine
-([CLASSIC-DRAFT-workflow](../model/Ref.Workflow.md)), the composer's aggregate tier, and the
+([CLASSIC-0008](../model/Ref.Workflow.md)), the composer's aggregate tier, and the
 planned lens system and signed-federation-events work. It asks whether Classic
 should offer this model; it does not decide.
 

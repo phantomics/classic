@@ -9,8 +9,8 @@ status:        Draft
 provenance:
   assistant:   opencode
 relates-to:
-  - CLASSIC-DRAFT-model
-  - CLASSIC-DRAFT-workflow
+  - CLASSIC-0007
+  - CLASSIC-0008
   - CLASSIC-DRAFT-forum
   - CLASSIC-0001
   - CLASSIC-0006
@@ -44,8 +44,8 @@ and point-pool expenditures. It is a conceptual sketch, not a build
 plan; it records why the idea is an unusually complete stress test of
 Classic's model, why the play-by-post mode fits the substrate's existing
 strengths, and where the genuine limits lie. It assumes the ontological
-model ([CLASSIC-DRAFT-model](../model/Ref.Model.md)), the workflow engine
-([CLASSIC-DRAFT-workflow](../model/Ref.Workflow.md)), the forum imprint
+model ([CLASSIC-0007](../model/Ref.Model.md)), the workflow engine
+([CLASSIC-0008](../model/Ref.Workflow.md)), the forum imprint
 ([CLASSIC-DRAFT-forum](../forum/Guide.Forum.md)), the federation and
 co-hosting model ([CLASSIC-0001](../federation/Guide.FederationDemo.md)),
 the persistence protocol

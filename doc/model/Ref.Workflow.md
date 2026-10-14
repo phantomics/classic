@@ -1,17 +1,21 @@
 ---
-id:            CLASSIC-DRAFT-workflow
+id:            CLASSIC-0008
 title:         Workflow Reference
 genre:         Ref
 scope:         component
 project:       Classic
 component:     model
 language:      en
-status:        Draft
+status:        Current
+authors:
+  - Andrew Sengul
+approved-by:   Andrew Sengul
+reviewed:      2026-10-13
 api-version:   "0.1.0"
 provenance:
   assistant:   opencode
 relates-to:
-  - CLASSIC-DRAFT-model
+  - CLASSIC-0007
   - CLASSIC-0003
 ---
 

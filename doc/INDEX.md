@@ -16,6 +16,8 @@ Table: Documents in the CLASSIC namespace.
 | [CLASSIC-0004](migration/Log.SchemaMigration.md) | Schema Migration Development Log | Log | component | Accepted | migration |
 | [CLASSIC-0005](migration/Ref.Migration.md) | Schema Migration Reference | Ref | component | Current | migration |
 | [CLASSIC-0006](persistence/Ref.Persistence.md) | Persistence Reference | Ref | component | Current | persistence |
+| [CLASSIC-0007](model/Ref.Model.md) | Ontological Model Reference | Ref | component | Current | model |
+| [CLASSIC-0008](model/Ref.Workflow.md) | Workflow Reference | Ref | component | Current | model |
 | [CLASSIC-DRAFT-archival](survey/Survey.Archival.md) | Content Archival and Durability Survey | Survey | project | Draft | — |
 | [CLASSIC-DRAFT-capability-exclusion](theme/Log.CapabilityExclusion.md) | Capability Exclusion Development Log | Log | component | Draft | theme |
 | [CLASSIC-DRAFT-compass-integration](survey/Survey.CompassIntegration.md) | Compass Documentation on Classic Survey | Survey | project | Draft | — |
@@ -26,7 +28,6 @@ Table: Documents in the CLASSIC namespace.
 | [CLASSIC-DRAFT-forum](forum/Guide.Forum.md) | Forum Preset Guide | Guide (tutorial) | component | Draft | forum |
 | [CLASSIC-DRAFT-forum-demo](forum/Log.ForumDemo.md) | Forum Demo Development Log | Log | component | Draft | forum |
 | [CLASSIC-DRAFT-general-model](model/Log.GeneralModel.md) | General Publication Models Development Log | Log | component | Draft | model |
-| [CLASSIC-DRAFT-model](model/Ref.Model.md) | Ontological Model Reference | Ref | component | Draft | model |
 | [CLASSIC-DRAFT-music-publishing](survey/Survey.MusicPublishing.md) | Music Publishing Survey | Survey | project | Draft | — |
 | [CLASSIC-DRAFT-new-schema](Guide.NewSchema.md) | Creating a New Schema Guide | Guide (howto) | project | Draft | schema |
 | [CLASSIC-DRAFT-persistence-backends](persistence/Arch.PersistenceBackends.md) | The Persistence Backends Architecture | Architecture | component | Draft | persistence |
@@ -46,7 +47,6 @@ Table: Documents in the CLASSIC namespace.
 | [CLASSIC-DRAFT-wiki](wiki/Guide.Wiki.md) | Wiki Preset Guide | Guide (tutorial) | component | Draft | wiki |
 | [CLASSIC-DRAFT-wiki-demo](wiki/Log.WikiDemo.md) | Wiki Demo Development Log | Log | component | Draft | wiki |
 | [CLASSIC-DRAFT-with-persistence](persistence/Log.WithPersistence.md) | with-persistence Development Log | Log | component | Draft | persistence |
-| [CLASSIC-DRAFT-workflow](model/Ref.Workflow.md) | Workflow Reference | Ref | component | Draft | model |
 | [CLASSIC-DRAFT-x400](Eval.X400.md) | X.400 Prior-Art Evaluation | Eval (prior-art) | project | Draft | — |
 
 Table: Decision, open-question, and memo records in the CLASSIC namespace.

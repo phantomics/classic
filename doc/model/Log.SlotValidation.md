@@ -10,7 +10,7 @@ status:        Draft
 provenance:
   assistant:   opencode
 relates-to:
-  - CLASSIC-DRAFT-model
+  - CLASSIC-0007
 decisions:
   - CLASSIC-DRAFT-slot-validation-D1
 ---
