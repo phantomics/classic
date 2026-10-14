@@ -170,7 +170,7 @@ Two additional worked examples are available as REPL walkthroughs:
 - **Forum** ([CLASSIC-0019](doc/forum/Guide.Forum.md)) — a
   phpBB-style discussion board with members, threads, reaction
   stickers, quotes, and moderation.
-- **Wiki** ([CLASSIC-DRAFT-wiki](doc/wiki/Guide.Wiki.md)) — a
+- **Wiki** ([CLASSIC-0021](doc/wiki/Guide.Wiki.md)) — a
   cross-referencing knowledge base with `[[wiki-links]]`, broken-link
   healing, infobox sidebars, influence lineage, and revision history.
 

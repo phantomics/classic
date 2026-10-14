@@ -30,6 +30,7 @@ Table: Documents in the CLASSIC namespace.
 | [CLASSIC-0018](model/Log.GeneralModel.md) | General Publication Models Development Log | Log | component | Implemented | model |
 | [CLASSIC-0019](forum/Guide.Forum.md) | Forum Preset Guide | Guide (tutorial) | component | Current | forum |
 | [CLASSIC-0020](forum/Log.ForumDemo.md) | Forum Demo Development Log | Log | component | Implemented | forum |
+| [CLASSIC-0021](wiki/Guide.Wiki.md) | Wiki Preset Guide | Guide (tutorial) | component | Current | wiki |
 | [CLASSIC-DRAFT-archival](survey/Survey.Archival.md) | Content Archival and Durability Survey | Survey | project | Draft | — |
 | [CLASSIC-DRAFT-compass-integration](survey/Survey.CompassIntegration.md) | Compass Documentation on Classic Survey | Survey | project | Draft | — |
 | [CLASSIC-DRAFT-compass-migration](Plan.CompassMigration.md) | Compass Migration Plan | Plan | project | Implemented | — |
@@ -44,7 +45,6 @@ Table: Documents in the CLASSIC namespace.
 | [CLASSIC-DRAFT-ttrpg-host](survey/Survey.TTRPGHost.md) | Tabletop RPG Hosting (Play-by-Post) Survey | Survey | project | Draft | — |
 | [CLASSIC-DRAFT-typed-pages](wiki/Log.TypedPages.md) | Typed Page Classes Development Log | Log | component | Implemented | wiki |
 | [CLASSIC-DRAFT-usenet](survey/Survey.Usenet.md) | Usenet-Analog Discussion Hosting Survey | Survey | project | Draft | — |
-| [CLASSIC-DRAFT-wiki](wiki/Guide.Wiki.md) | Wiki Preset Guide | Guide (tutorial) | component | Draft | wiki |
 | [CLASSIC-DRAFT-wiki-demo](wiki/Log.WikiDemo.md) | Wiki Demo Development Log | Log | component | Draft | wiki |
 | [CLASSIC-DRAFT-with-persistence](persistence/Log.WithPersistence.md) | with-persistence Development Log | Log | component | Accepted | persistence |
 | [CLASSIC-DRAFT-x400](Eval.X400.md) | X.400 Prior-Art Evaluation | Eval (prior-art) | project | Draft | — |

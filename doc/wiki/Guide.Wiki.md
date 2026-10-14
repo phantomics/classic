@@ -1,5 +1,5 @@
 ---
-id:            CLASSIC-DRAFT-wiki
+id:            CLASSIC-0021
 title:         Wiki Preset Guide
 genre:         Guide
 subtype:       tutorial
@@ -7,7 +7,11 @@ scope:         component
 project:       Classic
 component:     wiki
 language:      en
-status:        Draft
+status:        Current
+authors:
+  - Andrew Sengul
+approved-by:   Andrew Sengul
+reviewed:      2026-10-14
 api-version:   "0.1.0"
 provenance:
   assistant:   opencode

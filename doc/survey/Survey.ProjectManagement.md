@@ -332,7 +332,7 @@ ticket–branch–merge relationships; they are substrate data kept current by e
 The strongest demonstration of federation and workflow composing is that the
 project's documentation writes itself. Every branch creation, commit notification,
 review approval, and merge is a signed event; a wiki imprint
-([CLASSIC-DRAFT-wiki](../wiki/Guide.Wiki.md)) consumes the event stream and generates a live page
+([CLASSIC-0021](../wiki/Guide.Wiki.md)) consumes the event stream and generates a live page
 per task: who started it, from what branch, which commits landed, who reviewed it,
 when it merged, and which files changed. The page is a derived view of the event
 graph, not a document someone must remember to author. Because the wiki page is a
@@ -440,7 +440,7 @@ Structurally, the PM imprint is closest to the TTRPG hosting survey
 game actions, milestones are sessions, the project lead is the GM, and both use the
 thread-bearing mixin and role-gated workflow in the same way. It composes with the
 forum imprint ([CLASSIC-0019](../forum/Guide.Forum.md)) for task discussions, and with the
-blog and wiki ([CLASSIC-DRAFT-wiki](../wiki/Guide.Wiki.md)) imprints for announcements and
+blog and wiki ([CLASSIC-0021](../wiki/Guide.Wiki.md)) imprints for announcements and
 documentation. It shares the
 deployment-mode framing and grassroots adoption strategy of the sibling surveys
 ([CLASSIC-DRAFT-music-publishing](Survey.MusicPublishing.md),

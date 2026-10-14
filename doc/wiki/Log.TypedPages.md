@@ -15,7 +15,7 @@ provenance:
   assistant:   opencode
 relates-to:
   - CLASSIC-DRAFT-wiki-demo
-  - CLASSIC-DRAFT-wiki
+  - CLASSIC-0021
 decisions:
   - CLASSIC-DRAFT-typed-pages-D1
   - CLASSIC-DRAFT-typed-pages-D2

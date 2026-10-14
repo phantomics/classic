@@ -96,3 +96,4 @@
 (:id "CLASSIC-D73" :kind :decision :draft "CLASSIC-DRAFT-forum-demo-D5" :host "CLASSIC-0020" :date "2026-10-13" :by "Andrew Sengul")
 (:id "CLASSIC-D74" :kind :decision :draft "CLASSIC-DRAFT-forum-demo-D6" :host "CLASSIC-0020" :date "2026-10-13" :by "Andrew Sengul")
 (:id "CLASSIC-D75" :kind :decision :draft "CLASSIC-DRAFT-forum-demo-D7" :host "CLASSIC-0020" :date "2026-10-13" :by "Andrew Sengul")
+(:id "CLASSIC-0021" :kind :document :draft "CLASSIC-DRAFT-wiki" :path "doc/wiki/Guide.Wiki.md" :date "2026-10-14" :by "Andrew Sengul")
