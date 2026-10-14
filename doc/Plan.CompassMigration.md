@@ -393,7 +393,7 @@ ten-step walkthrough, and an afterword exploring the limits of pluggability.
 [CLASSIC-0014](Spec.SchemaContract.md) and adopts RFC 2119
 keywords. The walkthrough becomes
 [CLASSIC-0033](Guide.NewSchema.md), a how-to Guide, and the
-afterword becomes [CLASSIC-DRAFT-schema-pluggability](Survey.SchemaPluggability.md),
+afterword becomes [CLASSIC-0035](Survey.SchemaPluggability.md),
 with its trigger for the refactor as an open question and a note on what the
 dist factorization has since changed. Each "must" became MUST, except the
 requirement for `uri-namespace-prefix` methods, which became SHOULD: the

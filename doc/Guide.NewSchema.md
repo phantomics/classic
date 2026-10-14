@@ -13,7 +13,7 @@ provenance:
   assistant:   opencode
 relates-to:
   - CLASSIC-0014
-  - CLASSIC-DRAFT-schema-pluggability
+  - CLASSIC-0035
   - CLASSIC-0013
 ---
 
@@ -66,7 +66,7 @@ In `packages.lisp`:
 Today, this package must be named `classic.schema.alpha` for the
 existing core engines' qualified references to resolve. The package
 name is the hard part of the contract. See
-[CLASSIC-DRAFT-schema-pluggability](Survey.SchemaPluggability.md) for what
+[CLASSIC-0035](Survey.SchemaPluggability.md) for what
 would change this.
 
 ### Step 2: Define the base classes

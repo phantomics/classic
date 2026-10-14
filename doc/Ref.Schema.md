@@ -17,7 +17,7 @@ provenance:
 relates-to:
   - CLASSIC-0014
   - CLASSIC-0033
-  - CLASSIC-DRAFT-schema-pluggability
+  - CLASSIC-0035
   - CLASSIC-0012
   - CLASSIC-0015
   - CLASSIC-0005
@@ -228,7 +228,7 @@ The qualified class names make explicit which schema's classes the
 engine creates. If a different schema is loaded, these references
 would need to be updated (or the engine could be refactored to use
 configurable class names — see the future direction in
-[CLASSIC-DRAFT-schema-pluggability](Survey.SchemaPluggability.md)).
+[CLASSIC-0035](Survey.SchemaPluggability.md)).
 
 
 ## File Organization

@@ -191,3 +191,5 @@
 (:id "CLASSIC-D106" :kind :decision :draft "CLASSIC-DRAFT-persistence-backends-D4" :host "CLASSIC-0034" :date "2026-10-14" :by "Andrew Sengul")
 (:id "CLASSIC-O49" :kind :open-question :draft "CLASSIC-DRAFT-persistence-backends-O1" :host "CLASSIC-0034" :date "2026-10-14" :by "Andrew Sengul")
 (:id "CLASSIC-O50" :kind :open-question :draft "CLASSIC-DRAFT-persistence-backends-O2" :host "CLASSIC-0034" :date "2026-10-14" :by "Andrew Sengul")
+(:id "CLASSIC-0035" :kind :document :draft "CLASSIC-DRAFT-schema-pluggability" :path "doc/Survey.SchemaPluggability.md" :date "2026-10-14" :by "Andrew Sengul")
+(:id "CLASSIC-O51" :kind :open-question :draft "CLASSIC-DRAFT-schema-pluggability-O1" :host "CLASSIC-0035" :date "2026-10-14" :by "Andrew Sengul")

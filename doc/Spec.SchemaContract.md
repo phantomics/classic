@@ -17,7 +17,7 @@ provenance:
 relates-to:
   - CLASSIC-0013
   - CLASSIC-0033
-  - CLASSIC-DRAFT-schema-pluggability
+  - CLASSIC-0035
 cites:
   - title:   Key words for use in RFCs to Indicate Requirement Levels
     locator: RFC 2119
@@ -36,7 +36,7 @@ distribution: specific class names, slot names, and method signatures
 that the core engines reference. A walkthrough of satisfying it is
 [CLASSIC-0033](Guide.NewSchema.md), and the limits of this
 approach, with what would be needed to make the system fully name-agnostic,
-are surveyed in [CLASSIC-DRAFT-schema-pluggability](Survey.SchemaPluggability.md).
+are surveyed in [CLASSIC-0035](Survey.SchemaPluggability.md).
 
 The key words MUST, MUST NOT, SHOULD, SHOULD NOT, and MAY in this document
 are to be interpreted as described in RFC 2119.
@@ -62,7 +62,7 @@ For a new schema to work with the existing core engines, it MUST:
 The simplest way to satisfy these requirements today is to use the
 package name `classic.schema.alpha`. Until the engines are refactored
 to be name-agnostic (see
-[CLASSIC-DRAFT-schema-pluggability](Survey.SchemaPluggability.md)), this is a
+[CLASSIC-0035](Survey.SchemaPluggability.md)), this is a
 hard requirement.
 
 

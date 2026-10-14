@@ -1,12 +1,16 @@
 ---
-id:            CLASSIC-DRAFT-schema-pluggability
+id:            CLASSIC-0035
 title:         Schema Pluggability Survey
 genre:         Survey
 scope:         project
 project:       Classic
 component:     schema
 language:      en
-status:        Draft
+status:        Implemented
+authors:
+  - Andrew Sengul
+approved-by:   Andrew Sengul
+reviewed:      2026-10-13
 provenance:
   assistant:   opencode
 relates-to:
@@ -15,7 +19,7 @@ relates-to:
   - CLASSIC-0013
   - CLASSIC-0015
 open-questions:
-  - CLASSIC-DRAFT-schema-pluggability-O1
+  - CLASSIC-O51
 ---
 
 # Schema Pluggability: Survey
@@ -115,7 +119,7 @@ package name is not examined here.
 
 ## Open Questions
 
-### CLASSIC-DRAFT-schema-pluggability-O1 — When to indirect class and accessor references
+### CLASSIC-O51 — When to indirect class and accessor references
 
 The indirection of steps 2 to 4 waits on a trigger the original text names in
 two forms: a second schema that motivates the work, or a judgment that the

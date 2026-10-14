@@ -44,9 +44,9 @@ Table: Documents in the CLASSIC namespace.
 | [CLASSIC-0032](Plan.CompassMigration.md) | Compass Migration Plan | Plan | project | Implemented | — |
 | [CLASSIC-0033](Guide.NewSchema.md) | Creating a New Schema Guide | Guide (howto) | project | Current | schema |
 | [CLASSIC-0034](persistence/Arch.PersistenceBackends.md) | The Persistence Backends Architecture | Architecture | component | Accepted | persistence |
+| [CLASSIC-0035](Survey.SchemaPluggability.md) | Schema Pluggability Survey | Survey | project | Implemented | schema |
 | [CLASSIC-DRAFT-compass-migration-log](Log.CompassMigration.md) | Compass Migration Development Log | Log | project | Implemented | — |
 | [CLASSIC-DRAFT-realtime-chat](survey/Survey.RealtimeChat.md) | Real-Time Chat Integration Survey | Survey | project | Draft | — |
-| [CLASSIC-DRAFT-schema-pluggability](Survey.SchemaPluggability.md) | Schema Pluggability Survey | Survey | project | Draft | schema |
 | [CLASSIC-DRAFT-with-persistence](persistence/Log.WithPersistence.md) | with-persistence Development Log | Log | component | Accepted | persistence |
 
 Table: Decision, open-question, and memo records in the CLASSIC namespace.
@@ -220,6 +220,7 @@ Table: Decision, open-question, and memo records in the CLASSIC namespace.
 | [CLASSIC-O48](Plan.CompassMigration.md#classic-o48--logs-that-record-several-pieces-of-work) | Open question | Logs that record several pieces of work | — | CLASSIC-0032 |
 | [CLASSIC-O49](persistence/Arch.PersistenceBackends.md#classic-o49--serialization-durability-and-thread-safety) | Open question | Serialization, durability, and thread safety | — | CLASSIC-0034 |
 | [CLASSIC-O50](persistence/Arch.PersistenceBackends.md#classic-o50--rebuilding-derived-artifacts) | Open question | Rebuilding derived artifacts | — | CLASSIC-0034 |
+| [CLASSIC-O51](Survey.SchemaPluggability.md#classic-o51--when-to-indirect-class-and-accessor-references) | Open question | When to indirect class and accessor references | — | CLASSIC-0035 |
 | [CLASSIC-DRAFT-realtime-chat-O1](survey/Survey.RealtimeChat.md#classic-draft-realtime-chat-o1--crystallization-edge-timing) | Open question | Crystallization edge timing | — | CLASSIC-DRAFT-realtime-chat |
 | [CLASSIC-DRAFT-realtime-chat-O2](survey/Survey.RealtimeChat.md#classic-draft-realtime-chat-o2--recognizer-plugin-interface) | Open question | Recognizer plugin interface | — | CLASSIC-DRAFT-realtime-chat |
 | [CLASSIC-DRAFT-realtime-chat-O3](survey/Survey.RealtimeChat.md#classic-draft-realtime-chat-o3--granularity-threshold) | Open question | Granularity threshold | — | CLASSIC-DRAFT-realtime-chat |
@@ -228,4 +229,3 @@ Table: Decision, open-question, and memo records in the CLASSIC namespace.
 | [CLASSIC-DRAFT-realtime-chat-O6](survey/Survey.RealtimeChat.md#classic-draft-realtime-chat-o6--moderating-crystallized-chat) | Open question | Moderating crystallized chat | — | CLASSIC-DRAFT-realtime-chat |
 | [CLASSIC-DRAFT-realtime-chat-O7](survey/Survey.RealtimeChat.md#classic-draft-realtime-chat-o7--structured-notification-and-command-format) | Open question | Structured notification and command format | — | CLASSIC-DRAFT-realtime-chat |
 | [CLASSIC-DRAFT-realtime-chat-O8](survey/Survey.RealtimeChat.md#classic-draft-realtime-chat-o8--the-content-solicitation-entity) | Open question | The content-solicitation entity | — | CLASSIC-DRAFT-realtime-chat |
-| [CLASSIC-DRAFT-schema-pluggability-O1](Survey.SchemaPluggability.md#classic-draft-schema-pluggability-o1--when-to-indirect-class-and-accessor-references) | Open question | When to indirect class and accessor references | — | CLASSIC-DRAFT-schema-pluggability |

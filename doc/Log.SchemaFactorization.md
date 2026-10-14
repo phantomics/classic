@@ -16,7 +16,7 @@ provenance:
 relates-to:
   - CLASSIC-0013
   - CLASSIC-0014
-  - CLASSIC-DRAFT-schema-pluggability
+  - CLASSIC-0035
   - CLASSIC-0004
   - CLASSIC-0015
 decisions:
@@ -457,7 +457,7 @@ work for full pluggability:
    and accessors the engines call by name. Lifting this restriction
    (so a `classic.schema.beta` could use its own class names)
    requires routing class lookups through a configurable mapping.
-   See [CLASSIC-DRAFT-schema-pluggability](Survey.SchemaPluggability.md),
+   See [CLASSIC-0035](Survey.SchemaPluggability.md),
    formerly the afterword of the schema contract, for the upgrade path.
 
 These items are tracked but not scheduled. The current arrangement is
