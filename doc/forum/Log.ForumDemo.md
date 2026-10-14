@@ -6,7 +6,11 @@ scope:         component
 project:       Classic
 component:     forum
 language:      en
-status:        Draft
+status:        Implemented
+authors:
+  - Andrew Sengul
+approved-by:   Andrew Sengul
+reviewed:      2026-10-13
 provenance:
   assistant:   opencode
 relates-to:
@@ -66,7 +70,7 @@ implementation. The decisions:
 
 ### CLASSIC-DRAFT-forum-demo-D1 — forum-post descends from classic-post, not classic-article
 
-**Status:** Proposed
+**Status:** Implemented
 
 **Context:** A forum post needs a base class in the schema, which distinguishes
 `classic-article` from `classic-post`.
@@ -92,7 +96,7 @@ workflow, persistence), not the content-specific operations.
 
 ### CLASSIC-DRAFT-forum-demo-D2 — Reactions are a multiset of strings
 
-**Status:** Proposed
+**Status:** Implemented
 
 **Context:** Members react to posts with stickers.
 
@@ -111,7 +115,7 @@ display, but the slot itself is unconstrained.
 
 ### CLASSIC-DRAFT-forum-demo-D3 — Quote = link plus duplicated text
 
-**Status:** Proposed
+**Status:** Implemented
 
 **Context:** A post may quote another.
 
@@ -128,7 +132,7 @@ the lifted text; the `post-quotes` relation is exactly that reference.
 
 ### CLASSIC-DRAFT-forum-demo-D4 — Three roles, gated at the operation layer
 
-**Status:** Proposed
+**Status:** Implemented
 
 **Context:** The discussion workflow has three roles (member, moderator,
 admin), but the workflow engine's transitions carry a single `required-role`.
@@ -149,7 +153,7 @@ moderators and admins hold. This mirrors how the blog's `write-article` checks
 
 ### CLASSIC-DRAFT-forum-demo-D5 — Pinning and locking are slot updates, not workflow states
 
-**Status:** Proposed
+**Status:** Implemented
 
 **Context:** Threads can be pinned and locked.
 
@@ -164,7 +168,7 @@ phpBB, where pin and lock are thread attributes.
 
 ### CLASSIC-DRAFT-forum-demo-D6 — Atomic thread creation; whole-post quoting
 
-**Status:** Proposed
+**Status:** Implemented
 
 **Context:** Starting a thread and quoting a post each needed a granularity.
 
@@ -178,7 +182,7 @@ is a production refinement.
 
 ### CLASSIC-DRAFT-forum-demo-D7 — Stable post indices via placeholders
 
-**Status:** Proposed
+**Status:** Implemented
 
 **Context:** Moderation hides and deletes posts, which would shift post numbers
 if they were omitted from views.
