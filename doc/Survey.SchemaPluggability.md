@@ -12,7 +12,7 @@ provenance:
 relates-to:
   - CLASSIC-DRAFT-schema-contract
   - CLASSIC-DRAFT-new-schema
-  - CLASSIC-DRAFT-schema
+  - CLASSIC-0013
   - CLASSIC-DRAFT-dist-factorization
 open-questions:
   - CLASSIC-DRAFT-schema-pluggability-O1
@@ -54,7 +54,7 @@ The contract describes what works today. It also describes the limits.
 - **Schemas are not yet separate ASDF systems.** Currently the
   reference schema is a module inside the `classic` system. Extracting
   it into `classic.schema.alpha` as its own system is a planned
-  refactor (see [CLASSIC-DRAFT-schema](Ref.Schema.md)).
+  refactor (see [CLASSIC-0013](Ref.Schema.md)).
 
 ## What would make full pluggability work
 
@@ -109,7 +109,7 @@ package name is not examined here.
   the indirection above would cover.
 - **[CLASSIC-DRAFT-new-schema](Guide.NewSchema.md)** walks through satisfying
   the contract as it stands, including the fixed package name.
-- **[CLASSIC-DRAFT-schema](Ref.Schema.md)** describes the schema/core layering.
+- **[CLASSIC-0013](Ref.Schema.md)** describes the schema/core layering.
 - **[CLASSIC-DRAFT-dist-factorization](Log.DistFactorization.md)** carried out
   the extraction into separate ASDF systems.
 

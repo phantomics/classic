@@ -22,6 +22,7 @@ Table: Documents in the CLASSIC namespace.
 | [CLASSIC-0010](theme/Log.ThemeOntology.md) | Theme Ontology Development Log | Log | component | Implemented | theme |
 | [CLASSIC-0011](theme/Ref.Theme.md) | Theme Ontology Reference | Ref | component | Current | theme |
 | [CLASSIC-0012](Log.SchemaFactorization.md) | Schema Factorization Development Log | Log | project | Implemented | schema |
+| [CLASSIC-0013](Ref.Schema.md) | Schema Architecture Reference | Ref | project | Current | schema |
 | [CLASSIC-DRAFT-archival](survey/Survey.Archival.md) | Content Archival and Durability Survey | Survey | project | Draft | — |
 | [CLASSIC-DRAFT-capability-exclusion](theme/Log.CapabilityExclusion.md) | Capability Exclusion Development Log | Log | component | Draft | theme |
 | [CLASSIC-DRAFT-compass-integration](survey/Survey.CompassIntegration.md) | Compass Documentation on Classic Survey | Survey | project | Draft | — |
@@ -37,7 +38,6 @@ Table: Documents in the CLASSIC namespace.
 | [CLASSIC-DRAFT-persistence-backends](persistence/Arch.PersistenceBackends.md) | The Persistence Backends Architecture | Architecture | component | Draft | persistence |
 | [CLASSIC-DRAFT-project-management](survey/Survey.ProjectManagement.md) | Project Management as Classic Imprint Survey | Survey | project | Draft | — |
 | [CLASSIC-DRAFT-realtime-chat](survey/Survey.RealtimeChat.md) | Real-Time Chat Integration Survey | Survey | project | Draft | — |
-| [CLASSIC-DRAFT-schema](Ref.Schema.md) | Schema Architecture Reference | Ref | project | Draft | schema |
 | [CLASSIC-DRAFT-schema-contract](Spec.SchemaContract.md) | Schema Contract Specification | Spec | project | Draft | schema |
 | [CLASSIC-DRAFT-schema-pluggability](Survey.SchemaPluggability.md) | Schema Pluggability Survey | Survey | project | Draft | schema |
 | [CLASSIC-DRAFT-slot-fills](theme/Log.SlotFills.md) | Template Slot Fills Development Log | Log | component | Draft | theme |

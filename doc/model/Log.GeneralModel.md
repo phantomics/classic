@@ -12,7 +12,7 @@ provenance:
 relates-to:
   - CLASSIC-0007
   - CLASSIC-0008
-  - CLASSIC-DRAFT-schema
+  - CLASSIC-0013
   - CLASSIC-DRAFT-dist-factorization
 decisions:
   - CLASSIC-DRAFT-general-model-D1

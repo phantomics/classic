@@ -15,7 +15,7 @@ api-version:   "0.1.0"
 provenance:
   assistant:   opencode
 relates-to:
-  - CLASSIC-DRAFT-schema
+  - CLASSIC-0013
   - CLASSIC-0008
   - CLASSIC-0003
   - CLASSIC-DRAFT-general-model
@@ -449,5 +449,5 @@ src/mop/
                              introspection utilities (core system)
 ```
 
-See [CLASSIC-DRAFT-schema](../Ref.Schema.md) for the full layered layout (core, schema,
+See [CLASSIC-0013](../Ref.Schema.md) for the full layered layout (core, schema,
 engine, distribution, and common models).

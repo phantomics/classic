@@ -14,7 +14,7 @@ provenance:
 relates-to:
   - CLASSIC-DRAFT-schema-contract
   - CLASSIC-DRAFT-schema-pluggability
-  - CLASSIC-DRAFT-schema
+  - CLASSIC-0013
 ---
 
 # Creating a New Schema Guide
@@ -30,7 +30,7 @@ content hierarchy.
 - The schema contract, [CLASSIC-DRAFT-schema-contract](Spec.SchemaContract.md),
   which lists the classes, slots, accessors, and methods each step defines.
 - The schema/core layering, described in
-  [CLASSIC-DRAFT-schema](Ref.Schema.md).
+  [CLASSIC-0013](Ref.Schema.md).
 
 ## Walkthrough
 

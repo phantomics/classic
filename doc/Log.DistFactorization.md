@@ -14,7 +14,7 @@ provenance:
   assistant:   opencode
 relates-to:
   - CLASSIC-0012
-  - CLASSIC-DRAFT-schema
+  - CLASSIC-0013
   - CLASSIC-DRAFT-schema-contract
   - CLASSIC-DRAFT-general-model
 decisions:

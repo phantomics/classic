@@ -1,12 +1,16 @@
 ---
-id:            CLASSIC-DRAFT-schema
+id:            CLASSIC-0013
 title:         Schema Architecture Reference
 genre:         Ref
 scope:         project
 project:       Classic
 component:     schema
 language:      en
-status:        Draft
+status:        Current
+authors:
+  - Andrew Sengul
+approved-by:   Andrew Sengul
+reviewed:      2026-10-13
 api-version:   "0.1.0"
 provenance:
   assistant:   opencode
@@ -126,8 +130,8 @@ them).
 |  (core package)  |  :use  |    (schema package)    |
 +------------------+        +------------------------+
         ^                              ^
-        |                              |
-        |  imprint code uses both packages
+        |      imprint code uses       |
+        |        both packages         |
         |                              |
         +------------------------------+
                      |

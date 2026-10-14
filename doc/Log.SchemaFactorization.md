@@ -14,7 +14,7 @@ reviewed:      2026-10-11
 provenance:
   assistant:   opencode
 relates-to:
-  - CLASSIC-DRAFT-schema
+  - CLASSIC-0013
   - CLASSIC-DRAFT-schema-contract
   - CLASSIC-DRAFT-schema-pluggability
   - CLASSIC-0004
