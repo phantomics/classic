@@ -15,6 +15,7 @@ Table: Documents in the CLASSIC namespace.
 | [CLASSIC-0003](Log.DeletionSupport.md) | Deletion Support Development Log | Log | project | Implemented | model |
 | [CLASSIC-0004](migration/Log.SchemaMigration.md) | Schema Migration Development Log | Log | component | Accepted | migration |
 | [CLASSIC-0005](migration/Ref.Migration.md) | Schema Migration Reference | Ref | component | Current | migration |
+| [CLASSIC-0006](persistence/Ref.Persistence.md) | Persistence Reference | Ref | component | Current | persistence |
 | [CLASSIC-DRAFT-archival](survey/Survey.Archival.md) | Content Archival and Durability Survey | Survey | project | Draft | — |
 | [CLASSIC-DRAFT-capability-exclusion](theme/Log.CapabilityExclusion.md) | Capability Exclusion Development Log | Log | component | Draft | theme |
 | [CLASSIC-DRAFT-compass-integration](survey/Survey.CompassIntegration.md) | Compass Documentation on Classic Survey | Survey | project | Draft | — |
@@ -28,7 +29,6 @@ Table: Documents in the CLASSIC namespace.
 | [CLASSIC-DRAFT-model](model/Ref.Model.md) | Ontological Model Reference | Ref | component | Draft | model |
 | [CLASSIC-DRAFT-music-publishing](survey/Survey.MusicPublishing.md) | Music Publishing Survey | Survey | project | Draft | — |
 | [CLASSIC-DRAFT-new-schema](Guide.NewSchema.md) | Creating a New Schema Guide | Guide (howto) | project | Draft | schema |
-| [CLASSIC-DRAFT-persistence](persistence/Ref.Persistence.md) | Persistence Reference | Ref | component | Draft | persistence |
 | [CLASSIC-DRAFT-persistence-backends](persistence/Arch.PersistenceBackends.md) | The Persistence Backends Architecture | Architecture | component | Draft | persistence |
 | [CLASSIC-DRAFT-project-management](survey/Survey.ProjectManagement.md) | Project Management as Classic Imprint Survey | Survey | project | Draft | — |
 | [CLASSIC-DRAFT-realtime-chat](survey/Survey.RealtimeChat.md) | Real-Time Chat Integration Survey | Survey | project | Draft | — |

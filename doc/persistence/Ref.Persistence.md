@@ -1,12 +1,16 @@
 ---
-id:            CLASSIC-DRAFT-persistence
+id:            CLASSIC-0006
 title:         Persistence Reference
 genre:         Ref
 scope:         component
 project:       Classic
 component:     persistence
 language:      en
-status:        Draft
+status:        Current
+authors:
+  - Andrew Sengul
+approved-by:   Andrew Sengul
+reviewed:      2026-10-13
 api-version:   "0.1.0"
 provenance:
   assistant:   opencode

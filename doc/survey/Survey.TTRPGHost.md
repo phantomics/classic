@@ -13,7 +13,7 @@ relates-to:
   - CLASSIC-DRAFT-workflow
   - CLASSIC-DRAFT-forum
   - CLASSIC-0001
-  - CLASSIC-DRAFT-persistence
+  - CLASSIC-0006
   - CLASSIC-DRAFT-music-publishing
 cites:
   - title:   World of Darkness tabletop roleplaying games
@@ -49,7 +49,7 @@ model ([CLASSIC-DRAFT-model](../model/Ref.Model.md)), the workflow engine
 ([CLASSIC-DRAFT-forum](../forum/Guide.Forum.md)), the federation and
 co-hosting model ([CLASSIC-0001](../federation/Guide.FederationDemo.md)),
 the persistence protocol
-([CLASSIC-DRAFT-persistence](../persistence/Ref.Persistence.md)), the
+([CLASSIC-0006](../persistence/Ref.Persistence.md)), the
 composer pipeline, and the planned Seed authoring integration.
 
 **Date:** 2026-07-04

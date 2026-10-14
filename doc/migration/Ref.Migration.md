@@ -16,7 +16,7 @@ provenance:
   assistant:   opencode
 relates-to:
   - CLASSIC-0004
-  - CLASSIC-DRAFT-persistence
+  - CLASSIC-0006
 ---
 
 # Schema Migration Reference

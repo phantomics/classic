@@ -40,7 +40,7 @@ Classic instances. It assumes the forum imprint
 ([CLASSIC-DRAFT-forum](../forum/Guide.Forum.md)), the federation and co-hosting model
 ([CLASSIC-0001](../federation/Guide.FederationDemo.md)), the workflow engine
 ([CLASSIC-DRAFT-workflow](../model/Ref.Workflow.md)), the persistence protocol
-([CLASSIC-DRAFT-persistence](../persistence/Ref.Persistence.md)), the composer pipeline, and
+([CLASSIC-0006](../persistence/Ref.Persistence.md)), the composer pipeline, and
 the planned Seed authoring integration and TUI medium. It asks whether Classic
 should be positioned as a substrate for this deployment; it does not decide.
 
@@ -333,7 +333,7 @@ format adopted here and do not yet carry Compass identifiers.)
 It depends on the forum imprint ([CLASSIC-DRAFT-forum](../forum/Guide.Forum.md)), the federation
 model ([CLASSIC-0001](../federation/Guide.FederationDemo.md)), the workflow engine
 ([CLASSIC-DRAFT-workflow](../model/Ref.Workflow.md)), and the persistence protocol
-([CLASSIC-DRAFT-persistence](../persistence/Ref.Persistence.md)).
+([CLASSIC-0006](../persistence/Ref.Persistence.md)).
 
 The fine-grained, crowdsourced, subscription-based moderation model — where users
 publish and subscribe to federated moderation feeds that block, warn, promote, or

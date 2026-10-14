@@ -10,7 +10,7 @@ status:        Draft
 provenance:
   assistant:   opencode
 relates-to:
-  - CLASSIC-DRAFT-persistence
+  - CLASSIC-0006
 decisions:
   - CLASSIC-DRAFT-with-persistence-D1
   - CLASSIC-DRAFT-with-persistence-D2

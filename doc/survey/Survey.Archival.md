@@ -43,7 +43,7 @@ a personal endpoint**: a reader who values content can mirror it into their own
 instance, one-time or continuously, as a live and re-federatable copy; and for the
 reader without an instance, a publisher can offer a static flat-file archive as a
 download or torrent. It assumes the persistence protocol and its flat-file backend
-([CLASSIC-DRAFT-persistence](../persistence/Ref.Persistence.md)), the federation and co-hosting
+([CLASSIC-0006](../persistence/Ref.Persistence.md)), the federation and co-hosting
 model ([CLASSIC-0001](../federation/Guide.FederationDemo.md)), the planned blob adapters,
 and the planned signed-federation-events work. It asks whether Classic should
 offer these mechanisms; it does not decide.
@@ -350,7 +350,7 @@ open question recorded in both surveys, as CLASSIC-DRAFT-archival-O6 here and
 CLASSIC-DRAFT-distributed-moderation-O6 there.
 
 It depends on the persistence protocol and its flat-file backend
-([CLASSIC-DRAFT-persistence](../persistence/Ref.Persistence.md)) and the federation and
+([CLASSIC-0006](../persistence/Ref.Persistence.md)) and the federation and
 co-hosting model ([CLASSIC-0001](../federation/Guide.FederationDemo.md)), and it shares the
 text/binary blob split with the pre-Compass music survey
 ([CLASSIC-DRAFT-music-publishing](Survey.MusicPublishing.md), which does not yet carry

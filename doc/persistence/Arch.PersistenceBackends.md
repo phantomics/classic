@@ -10,7 +10,7 @@ status:        Draft
 provenance:
   assistant:   opencode
 relates-to:
-  - CLASSIC-DRAFT-persistence
+  - CLASSIC-0006
 decisions:
   - CLASSIC-DRAFT-persistence-backends-D1
   - CLASSIC-DRAFT-persistence-backends-D2
@@ -27,7 +27,7 @@ This record describes the two persistence backends Classic has designed but
 not built: a flat-file backend for personal blogs and small publications, and
 a triplestore backend for production clusters and social networks. Both
 implement the persistence protocol described in
-[CLASSIC-DRAFT-persistence](Ref.Persistence.md), beside the in-memory backend
+[CLASSIC-0006](Ref.Persistence.md), beside the in-memory backend
 that exists today. The design was the "Planned Backends" section of that
 reference, and was moved here so that the reference describes only what is
 built.
@@ -49,7 +49,7 @@ Table: Terms used in this design, with their definitions.
 Classic's persistence is a spectrum, from a personal blog stored as flat files
 to a social network on a triplestore and blob store, and the ontology must
 express itself at any point on it without its class definitions changing
-([CLASSIC-DRAFT-persistence](Ref.Persistence.md#the-central-design-problem)).
+([CLASSIC-0006](Ref.Persistence.md#the-central-design-problem)).
 These two backends are the ends of that spectrum. A publication that outgrows
 the flat-file backend moves to the triplestore by swapping its strategy object
 and running a one-time export and import.
@@ -57,11 +57,11 @@ and running a one-time export and import.
 ## Influences
 
 - **The persistence protocol**
-  ([CLASSIC-DRAFT-persistence](Ref.Persistence.md#the-persistence-protocol)):
+  ([CLASSIC-0006](Ref.Persistence.md#the-persistence-protocol)):
   both backends implement its generic functions, and read the `:persistence`
   annotation of each slot to decide where it is stored.
 - **The in-memory backend**
-  ([CLASSIC-DRAFT-persistence](Ref.Persistence.md#the-in-memory-backend)):
+  ([CLASSIC-0006](Ref.Persistence.md#the-in-memory-backend)):
   it validates the protocol and leaves serialization, durability, and thread
   safety to these backends.
 

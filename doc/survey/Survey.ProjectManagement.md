@@ -52,7 +52,7 @@ Rails accreted. It assumes the ontological model
 ([CLASSIC-DRAFT-workflow](../model/Ref.Workflow.md)), the forum imprint's thread-bearing pattern
 ([CLASSIC-DRAFT-forum](../forum/Guide.Forum.md)), the federation and co-hosting model
 ([CLASSIC-0001](../federation/Guide.FederationDemo.md)), the persistence protocol
-([CLASSIC-DRAFT-persistence](../persistence/Ref.Persistence.md)), the composer's aggregate tier,
+([CLASSIC-0006](../persistence/Ref.Persistence.md)), the composer's aggregate tier,
 and the planned Seed authoring integration. It asks whether Classic should offer
 this imprint; it does not decide.
 
@@ -450,7 +450,7 @@ deployment-mode framing and grassroots adoption strategy of the sibling surveys
 ([CLASSIC-DRAFT-model](../model/Ref.Model.md)), the workflow engine
 ([CLASSIC-DRAFT-workflow](../model/Ref.Workflow.md)), the federation model
 ([CLASSIC-0001](../federation/Guide.FederationDemo.md)), and the persistence protocol
-([CLASSIC-DRAFT-persistence](../persistence/Ref.Persistence.md)).
+([CLASSIC-0006](../persistence/Ref.Persistence.md)).
 
 Externally, its principal comparison is Ruby on Rails and the Basecamp application
 Rails was extracted from — the framework-from-application lineage this survey

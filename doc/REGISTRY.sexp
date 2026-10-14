@@ -33,3 +33,4 @@
 (:id "CLASSIC-D26" :kind :decision :draft "CLASSIC-DRAFT-schema-migration-D10" :host "CLASSIC-0004" :date "2026-10-13" :by "Andrew Sengul")
 (:id "CLASSIC-D27" :kind :decision :draft "CLASSIC-DRAFT-schema-migration-D11" :host "CLASSIC-0004" :date "2026-10-13" :by "Andrew Sengul")
 (:id "CLASSIC-0005" :kind :document :draft "CLASSIC-DRAFT-migration" :path "doc/migration/Ref.Migration.md" :date "2026-10-13" :by "Andrew Sengul")
+(:id "CLASSIC-0006" :kind :document :draft "CLASSIC-DRAFT-persistence" :path "doc/persistence/Ref.Persistence.md" :date "2026-10-13" :by "Andrew Sengul")

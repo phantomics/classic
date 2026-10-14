@@ -16,7 +16,7 @@ provenance:
 relates-to:
   - CLASSIC-DRAFT-model
   - CLASSIC-DRAFT-workflow
-  - CLASSIC-DRAFT-persistence
+  - CLASSIC-0006
 decisions:
   - CLASSIC-D14
   - CLASSIC-D15

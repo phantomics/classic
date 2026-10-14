@@ -421,7 +421,7 @@ whose decision records state the design choices the original text makes, with
 "None recorded" where it names no alternative (as
 CLASSIC-DRAFT-compass-migration-D4 does for Logs), and whose open questions
 name what the reference leaves to these backends without the design saying
-how. [CLASSIC-DRAFT-persistence](persistence/Ref.Persistence.md) keeps a short
+how. [CLASSIC-0006](persistence/Ref.Persistence.md) keeps a short
 section pointing to it. The comparison of storage across backends in the
 reference's tables and diagram stays, since it explains the protocol.
 

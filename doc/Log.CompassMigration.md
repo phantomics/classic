@@ -71,7 +71,7 @@ descriptive phrase (§9, §12). Other links already carried descriptive text.
 
 **Decision:** When a link was rewritten to a renamed target, link text that
 named a file was replaced by the target's identifier, such as
-`[CLASSIC-DRAFT-persistence](../persistence/Ref.Persistence.md)`. Descriptive
+`[CLASSIC-0006](../persistence/Ref.Persistence.md)`. Descriptive
 link text was kept, and only the target changed.
 
 **Alternatives:**

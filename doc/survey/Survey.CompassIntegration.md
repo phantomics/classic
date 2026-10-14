@@ -13,7 +13,7 @@ relates-to:
   - COMPASS-DRAFT-semantic-binding
   - COMPASS-DRAFT-toolchain
   - CLASSIC-DRAFT-project-management
-  - CLASSIC-DRAFT-persistence
+  - CLASSIC-0006
   - CLASSIC-DRAFT-persistence-backends
 cites:
   - title:   Schema.org TechArticle and APIReference
@@ -127,7 +127,7 @@ would bolt on, are native to Classic's model.
   `dcterms:created`). Compass's `created` and `updated` are authorial.
 - **Generated files are derived artifacts.** Classic treats indexes and
   rendered pages as derived, with invalidation rules
-  ([CLASSIC-DRAFT-persistence](../persistence/Ref.Persistence.md)); Compass requires its `INDEX.md` to be
+  ([CLASSIC-0006](../persistence/Ref.Persistence.md)); Compass requires its `INDEX.md` to be
   generated and verified, never hand-edited.
 - **Typed rendering is a lens.** The wiki preset already renders typed pages
   with an infobox lens and cites them elsewhere with a compact label sublens
