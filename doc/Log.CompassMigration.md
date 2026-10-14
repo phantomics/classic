@@ -62,7 +62,7 @@ The records below are the narrower choices made while carrying it out.
 
 ### CLASSIC-DRAFT-compass-migration-log-D1 — A link whose text is a file name takes the target's identifier
 
-**Status:** Accepted
+**Status:** Implemented
 
 **Context:** About fifty links in the Surveys read like
 `[Persistence.md](../persistence/Persistence.md)`. The renames broke their
@@ -82,7 +82,7 @@ link text was kept, and only the target changed.
 
 ### CLASSIC-DRAFT-compass-migration-log-D2 — Relations come from the corpus, not from the topic
 
-**Status:** Accepted
+**Status:** Implemented
 
 **Context:** Each new front-matter block could list related documents in
 `relates-to:`. Compass checks only that each identifier resolves, so the
@@ -102,7 +102,7 @@ that cite one another. Documents that merely share a subject are not listed.
 
 ### CLASSIC-DRAFT-compass-migration-log-D3 — In-body status lines that front-matter replaces are removed; dates stay
 
-**Status:** Accepted
+**Status:** Implemented
 
 **Context:** `Survey.MusicPublishing.md` and `Survey.TTRPGHost.md` opened
 with `**Status:** Conceptual. No implementation has begun.` and a
@@ -122,7 +122,7 @@ its author, which can differ from Git's dates, and two Logs' dates already do
 
 ### CLASSIC-DRAFT-compass-migration-log-D4 — Headings follow the genre spine; body text is not rewritten
 
-**Status:** Accepted
+**Status:** Implemented
 
 **Context:** Several documents' headings did not match their genre: Ref and
 Guide H1s such as "Workflow" or "The Forum Preset" did not match their new
@@ -143,7 +143,7 @@ records with their wording intact.
 
 ### CLASSIC-DRAFT-compass-migration-log-D5 — Each gate is checked with two builds of the toolchain
 
-**Status:** Accepted
+**Status:** Implemented
 
 **Context:** The `compass` executable in local use reports
 `0.2.0 (commit ccb28e932238-dirty)`: it was built from an uncommitted tree.

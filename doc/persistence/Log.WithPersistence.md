@@ -6,7 +6,11 @@ scope:         component
 project:       Classic
 component:     persistence
 language:      en
-status:        Draft
+status:        Accepted
+authors:
+  - Andrew Sengul
+approved-by:   Andrew Sengul
+reviewed:      2026-10-13
 provenance:
   assistant:   opencode
 relates-to:
@@ -63,7 +67,7 @@ the worst possible failure mode.
 
 ### CLASSIC-DRAFT-with-persistence-D1 — A with-persistence macro
 
-**Status:** Proposed
+**Status:** Implemented
 
 **Context:** Every caller of `attempt-transition`, and of other mutations,
 must remember to call `persist-entity` afterward, and forgetting is silent
@@ -115,7 +119,7 @@ validation system.
 
 ### CLASSIC-DRAFT-with-persistence-D2 — Persist on normal exit only
 
-**Status:** Proposed
+**Status:** Implemented
 
 **Context:** A body of mutations may exit normally or by signalling an error,
 such as `permission-denied` from a failed workflow transition.
@@ -174,7 +178,7 @@ together.
 
 ### CLASSIC-DRAFT-with-persistence-D4 — The body's return values are preserved
 
-**Status:** Proposed
+**Status:** Implemented
 
 **Context:** Callers may want the macro's value in an expression.
 
@@ -192,7 +196,7 @@ together.
 
 ### CLASSIC-DRAFT-with-persistence-D5 — No automatic clock increment
 
-**Status:** Proposed
+**Status:** Implemented
 
 **Context:** The macro knows the entity is being mutated, which is why
 persistence is needed.
@@ -210,7 +214,7 @@ remains explicit.
 
 ### CLASSIC-DRAFT-with-persistence-D6 — Composition with validation through the normal path
 
-**Status:** Proposed
+**Status:** Implemented
 
 **Context:** The validation system's `*validate-on-persist*` hook fires on
 `persist-entity`.

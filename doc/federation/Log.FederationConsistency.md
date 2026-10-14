@@ -6,7 +6,7 @@ scope:         component
 project:       Classic
 component:     federation
 language:      en
-status:        Accepted
+status:        Implemented
 authors:
   - Andrew Sengul
 approved-by:   Andrew Sengul
@@ -87,7 +87,7 @@ The federation system's state management had five specific defects:
 
 ### CLASSIC-D1 — Provenance as Classic resources
 
-**Status:** Accepted
+**Status:** Implemented
 
 **Context:** `*federation-provenance*` was a global hash table: not persisted,
 not thread-safe, not scoped per publication, and not itself federated (defect 1
@@ -107,7 +107,7 @@ same URI-based identity as all other Classic entities.
 
 ### CLASSIC-D2 — Per-publication scoping
 
-**Status:** Accepted
+**Status:** Implemented
 
 **Context:** Provenance lived in a shared global namespace (defect 1).
 
@@ -121,7 +121,7 @@ persistence protocol with a publication filter.
 
 ### CLASSIC-D3 — Event log as Classic resources
 
-**Status:** Accepted
+**Status:** Implemented
 
 **Context:** Federation operations left no audit trail (defect 2).
 
@@ -135,7 +135,7 @@ foundation (Phase B), and retry queue foundation (Phase B).
 
 ### CLASSIC-D4 — Configurable retention policy
 
-**Status:** Accepted
+**Status:** Implemented
 
 **Context:** There was no mechanism for managing the growth of federation
 metadata over time (defect 4).
@@ -153,7 +153,7 @@ categories requires only extending the rules alist.
 
 ### CLASSIC-D5 — Sync status on provenance
 
-**Status:** Accepted
+**Status:** Implemented
 
 **Context:** Provenance records did not track synchronization status, so a
 received retraction left them unchanged (defect 5).
@@ -169,7 +169,7 @@ should be shown to users" (for content listing).
 
 ### CLASSIC-D6 — Transport extensibility
 
-**Status:** Accepted
+**Status:** Implemented
 
 **Context:** The `ecase` dispatch in `federation-receive` signalled an error on
 any unknown message type, making protocol extension fragile (defect 3).
@@ -369,7 +369,7 @@ delivery. Three specific gaps remained:
 
 ### CLASSIC-D7 — Acknowledgment abstraction
 
-**Status:** Accepted
+**Status:** Implemented
 
 **Context:** A peer returning a non-ack response was logged as `:delivered`
 (gap 1 above).
@@ -428,7 +428,7 @@ and the retry system to use when staleness checking is needed.
 
 ### CLASSIC-D9 — Synchronous single-pass retry with expansion stubs
 
-**Status:** Accepted
+**Status:** Implemented
 
 **Context:** Failed and pending deliveries accumulated in the event log with no
 path to resolution (gap 3).
@@ -579,7 +579,7 @@ delivery confirmation, and retry. Three gaps remained:
 
 ### CLASSIC-D10 — Logical clock on classic-resource
 
-**Status:** Accepted
+**Status:** Implemented
 
 **Context:** Wall-clock timestamps are fragile for ordering: clocks skew
 between instances, timestamps can be absent, and simultaneous edits have no
@@ -613,7 +613,7 @@ takes precedence.
 
 ### CLASSIC-D11 — :update message type and receive-update
 
-**Status:** Accepted
+**Status:** Implemented
 
 **Context:** Edits after federation did not reach peers; only initial publish
 and retraction were federated (gap 2).
@@ -637,7 +637,7 @@ logs events.
 
 ### CLASSIC-D12 — Per-peer outbox with threshold and interval flushing
 
-**Status:** Accepted
+**Status:** Implemented
 
 **Context:** Every operation sent an individual message to each peer, with no
 debounce or accumulation (gap 3).
@@ -672,7 +672,7 @@ changing the behavior of existing code.
 
 ### CLASSIC-D13 — Blog edit-post with update propagation
 
-**Status:** Accepted
+**Status:** Implemented
 
 **Context:** The blog model had no way to edit a published post and propagate
 the edit.

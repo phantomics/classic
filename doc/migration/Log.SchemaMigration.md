@@ -6,7 +6,7 @@ scope:         component
 project:       Classic
 component:     migration
 language:      en
-status:        Accepted
+status:        Implemented
 authors:
   - Andrew Sengul
 approved-by:   Andrew Sengul
@@ -69,7 +69,7 @@ persisted data. This gets harder to fix the longer it's deferred.
 
 ### CLASSIC-D17 — Where to store migration metadata
 
-**Status:** Accepted
+**Status:** Implemented
 
 **Context:** One of four questions settled through analysis and discussion
 before implementation (see [Problem](#problem)): where to store migration
@@ -93,7 +93,7 @@ testable, versionable in Git, and loadable through ASDF.
 
 ### CLASSIC-D18 — Per-class versioning with system-wide manifests
 
-**Status:** Accepted
+**Status:** Implemented
 
 **Context:** One of four questions settled through analysis and discussion
 before implementation (see [Problem](#problem)): how to version classes: per
@@ -145,7 +145,7 @@ DAG (ensures correct ordering).
 
 ### CLASSIC-D19 — Data migrations via extensible stubs
 
-**Status:** Accepted
+**Status:** Implemented
 
 **Context:** One of four questions settled through analysis and discussion
 before implementation (see [Problem](#problem)): how to handle data migrations.
@@ -167,7 +167,7 @@ continues rather than aborting).
 
 ### CLASSIC-D20 — Trigger-based migration timing
 
-**Status:** Accepted
+**Status:** Implemented
 
 **Context:** One of four questions settled through analysis and discussion
 before implementation (see [Problem](#problem)): when migrations execute.
@@ -440,7 +440,7 @@ significant source of transcription errors.
 
 ### CLASSIC-D21 — Explicit class list with auto-discover helper
 
-**Status:** Accepted
+**Status:** Implemented
 
 **Context:** See the Problem of this update: a namespace rename needs one
 `:rename-predicate` operation per slot, across every class using the namespace.
@@ -468,7 +468,7 @@ without relying on runtime class scanning.
 
 ### CLASSIC-D22 — Uniform target version with auto-detected from-version
 
-**Status:** Accepted
+**Status:** Implemented
 
 **Context:** See the Problem of this update: a namespace rename needs one
 `:rename-predicate` operation per slot, across every class using the namespace.
@@ -494,7 +494,7 @@ which version step, with no hidden per-class version differences.
 
 ### CLASSIC-D23 — No -> arrow in syntax
 
-**Status:** Accepted
+**Status:** Implemented
 
 **Context:** The macro takes an old and a new namespace prefix.
 
@@ -616,7 +616,7 @@ predecessors introduced.
 
 ### CLASSIC-D24 — Sentinel version for "class did not exist"
 
-**Status:** Accepted
+**Status:** Implemented
 
 **Context:** One of four questions settled before implementation of the
 `:create-class` operation, introduced in the Context of this update: what
@@ -635,7 +635,7 @@ special-casing.
 
 ### CLASSIC-D25 — Federation translation for missing classes
 
-**Status:** Accepted
+**Status:** Implemented
 
 **Context:** One of four questions settled before implementation of the
 `:create-class` operation, introduced in the Context of this update: how
@@ -667,7 +667,7 @@ makes the situation explicit.
 
 ### CLASSIC-D26 — URI namespace prefix in the migration declaration
 
-**Status:** Accepted
+**Status:** Implemented
 
 **Context:** One of four questions settled before implementation of the
 `:create-class` operation, introduced in the Context of this update: whether
@@ -689,7 +689,7 @@ superclasses for dependency reasoning, metaclass for documentation).
 
 ### CLASSIC-D27 — Migration of classic-migration-operation itself
 
-**Status:** Accepted
+**Status:** Implemented
 
 **Context:** One of four questions settled before implementation of the
 `:create-class` operation, introduced in the Context of this update: whether
